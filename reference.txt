@@ -1,0 +1,121 @@
+if (count($customfieldsName) == 0) {
+            $customfieldsName = array();
+        }
+
+        //remove blank value and key when send data in post
+        /*foreach ($colNumber as $key => $value) {
+            if ($value == '') {
+                unset($colNumber[$key]);
+            }
+        }*/
+
+        $csv = $_FILES['uploadCsv']['tmp_name'];
+        $file = fopen($csv,"r");
+        $header = fgetcsv($file);
+        
+        //detect delimiter
+        $delimiter = $this->detectDelimiter($csv);
+        
+        $fieldArr = array();
+
+        if (count($header) > 2) {
+            while(! feof($file)){
+                $fieldArr[] = fgetcsv($file,$delimiter);
+            } 
+
+        }else{
+            while(! feof($file)){
+                $fileLine = fgetcsv($file,$delimiter);
+                $fieldArr[] = explode($delimiter, $fileLine[0]);
+            }   
+        }
+
+
+        /*$test = array();*/
+        $response = array();
+        //check file is empty or not
+        if (count($fieldArr) == 1 && empty($fieldArr[0]) == 1) {
+
+            $response['err'] = 1;
+            $response['msg'] = 'CSV file is empty';                  
+
+        }else{
+
+            $countFieldArr = count($fieldArr);
+            for ($i=0; $i < $countFieldArr; $i++) { 
+                
+                //check if any array is blank or not
+                if (count($fieldArr[$i]) > 1) {
+
+                    $csvDataArr = $fieldArr[$i];
+
+                    // prepare for insert in table
+                    $dataArr = array();
+                    $otherVal = array();
+                    $allDataValInString = '';
+
+                    $countColNumber = count($colNumber);
+
+                    // prepare array for insert the data
+                    for ($j=0; $j < $countColNumber; $j++) { 
+
+                        //for 'other', make an array and insert in db with convered to json
+                        if ($fieldsName[$j] == 'other') {
+                            $otherVal[] = $csvDataArr[$colNumber[$j] - 1];
+                        }else if($fieldsName[$j] == 'participated'){
+                            $dataArr[$fieldsName[$j]] = date('Y-m-d H:i:s',strtotime(date('d-m-y H:i',strtotime($csvDataArr[$colNumber[$j] - 1]))));    
+                        }else{
+
+                            //feed age field with math opration
+
+                            if ($fieldsName[$j] == 'birthdateYear') {
+                                $dataArr['age'] = date('Y') - $csvDataArr[$colNumber[$j] - 1];
+                            }
+
+                            $dataArr[$fieldsName[$j]] = $csvDataArr[$colNumber[$j] - 1];
+
+                            
+                        }
+                        
+                        //make all value in string for global search purpose
+                        if ($allDataValInString == '') {
+                            $allDataValInString = $csvDataArr[$colNumber[$j] - 1];
+                        }else{
+                            $allDataValInString .= '+'.$csvDataArr[$colNumber[$j] - 1];
+                        }
+                    }
+
+                    if (count($customfieldsName) > 0) {
+                        $dataArr['otherLable'] = json_encode(array_map('utf8_encode', $customfieldsName));   
+                        $dataArr['other'] = json_encode(array_map('utf8_encode', $otherVal));   
+                    }
+
+                    $dataArr['groupName'] = $groupName;
+                    $dataArr['keyword'] = $keyword;
+
+                    $allDataValInString .= '+'.$groupName.'+'.$keyword;
+
+                    $dataArr['allDataInString'] = $allDataValInString; 
+                    
+                    $dataArr = array_map('utf8_encode',$dataArr); 
+                    /*$test[] = $dataArr;*/
+                    //insert in db
+                    $condition = array();
+                    $is_insert = true;
+                    $lastInsertedId = ManageData(USER,$condition,$dataArr,$is_insert);
+
+                    if ($lastInsertedId > 0) {
+                        $numberOfInstertedEnteries++;    
+                    }
+
+                    $response['err'] = 0;
+                    $response['msg'] = "Record Inserted Successfully !!!";
+                    $response['entries'] = $numberOfInstertedEnteries;
+                }
+            }
+            /*pre($test);die;*/
+        }
+        
+        fclose($file);
+        
+        echo json_encode($response);

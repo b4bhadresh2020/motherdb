@@ -1,0 +1,30 @@
+Array
+(
+    [status] => lowquality
+    [email] => {%email%}
+    [phone] => {%phone%}
+    [loan_amount] => {%amount%}
+    [loan_period] => {%period%}
+)
+
+Array
+(
+    [status] => duplicate
+    [email] => {%email%}
+    [phone] => {%phone%}
+    [loan_amount] => {%amount%}
+    [loan_period] => {%period%}
+)
+
+
+Array
+(
+    [prefill] => Array
+        (
+            [email] => {%email%}
+            [phone] => {%phone%}
+            [loan_amount] => {%amount%}
+            [loan_period] => {%period%}
+        )
+
+)

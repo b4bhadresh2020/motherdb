@@ -1,0 +1,99 @@
+.content-wrap {
+    margin-top: 63px;
+}
+.title_type {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+.countryWise {
+    border-right: 0.1px solid rgba(0, 0, 0, 0.7);
+}
+.groupWise {
+    border-left: 0.1px solid rgba(0, 0, 0, 0.7);
+}
+.mainCircle {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.circle {
+    margin-left: 50%;
+    transform: translateX(-50%);
+    height: 200px;
+    width: 200px;
+    background-color: #03a9f5;
+    border: 1px solid #03a9f5;
+    border-radius: 50%;
+}
+
+.f_title {
+    position: absolute;
+    left: 25%;
+    top: 20%;
+    color: #fff;
+    font-size: 18px;
+}
+
+.m_title {
+    position: absolute;
+    left: 67%;
+    top: 20%;
+    color: #fff;
+    font-size: 18px;
+}
+
+.main_title, .main_total {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 18px;
+}
+.detail_circle {
+    text-align: center;
+    margin: 56% 0 0 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+}
+.detail_circle p {
+    color: white;
+}
+.mini_font {
+    font-size: 18px;
+}
+.detail_circle_top, .detail_circle_bottom {
+    height: 20px;
+    color: #fff;
+}
+.detail_circle_top div {
+    float: left;
+}
+.detail_circle_bottom div {
+    float: left;
+}
+.top_mini_left {
+    width: 50%;
+    height: 20px;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    word-break: break-all;
+}
+.top_mini_right {
+    width: 50%;
+    height: 20px;
+    border-left: 2px solid #fff;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    word-break: break-all;
+}
+.typeTitle {
+    float: right;
+    font-size: 18px;
+    color: #777;
+    text-transform: capitalize;
+}
+.calc_btn {
+    margin: 2px;
+    padding: 8px 10px;
+    width: 140px;
+    cursor: not-allowed;
+}

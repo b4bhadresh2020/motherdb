@@ -1,0 +1,22 @@
+-----------2020-03-19 13:58-----------
+-----------2020-03-19 14:00-----------
+-----------2020-03-19 14:07-----------
+providerUserId : 1 userId : 10105 provider : 2 response : ""
+providerUserId : 2 userId : 10106 provider : 2 response : ""
+providerUserId : 3 userId : 10107 provider : 2 response : ""
+providerUserId : 4 userId : 10108 provider : 2 response : ""
+-----------2020-03-19 14:10-----------
+providerUserId : 1 userId : 10105 provider : 2 response : ""
+providerUserId : 2 userId : 10106 provider : 2 response : ""
+providerUserId : 3 userId : 10107 provider : 2 response : ""
+-----------2020-03-19 14:11-----------
+providerUserId : 1 userId : 10105 provider : 2 response : ""
+providerUserId : 2 userId : 10106 provider : 2 response : ""
+providerUserId : 3 userId : 10107 provider : 2 response : ""
+providerUserId : 4 userId : 10108 provider : 2 response : ""
+-----------2020-03-19 14:38-----------
+providerUserId : 1 userId : 10105 provider : 2 response : ""
+providerUserId : 2 userId : 10106 provider : 2 response : ""
+providerUserId : 3 userId : 10107 provider : 2 response : ""
+providerUserId : 4 userId : 10108 provider : 2 response : ""
+-----------2020-03-20 10:34-----------

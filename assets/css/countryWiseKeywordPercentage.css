@@ -1,0 +1,9 @@
+.country_total {
+	margin-top: 10px;
+	display: block;
+	background-color: #03a9f5;
+	color: #fff;
+	font-size: 16px;
+	border-radius: 3px;
+	padding: 3px 10px;
+}

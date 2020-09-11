@@ -1,0 +1,143 @@
+===================================fortytwo_sms_provider============================
+
+1) test single sms
+    
+    Request : 
+                {
+                    "destinations": [
+                        {
+                            "number": " 919725777942 "
+                        }
+                    ],
+                    "sms_content": {
+                        "message": "You have won 1 cr."
+                    }
+                }
+
+    Response : 
+                {
+                    "api_job_id": "9f42e9af-5778-4d55-9db0-a501131fa83f",
+                    "result_info": {
+                        "status_code": 200,
+                        "description": "Request successful (no errors occured and the message has been submitted)"
+                    },
+                    "results": {
+                        "919725777942": {
+                            "message_id": "15736398263340014203",
+                            "custom_id": ""
+                        }
+                    }
+                }
+
+    Error : 
+            {
+                "api_job_id": "fce79809-d212-4545-9a5b-8d95428fabb4",
+                "result_info": {
+                    "status_code": 401,
+                    "description": "Unauthorized: request has a missing or incorrect authorization token."
+                },
+                "results": {}
+            }                
+
+2) Test with call back url 
+  
+    Request : 
+            {
+                "destinations": [
+                    {
+                        "number": "919725777942"
+                    }
+                ],
+                "sms_content": {
+                    "message": "This is a real test message to say hello.",
+                   "sender_id": "MyCompany"
+                },
+                "callback_url": "https://suprdat.dk/callback_url_forty_two/delivery_report",
+                "job_id": "ypuuN"
+            }
+
+    Response : 
+                {
+                    "api_job_id": "c7a8f44b-9b8d-4f13-928f-bb48789733fc",
+                    "client_job_id": "ypuuN",
+                    "result_info": {
+                        "status_code": 200,
+                        "description": "Request successful (no errors occured and the message has been submitted)"
+                    },
+                    "results": {
+                        "919725777942": {
+                            "message_id": "15737148752980014303",
+                            "custom_id": ""
+                        }
+                    }
+                }
+    Error : 
+            {
+                "api_job_id": "f768c20c-e6f7-4c4c-b6d3-b15174023ab8",
+                "client_job_id": "ypuuN",
+                "result_info": {
+                    "status_code": 401,
+                    "description": "Unauthorized: request has a missing or incorrect authorization token."
+                },
+                "results": {}
+            }            
+
+
+===================================cpsms_sms_provider============================
+
+1) Test with single sms
+
+    request : 
+                {
+                    "to":"919725777942",
+                    "message":"You have won 1 cr.",
+                    "from":"company"
+                }
+    response : 
+                {
+                    "success":
+                    [
+                        {
+                            "to":"919725777942",
+                            "cost":2.1
+                        }
+                    ]                
+                }
+
+    error : 
+            {
+                "error": {
+                    "code": 401,
+                    "message": "Check your Username or API-key credentials"
+                }
+            }
+
+2) Test with call back url
+    
+    request : 
+                {
+                    "to":"919725777942",
+                    "message":"Test SMS",
+                    "from":"company1234",
+                    "dlr_url":"https://suprdat.dk/callback_url_cp_sms/delivery_report/?uniqueKey=aQYGT"
+                }
+
+    response : 
+
+            {
+                "success":
+                [
+                    {
+                        "to":"919725777942",
+                        "cost":2.1
+                    }
+                ]                
+            }
+
+    error : 
+            {
+                "error": {
+                    "code": 401,
+                    "message": "Check your Username or API-key credentials"
+                }
+            }

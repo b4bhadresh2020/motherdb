@@ -1,0 +1,63 @@
+function checkQueryTime(){
+
+        $condition = array();
+        $condition['emailId'] = 'stephen.longhurst@gmail.com';
+        $condition['ip !=']   = '';
+        $condition['phone !=']   = '';
+        $condition['participated !=']   = '';
+        $condition['groupName REGEXP'] = '[[:<:]]Weloveleads[[:>:]]';
+        $condition['keyword REGEXP'] = '[[:<:]]Master[[:>:]]';
+
+        $is_single = TRUE;
+        $order_by = array('userId' => 'DESC');
+
+        
+        $msc=microtime(true);
+        $getUserDataCount = GetAllRecordCount(USER,$condition);    
+        $msc=microtime(true)-$msc;
+        pre($getUserDataCount);
+        last_query();
+        echo $msc.' seconds'; // in seconds
+        echo '<br />';
+        echo ($msc*1000).' milliseconds'; // in millseconds
+
+        echo '<br />';
+        echo '<br />';
+
+        $this->db->limit(1);
+        $msc=microtime(true);
+        $getUserDataId = GetAllRecord(USER,$condition,$is_single,array(),array(),array($order_by),'userId');
+        $msc=microtime(true)-$msc;
+        pre($getUserDataId);
+        last_query();
+        echo $msc.' seconds'; // in seconds
+        echo '<br />';
+        echo ($msc*1000).' milliseconds'; // in millseconds
+
+        echo '<br />';
+        echo '<br />';
+
+        $condition1 = array('userId' => $getUserDataId['userId']);
+        $this->db->limit(1);
+        $msc=microtime(true);
+        $getUserData = GetAllRecord(USER,$condition1,$is_single,array(),array(),array(),'userId,groupName,keyword,country,allDataInString');
+        $msc=microtime(true)-$msc;
+        pre($getUserData);
+        last_query();
+        echo $msc.' seconds'; // in seconds
+        echo '<br />';
+        echo ($msc*1000).' milliseconds'; // in millseconds
+
+        echo '<br />';
+        echo '<br />';
+
+        $this->db->limit(1);
+        $msc=microtime(true);
+        $getUserDataNormalWay = GetAllRecord(USER,$condition,$is_single,array(),array(),array($order_by),'userId,groupName,keyword,country,allDataInString');
+        $msc=microtime(true)-$msc;
+        pre($getUserDataNormalWay);
+        last_query();
+        echo $msc.' seconds'; // in seconds
+        echo '<br />';
+        echo ($msc*1000).' milliseconds'; // in millseconds
+    }

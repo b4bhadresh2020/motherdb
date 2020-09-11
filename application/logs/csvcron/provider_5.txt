@@ -1,0 +1,9 @@
+-----------2020-05-25 11:52-----------
+-----------2020-05-25 12:52-----------
+providerUserId : 1 userId : 10153 provider : 2 response : {"result":"success","data":{"id":"bl4597knto371"}}
+-----------2020-05-25 13:25-----------
+providerUserId : 2 userId : 10154 provider : 1 response : {"result":"error","error":{"msg":"401 - Bad Request"}}
+-----------2020-05-25 13:30-----------
+providerUserId : 2 userId : 10154 provider : 1 response : {"result":"error","error":{"msg":"401 - Bad Request"}}
+-----------2020-05-25 13:33-----------
+providerUserId : 2 userId : 10154 provider : 1 response : {"result":"success","data":{"id":70333654}}

@@ -1,0 +1,284 @@
+<?php
+
+defined('BASEPATH') or exit('No direct script access allowed');
+
+class broadcast extends CI_Controller
+{
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model('mdl_user_tracking');
+        $this->load->model('mdl_history');
+        $this->load->model('mdl_broadcast');
+    }
+
+
+    /*ajax*/
+    public function getBroadcastTrackClickerDataCount(){
+
+        $postData = $_POST;
+        $countArr = $this->mdl_broadcast->getUserBroadcastTrackClickerDataCount($postData);
+
+        echo json_encode($countArr);
+        
+    } 
+
+    /*ajax*/ 
+    public function broadcast_process_send_now_user_data(){
+        
+        $postData = $this->input->post();
+        $userIdsArr = array();
+
+        if (@$postData['userIdsArr']) {
+            $userIdsArr = json_decode($postData['userIdsArr']);
+        }
+
+        $batchId = $postData['batchId'];
+        $generalBatchId = $postData['generalBatchId'];
+        $start = $postData['broadcast_send_now_process_start'];
+        $perPage = $postData['broadcast_send_now_process_per_page'];
+        $campaignId = $postData['campaignName'];
+        $totalCount = $postData['totalCount'];
+        $csvType = $postData['csvType'];
+        $is_set_except_days = $postData['is_set_except_days'];
+        $batchCampaignId = isset($postData['batchCampaignId'])?$postData['batchCampaignId']:0;
+
+        // add sender data in postdata with updated keyname
+        $postData['sender_id'] = $postData['send_now_sender_id']; 
+        $postData['service_provider'] = $postData['send_now_service_provider'];
+        $postData['specificTime'] = ''; //because no need in 'send now' option
+        
+        //get user data
+        $modelResponse = $this->mdl_broadcast->get_user_process_data_from_broadcast($postData, $userIdsArr, $start, $perPage);
+
+        $userData   = $modelResponse['userData'];
+        $intervalCount = $modelResponse['intervalCount'];
+
+        if ($start == 0 && $is_set_except_days == 0) {
+
+            $this->mdl_user_tracking->addInSmsHistoryTable($postData);
+            $this->mdl_user_tracking->editIsNewInCampaignTable($campaignId);
+            $batchCampaignId = $this->mdl_broadcast->addNewBatchUserCampaign($postData);
+            $postData['batchCampaignId'] = $batchCampaignId;
+            //add data in history table
+            if ($csvType == 1) {
+
+                $fileName = 'sms_with_merge_tag_' . date('Y-m-d H:i:s') . '_Total_' . $totalCount . '_Entries.csv';
+                $fileModuleType = 'with_merge';
+
+            }else if($csvType == 2){
+
+                $fileName = 'sms_with_out_merge_tag_' . date('Y-m-d H:i:s') . '_Total_' . $totalCount . '_Entries.csv';
+                $fileModuleType = 'without_merge';
+            }
+
+            $jsonValue = array('batchName' => $batchId,'campaignName' => $campaignId);
+            if ($generalBatchId > 0) {
+                $jsonValue['generalBatchName'] = $generalBatchId;
+            }
+
+            $jsonValue = json_encode($jsonValue);
+            $isImported = 0;
+            $this->mdl_history->addInHistoryTable($fileName, $fileModuleType, $isImported, $jsonValue, $totalCount);
+        }else{
+            $this->mdl_broadcast->updateNewBatchUserCampaign($postData);
+        }
+
+        //add data in batch user table and other table        
+        $this->mdl_broadcast->addInBatchUserAndOtherTablesFromBroadcast($userData,$postData);
+
+        if (@$postData['exceptDays'] > 0) {
+            $is_set_except_days = 1;
+        }
+
+        $response = array(
+            'intervalCount' => $intervalCount,
+            'is_set_except_days' => $is_set_except_days,
+            'batchCampaignId' => $batchCampaignId
+        );
+
+        echo json_encode($response);
+    
+    }
+
+
+    /*ajax*/
+    function broadcast_process_specific_time_user_data(){
+
+        $postData = $this->input->post();
+        $userIdsArr = array();
+
+        if (@$postData['userIdsArr']) {
+            $userIdsArr = json_decode($postData['userIdsArr']);
+        }
+
+        $batchId = $postData['batchId'];
+        $generalBatchId = $postData['generalBatchId'];
+        $start = $postData['broadcast_specific_time_process_start'];
+        $perPage = $postData['broadcast_specific_time_process_per_page'];
+        $campaignId = $postData['campaignName'];
+        $totalCount = $postData['totalCount'];
+        $csvType = $postData['csvType'];
+        $service_provider = $postData['specific_time_service_provider'];
+        $is_set_except_days = $postData['is_set_except_days'];
+        $batchCampaignId = isset($postData['batchCampaignId'])?$postData['batchCampaignId']:0;
+        
+        // add sender data in postdata with updated keyname
+        $postData['sender_id'] = $postData['specific_time_sender_id']; 
+        $postData['service_provider'] = $service_provider;
+
+        //get user data
+        $modelResponse = $this->mdl_broadcast->get_user_process_data_from_broadcast($postData, $userIdsArr, $start, $perPage);
+
+        $userData   = $modelResponse['userData'];
+        $intervalCount = $modelResponse['intervalCount'];
+
+        if ($start == 0 && $is_set_except_days == 0) {
+
+            $this->mdl_user_tracking->addInSmsHistoryTable($postData);
+            $this->mdl_user_tracking->editIsNewInCampaignTable($campaignId);
+            $batchCampaignId = $this->mdl_broadcast->addNewBatchUserCampaign($postData);
+            $postData['batchCampaignId'] = $batchCampaignId;
+
+            //add data in history table
+            if ($csvType == 1) {
+
+                $fileName = 'sms_with_merge_tag_' . date('Y-m-d H:i:s') . '_Total_' . $totalCount . '_Entries.csv';
+                $fileModuleType = 'with_merge';
+
+            }else if($csvType == 2){
+
+                $fileName = 'sms_with_out_merge_tag_' . date('Y-m-d H:i:s') . '_Total_' . $totalCount . '_Entries.csv';
+                $fileModuleType = 'without_merge';
+            }
+
+            $jsonValue = array('batchName' => $batchId,'campaignName' => $campaignId);
+            if ($generalBatchId > 0) {
+                $jsonValue['generalBatchName'] = $generalBatchId;
+            }
+
+            $jsonValue = json_encode($jsonValue);
+            $isImported = 0;
+            $this->mdl_history->addInHistoryTable($fileName, $fileModuleType, $isImported, $jsonValue, $totalCount);
+        }else{
+            $this->mdl_broadcast->updateNewBatchUserCampaign($postData);
+        }
+
+        //add data in batch user table and other table       
+
+        if ($service_provider == 'forty_two') {
+            $postData['specificTime'] = $postData['diff_in_sec'];    
+        }else if($service_provider == 'cp_sms'){
+            $postData['specificTime'] = strtotime($postData['broadcast_specific_time']);
+        }else if($service_provider == 'warriors_sms'){
+            $postData['specificTime'] = date('Y-m-d H:i',strtotime($postData['broadcast_specific_time']));
+        }
+
+        $minuteCounter = $this->mdl_broadcast->addInBatchUserAndOtherTablesFromBroadcast($userData,$postData);
+        $previousProvider = $service_provider;
+
+        if (@$postData['exceptDays'] > 0) {
+            $is_set_except_days = 1;
+        }
+
+        $response = array(
+            'intervalCount' => $intervalCount,
+            'is_set_except_days' => $is_set_except_days,
+            'batchCampaignId' => $batchCampaignId,
+            'minuteCounter' => $minuteCounter,   
+            'previousProvider' => $previousProvider
+        );
+
+        echo json_encode($response);    
+    }
+
+    /*ajax*/
+    function broadcast_process_split_part_user_data(){
+
+        $postData = $this->input->post();
+        $userIdsArr = array();
+
+        if (@$postData['userIdsArr']) {
+            $userIdsArr = json_decode($postData['userIdsArr']);
+        }
+
+        $batchId = $postData['batchId'];
+        $generalBatchId = $postData['generalBatchId'];
+        $start = $postData['broadcast_split_part_process_start'];
+        $perPage = $postData['broadcast_split_part_process_per_page'];
+        $campaignId = $postData['campaignName'];
+        $totalCount = $postData['totalCount'];
+        $csvType = $postData['csvType'];
+        $service_provider = $postData['split_part_service_provider'];
+        $is_set_except_days = $postData['is_set_except_days'];
+        $batchCampaignId = isset($postData['batchCampaignId'])?$postData['batchCampaignId']:0;
+
+        // add sender data in postdata with updated keyname
+        $postData['sender_id'] = $postData['split_part_sender_id']; 
+        $postData['service_provider'] = $service_provider;
+
+        //get user data
+        $modelResponse = $this->mdl_broadcast->get_user_process_data_from_broadcast($postData, $userIdsArr, $start, $perPage);
+
+        $userData   = $modelResponse['userData'];
+        $intervalCount = $modelResponse['intervalCount'];
+
+        if ($start == 0 && $is_set_except_days == 0) {
+
+            $this->mdl_user_tracking->addInSmsHistoryTable($postData);
+            $this->mdl_user_tracking->editIsNewInCampaignTable($campaignId);
+            $batchCampaignId = $this->mdl_broadcast->addNewBatchUserCampaign($postData);
+            $postData['batchCampaignId'] = $batchCampaignId;
+
+            //add data in history table
+            if ($csvType == 1) {
+
+                $fileName = 'sms_with_merge_tag_' . date('Y-m-d H:i:s') . '_Total_' . $totalCount . '_Entries.csv';
+                $fileModuleType = 'with_merge';
+
+            }else if($csvType == 2){
+
+                $fileName = 'sms_with_out_merge_tag_' . date('Y-m-d H:i:s') . '_Total_' . $totalCount . '_Entries.csv';
+                $fileModuleType = 'without_merge';
+            }
+
+            $jsonValue = array('batchName' => $batchId,'campaignName' => $campaignId);
+            if ($generalBatchId > 0) {
+                $jsonValue['generalBatchName'] = $generalBatchId;
+            }
+
+            $jsonValue = json_encode($jsonValue);
+            $isImported = 0;
+            $this->mdl_history->addInHistoryTable($fileName, $fileModuleType, $isImported, $jsonValue, $totalCount);
+        }else{
+            $this->mdl_broadcast->updateNewBatchUserCampaign($postData);
+        }
+
+        //add data in batch user table and other table        
+
+        if ($service_provider == 'forty_two') {
+            $postData['specificTime'] = $postData['split_part_diff_in_sec'];
+        }else if($service_provider == 'cp_sms'){
+            $postData['specificTime'] = strtotime($postData['split_part_specific_date']);
+        }else if($service_provider == 'warriors_sms'){
+            $postData['specificTime'] = date('Y-m-d H:i',strtotime($postData['split_part_specific_date']));
+        }
+        
+        
+        $minuteCounter = $this->mdl_broadcast->addInBatchUserAndOtherTablesFromBroadcast($userData,$postData);
+        $previousProvider = $service_provider;
+        if (@$postData['exceptDays'] > 0) {
+            $is_set_except_days = 1;
+        }
+
+        $response = array(
+            'intervalCount' => $intervalCount,
+            'is_set_except_days' => $is_set_except_days,
+            'batchCampaignId' => (int)$batchCampaignId,
+            'minuteCounter' => $minuteCounter,   
+            'previousProvider' => $previousProvider
+        );
+        echo json_encode($response);    
+    }
+}
