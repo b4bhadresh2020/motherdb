@@ -573,6 +573,29 @@ class Live_delivery_api extends CI_Controller
                                 $response = null;
                                 addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);
                             }
+                        }else if($providerData['provider'] == SENDGRID){
+                            $lastDeliveryData['birthDate'] = "";
+                            if (@$lastDeliveryData['birthdateDay'] != '0' && @$lastDeliveryData['birthdateMonth'] != '0' && @$lastDeliveryData['birthdateYear'] != '0') {
+                                $birthDate            = $lastDeliveryData['birthdateYear'] . '-' . $lastDeliveryData['birthdateMonth'] . '-' . $lastDeliveryData['birthdateDay'];
+                                $lastDeliveryData['birthDate'] = date('Y-m-d', strtotime($birthDate));
+                            } 
+                            $this->load->model('mdl_sendgrid');
+                            // LOGIC FOR SEND DATA TO SENDGRID OR QUEUE                            
+                            //$delayDay = $delays[$mailProvider];
+                            $delayDay = 0;
+                            $provider = SENDGRID;
+                            if($delayDay == 0){
+                                // NO DELAY INSTANT SEND DATA TO SENDGRID
+                                $response = $this->mdl_sendgrid->AddEmailToSendgridSubscriberList($lastDeliveryData,$mailProvider);
+                                // ADD RECORD IN HISTORY
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);
+                            }else{
+                                // ADD DATA IN QUEUE FOR DELAY SENDING
+                                addToAweberSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
+                                // ADD RECORD IN HISTORY
+                                $response = null;
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);
+                            } 
                         }else{
                             $response = array("result" => "error", "error" => array("msg" => "Wrong provider"));
                         }    

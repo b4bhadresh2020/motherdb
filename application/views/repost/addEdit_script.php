@@ -86,6 +86,8 @@
 					sendEmailToConstantContact(apiData, provider, groupName, keyword);
 				} else if (providerId == 4) {
 					sendEmailToOngage(apiData, provider, groupName, keyword);
+				} else if (providerId == 5) {
+					sendEmailToSendgrid(apiData, provider, groupName, keyword);
 				}
 			}
 		});
@@ -96,6 +98,7 @@
 	var sendEmailToConstantContactCount = 0;
 	var sendEmailToTransmitviaCount = 0;
 	var sendEmailToOngageCount = 0;
+	var sendEmailToSendgridCount = 0;
 
 	function sendEmailToEgoi(apiData) {
 		var apiDataDetail = apiData[sendEmailToEgoiCount];
@@ -273,6 +276,43 @@
 				sendEmailToOngageCount++;
 				if (sendEmailToOngageCount < apiData.length) {
 					sendEmailToOngage(apiData, provider, groupName, keyword);
+				}
+
+			}
+		});
+	}
+
+	function sendEmailToSendgrid(apiData, provider, groupName, keyword) {
+		var apiDataDetail = apiData[sendEmailToSendgridCount];
+
+		$.ajax({
+			url: BASEPATH + 'repost/addDataToSendgrid',
+			type: 'post',
+			data: {
+				apiDataDetail: apiDataDetail,
+				provider: provider,
+				groupName: groupName,
+				keyword: keyword
+			},
+			success: function(response) {
+
+				userApiDataLength--;
+				if (userApiDataLength == 0) {
+
+					$('#sucErrMsg').text("Contacts has been added successfully !!!").addClass('alert alert-success');
+
+					var timeoutVar = setTimeout(function() {
+						clearTimeout(timeoutVar);
+						location.reload();
+					}, 2000);
+
+				} else {
+					$('#sucErrMsg').text('Approx ' + userApiDataLength + ' Records Left').addClass('alert alert-info');
+				}
+
+				sendEmailToSendgridCount++;
+				if (sendEmailToSendgridCount < apiData.length) {
+					sendEmailToSendgrid(apiData, provider, groupName, keyword);
 				}
 
 			}

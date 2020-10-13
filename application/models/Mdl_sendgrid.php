@@ -10,7 +10,7 @@ class Mdl_sendgrid extends CI_Model {
     }
 
     
-    function sendGridMail($getData,$sendGridListId){
+    function AddEmailToSendgridSubscriberList($getData,$sendGridListId){
 
         try{
             // Create a Guzzle client

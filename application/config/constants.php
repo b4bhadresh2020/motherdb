@@ -162,6 +162,7 @@ define('AWEBER'	, '1');
 define('TRANSMITVIA', '2');
 define('CONSTANTCONTACT', '3');
 define('ONGAGE', '4');
+define('SENDGRID', '5');
 define('PROVIDERS', 'providers');
 define('AWEBER_ACCOUNTS', 'aweber_accounts');
 define('ONGAGE_ACCOUNTS', 'ongage_accounts');

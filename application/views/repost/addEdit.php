@@ -3,6 +3,7 @@ $aweberList = getProviderList(AWEBER);
 $transmitviaList = getProviderList(TRANSMITVIA);
 $constantContactList = getProviderList(CONSTANTCONTACT);
 $ongageList = getProviderList(ONGAGE);
+$sendgridList = getProviderList(SENDGRID);
 
 $mailProviders = array(    
     'egoi' => 'E-goi',
@@ -26,6 +27,11 @@ foreach($constantContactList as $list){
 // Add Ongage list in mail provider
 foreach($ongageList as $list){
     $mailProviders[$list['id']] = $list['listname']." (Ongage)";
+}
+
+// Add Sendgrid list in mail provider
+foreach($sendgridList as $list){
+    $mailProviders[$list['id']] = $list['listname']." (Sendgrid)";
 }
 
 ?>
