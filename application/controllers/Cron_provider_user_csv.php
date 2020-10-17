@@ -12,7 +12,7 @@ class Cron_provider_user_csv extends CI_Controller
         $this->load->model('mdl_aweber');
         $this->load->model('mdl_transmitvia');
         $this->load->model('mdl_ongage');
-        //$this->load->model('mdl_cron_provider');
+        $this->load->model('mdl_sendgrid');
     }
 
     public function index() {
@@ -122,7 +122,12 @@ class Cron_provider_user_csv extends CI_Controller
                                 $responseField = "ongageResponse";
                                 $mailProvider = $this->getOngageMailProviderId($provider["providerList"]);                                
                                 $response = $this->mdl_ongage->AddEmailToOngageSubscriberList($userData,$mailProvider);
-                                addRecordInHistoryFromCSV($userData, $mailProvider, TRANSMITVIA, $response,$provider['groupName'],$provider['keyword']);
+                                addRecordInHistoryFromCSV($userData, $mailProvider, ONGAGE, $response,$provider['groupName'],$provider['keyword']);
+                            }else if($provider['providerName'] == SENDGRID){
+                                $responseField = "sendgridResponse";
+                                $mailProvider = $this->getSendgridMailProviderId($provider["providerList"]);                                
+                                $response = $this->mdl_sendgrid->AddEmailToSendgridSubscriberList($userData,$mailProvider);
+                                addRecordInHistoryFromCSV($userData, $mailProvider, SENDGRID, $response,$provider['groupName'],$provider['keyword']);
                             }   
                             // update status of sended record
                             $is_insert = FALSE;
@@ -213,6 +218,13 @@ class Cron_provider_user_csv extends CI_Controller
             "8" => "54",  // Norway - Kare 
             "9" => "58", // Finland  - Camilla 
             "10" => "59"  // Finland  - Kare 
+        );
+        return $provider[$providerId];
+    }
+
+    public function getSendgridMailProviderId($providerId){
+        $provider = array(
+            "1" => "60",  // Australia-camilla 
         );
         return $provider[$providerId];
     }

@@ -14,15 +14,16 @@ class Mdl_sendgrid extends CI_Model {
 
         try{
             // Create a Guzzle client
-            $client = new GuzzleHttp\Client();        
-
+            $client = new GuzzleHttp\Client();     
+            
             // fetch mail provider data from providers table
             $providerCondition   = array('id' => $sendGridListId);
             $is_single           = true;
             $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);            
-                    
+            
             //LIST ID 
             $list_id = $providerData['code'];      
+            $newsubscriberUrl = "https://api.sendgrid.com/v3/marketing/contacts";
             $accessToken = "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";
 
             // Find tag value
@@ -70,13 +71,10 @@ class Mdl_sendgrid extends CI_Model {
             $body = $client->put($newsubscriberUrl, [
                     'json' => $data, 
                     'headers' => ['Authorization' => 'Bearer ' . $accessToken]
-            ]);
-            
-            $responseCode = $body->getStatusCode();  
-            $subscriberUrl = $body->getHeader('Location')[0];
-            $subscriberResponse = $client->get($subscriberUrl,
-                ['headers' => ['Authorization' => 'Bearer ' . $accessToken]])->getBody();
-            $subscriber = json_decode($subscriberResponse, true);
+            ]);            
+
+            $responseCode = $body->getStatusCode();
+            $subscriber = json_decode($body->getBody(),true);
 
             if ($responseCode == 202) {                
                 $subscriber_id = $subscriber['job_id'];    

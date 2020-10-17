@@ -674,6 +674,13 @@ function getOngageProviderListName($providerListId){
     return $ongageList[$providerListId];
 }
 
+function getSendgridProviderListName($providerListId){
+    $ongageList = array(
+        "1" => "CA",
+    );
+    return $ongageList[$providerListId];
+}
+
 function getLiveRepostAweverProviderID($providerListId){
     $provider = array(
         "1" => "14",  // Velkomstgaven.com (Norway) 
@@ -732,6 +739,13 @@ function getLiveRepostOngageProviderID($providerId){
         "8" => "54", // Norway - Kare 
         "9" => "58", // Finland  - Camilla 
         "10" => "59"  // Finland  - Kare 
+    );
+    return $provider[$providerId];
+}
+
+function getLiveRepostSendgridProviderID($providerId){
+    $provider = array(
+        "1" => "60",  // CA
     );
     return $provider[$providerId];
 }
