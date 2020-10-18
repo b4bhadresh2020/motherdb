@@ -132,6 +132,7 @@
                         <li class="<?php echo (@$load_page == 'ongageQueue')?"active":"";?>" title = "Ongage Queue List" ><a href="<?php echo base_url('ongageQueue/manage'); ?>" ><i class="ti-timer"></i> Ongage Queue List </a></li>
                         <li class="<?php echo (@$load_page == 'transmitviaQueue')?"active":"";?>" title = "Transmitvia Queue List" ><a href="<?php echo base_url('transmitviaQueue/manage'); ?>"><i class="ti-timer"></i> Transmitvia Queue List </a></li>
                         <li class="<?php echo (@$load_page == 'constantContactQueue')?"active":"";?>" title = "ConstantContact Queue List" ><a href="<?php echo base_url('constantContactQueue/manage'); ?>"><i class="ti-timer"></i> Constant Queue List </a></li>
+                        <li class="<?php echo (@$load_page == 'sendgridQueue')?"active":"";?>" title = "Sendgrid Queue List" ><a href="<?php echo base_url('sendgridQueue/manage'); ?>"><i class="ti-timer"></i> Sendgrid Queue List </a></li>
 
                     <li class="label">Email Provider State </li>
 
@@ -139,7 +140,7 @@
                         <li class="<?php echo (@$load_page == 'transmitvia')?"active":"";?>" title = "Transmitvia State" ><a href="<?php echo base_url('providerState/transmitvia'); ?>" ><i class="ti-timer"></i> Transmitvia Email Stats </a></li>
                         <li class="<?php echo (@$load_page == 'constantcontact')?"active":"";?>" title = "Constant Contact State" ><a href="<?php echo base_url('providerState/constantcontact'); ?>" ><i class="ti-timer"></i> Constant Email Stats </a></li>
                         <li class="<?php echo (@$load_page == 'ongage')?"active":"";?>" title = "Ongage State" ><a href="<?php echo base_url('providerState/ongage'); ?>" ><i class="ti-timer"></i> Ongage Email Stats </a></li>
-                        
+                        <li class="<?php echo (@$load_page == 'sendgrid')?"active":"";?>" title = "Sendgrid State" ><a href="<?php echo base_url('providerState/sendgrid'); ?>" ><i class="ti-timer"></i> Sendgrid Email Stats </a></li>
 
                     <li class="label">Stats </li>
                         

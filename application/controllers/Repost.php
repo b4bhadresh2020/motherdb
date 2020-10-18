@@ -240,7 +240,7 @@ class Repost extends CI_Controller
         }
 
         $this->load->model('mdl_sendgrid');
-        $response = $this->mdl_aweber->AddEmailToSendgridSubscriberList($apiDataDetail, $mailProvider);
+        $response = $this->mdl_sendgrid->AddEmailToSendgridSubscriberList($apiDataDetail, $mailProvider);
         // ADD RECORD IN HISTORY
         addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword);
 

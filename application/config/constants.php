@@ -133,6 +133,7 @@ define("AWEBER_DELAY_USER_DATA"			,	"aweber_delay_user_data");
 define("TRANSMITVIA_DELAY_USER_DATA"	,	"transmitvia_delay_user_data");
 define("CONTACT_DELAY_USER_DATA"		,	"contact_delay_user_data");
 define("ONGAGE_DELAY_USER_DATA"			,	"ongage_delay_user_data");
+define("SENDGRID_DELAY_USER_DATA"		,	"sendgrid_delay_user_data");
 define("EMAIL_HISTORY_DATA"				,	"email_history_data");
 
 

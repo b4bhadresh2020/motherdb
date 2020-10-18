@@ -294,7 +294,7 @@ class Live_delivery_api extends CI_Controller
                                                 unset($dataArr['financingNeed']);
                                                 unset($dataArr['timestamp']);
                                                 unset($dataArr['tag']);
-                                                
+
                                                 ManageData(USER, $condition, $dataArr, $is_insert);
 
                                                 // Get userdata 
@@ -441,7 +441,7 @@ class Live_delivery_api extends CI_Controller
         $lastDeliveryData        = GetAllRecord(LIVE_DELIVERY_DATA, $liveDeliveryCondition, $is_single); 
 
         //we will not send from local
-        if ($_SERVER['HTTP_HOST'] == 'localhost') {
+        if ($_SERVER['HTTP_HOST'] != 'localhost') {
 
             $mailProviders = json_decode($getLiveDeliveryData['mailProvider']);
 
