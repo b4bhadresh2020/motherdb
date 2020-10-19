@@ -59,10 +59,10 @@ class Mdl_sendgrid extends CI_Model {
                         "first_name"    => $getData['firstName'],
                         "last_name"     => $getData['lastName'],
                         "custom_fields" => array(
-                            "w1_T" => $getData['gender'],
-                            "w2_T" => $getData['phone'],
-                            "w3_T" => $getData['birthDate'],
-                            "w4_T" => $tagValue
+                            "w1_T" => @$getData['gender'],
+                            "w2_T" => @$getData['phone'],
+                            "w3_T" => @$getData['birthDate'],
+                            "w4_T" => @$tagValue
                         )
                     )
                 )

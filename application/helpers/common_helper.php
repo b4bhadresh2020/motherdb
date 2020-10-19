@@ -606,7 +606,8 @@ function getProviderName($providerId){
     $providerNames = array(
         '1' => 'Aweber',
         '2' => 'Transmitvia',
-        '4' => 'Ongage'
+        '4' => 'Ongage',
+        '5' => 'Sendgrid'
     );
     return $providerNames[$providerId];
 }

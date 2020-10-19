@@ -100,6 +100,10 @@
                                                                 $providerName = 'Ongage';
                                                                 $response = $curEntry['ongageResponse'];
                                                                 break;
+                                                            case 5:                                                                
+                                                                $providerName = 'Sendgrid';
+                                                                $response = $curEntry['sendgridResponse'];
+                                                                break;
                                                         }
                                                         if($curEntry['status'] == 0){
                                                             $response_staus = "Pending";
