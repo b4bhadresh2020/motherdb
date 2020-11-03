@@ -133,6 +133,7 @@ define("AWEBER_DELAY_USER_DATA"			,	"aweber_delay_user_data");
 define("TRANSMITVIA_DELAY_USER_DATA"	,	"transmitvia_delay_user_data");
 define("CONTACT_DELAY_USER_DATA"		,	"contact_delay_user_data");
 define("ONGAGE_DELAY_USER_DATA"			,	"ongage_delay_user_data");
+define("SENDGRID_DELAY_USER_DATA"		,	"sendgrid_delay_user_data");
 define("EMAIL_HISTORY_DATA"				,	"email_history_data");
 
 
@@ -162,6 +163,7 @@ define('AWEBER'	, '1');
 define('TRANSMITVIA', '2');
 define('CONSTANTCONTACT', '3');
 define('ONGAGE', '4');
+define('SENDGRID', '5');
 define('PROVIDERS', 'providers');
 define('AWEBER_ACCOUNTS', 'aweber_accounts');
 define('ONGAGE_ACCOUNTS', 'ongage_accounts');

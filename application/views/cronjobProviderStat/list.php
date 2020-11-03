@@ -67,6 +67,8 @@
                                                             echo getTransmitviaProviderListName($curEntry['providerList']);
                                                          }else if($curEntry['providerName'] ==  ONGAGE ){
                                                             echo getOngageProviderListName($curEntry['providerList']);
+                                                         }else if($curEntry['providerName'] ==  SENDGRID ){
+                                                            echo getSendgridProviderListName($curEntry['providerList']);
                                                          }
                                                          ?></td>
                                                         <td><?php echo date("d-m-Y",strtotime($curEntry['fromDate'])); ?></td>

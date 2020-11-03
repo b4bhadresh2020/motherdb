@@ -17,11 +17,21 @@
 
                 foreach ($historyProviderData as $providerInfo) {
                     $i++;
+                    $providerListName = "";
+                    if($providerInfo['providerName'] == AWEBER){
+                        $providerListName = getAweverProviderListName($providerInfo['providerList']);
+                    }else if($providerInfo['providerName'] == TRANSMITVIA){
+                        $providerListName = getTransmitviaProviderListName($providerInfo['providerList']);
+                    }else if($providerInfo['providerName'] == ONGAGE){
+                        $providerListName = getOngageProviderListName($providerInfo['providerList']);
+                    }else if($providerInfo['providerName'] == SENDGRID){
+                        $providerListName = getSendgridProviderListName($providerInfo['providerList']);
+                    }
                     ?> 
                     <tr>
                         <td><?php echo $i; ?></td>
                         <td><?php echo getProviderName($providerInfo['providerName']); ?></td>
-                        <td><?php echo ($providerInfo['providerName'] ==1 )?getAweverProviderListName($providerInfo['providerList']):getTransmitviaProviderListName($providerInfo['providerList']); ?></td>
+                        <td><?php echo $providerListName; ?></td>
                         <td><?php echo date("d-m-Y",strtotime($providerInfo['sendDate'])); ?></td>
                         <td><?php echo $providerInfo['totalSend']; ?></td>
                     </tr>
