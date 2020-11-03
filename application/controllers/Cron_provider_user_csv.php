@@ -203,6 +203,7 @@ class Cron_provider_user_csv extends CI_Controller
             "10" => "55",  // CA - Getspinn
             "11" => "56",  // NO - Getspinn
             "12" => "57",  // NZ - Getspinn
+            "13" => "61",  // Freecasinodeal.com/nz  (New Zealand)
         );
         return $provider[$providerId];
     
