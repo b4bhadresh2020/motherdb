@@ -671,7 +671,9 @@ function getOngageProviderListName($providerListId){
         "7" => "Norway - Camilla",
         "8" => "Norway - Kare",
         "9" => "Finland  - Camilla",
-        "10" => "Finland  - Kare"
+        "10" => "Finland  - Kare",
+        "11" => "New Zealand  - Camilla",
+        "12" => "New Zealand  - Kare"
     );
     return $ongageList[$providerListId];
 }
@@ -741,7 +743,9 @@ function getLiveRepostOngageProviderID($providerId){
         "7" => "53",  // Norway - Camilla
         "8" => "54", // Norway - Kare 
         "9" => "58", // Finland  - Camilla 
-        "10" => "59"  // Finland  - Kare 
+        "10" => "59",  // Finland  - Kare 
+        "11" => "62",  // New zealand  - Camilla 
+        "12" => "63"  // New zealand  - Kare 
     );
     return $provider[$providerId];
 }

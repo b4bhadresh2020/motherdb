@@ -461,6 +461,8 @@
             providerList +="<option value='8'>Norway - Kare</option>";
             providerList +="<option value='9'>Finland  - Camilla</option>";
             providerList +="<option value='10'>Finland  - Kare</option>";
+            providerList +="<option value='11'>New Zealand  - Camilla</option>";
+            providerList +="<option value='12'>New Zealand  - Kare</option>";
         }else if(providerId == 5){
             providerList +="<option value='1'>CA</option>";
         }else{
