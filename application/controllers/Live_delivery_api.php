@@ -441,7 +441,7 @@ class Live_delivery_api extends CI_Controller
         $lastDeliveryData        = GetAllRecord(LIVE_DELIVERY_DATA, $liveDeliveryCondition, $is_single); 
 
         //we will not send from local
-        if ($_SERVER['HTTP_HOST'] != 'localhost') {
+        if ($_SERVER['HTTP_HOST'] == 'localhost') {
 
             $mailProviders = json_decode($getLiveDeliveryData['mailProvider']);
 
@@ -594,7 +594,30 @@ class Live_delivery_api extends CI_Controller
                                 addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);
                             }else{
                                 // ADD DATA IN QUEUE FOR DELAY SENDING
-                                addToAweberSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
+                                addToSendgridSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
+                                // ADD RECORD IN HISTORY
+                                $response = null;
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);
+                            } 
+                        }else if($providerData['provider'] == SENDINBLUE){
+                            $lastDeliveryData['birthDate'] = "";
+                            if (@$lastDeliveryData['birthdateDay'] != '0' && @$lastDeliveryData['birthdateMonth'] != '0' && @$lastDeliveryData['birthdateYear'] != '0') {
+                                $birthDate            = $lastDeliveryData['birthdateYear'] . '-' . $lastDeliveryData['birthdateMonth'] . '-' . $lastDeliveryData['birthdateDay'];
+                                $lastDeliveryData['birthDate'] = date('Y-m-d', strtotime($birthDate));
+                            } 
+                            $this->load->model('mdl_sendinblue');
+                            // LOGIC FOR SEND DATA TO SENDGRID OR QUEUE                            
+                            //$delayDay = $delays[$mailProvider];
+                            $delayDay = 0;
+                            $provider = SENDINBLUE;
+                            if($delayDay == 0){
+                                // NO DELAY INSTANT SEND DATA TO SENDGRID
+                                $response = $this->mdl_sendinblue->AddEmailToSendInBlueSubscriberList($lastDeliveryData,$mailProvider);
+                                // ADD RECORD IN HISTORY
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);
+                            }else{
+                                // ADD DATA IN QUEUE FOR DELAY SENDING
+                                addToSendinblueSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
                                 // ADD RECORD IN HISTORY
                                 $response = null;
                                 addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);

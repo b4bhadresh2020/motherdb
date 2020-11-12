@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Mdl_sendgrid extends CI_Model {
+class Mdl_sendinblue extends CI_Model {
 
     public function __construct() {
         parent::__construct();
@@ -10,21 +10,21 @@ class Mdl_sendgrid extends CI_Model {
     }
 
     
-    function AddEmailToSendgridSubscriberList($getData,$sendGridListId){
+    function AddEmailToSendInBlueSubscriberList($getData,$sendInBlueListId){
 
         try{
             // Create a Guzzle client
             $client = new GuzzleHttp\Client();     
             
             // fetch mail provider data from providers table
-            $providerCondition   = array('id' => $sendGridListId);
+            $providerCondition   = array('id' => $sendInBlueListId);
             $is_single           = true;
             $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);            
             
             //LIST ID 
             $list_id = $providerData['code'];      
-            $newsubscriberUrl = "https://api.sendgrid.com/v3/marketing/contacts";
-            $accessToken = "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";
+            $newsubscriberUrl = "https://api.sendinblue.com/v3/contacts";
+            $accessToken = "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";
 
             // Find tag value
             if(isset($getData["otherLable"]) && isset($getData["other"])){
@@ -44,7 +44,7 @@ class Mdl_sendgrid extends CI_Model {
             }
 
             // LOG ENTRY
-            $logPath    = FCPATH."log/sendgrid/";
+            $logPath    = FCPATH."log/sendinblue/";
             $fileName   = date("Ymd")."_log.txt"; 
             $logFile    = fopen($logPath.$fileName,"a");
             $logData    = $getData['emailId']." ".$getData['firstName']." ".$getData['lastName']." ".time()."\n";
@@ -52,44 +52,41 @@ class Mdl_sendgrid extends CI_Model {
             fclose($logFile);
 
             $data = array(
-                "list_ids" => array($list_id),
-                "contacts" => array(
-                    array(
-                        "email"         => $getData['emailId'],
-                        "first_name"    => $getData['firstName'],
-                        "last_name"     => $getData['lastName'],
-                        "phone_number"  => @$getData['phone'],
-                        "address_line_1"=> @$getData['address'],
-                        "city"          => @$getData['city'],
-                        "country"       => @$getData['country'],
-                        "postal_code"   => @$getData['postCode'],
-                        "custom_fields" => array(
-                            "w1_T" => @$getData['gender'],
-                            "w2_T" => @$getData['phone'],
-                            "w3_T" => @$getData['birthDate'],
-                            "w4_T" => @$tagValue
-                        )
-                    )
+                "listIds" => array((int)$list_id),
+                "email" => $getData['emailId'],
+                "updateEnabled" => false,
+                "attributes" => array(
+                        "FIRSTNAME"    => $getData['firstName'],
+                        "LASTNAME"     => $getData['lastName'],
+                        // "SMS"  => @$getData['phone'],
+                        "ADDRESS"=> @$getData['address'],
+                        "CITY"          => @$getData['city'],
+                        "ZIPCODE"   => @$getData['postCode'],
+                        "GENDER"   => @$getData['postCode'] 
                 )
             );  
 
-            $body = $client->put($newsubscriberUrl, [
-                    'json' => $data, 
-                    'headers' => ['Authorization' => 'Bearer ' . $accessToken]
-            ]);            
 
+            $body = $client->post($newsubscriberUrl, [
+                    'json' => $data, 
+                    'headers' => ['api-key' => "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",
+                                  'Accept' => "application/json",
+                                  'Content-Type' => "application/json"
+                                 ]
+            ]);
+            
             $responseCode = $body->getStatusCode();
             $subscriber = json_decode($body->getBody(),true);
 
-            if ($responseCode == 202) {                
-                $subscriber_id = $subscriber['job_id'];    
+            if ($responseCode == 201) {                
+                $subscriber_id = $subscriber['id'];    
                 return array("result" => "success","data" => array("id" => $subscriber_id));
             }else if($responseCode == 400) {
-                return array("result" => "error","error" => array("msg" => $subscriber['errors']['message']));
+                return array("result" => "error","error" => array("msg" => $subscriber['message']));
             }else{
                 return array("result" => "error","error" => array("msg" => "Unknown Error Response"));
             }
-        }catch (\GuzzleHttp\Exception\ClientException $e) {            
+        }catch (\GuzzleHttp\Exception\ClientException $e) { 
                 return array("result" => "error","error" => array("msg" => "Bad Request"));            
         }
     } 

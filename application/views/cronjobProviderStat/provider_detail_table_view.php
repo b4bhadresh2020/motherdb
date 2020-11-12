@@ -26,6 +26,8 @@
                         $providerListName = getOngageProviderListName($providerInfo['providerList']);
                     }else if($providerInfo['providerName'] == SENDGRID){
                         $providerListName = getSendgridProviderListName($providerInfo['providerList']);
+                    }else if($providerInfo['providerName'] == SENDINBLUE){
+                        $providerListName = getSendInBlueProviderListName($providerInfo['providerList']);
                     }
                     ?> 
                     <tr>

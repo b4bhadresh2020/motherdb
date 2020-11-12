@@ -607,7 +607,8 @@ function getProviderName($providerId){
         '1' => 'Aweber',
         '2' => 'Transmitvia',
         '4' => 'Ongage',
-        '5' => 'Sendgrid'
+        '5' => 'Sendgrid',
+        '6' => 'Sendinblue'
     );
     return $providerNames[$providerId];
 }
@@ -679,10 +680,20 @@ function getOngageProviderListName($providerListId){
 }
 
 function getSendgridProviderListName($providerListId){
-    $ongageList = array(
+    $sendgridList = array(
         "1" => "CA",
     );
-    return $ongageList[$providerListId];
+    return $sendgridList[$providerListId];
+}
+
+function getSendInBlueProviderListName($providerListId){
+    $sendInBlueList = array(
+        "1" => "NO",
+        "2" => "CA",
+        "3" => "NZ",
+        "4" => "SE"
+    );
+    return $sendInBlueList[$providerListId];
 }
 
 function getLiveRepostAweverProviderID($providerListId){
@@ -753,6 +764,16 @@ function getLiveRepostOngageProviderID($providerId){
 function getLiveRepostSendgridProviderID($providerId){
     $provider = array(
         "1" => "60",  // CA
+    );
+    return $provider[$providerId];
+}
+
+function getLiveRepostSendInBlueProviderID($providerId){
+    $provider = array(
+        "1" => "64",  // NO
+        "2" => "65",  // CA
+        "3" => "66",  // NZ
+        "4" => "67"  // SE
     );
     return $provider[$providerId];
 }
@@ -1319,6 +1340,36 @@ function addToOngageSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay)
     $condition = array();
     $is_insert = true;
     ManageData(ONGAGE_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
+}
+
+function addToSendgridSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+    $liveDeliveryDelayData = array(
+        "liveDeliveryDataId" => $liveDeliveryDataId,
+        "providerId" => $mailProvider,
+        "delayDay" => $delayDay,
+        "currentTimestamp" => time(),
+        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "status" => 0
+    );
+    $condition = array();
+    $is_insert = true;
+    ManageData(SENDGRID_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
+}
+
+function addToSendinblueSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+    $liveDeliveryDelayData = array(
+        "liveDeliveryDataId" => $liveDeliveryDataId,
+        "providerId" => $mailProvider,
+        "delayDay" => $delayDay,
+        "currentTimestamp" => time(),
+        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "status" => 0
+    );
+    $condition = array();
+    $is_insert = true;
+    ManageData(SENDINBLUE_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
 function addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$groupName,$keyword){

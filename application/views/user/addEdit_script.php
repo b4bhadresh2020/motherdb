@@ -465,6 +465,11 @@
             providerList +="<option value='12'>New Zealand  - Kare</option>";
         }else if(providerId == 5){
             providerList +="<option value='1'>CA</option>";
+        }else if(providerId == 6){
+            providerList +="<option value='1'>NO</option>";
+            providerList +="<option value='2'>CA</option>";
+            providerList +="<option value='3'>NZ</option>";
+            providerList +="<option value='4'>SE</option>";
         }else{
             providerList +="<option value='0'>Select Provider List</option>";
         }

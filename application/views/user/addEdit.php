@@ -139,6 +139,7 @@
                                                         <option value="2">Transmitvia</option>                                                        
                                                         <option value="4">Ongage</option>                                                        
                                                         <option value="5">Sendgrid</option>                                                        
+                                                        <option value="6">Sendinblue</option>                                                        
                                                     </select>
                                                 </div>
                                             </div>

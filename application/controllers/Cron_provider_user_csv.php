@@ -13,6 +13,7 @@ class Cron_provider_user_csv extends CI_Controller
         $this->load->model('mdl_transmitvia');
         $this->load->model('mdl_ongage');
         $this->load->model('mdl_sendgrid');
+        $this->load->model('mdl_sendinblue');
     }
 
     public function index() {
@@ -129,6 +130,15 @@ class Cron_provider_user_csv extends CI_Controller
                                 $mailProvider = $this->getSendgridMailProviderId($provider["providerList"]);                                
                                 $response = $this->mdl_sendgrid->AddEmailToSendgridSubscriberList($userData,$mailProvider);
                                 addRecordInHistoryFromCSV($userData, $mailProvider, SENDGRID, $response,$provider['groupName'],$provider['keyword']);
+                            } else if($provider['providerName'] == SENDINBLUE){
+                                if (@$userData['birthdateDay'] != '' && @$userData['birthdateMonth'] != '' && @$userData['birthdateYear'] != '') {
+                                    $birthDate              = $userData['birthdateYear'] . '-' . $userData['birthdateMonth'] . '-' . $userData['birthdateDay'];
+                                    $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
+                                } 
+                                $responseField = "sendinblueResponse";
+                                $mailProvider = $this->getSendInBlueMailProviderId($provider["providerList"]);                                
+                                $response = $this->mdl_sendinblue->AddEmailToSendInBlueSubscriberList($userData,$mailProvider);
+                                addRecordInHistoryFromCSV($userData, $mailProvider, SENDINBLUE, $response,$provider['groupName'],$provider['keyword']);
                             }   
                             // update status of sended record
                             $is_insert = FALSE;
@@ -208,6 +218,7 @@ class Cron_provider_user_csv extends CI_Controller
         return $provider[$providerId];
     
     }
+
     public function getOngageMailProviderId($providerId){
         $provider = array(
             "1" => "47",  // Australia-camilla 
@@ -257,6 +268,16 @@ class Cron_provider_user_csv extends CI_Controller
             "20" => "vq4332j3xbfc0",  
             "21" => "bw3936mqqq855",  
             "22" => "la425f30kz146" 
+        );
+        return $provider[$providerId];
+    }
+
+    public function getSendInBlueMailProviderId($providerId){
+        $provider = array(
+            "1" => "64",  // NO
+            "2" => "65",  // CA
+            "3" => "66",  // NZ
+            "4" => "67"  // SE
         );
         return $provider[$providerId];
     }
