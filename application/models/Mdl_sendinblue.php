@@ -58,7 +58,7 @@ class Mdl_sendinblue extends CI_Model {
                 "attributes" => array(
                         "FIRSTNAME"    => $getData['firstName'],
                         "LASTNAME"     => $getData['lastName'],
-                        // "SMS"  => @$getData['phone'],
+                        //"SMS"  => @$getData['phone'],
                         "ADDRESS"=> @$getData['address'],
                         "CITY"          => @$getData['city'],
                         "ZIPCODE"   => @$getData['postCode'],
@@ -77,7 +77,7 @@ class Mdl_sendinblue extends CI_Model {
             
             $responseCode = $body->getStatusCode();
             $subscriber = json_decode($body->getBody(),true);
-
+            
             if ($responseCode == 201) {                
                 $subscriber_id = $subscriber['id'];    
                 return array("result" => "success","data" => array("id" => $subscriber_id));
@@ -87,7 +87,8 @@ class Mdl_sendinblue extends CI_Model {
                 return array("result" => "error","error" => array("msg" => "Unknown Error Response"));
             }
         }catch (\GuzzleHttp\Exception\ClientException $e) { 
-                return array("result" => "error","error" => array("msg" => "Bad Request"));            
+                $response = json_decode($e->getResponse()->getBody()->getContents(),true);
+                return array("result" => "error","error" => array("msg" => isset($response['message'])?$response['message']:"Invalid Parameters"));            
         }
     } 
 }
