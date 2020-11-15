@@ -58,11 +58,11 @@ class Mdl_sendinblue extends CI_Model {
                 "attributes" => array(
                         "FIRSTNAME"    => $getData['firstName'],
                         "LASTNAME"     => $getData['lastName'],
-                        //"SMS"  => @$getData['phone'],
+                        "SMS"  => @$getData['phone'],
                         "ADDRESS"=> @$getData['address'],
                         "CITY"          => @$getData['city'],
                         "ZIPCODE"   => @$getData['postCode'],
-                        "GENDER"   => @$getData['postCode'] 
+                        "GENDER"   => @$getData['gender'] 
                 )
             );  
 
