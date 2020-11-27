@@ -209,6 +209,16 @@
                                                     <input type="text" class="form-control"  name="addTheUserInThisGroup" value="<?php echo @$addTheUserInThisGroup; ?>">
                                                 </div>
                                             </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Only Add Duplicates *</label>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" name="isDuplicate" value="1" id="isDuplicate" <?php echo @$isDuplicate == 1 ? 'checked' : '' ;?> > Send data to provider if record is duplicate.
+                                                        </label>
+                                                    </div> 
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="row providerBlockHeader" style="display:<?php echo counts($delays)?"block":"none"?>">

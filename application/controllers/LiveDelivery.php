@@ -57,7 +57,7 @@ class LiveDelivery extends CI_Controller {
             $postVal = $_POST;
             $fieldArr = array('country','mailProvider','identifier','groupName','keyword','dataSource','delay');
             $dataArr = array();
-            foreach ($fieldArr as $value) {                
+            foreach ($fieldArr as $value) {                 
                 $dataArr[$value] = ($value == "mailProvider" || $value == "delay")?json_encode($postVal[$value]):$postVal[$value];
             }
 
@@ -75,6 +75,12 @@ class LiveDelivery extends CI_Controller {
                 $dataArr['addTheUserInThisGroup'] = '';
             }
 
+            if(isset($postVal['isDuplicate'])){
+                $dataArr['isDuplicate'] = 1;
+            }else{
+                $dataArr['isDuplicate'] = 0;
+            }
+            
             if ($liveDeliveryId > 0) {
 
                 $condition = array("liveDeliveryId" => $liveDeliveryId);

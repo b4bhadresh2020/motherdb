@@ -491,8 +491,20 @@ class Live_delivery_api extends CI_Controller
                     $is_single           = true;
                     $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
 
+                    // check condition for send data to provider or not. 
+                    /* Condition 
+                       1. if duplicate true then record must be duplicate. 
+                       2. if duplicate false (by default) then fail message index must be 0 or 1.  
+                    */
+                    $sendToMailProvider = 0;
+                    if($getLiveDeliveryData['isDuplicate'] == 1 && $sucFailMsgIndex == 1){
+                        $sendToMailProvider = 1;
+                    }else if($getLiveDeliveryData['isDuplicate'] == 0 && ($sucFailMsgIndex == 0 || $sucFailMsgIndex == 1)){
+                        $sendToMailProvider = 1;
+                    }
+
                     // send data to aweber if user is successfully added or duplicate
-                    if ($sucFailMsgIndex == 0 || $sucFailMsgIndex == 1) {
+                    if ($sendToMailProvider == 1) {
 
                         $country             = $getLiveDeliveryData['country'];
                         $validCountryForAweber = countryThasListedInAweber();
