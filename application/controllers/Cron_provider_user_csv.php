@@ -214,6 +214,7 @@ class Cron_provider_user_csv extends CI_Controller
             "11" => "56",  // NO - Getspinn
             "12" => "57",  // NZ - Getspinn
             "13" => "61",  // Freecasinodeal.com/nz  (New Zealand)
+            "14" => "68",  // DK - Signesmail
         );
         return $provider[$providerId];
     
@@ -233,6 +234,8 @@ class Cron_provider_user_csv extends CI_Controller
             "10" => "59",  // Finland  - Kare 
             "11" => "62",  // New zealand  - Camilla 
             "12" => "63",  // New zealand  - Kare 
+            "13" => "69",  // Denmark  - Kare 
+            "14" => "70",  // Denmark  - Camilla 
         );
         return $provider[$providerId];
     }

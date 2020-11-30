@@ -627,7 +627,8 @@ function getAweverProviderListName($providerListId){
         '10' => 'CA - Getspinn',
         '11' => 'NO - Getspinn',
         '12' => 'NZ - Getspinn',
-        '13' => 'Freecasinodeal.com/nz  (New Zealand)'
+        '13' => 'Freecasinodeal.com/nz  (New Zealand)',
+        '14' => 'DK - Signesmail',
     );
     return $aweberList[$providerListId];
 }
@@ -674,7 +675,9 @@ function getOngageProviderListName($providerListId){
         "9" => "Finland  - Camilla",
         "10" => "Finland  - Kare",
         "11" => "New Zealand  - Camilla",
-        "12" => "New Zealand  - Kare"
+        "12" => "New Zealand  - Kare",
+        "13" => "Denmark  - Kare",
+        "14" => "Denmark  - Camilla",
     );
     return $ongageList[$providerListId];
 }
@@ -711,6 +714,7 @@ function getLiveRepostAweverProviderID($providerListId){
         "11" => "56",  // NO - Getspinn
         "12" => "57",  // NZ - Getspinn
         "13" => "61",  // Freecasinodeal.com/nz  (New Zealand)
+        "14" => "68",  // DK - Signesmail
     );
     return $provider[$providerListId];
 }
@@ -756,7 +760,9 @@ function getLiveRepostOngageProviderID($providerId){
         "9" => "58", // Finland  - Camilla 
         "10" => "59",  // Finland  - Kare 
         "11" => "62",  // New zealand  - Camilla 
-        "12" => "63"  // New zealand  - Kare 
+        "12" => "63",  // New zealand  - Kare 
+        "13" => "69",  // Denmark  - kare 
+        "14" => "70"  // Denmark  - Camilla 
     );
     return $provider[$providerId];
 }

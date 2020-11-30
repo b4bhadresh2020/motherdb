@@ -427,6 +427,7 @@
             providerList +="<option value='11'>NO - Getspinn</option>";
             providerList +="<option value='12'>NZ - Getspinn</option>";
             providerList +="<option value='13'>Freecasinodeal.com/nz (New Zealand)</option>";
+            providerList +="<option value='14'>DK - Signesmail</option>";
         }else if(providerId == 2){
             providerList +="<option value='1'>NO - deveroper</option>";
             providerList +="<option value='2'>SE - deveroper - Loan</option>";
@@ -463,6 +464,8 @@
             providerList +="<option value='10'>Finland  - Kare</option>";
             providerList +="<option value='11'>New Zealand  - Camilla</option>";
             providerList +="<option value='12'>New Zealand  - Kare</option>";
+            providerList +="<option value='13'>Denmark  - Kare</option>";
+            providerList +="<option value='14'>Denmark  - Camilla</option>";
         }else if(providerId == 5){
             providerList +="<option value='1'>CA</option>";
         }else if(providerId == 6){
