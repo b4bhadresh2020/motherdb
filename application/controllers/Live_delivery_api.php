@@ -450,7 +450,13 @@ class Live_delivery_api extends CI_Controller
             }else{
                 $delays = array();
             } 
-            
+
+            if(isset($getLiveDeliveryData['isDuplicate']) && !empty($getLiveDeliveryData['isDuplicate'])){
+                $duplicates = json_decode($getLiveDeliveryData['isDuplicate'],true);
+            }else{
+                $duplicates = array();
+            } 
+
             foreach($mailProviders as $mailProvider){
                 //send user data to egoi
                 if ($mailProvider == 'egoi') {
@@ -493,13 +499,15 @@ class Live_delivery_api extends CI_Controller
 
                     // check condition for send data to provider or not. 
                     /* Condition 
-                       1. if duplicate true then record must be duplicate. 
+                       1. if duplicate true then record must be duplicate (fail message index must be 1). 
                        2. if duplicate false (by default) then fail message index must be 0 or 1.  
                     */
                     $sendToMailProvider = 0;
-                    if($getLiveDeliveryData['isDuplicate'] == 1 && $sucFailMsgIndex == 1){
+                    $isDuplicate = array_key_exists($mailProvider,$duplicates)?1:0;
+
+                    if($isDuplicate == 1 && $sucFailMsgIndex == 1){
                         $sendToMailProvider = 1;
-                    }else if($getLiveDeliveryData['isDuplicate'] == 0 && ($sucFailMsgIndex == 0 || $sucFailMsgIndex == 1)){
+                    }else if($isDuplicate == 0 && ($sucFailMsgIndex == 0 || $sucFailMsgIndex == 1)){
                         $sendToMailProvider = 1;
                     }
 
@@ -646,31 +654,7 @@ class Live_delivery_api extends CI_Controller
                             ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
                         }                        
                     }
-
-                }/*else if(in_array($mailProvider, $get_reponse_account_arr)){
-                    
-
-                    // send data to get_response_provider if user is successfully added or duplicate
-                    if ($sucFailMsgIndex == 0 || $sucFailMsgIndex == 1) {
-
-                        $this->load->model('mdl_get_response_provider');
-                        $response = $this->mdl_get_response_provider->send_data_to_get_response($getData,$mailProvider);
-
-                        if ($response == '') {
-                            $response = array("result" => "success", "success" => array("msg" => "Contact Added Successfully"));
-                        }
-
-                        //update to live delivery data response
-                        $condition = array('liveDeliveryDataId' => $liveDeliveryDataId);
-                        $is_insert = false;
-                        $updateArr = array('get_response_api_response' => json_encode($response));
-
-                        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
-
-
-                    }
-
-                }*/
+                }
             }
         }
 

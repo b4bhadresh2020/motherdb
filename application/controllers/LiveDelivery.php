@@ -55,10 +55,10 @@ class LiveDelivery extends CI_Controller {
         if ($this->form_validation->run() != FALSE) {
 
             $postVal = $_POST;
-            $fieldArr = array('country','mailProvider','identifier','groupName','keyword','dataSource','delay');
+            $fieldArr = array('country','mailProvider','identifier','groupName','keyword','dataSource','delay','isDuplicate');
             $dataArr = array();
             foreach ($fieldArr as $value) {                 
-                $dataArr[$value] = ($value == "mailProvider" || $value == "delay")?json_encode($postVal[$value]):$postVal[$value];
+                $dataArr[$value] = ($value == "mailProvider" || $value == "delay" || $value == "isDuplicate")?isset($postVal[$value])?json_encode($postVal[$value]):"":$postVal[$value];
             }
 
             if(@$this->input->post('ifUserInThisGroups') != '' && @$this->input->post('addTheUserInThisGroup') != ''){
@@ -73,13 +73,7 @@ class LiveDelivery extends CI_Controller {
                 
                 $dataArr['ifUserInThisGroups'] = '';
                 $dataArr['addTheUserInThisGroup'] = '';
-            }
-
-            if(isset($postVal['isDuplicate'])){
-                $dataArr['isDuplicate'] = 1;
-            }else{
-                $dataArr['isDuplicate'] = 0;
-            }
+            }            
             
             if ($liveDeliveryId > 0) {
 

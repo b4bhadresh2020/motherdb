@@ -54,10 +54,16 @@
     }
 
     if(isset($delay) && !empty($delay)){
-        $delays = (array)json_decode($delay);
+        $delays = json_decode($delay,true);
     }else{
         $delays = array();
-    }   
+    }
+
+    if(isset($isDuplicate) && !empty($isDuplicate)){
+        $isDuplicate = json_decode($isDuplicate,true);
+    }else{
+        $isDuplicate = array();
+    } 
     
 ?>
 <style>
@@ -208,17 +214,7 @@
                                                     <label>Add the user in this group</label>
                                                     <input type="text" class="form-control"  name="addTheUserInThisGroup" value="<?php echo @$addTheUserInThisGroup; ?>">
                                                 </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label>Only Add Duplicates *</label>
-                                                    <div class="checkbox">
-                                                        <label>
-                                                            <input type="checkbox" name="isDuplicate" value="1" id="isDuplicate" <?php echo @$isDuplicate == 1 ? 'checked' : '' ;?> > Send data to provider if record is duplicate.
-                                                        </label>
-                                                    </div> 
-                                                </div>
-                                            </div>
+                                            </div>                                            
                                         </div>
 
                                         <div class="row providerBlockHeader" style="display:<?php echo counts($delays)?"block":"none"?>">
@@ -228,6 +224,9 @@
                                             <div class="col-md-3">
                                                 <label>Delay (Day)</label>
                                             </div>                                                   
+                                            <div class="col-md-3">
+                                                <label>Only Add Duplicates</label>
+                                            </div>                                                   
                                         </div>  
                                         <div class="providerBlock">    
                                             <?php if(counts($delays) > 0) {
@@ -236,8 +235,15 @@
                                                         <div class="col-md-3">
                                                             <label class="pname"><?php echo $mailProviders[$delayProvider];?></label>
                                                         </div>                                                   
-                                                        <div class="col-md-1">
+                                                        <div class="col-md-3">
                                                             <input type="number" name="delay[<?php echo $delayProvider;?>]" class="delay form-control" value="<?php echo $delayDay;?>"/>
+                                                        </div>                                                   
+                                                        <div class="col-md-1">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox" name="isDuplicate[<?php echo $delayProvider;?>]" class="duplicate" value="1" <?php echo array_key_exists($delayProvider,$isDuplicate)?"checked":""?>/>
+                                                                </label>
+                                                            </div>    
                                                         </div>                                                   
                                                     </div>
                                             <?php } } ?>    
@@ -260,9 +266,16 @@
          <div class="col-md-3">
             <label class="pname"></label>
          </div>                                                   
-         <div class="col-md-1">
+         <div class="col-md-3">
             <input type="number" name="" class="delay form-control"/>
-         </div>                                                   
+         </div>      
+         <div class="col-md-1">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="isDuplicate[<?php echo $delayProvider;?>]" class="duplicate" value="1"/>
+                </label>
+            </div>    
+        </div>                                             
     </div>
 </div>
 <script type="text/javascript">
@@ -286,6 +299,7 @@
                     newRecord.addClass("provider_"+value).attr("id",value);  
                     newRecord.find(".pname").text(text);              
                     newRecord.find(".delay").attr("name","delay["+value+"]").val(currentIndex);              
+                    newRecord.find(".duplicate").attr("name","isDuplicate["+value+"]").val(currentIndex);              
                     $(".providerBlock").append(newRecord);  
                 }
             });   
