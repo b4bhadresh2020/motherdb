@@ -54,6 +54,10 @@ class Live_delivery_api extends CI_Controller
                                     $notToCheckFuther = 1;
                                 }
 
+                                if($notToCheckFuther == 0 && isValidDeliverableEmail($_GET['emailId']) == 0){
+                                    $notToCheckFuther = 3;
+                                }
+
                                 if ($notToCheckFuther == 0) {
 
                                     //check if phone or email is blacklisted or not
@@ -344,11 +348,16 @@ class Live_delivery_api extends CI_Controller
                                     $isFail            = 1;
                                     $sucFailMsgIndex   = 9; //Invalid email format
                                     $response['error'] = 'Invalid email format';
-                                } else {
+                                } else if ($notToCheckFuther == 2) {
                                     //data save to live_delivery_data table
                                     $isFail            = 1;
                                     $sucFailMsgIndex   = 10; //Invalid Phone
                                     $response['error'] = 'Invalid Phone';
+                                } else if ($notToCheckFuther == 3) {
+                                    //data save to live_delivery_data table
+                                    $isFail            = 1;
+                                    $sucFailMsgIndex   = 9; //Invalid email
+                                    $response['error'] = 'Invalid email';
                                 }
                             } else {
 

@@ -1022,12 +1022,45 @@ function imageUnlink($imagePath = ''){
 */
 function isValidEmail($emailId = ''){
     if (filter_var($emailId, FILTER_VALIDATE_EMAIL)) {
+
         return 1; //Yes
     }else{
         return 0; //No
     }
 }
 
+/*
+    -> isValidDeliverableEmail
+    -> emailid valid for delivery or not
+    
+*/
+function isValidDeliverableEmail($emailId){
+    try {
+        require_once(FCPATH.'vendor/autoload.php');
+        $apikey = "8fafe17031cd31997be8835f2e3264741112461af4dc494d6f3da0980636b13c";
+        $data = array(                
+            'email' => $emailId,
+            'api_key' => $apikey
+        );
+
+        // Create a Guzzle client
+        $client = new GuzzleHttp\Client();
+
+        $body = $client->get("https://api.thechecker.co/v2/verify", [
+            'query' => $data        
+        ]);
+
+        $responseBody = json_decode($body->getBody(true),true);
+        if($responseBody['result'] == "deliverable"){
+            return 1;
+        }else{
+            return 0;
+        }
+    } catch (\Throwable $th) {
+        return 1;
+    }
+
+}
 
 /*
 ===========
