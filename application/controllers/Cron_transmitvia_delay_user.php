@@ -21,16 +21,35 @@ class Cron_transmitvia_delay_user extends CI_Controller
             'deliveryTimestamp <=' => time(),
             'status' => 0
         );
-        $is_single = FALSE;
-        $userData = JoinData(TRANSMITVIA_DELAY_USER_DATA,$condition,LIVE_DELIVERY_DATA,"liveDeliveryDataId","liveDeliveryDataId","left",$is_single,array());
+
+        $this->db->select('transmitvia_delay_user_data.id,live_delivery_data.liveDeliveryDataId,live_delivery_data.apikey,firstName,lastName,emailId,address,postCode,city,live_delivery_data.country,phone,gender,birthdateDay,birthdateMonth,birthdateYear,age,ip,tag,sucFailMsgIndex,providerId,live_delivery_data.groupName,live_delivery_data.keyword,isDuplicate');
+        $this->db->from(TRANSMITVIA_DELAY_USER_DATA);
+        $this->db->join(LIVE_DELIVERY_DATA,'transmitvia_delay_user_data.liveDeliveryDataId=live_delivery_data.liveDeliveryDataId');
+        $this->db->join(LIVE_DELIVERY,'live_delivery_data.apikey=live_delivery.apikey');
+        $this->db->where($condition);
+        $this->db->order_by('deliveryTimestamp');
+        $this->db->limit(500);
+        $query=$this->db->get();
+        $userData= $query->result_array();
 
         foreach($userData as $user){   
 
-            $getProviderCondition   = array('id' => $user['providerId']);
-            $is_single           = true;
-            $transmitviaProviderData        = GetAllRecord(PROVIDERS, $getProviderCondition, $is_single);
+            $getProviderCondition       = array('id' => $user['providerId']);
+            $is_single                  = true;
+            $transmitviaProviderData    = GetAllRecord(PROVIDERS, $getProviderCondition, $is_single);
 
-            $response = $this->mdl_transmitvia->AddEmailToTransmitSubscriberList($user,$transmitviaProviderData['code']);
+            if(isset($user['isDuplicate']) && !empty($user['isDuplicate'])){
+                $isDuplicate = json_decode($user['isDuplicate'],true);
+            }else{
+                $isDuplicate = array();
+            }
+
+            if(!array_key_exists($user['providerId'],$isDuplicate) || (array_key_exists($user['providerId'],$isDuplicate) && $user['sucFailMsgIndex'] == 1)){
+                $response = $this->mdl_transmitvia->AddEmailToTransmitSubscriberList($user,$transmitviaProviderData['code']);
+            }else{
+                $response = array("result" => "success","data" => "Duplicate condition not satisfied");
+            }
+
             $responseField = $providerData[$user['providerId']]['response_field'];
 
             // Update response in live delivery user data table

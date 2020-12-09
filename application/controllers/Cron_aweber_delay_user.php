@@ -20,19 +20,35 @@ class Cron_aweber_delay_user extends CI_Controller
             'deliveryTimestamp <=' => time(),
             'status' => 0
         );
-        $is_single = FALSE;
-        $userData = JoinData(AWEBER_DELAY_USER_DATA,$condition,LIVE_DELIVERY_DATA,"liveDeliveryDataId","liveDeliveryDataId","left",$is_single,array(),"","");
 
-        foreach($userData as $user){   
-            if (@$user['birthdateDay'] != '0' && @$user['birthdateMonth'] != '0' && @$user['birthdateYear'] != '0') {
-                $birthDate  = $user['birthdateYear'] . '-' . $user['birthdateMonth'] . '-' . $user['birthdateDay'];
-                $user['birthDate'] = date('Y-m-d', strtotime($birthDate));
+        $this->db->select('aweber_delay_user_data.id,live_delivery_data.liveDeliveryDataId,live_delivery_data.apikey,firstName,lastName,emailId,address,postCode,city,live_delivery_data.country,phone,gender,birthdateDay,birthdateMonth,birthdateYear,age,ip,tag,sucFailMsgIndex,providerId,live_delivery_data.groupName,live_delivery_data.keyword,isDuplicate');
+        $this->db->from(AWEBER_DELAY_USER_DATA);
+        $this->db->join(LIVE_DELIVERY_DATA,'aweber_delay_user_data.liveDeliveryDataId=live_delivery_data.liveDeliveryDataId');
+        $this->db->join(LIVE_DELIVERY,'live_delivery_data.apikey=live_delivery.apikey');
+        $this->db->where($condition);
+        $this->db->order_by('deliveryTimestamp');
+        $this->db->limit(500);
+        $query=$this->db->get();
+        $userData= $query->result_array();
+
+        foreach($userData as $user){            
+            if(isset($user['isDuplicate']) && !empty($user['isDuplicate'])){
+                $isDuplicate = json_decode($user['isDuplicate'],true);
             }else{
-                $user['birthDate'] = "";
+                $isDuplicate = array();
             } 
-
-            $response = $this->mdl_aweber->AddEmailToAweberSubscriberList($user,$user['country'],$user['providerId']);
-            //$response = array("result" => "success","data" => array("id" => 0000));
+            if(!array_key_exists($user['providerId'],$isDuplicate) || (array_key_exists($user['providerId'],$isDuplicate) && $user['sucFailMsgIndex'] == 1)){
+                if (@$user['birthdateDay'] != '0' && @$user['birthdateMonth'] != '0' && @$user['birthdateYear'] != '0') {
+                    $birthDate  = $user['birthdateYear'] . '-' . $user['birthdateMonth'] . '-' . $user['birthdateDay'];
+                    $user['birthDate'] = date('Y-m-d', strtotime($birthDate));
+                }else{
+                    $user['birthDate'] = "";
+                } 
+                $response = $this->mdl_aweber->AddEmailToAweberSubscriberList($user,$user['country'],$user['providerId']);
+            }else{
+                $response = array("result" => "success","data" => "Duplicate condition not satisfied");
+            }
+            
             $responseField = $providerData[$user['providerId']]['response_field'];
 
             // Update response in live delivery user data table
