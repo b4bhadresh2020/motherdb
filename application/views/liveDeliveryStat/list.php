@@ -1,6 +1,6 @@
 <?php 
     
-    $condition = array();
+    $condition = array('isInActive' => 0);
     $is_single = FALSE;
     $getApiKeys = GetAllRecord(LIVE_DELIVERY,$condition,$is_single,array(),array(),array(array('liveDeliveryId' => 'DESC')),'apikey,groupName,keyword');
 ?>

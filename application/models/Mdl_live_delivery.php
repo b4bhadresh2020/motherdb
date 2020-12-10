@@ -13,6 +13,15 @@ class Mdl_live_delivery extends CI_Model
 
         $apikey = @$getData['apikey'];
         $chooseFilter = @$getData['chooseFilter'];
+
+        // if apikey is blank
+        if(empty($apikey)){
+            $condition = array('isInActive' => 0);
+            $is_single = TRUE;
+            $getApiKey = GetAllRecord(LIVE_DELIVERY,$condition,$is_single,array(),array(),array(array('liveDeliveryId' => 'DESC')),'apikey,groupName,keyword');
+            $apikey = $getApiKey['apikey'];
+        }
+        
         
         //for return value
         if ($chooseFilter == 'td') {
