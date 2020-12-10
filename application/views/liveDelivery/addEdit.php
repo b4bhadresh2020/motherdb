@@ -214,6 +214,16 @@
                                                     <label>Add the user in this group</label>
                                                     <input type="text" class="form-control"  name="addTheUserInThisGroup" value="<?php echo @$addTheUserInThisGroup; ?>">
                                                 </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label>Enable to verify email id</label>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" name="checkEmail" value="1" <?php echo ($checkEmail)?"checked":""?>/>
+                                                        </label>
+                                                    </div>
+                                                </div>
                                             </div>                                            
                                         </div>
 

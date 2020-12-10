@@ -54,8 +54,11 @@ class Live_delivery_api extends CI_Controller
                                     $notToCheckFuther = 1;
                                 }
 
-                                if($notToCheckFuther == 0 && isValidDeliverableEmail($_GET['emailId']) == 0){
-                                    $notToCheckFuther = 3;
+                                // check live email check flag is on
+                                if ($getLiveDeliveryData['checkEmail'] == 1) {
+                                    if($notToCheckFuther == 0 && isValidDeliverableEmail($_GET['emailId']) == 0){
+                                        $notToCheckFuther = 3;
+                                    }
                                 }
 
                                 if ($notToCheckFuther == 0) {

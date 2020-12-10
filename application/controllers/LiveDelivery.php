@@ -55,7 +55,7 @@ class LiveDelivery extends CI_Controller {
         if ($this->form_validation->run() != FALSE) {
 
             $postVal = $_POST;
-            $fieldArr = array('country','mailProvider','identifier','groupName','keyword','dataSource','delay','isDuplicate');
+            $fieldArr = array('country','mailProvider','identifier','groupName','keyword','dataSource','delay','isDuplicate','checkEmail');
             $dataArr = array();
             foreach ($fieldArr as $value) {                 
                 $dataArr[$value] = ($value == "mailProvider" || $value == "delay" || $value == "isDuplicate")?isset($postVal[$value])?json_encode($postVal[$value]):"":$postVal[$value];
