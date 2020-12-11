@@ -50,12 +50,12 @@ class Mdl_aweber extends CI_Model {
             }
 
             // LOG ENTRY
-            $logPath    = FCPATH."log/aweber/";
-            $fileName   = date("Ymd")."_log.txt"; 
-            $logFile    = fopen($logPath.$fileName,"a");
-            $logData    = $providerData['aweber_account']." ".$providerData['listname']." ".$getData['emailId']." ".$getData['firstName']." ".$getData['lastName']." ".time()."\n";
-            fwrite($logFile,$logData);
-            fclose($logFile);
+            // $logPath    = FCPATH."log/aweber/";
+            // $fileName   = date("Ymd")."_log.txt"; 
+            // $logFile    = fopen($logPath.$fileName,"a");
+            // $logData    = $providerData['aweber_account']." ".$providerData['listname']." ".$getData['emailId']." ".$getData['firstName']." ".$getData['lastName']." ".time()."\n";
+            // fwrite($logFile,$logData);
+            // fclose($logFile);
             
             $data = array(
                 'ad_tracking' => generateRandomString(10),
