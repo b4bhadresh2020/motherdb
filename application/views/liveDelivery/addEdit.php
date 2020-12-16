@@ -282,7 +282,7 @@
          <div class="col-md-1">
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="isDuplicate[<?php echo $delayProvider;?>]" class="duplicate" value="1"/>
+                    <input type="checkbox" name="" class="duplicate" value="1"/>
                 </label>
             </div>    
         </div>                                             

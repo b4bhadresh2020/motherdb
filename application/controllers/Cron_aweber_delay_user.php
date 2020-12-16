@@ -5,7 +5,7 @@ class Cron_aweber_delay_user extends CI_Controller
     
     public function __construct() {
         parent::__construct();
-        $this->load->model('mdl_aweber');
+        $this->load->model('mdl_aweber_cron');
     }
 
     public function index() {       
@@ -44,7 +44,7 @@ class Cron_aweber_delay_user extends CI_Controller
                 }else{
                     $user['birthDate'] = "";
                 } 
-                $response = $this->mdl_aweber->AddEmailToAweberSubscriberList($user,$user['country'],$user['providerId']);
+                $response = $this->mdl_aweber_cron->AddEmailToAweberSubscriberList($user,$user['country'],$user['providerId']);
             }else{
                 $response = array("result" => "success","data" => "Duplicate condition not satisfied");
             }
