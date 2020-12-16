@@ -45,10 +45,7 @@ class Live_delivery_api extends CI_Controller
                             if ($_GET[$identifier] != '') {
 
                                 $notToCheckFuther = 0;
-
-                                if (@$_GET['phone'] != '' && !is_numeric($_GET['phone'])) {
-                                    $notToCheckFuther = 2;
-                                }
+                                $isEmailChecked = 0;                                                              
 
                                 if (@$_GET['emailId'] != '' && isValidEmail($_GET['emailId']) == 0) {
                                     $notToCheckFuther = 1;
@@ -56,8 +53,20 @@ class Live_delivery_api extends CI_Controller
 
                                 // check live email check flag is on
                                 if ($getLiveDeliveryData['checkEmail'] == 1) {
-                                    if($notToCheckFuther == 0 && isValidDeliverableEmail($_GET['emailId']) == 0){
+                                    $checkEmailResponse = isValidDeliverableEmail($_GET['emailId']);
+                                    if($notToCheckFuther == 0 &&  $checkEmailResponse == 0){
                                         $notToCheckFuther = 3;
+                                    }
+
+                                    // check successfully get valid response from checker api
+                                    if($checkEmailResponse != -1){
+                                        $isEmailChecked = 1;
+                                    }
+                                }
+
+                                if ($getLiveDeliveryData['checkPhone'] == 1) {
+                                    if (@$_GET['phone'] != '' && !is_numeric($_GET['phone'])) {
+                                        $notToCheckFuther = 2;
                                     }
                                 }
 
@@ -396,7 +405,7 @@ class Live_delivery_api extends CI_Controller
                         $response['error'] = 'Api key is not active. Please contact to admin';
                     }
                     //add data to live delivery table
-                    $this->addToLiveDeliveryDataTable($_GET, $getLiveDeliveryData, $sucFailMsgIndex, $isFail);
+                    $this->addToLiveDeliveryDataTable($_GET, $getLiveDeliveryData, $sucFailMsgIndex, $isFail, $isEmailChecked);
                 } else {
                     $response['error'] = 'Invalid apikey';
                     $sucFailMsgIndex   = 3;
@@ -419,7 +428,7 @@ class Live_delivery_api extends CI_Controller
         echo json_encode($response);
     }
 
-    public function addToLiveDeliveryDataTable($getData, $getLiveDeliveryData, $sucFailMsgIndex, $isFail)
+    public function addToLiveDeliveryDataTable($getData, $getLiveDeliveryData, $sucFailMsgIndex, $isFail, $isEmailChecked)
     {        
         //add in live delivery data database
         $condition = array();
@@ -443,6 +452,7 @@ class Live_delivery_api extends CI_Controller
         $dataArr['source']          = $getLiveDeliveryData['dataSource'];
         $dataArr['isFail']          = $isFail;
         $dataArr['sucFailMsgIndex'] = $sucFailMsgIndex;
+        $dataArr['isEmailChecked']  = $isEmailChecked;
         $dataArr['timestamp'] = time();
 
         $liveDeliveryDataId = ManageData(LIVE_DELIVERY_DATA, $condition, $dataArr, $is_insert);

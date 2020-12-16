@@ -1057,7 +1057,7 @@ function isValidDeliverableEmail($emailId){
             return 0;
         }
     } catch (\Throwable $th) {
-        return 1;
+        return -1;
     }
 
 }

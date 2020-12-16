@@ -170,7 +170,7 @@
                                             <div class="col-lg-4">
                                                 <div class="form-group">
                                                     <label>Identifier * (To compare in our database)</label>
-                                                    <select name="identifier" class="form-control">
+                                                    <select id="identifier" name="identifier" class="form-control">
                                                         <option value="">Select Identifier</option>
                                                         <?php foreach ($identifiers as $key => $value) { ?>
                                                             <option value="<?php echo $key; ?>" <?php if(@$identifier == $key){ echo 'selected'; } ?> ><?php echo $value; ?></option>
@@ -220,11 +220,21 @@
                                                     <label>Enable to verify email id</label>
                                                     <div class="checkbox">
                                                         <label>
-                                                            <input type="checkbox" name="checkEmail" value="1" <?php echo ($checkEmail)?"checked":""?>/>
+                                                            <input id="checkEmail" type="checkbox" name="checkEmail" value="1" <?php echo ($checkEmail)?"checked":""?>/>
                                                         </label>
                                                     </div>
                                                 </div>
-                                            </div>                                            
+                                            </div> 
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label>Enable to check phone validation</label>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input id="checkPhone" type="checkbox" name="checkPhone" value="1" <?php echo ($checkPhone)?"checked":""?>/>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>                                           
                                         </div>
 
                                         <div class="row providerBlockHeader" style="display:<?php echo counts($delays)?"block":"none"?>">
@@ -294,6 +304,7 @@
         $('#mailProvider').multiselect({
           includeSelectAllOption: true,
         });
+
         $('#mailProvider').on("change",function(){     
             var selectedProviders = $(this).val();
             if(selectedProviders !== null){
@@ -319,8 +330,16 @@
                 if($.inArray(providerID,selectedProviders) == -1){
                     $(this).remove();
                 }
-            });
+            });   
+        });
 
+        $(document).on("change","#identifier",function(){
+            console.log("called");
+            if($(this).val() == "phone"){
+                $("#checkPhone").prop('checked', true);
+            }else{
+                $("#checkPhone").prop('checked', false);
+            }
         });
     });
 </script>
