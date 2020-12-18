@@ -220,7 +220,7 @@
                                                     <label>Enable to verify email id</label>
                                                     <div class="checkbox">
                                                         <label>
-                                                            <input id="checkEmail" type="checkbox" name="checkEmail" value="1" <?php echo ($checkEmail)?"checked":""?>/>
+                                                            <input id="checkEmail" type="checkbox" name="checkEmail" value="1" <?php echo (@$checkEmail)?"checked":""?>/>
                                                         </label>
                                                     </div>
                                                 </div>
@@ -230,7 +230,7 @@
                                                     <label>Enable to check phone validation</label>
                                                     <div class="checkbox">
                                                         <label>
-                                                            <input id="checkPhone" type="checkbox" name="checkPhone" value="1" <?php echo ($checkPhone)?"checked":""?>/>
+                                                            <input id="checkPhone" type="checkbox" name="checkPhone" value="1" <?php echo (@$checkPhone)?"checked":""?>/>
                                                         </label>
                                                     </div>
                                                 </div>

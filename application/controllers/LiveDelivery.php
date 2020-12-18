@@ -57,8 +57,14 @@ class LiveDelivery extends CI_Controller {
             $postVal = $_POST;
             $fieldArr = array('country','mailProvider','identifier','groupName','keyword','dataSource','delay','isDuplicate','checkEmail','checkPhone');
             $dataArr = array();
-            foreach ($fieldArr as $value) {                 
-                $dataArr[$value] = ($value == "mailProvider" || $value == "delay" || $value == "isDuplicate")?isset($postVal[$value])?json_encode($postVal[$value]):"":$postVal[$value];
+            foreach ($fieldArr as $value) {           
+                if(isset($postVal[$value])){
+                    if($value == "mailProvider" || $value == "delay" || $value == "isDuplicate"){
+                       $dataArr[$value] = json_encode($postVal[$value]);
+                    }else{
+                       $dataArr[$value] = $postVal[$value];
+                    }
+                }
             }
 
             if(@$this->input->post('ifUserInThisGroups') != '' && @$this->input->post('addTheUserInThisGroup') != ''){

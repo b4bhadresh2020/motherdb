@@ -150,9 +150,12 @@
 
                                             $successCountPercenatage = 0;
                                             $failureCountPercenatage = 0;
+                                            $checkEmailsCountPercenatage = 0;
+
                                             if ($totalCount > 0) {
                                                 $successCountPercenatage = reformat_number_format(($countsArr['successCount'] / $totalCount) * 100);
                                                 $failureCountPercenatage = reformat_number_format(($countsArr['failureCount'] / $totalCount) * 100);
+                                                $checkEmailsCountPercenatage = reformat_number_format(($countsArr['checkEmailCount'] / $totalCount) * 100);
                                             }
                                             
 
@@ -206,6 +209,23 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="col-lg-2">
+                                            <div class="card bg-info" style="background: #218dbd;"  >
+                                                <div class="stat-widget-six">
+                                                    <div class="stat-icon p-15">
+                                                        <i class="ti-direction-alt"></i>
+                                                    </div>
+                                                    <div class="stat-content p-t-12 p-b-12">
+                                                        <div class="text-left dib">
+                                                            <div class="stat-heading">Email verified</div>
+                                                            <div class="stat-text"><?php echo $countsArr['checkEmailCount'].' ( '.$checkEmailsCountPercenatage.' %)'; ?></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </form>
                             </div>

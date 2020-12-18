@@ -5,6 +5,7 @@ $i = 0 + $start;
 foreach ($listArr as $curEntry) {
     
         $liveDeliveryDataId = $curEntry["liveDeliveryDataId"];
+        $isEmailChecked = $curEntry["isEmailChecked"];
         $i++;
 
         if ($curEntry['birthdateDay'] != 0 && $curEntry['birthdateMonth'] != 0 && $curEntry['birthdateYear'] != 0) {
@@ -30,7 +31,7 @@ foreach ($listArr as $curEntry) {
         <td><?php echo $sucFailMsgIndexArr[$curEntry['sucFailMsgIndex']]; ?></td>
         <td><?php echo $curEntry['firstName']; ?></td>
         <td><?php echo $curEntry['lastName']; ?></td>
-        <td><?php echo $curEntry['emailId']; ?></td>
+        <td style="color:<?= ($isEmailChecked) ? "green":"" ?>"><?php echo $curEntry['emailId']; ?></td>
         <td><?php echo $curEntry['address']; ?></td>
         <td><?php echo $curEntry['postCode']; ?></td>
         <td><?php echo $curEntry['city']; ?></td>

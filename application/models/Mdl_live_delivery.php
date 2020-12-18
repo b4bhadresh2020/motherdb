@@ -223,7 +223,7 @@ class Mdl_live_delivery extends CI_Model
                 if (count($getApiKeys) > 0) {
                     $apikey = $getApiKeys['apikey'];
                 }else{
-                    $countsArr =  array('successCount' => 0,'failureCount' => 0);
+                    $countsArr =  array('successCount' => 0,'failureCount' => 0, 'checkEmailCount' => 0);
                     $rejectDetailCountsArr = array('duplicateCount' => 0, 'blacklistCount' => 0, 'duplicateCount' => 0, 'blacklistCount' => 0, 'serverIssue' => 0, 'apiKeyIsNotActive' => 0, 'emailIsRequired' => 0, 'phoneIsRequired' => 0, 'emailIsBlank' => 0, 'phoneIsBlank' => 0, 'invalidEmailFormat' => 0, 'invalidPhone' => 0, 'invalidGender' => 0);
 
                     return array('countsArr' => $countsArr,'rejectDetailCountsArr' => $rejectDetailCountsArr,'filteredData' => array());
@@ -270,7 +270,14 @@ class Mdl_live_delivery extends CI_Model
                     'isFail' => 1
                 );
                 $failureCount = GetAllRecordCount(LIVE_DELIVERY_DATA,$condition);
-                $countsArr =  array('successCount' => $successCount,'failureCount' => $failureCount);
+
+                $condition = array(
+                    'apikey' => $apikey,
+                    'isEmailChecked' => 1
+                );
+                $checkEmailCount = GetAllRecordCount(LIVE_DELIVERY_DATA,$condition);
+
+                $countsArr =  array('successCount' => $successCount,'failureCount' => $failureCount, 'checkEmailCount' => $checkEmailCount);
                 //---------------------------------------------------------------------------------------------------
 
                 //get reject count in detail
@@ -332,9 +339,16 @@ class Mdl_live_delivery extends CI_Model
             'isFail' => 1
         );
         $failureCount = GetAllRecordCount(LIVE_DELIVERY_DATA,$condition);
-       
 
-        return array('successCount' => $successCount,'failureCount' => $failureCount);
+        $condition = array(
+            'createdDate >=' => $startDate,
+            'createdDate <=' => $endDate,
+            'apikey' => $apikey,
+            'isEmailChecked' => 1
+        );
+        $checkEmailCount = GetAllRecordCount(LIVE_DELIVERY_DATA,$condition);
+       
+        return array('successCount' => $successCount,'failureCount' => $failureCount,'checkEmailCount' => $checkEmailCount);
     }
 
 

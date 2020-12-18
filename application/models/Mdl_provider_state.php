@@ -31,71 +31,57 @@ class Mdl_provider_state extends CI_Model
         $statusInfo = array();
         
         foreach($providers as $provider){
+            
+            $newDeliveryDate = date("Y-m-d",strtotime("+6 day", strtotime($deliveryDate)));
+
+            // SET DEFAULT SUCCESS COUNTER FOR LIVE DELIVERY AND REPOST
+            for ($i=0; $i < 7; $i++) {
+                $dataDeliveryDate = date("Y-m-d",strtotime("+$i day", strtotime($deliveryDate)));    
+                $statusInfo[$provider['listname']][$dataDeliveryDate]["livedelivery_success"] = array('total' => 0);
+                $statusInfo[$provider['listname']][$dataDeliveryDate]["liverepost_success"] = array('total' => 0);
+            }
+
+            // APPLY CONDITION FOR FETCH DATA
+            $condition['providerId'] = $provider['id'];
+            $condition['status'] = 1;
+            $condition['updateDate >='] = $deliveryDate;
+            $condition['updateDate <='] = $newDeliveryDate;
+
+            if (@$apikey != "") {
+                $condition['apikey'] = $apikey;
+                $this->db->join(LIVE_DELIVERY_DATA,LIVE_DELIVERY_DATA.'.liveDeliveryDataId = '.EMAIL_HISTORY_DATA.'.liveDeliveryDataId');
+            }
+
             // GET LIVE DELIVERY STATE
-            for ($i=0; $i < 7; $i++) { 
-                $newDeliveryDate = date("Y-m-d",strtotime("+$i day", strtotime($deliveryDate)));    
-                $statusInfo[$provider['listname']][$newDeliveryDate]["livedelivery_success"] = array('total' => 0);
-                
-                if(strtotime($newDeliveryDate) <= strtotime($currentDate)){
-                    $condition['providerId'] = $provider['id'];
-                    $condition['status'] = 1;
-                    $condition['updateDate'] = $newDeliveryDate;
-    
-                    if (@$apikey != "") {
-                        $condition['apikey'] = $apikey;
-                        $this->db->join(LIVE_DELIVERY_DATA,LIVE_DELIVERY_DATA.'.liveDeliveryDataId = '.EMAIL_HISTORY_DATA.'.liveDeliveryDataId');
-                    }
-    
-                    $this->db->select('count(*) as total,email_history_data.keyword');
-                    $this->db->from(EMAIL_HISTORY_DATA);
-                    $this->db->where($condition);
-                    $this->db->where('email_history_data.liveDeliveryDataId is NOT NULL', NULL, FALSE);
-                    $this->db->group_by("email_history_data.keyword");
-                    $query=$this->db->get();
-                    $statusResponse=$query->result_array();
+            $this->db->select('count(*) as total,email_history_data.keyword,updateDate');
+            $this->db->from(EMAIL_HISTORY_DATA);
+            $this->db->where($condition);
+            $this->db->where('email_history_data.liveDeliveryDataId is NOT NULL', NULL, FALSE);
+            $this->db->group_by("email_history_data.keyword,updateDate");
+            $query=$this->db->get();
+            $statusResponse=$query->result_array();             
+            
+            foreach($statusResponse as $record){
+                $statusInfo[$provider['listname']][$record['updateDate']]["livedelivery_success"][$record['keyword']] = $record['total'];                            
+                $statusInfo[$provider['listname']][$record['updateDate']]["livedelivery_success"]['total'] += $record['total'];
+            }   
+            
+            //GET LIVE REPOST STATE
+            $this->db->select('count(*) as total,email_history_data.keyword,updateDate');
+            $this->db->from(EMAIL_HISTORY_DATA);
+            $this->db->where($condition);
+            $this->db->where('email_history_data.liveDeliveryDataId is NULL', NULL, FALSE);
+            $this->db->group_by("email_history_data.keyword,updateDate");
+            $query=$this->db->get();
+            $statusResponse=$query->result_array();
 
-                    //pre($statusResponse);
-
-                    foreach($statusResponse as $record){
-                        $statusInfo[$provider['listname']][$newDeliveryDate]["livedelivery_success"][$record['keyword']] = $record['total'];                            
-                        $statusInfo[$provider['listname']][$newDeliveryDate]["livedelivery_success"]['total'] += $record['total'];
-                    }
-                }                    
-            }
-            // GET LIVE REPOST STATE
-            for ($i=0; $i < 7; $i++) { 
-                $newDeliveryDate = date("Y-m-d",strtotime("+$i day", strtotime($deliveryDate)));    
-                $statusInfo[$provider['listname']][$newDeliveryDate]["liverepost_success"] = array('total' => 0);
-                
-                if(strtotime($newDeliveryDate) <= strtotime($currentDate)){
-                    $condition['providerId'] = $provider['id'];
-                    $condition['status'] = 1;
-                    $condition['updateDate'] = $newDeliveryDate;
-    
-                    if (@$apikey != "") {
-                        $condition['apikey'] = $apikey;
-                        $this->db->join(LIVE_DELIVERY_DATA,LIVE_DELIVERY_DATA.'.liveDeliveryDataId = '.EMAIL_HISTORY_DATA.'.liveDeliveryDataId');
-                    }
-    
-                    $this->db->select('count(*) as total,email_history_data.keyword');
-                    $this->db->from(EMAIL_HISTORY_DATA);
-                    $this->db->where($condition);
-                    $this->db->where('email_history_data.liveDeliveryDataId is NULL', NULL, FALSE);
-                    $this->db->group_by("email_history_data.keyword");
-                    $query=$this->db->get();
-                    $statusResponse=$query->result_array();
-    
-                    //pre($statusResponse);
-
-                    foreach($statusResponse as $record){
-                        $statusInfo[$provider['listname']][$newDeliveryDate]["liverepost_success"][$record['keyword']] = $record['total'];
-                        $statusInfo[$provider['listname']][$newDeliveryDate]["liverepost_success"]['total'] += $record['total'];                             
-                    }
-                }    
-            }
+            foreach($statusResponse as $record){
+                $statusInfo[$provider['listname']][$record['updateDate']]["liverepost_success"][$record['keyword']] = $record['total'];                            
+                $statusInfo[$provider['listname']][$record['updateDate']]["liverepost_success"]['total'] += $record['total'];
+            }             
         }
-        $providerStatusInfo = $statusInfo;        
 
+        $providerStatusInfo = $statusInfo;        
         $allProvidersData = GetAllRecord(PROVIDERS,array(),false,array(),array(),array(),"id,listname");
         foreach($allProvidersData as $providerData){
             $allProvider[$providerData['id']] = $providerData['listname'];
