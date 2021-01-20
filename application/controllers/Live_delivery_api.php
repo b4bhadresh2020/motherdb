@@ -19,6 +19,9 @@ class Live_delivery_api extends CI_Controller
     public function rest()
     {
         $response = array();
+        $blockDomain = array(
+            "telia.com"
+        );
 
         if (isset($_GET['apikey'])) {
 
@@ -51,8 +54,14 @@ class Live_delivery_api extends CI_Controller
                                     $notToCheckFuther = 1;
                                 }
 
+                                // check email id host in blocklist array.
+                                $emailAddressChunk = explode("@",$_GET['emailId']);
+                                if(in_array($emailAddressChunk[1],$blockDomain)){
+                                    $notToCheckFuther = 4;
+                                }
+
                                 // check live email check flag is on
-                                if ($getLiveDeliveryData['checkEmail'] == 1) {
+                                if ($notToCheckFuther == 0 && $getLiveDeliveryData['checkEmail'] == 1) {
                                     $checkEmailResponse = isValidDeliverableEmail($_GET['emailId']);
                                     if($notToCheckFuther == 0 &&  $checkEmailResponse == 0){
                                         $notToCheckFuther = 3;
@@ -64,11 +73,13 @@ class Live_delivery_api extends CI_Controller
                                     }
                                 }
 
+                                // check phone number if check phone status enable from live delivery
                                 if ($getLiveDeliveryData['checkPhone'] == 1) {
                                     if (@$_GET['phone'] != '' && !is_numeric($_GET['phone'])) {
                                         $notToCheckFuther = 2;
                                     }
-                                }
+                                }                              
+
 
                                 if ($notToCheckFuther == 0) {
 
@@ -370,6 +381,11 @@ class Live_delivery_api extends CI_Controller
                                     $isFail            = 1;
                                     $sucFailMsgIndex   = 9; //Invalid email
                                     $response['error'] = 'Invalid email';
+                                } else if ($notToCheckFuther == 4) {
+                                    //data save to live_delivery_data table
+                                    $isFail            = 1;
+                                    $sucFailMsgIndex   = 12; //Telia MX Block
+                                    $response['error'] = 'Duplicate record found.';
                                 }
                             } else {
 

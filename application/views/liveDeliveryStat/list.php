@@ -281,6 +281,7 @@
                                             $invalidEmailFormatCount = $rejectDetailCountsArr['invalidEmailFormat'];
                                             $invalidPhoneCount = $rejectDetailCountsArr['invalidPhone'];
                                             $invalidGenderCount = $rejectDetailCountsArr['invalidGender'];
+                                            $teliaMxBlockCount = $rejectDetailCountsArr['teliaMxBlock'];
 
                                             if ($totalRejectCount > 0) {
                                                 
@@ -316,6 +317,9 @@
 
                                                 $invalidGenderPer = ($invalidGenderCount / $totalRejectCount) * 100;
                                                 $invalidGenderPer = reformat_number_format($invalidGenderPer);
+                                                
+                                                $teliaMxBlockPer = ($teliaMxBlockCount / $totalRejectCount) * 100;
+                                                $teliaMxBlockPer = reformat_number_format($teliaMxBlockPer);
 
                                             }else{
 
@@ -330,6 +334,7 @@
                                                 $invalidEmailFormatPer = 0;
                                                 $invalidPhonePer = 0;
                                                 $invalidGenderPer = 0;
+                                                $teliaMxBlockPer = 0;
                                             }
                                             
 
@@ -399,6 +404,12 @@
                                                 <td>Server Issue</td>
                                                 <td><?php echo $serverIssueCount; ?></td>
                                                 <td><?php echo $serverIssuePer.' %'; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td>12</td>
+                                                <td>Telia MX Block</td>
+                                                <td><?php echo $teliaMxBlockCount; ?></td>
+                                                <td><?php echo $teliaMxBlockPer.' %'; ?></td>
                                             </tr>
                                             
                                         </tbody>
