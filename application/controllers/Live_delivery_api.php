@@ -54,25 +54,27 @@ class Live_delivery_api extends CI_Controller
                                     $notToCheckFuther = 1;
                                 }
 
-                                // check email id host in blocklist array.
-                                $emailAddressChunk = explode("@",$_GET['emailId']);
-                                if(in_array($emailAddressChunk[1],$blockDomain)){
-                                    $notToCheckFuther = 4;
-                                }
-
-                                // check live email check flag is on
-                                if ($notToCheckFuther == 0 && $getLiveDeliveryData['checkEmail'] == 1) {
-                                    $checkEmailResponse = isValidDeliverableEmail($_GET['emailId']);
-                                    if($notToCheckFuther == 0 &&  $checkEmailResponse == 0){
-                                        $notToCheckFuther = 3;
+                                if($notToCheckFuther == 0){
+                                    // check email id host in blocklist array.
+                                    $emailAddressChunk = explode("@",$_GET['emailId']);
+                                    if(in_array($emailAddressChunk[1],$blockDomain)){
+                                        $notToCheckFuther = 4;
                                     }
 
-                                    // check successfully get valid response from checker api
-                                    if($checkEmailResponse != -1){
-                                        $isEmailChecked = 1;
+                                    // check live email check flag is on
+                                    if ($notToCheckFuther == 0 && $getLiveDeliveryData['checkEmail'] == 1) {
+                                        $checkEmailResponse = isValidDeliverableEmail($_GET['emailId']);
+                                        if($checkEmailResponse == 0){
+                                            $notToCheckFuther = 3;
+                                        }
+
+                                        // check successfully get valid response from checker api
+                                        if($checkEmailResponse != -1){
+                                            $isEmailChecked = 1;
+                                        }
                                     }
                                 }
-
+                                
                                 // check phone number if check phone status enable from live delivery
                                 if ($getLiveDeliveryData['checkPhone'] == 1) {
                                     if (@$_GET['phone'] != '' && !is_numeric($_GET['phone'])) {
