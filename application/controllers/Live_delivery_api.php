@@ -19,9 +19,6 @@ class Live_delivery_api extends CI_Controller
     public function rest()
     {
         $response = array();
-        $blockDomain = array(
-            "telia.com"
-        );
 
         if (isset($_GET['apikey'])) {
 
@@ -57,8 +54,10 @@ class Live_delivery_api extends CI_Controller
                                 if($notToCheckFuther == 0){
                                     // check email id host in blocklist array.
                                     $emailAddressChunk = explode("@",$_GET['emailId']);
-                                    if(in_array($emailAddressChunk[1],$blockDomain)){
-                                        $notToCheckFuther = 4;
+                                    if($emailAddressChunk[1] == TELIA_DOMAIN){
+                                        $notToCheckFuther = 4; // Telia MX Block	
+                                    } else if($emailAddressChunk[1] == LUUKKU_DOMAIN) {
+                                        $notToCheckFuther = 5; // Luukku MX Block	
                                     }
 
                                     // check live email check flag is on
@@ -387,6 +386,11 @@ class Live_delivery_api extends CI_Controller
                                     //data save to live_delivery_data table
                                     $isFail            = 1;
                                     $sucFailMsgIndex   = 12; //Telia MX Block
+                                    $response['error'] = 'Duplicate record found.';
+                                } else if ($notToCheckFuther == 5) {
+                                    //data save to live_delivery_data table
+                                    $isFail            = 1;
+                                    $sucFailMsgIndex   = 13; //Luukku MX Block
                                     $response['error'] = 'Duplicate record found.';
                                 }
                             } else {
