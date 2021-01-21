@@ -170,6 +170,11 @@ define('PROVIDERS', 'providers');
 define('AWEBER_ACCOUNTS', 'aweber_accounts');
 define('ONGAGE_ACCOUNTS', 'ongage_accounts');
 
+// MX Block account
+define('TELIA_DOMAIN', 'telia.com');
+define('LUKKIA_DOMAIN', 'lukkia.com');
+
+
 /*
  * 	 -> google 2 factor, dont change it if you dont have proper reason
  */

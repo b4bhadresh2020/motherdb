@@ -224,7 +224,7 @@ class Mdl_live_delivery extends CI_Model
                     $apikey = $getApiKeys['apikey'];
                 }else{
                     $countsArr =  array('successCount' => 0,'failureCount' => 0, 'checkEmailCount' => 0);
-                    $rejectDetailCountsArr = array('duplicateCount' => 0, 'blacklistCount' => 0, 'duplicateCount' => 0, 'blacklistCount' => 0, 'serverIssue' => 0, 'apiKeyIsNotActive' => 0, 'emailIsRequired' => 0, 'phoneIsRequired' => 0, 'emailIsBlank' => 0, 'phoneIsBlank' => 0, 'invalidEmailFormat' => 0, 'invalidPhone' => 0, 'invalidGender' => 0, 'teliaMxBlock' => 0);
+                    $rejectDetailCountsArr = array('duplicateCount' => 0, 'blacklistCount' => 0, 'duplicateCount' => 0, 'blacklistCount' => 0, 'serverIssue' => 0, 'apiKeyIsNotActive' => 0, 'emailIsRequired' => 0, 'phoneIsRequired' => 0, 'emailIsBlank' => 0, 'phoneIsBlank' => 0, 'invalidEmailFormat' => 0, 'invalidPhone' => 0, 'invalidGender' => 0, 'teliaMxBlock' => 0, 'lukkiaMxBlock' => 0);
 
                     return array('countsArr' => $countsArr,'rejectDetailCountsArr' => $rejectDetailCountsArr,'filteredData' => array());
                 }
@@ -282,7 +282,7 @@ class Mdl_live_delivery extends CI_Model
 
                 //get reject count in detail
 
-                $reasonArr = array(1 => 'duplicateCount', 2 => 'blacklistCount', 3 => 'serverIssue', 4 => 'apiKeyIsNotActive', 5 => 'emailIsRequired', 6 => 'phoneIsRequired', 7 => 'emailIsBlank', 8 => 'phoneIsBlank', 9 => 'invalidEmailFormat', 10 => 'invalidPhone', 11 => 'invalidGender', 12 => 'teliaMxBlock' );
+                $reasonArr = array(1 => 'duplicateCount', 2 => 'blacklistCount', 3 => 'serverIssue', 4 => 'apiKeyIsNotActive', 5 => 'emailIsRequired', 6 => 'phoneIsRequired', 7 => 'emailIsBlank', 8 => 'phoneIsBlank', 9 => 'invalidEmailFormat', 10 => 'invalidPhone', 11 => 'invalidGender', 12 => 'teliaMxBlock', 13 => 'lukkiaMxBlock' );
 
                 $rejectDetailCountsArr = array();
                 for ($i=1; $i <= count($reasonArr); $i++) { 
@@ -368,6 +368,7 @@ class Mdl_live_delivery extends CI_Model
             10 => 'invalidPhone',
             11 => 'invalidGender',
             12 => 'teliaMxBlock',
+            13 => 'lukkiaMxBlock',
         );
 
         if ($this->isDateWithoutTime($startDate) == 'true') {
