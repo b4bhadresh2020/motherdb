@@ -105,7 +105,7 @@
                                                     </div>    
                                                 </div>
                                             </div>
-                                            <?php $sucFailTypeArr =  array('0' => 'Success', '1' => 'Duplicate', '2' => 'Blacklisted', '3' => 'Server Issue','4' => 'Api Key Is Not Active', '5' => 'Email Is Required', '6' => 'Phone Is Required', '7' => 'Email Is Blank', '8' => 'Phone Is Blank', '9' => 'Invalid Email Format', '10' => 'Invalid Phone', '11' => 'Invalid Gender', '12' => 'Telia MX Block','13' => 'Lukkia Mx Block'); ?>
+                                            <?php $sucFailTypeArr =  array('0' => 'Success', '1' => 'Duplicate', '2' => 'Blacklisted', '3' => 'Server Issue','4' => 'Api Key Is Not Active', '5' => 'Email Is Required', '6' => 'Phone Is Required', '7' => 'Email Is Blank', '8' => 'Phone Is Blank', '9' => 'Invalid Email Format', '10' => 'Invalid Phone', '11' => 'Invalid Gender', '12' => 'Telia MX Block','13' => 'Luukku Mx Block'); ?>
                                             
                                             <div class="row" >
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -282,7 +282,7 @@
                                             $invalidPhoneCount = $rejectDetailCountsArr['invalidPhone'];
                                             $invalidGenderCount = $rejectDetailCountsArr['invalidGender'];
                                             $teliaMxBlockCount = $rejectDetailCountsArr['teliaMxBlock'];
-                                            $lukkiaMxBlockCount = $rejectDetailCountsArr['lukkiaMxBlock'];
+                                            $luukkuMxBlockCount = $rejectDetailCountsArr['luukkuMxBlock'];
 
                                             if ($totalRejectCount > 0) {
                                                 
@@ -322,8 +322,8 @@
                                                 $teliaMxBlockPer = ($teliaMxBlockCount / $totalRejectCount) * 100;
                                                 $teliaMxBlockPer = reformat_number_format($teliaMxBlockPer);
 
-                                                $lukkiaMxBlockPer = ($lukkiaMxBlockCount / $totalRejectCount) * 100;
-                                                $lukkiaMxBlockPer = reformat_number_format($lukkiaMxBlockPer);
+                                                $luukkuMxBlockPer = ($luukkuMxBlockCount / $totalRejectCount) * 100;
+                                                $luukkuMxBlockPer = reformat_number_format($luukkuMxBlockPer);
 
                                             }else{
 
@@ -339,7 +339,7 @@
                                                 $invalidPhonePer = 0;
                                                 $invalidGenderPer = 0;
                                                 $teliaMxBlockPer = 0;
-                                                $lukkiaMxBlockPer = 0;
+                                                $luukkuMxBlockPer = 0;
                                             }
                                             
 
@@ -418,9 +418,9 @@
                                             </tr>
                                             <tr>
                                                 <td>13</td>
-                                                <td>Lukkia MX Block</td>
-                                                <td><?php echo $lukkiaMxBlockCount; ?></td>
-                                                <td><?php echo $lukkiaMxBlockPer.' %'; ?></td>
+                                                <td>Luukku MX Block</td>
+                                                <td><?php echo $luukkuMxBlockCount; ?></td>
+                                                <td><?php echo $luukkuMxBlockPer.' %'; ?></td>
                                             </tr>
                                         </tbody>
                                     </table>

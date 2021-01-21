@@ -56,8 +56,8 @@ class Live_delivery_api extends CI_Controller
                                     $emailAddressChunk = explode("@",$_GET['emailId']);
                                     if($emailAddressChunk[1] == TELIA_DOMAIN){
                                         $notToCheckFuther = 4; // Telia MX Block	
-                                    } else if($emailAddressChunk[1] == LUKKIA_DOMAIN) {
-                                        $notToCheckFuther = 5; // Lukkia MX Block	
+                                    } else if($emailAddressChunk[1] == LUUKKU_DOMAIN) {
+                                        $notToCheckFuther = 5; // Luukku MX Block	
                                     }
 
                                     // check live email check flag is on
@@ -390,7 +390,7 @@ class Live_delivery_api extends CI_Controller
                                 } else if ($notToCheckFuther == 5) {
                                     //data save to live_delivery_data table
                                     $isFail            = 1;
-                                    $sucFailMsgIndex   = 13; //Lukkia MX Block
+                                    $sucFailMsgIndex   = 13; //Luukku MX Block
                                     $response['error'] = 'Duplicate record found.';
                                 }
                             } else {

@@ -172,7 +172,7 @@ define('ONGAGE_ACCOUNTS', 'ongage_accounts');
 
 // MX Block account
 define('TELIA_DOMAIN', 'telia.com');
-define('LUKKIA_DOMAIN', 'lukkia.com');
+define('LUUKKU_DOMAIN', 'luukku.com');
 
 
 /*
