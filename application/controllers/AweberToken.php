@@ -10,6 +10,7 @@ class AweberToken extends CI_Controller
         parent::__construct();
         require_once(FCPATH.'vendor/autoload.php');
         $this->load->model('mdl_inboxgame_db');
+        $this->load->model('mdl_felinafinans_db');
     }
 
     public function index()
@@ -51,7 +52,11 @@ class AweberToken extends CI_Controller
 
             $is_insert = FALSE;
             ManageData(AWEBER_ACCOUNTS,$updateCondition,$updateAweberAccountData,$is_insert);
+            // Inboxgame DB
             $this->mdl_inboxgame_db->ManageData(AWEBER_ACCOUNTS,$updateCondition,$updateAweberAccountData,$is_insert);
+
+            // Felinafinans DB
+            $this->mdl_felinafinans_db->ManageData(AWEBER_ACCOUNTS,$updateCondition,$updateAweberAccountData,$is_insert);
         }
     }
 }

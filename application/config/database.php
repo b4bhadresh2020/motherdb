@@ -196,3 +196,42 @@ else{
 	$db['inboxgame_db']['database'] = 'inboxgamecom_db';
 	
 }
+
+//felinafinans database configuration
+$db['felinafinans_db'] = array(
+    'dsn'       => '',
+    'hostname' => 'localhost',
+    'username' => '',
+    'password' => '',
+    'database' => '',
+    'dbdriver' => 'mysqli',
+    'dbprefix' => '',
+    'pconnect' => FALSE,
+    'db_debug' => (ENVIRONMENT !== 'production'),
+    'cache_on' => FALSE,
+    'cachedir' => '',
+    'char_set' => 'utf8',
+    'dbcollat' => 'utf8_general_ci',
+    'swap_pre' => '',
+    'encrypt'  => FALSE,
+    'compress' => FALSE,
+    'stricton' => FALSE,
+    'failover' => array(),
+    'save_queries' => TRUE
+);
+
+
+if(strtolower($_SERVER['HTTP_HOST']) == 'localhost'){
+	$db['felinafinans_db']['hostname'] = 'localhost';
+	$db['felinafinans_db']['username'] = 'root';
+	$db['felinafinans_db']['password'] = '';
+	$db['felinafinans_db']['database'] = 'felina'; 
+}
+else{
+	
+	$db['felinafinans_db']['hostname'] = 'dedi18.azehosting.net';
+	$db['felinafinans_db']['username'] = 'felinase_admin';
+	$db['felinafinans_db']['password'] = 'H&I%mToGT{gS';
+	$db['felinafinans_db']['database'] = 'felinase_portal';
+	
+}
