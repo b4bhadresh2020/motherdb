@@ -105,16 +105,11 @@ if(strtolower($_SERVER['HTTP_HOST']) == 'localhost'){
 }
 else{
 	
-	/*$db['default']['hostname'] = 'dedi18.azehosting.net';
+	$db['default']['hostname'] = 'dedi18.azehosting.net';
 	$db['default']['username'] = 'suprdat_motherdbuser';
 	$db['default']['password'] = 'L9fp^0F?brR5';
 	//$db['default']['database'] = 'suprdat_motherdb_new';
-	$db['default']['database'] = 'suprdat_motherdb';*/
-
-	$db['default']['hostname'] = 'localhost';
-	$db['default']['username'] = 'root';
-	$db['default']['password'] = '';
-	$db['default']['database'] = 'motherdb'; 
+	$db['default']['database'] = 'suprdat_motherdb';
 	
 }
 
@@ -155,7 +150,8 @@ else{
 	$db['another_db']['hostname'] = 'dedi18.azehosting.net';
 	$db['another_db']['username'] = 'suprdat_hoi3user';
 	$db['another_db']['password'] = 'Zx-]50r(qiKI';
-	$db['another_db']['database'] = 'suprdat_hoi3';	
+	$db['another_db']['database'] = 'suprdat_hoi3';
+	
 }
 
 //inboxgame database configuration
