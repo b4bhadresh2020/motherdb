@@ -629,6 +629,10 @@ function getAweverProviderListName($providerListId){
         '12' => 'NZ - Getspinn',
         '13' => 'Freecasinodeal.com/nz  (New Zealand)',
         '14' => 'DK - Signesmail',
+        '15' => 'DK - abbie',
+        '16' => 'FI - abbie',
+        '17' => 'NO - abbie',
+        '18' => 'SE - abbie'
     );
     return $aweberList[$providerListId];
 }
@@ -715,6 +719,10 @@ function getLiveRepostAweverProviderID($providerListId){
         "12" => "57",  // NZ - Getspinn
         "13" => "61",  // Freecasinodeal.com/nz  (New Zealand)
         "14" => "68",  // DK - Signesmail
+        "15" => "71",  // DK - abbie
+        "16" => "72",  // FI - abbie
+        "17" => "73",  // NO - abbie
+        "18" => "74",  // SE - abbie
     );
     return $provider[$providerListId];
 }

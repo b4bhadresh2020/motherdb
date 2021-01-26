@@ -61,6 +61,11 @@
                 providerList +="<option value='12'>NZ - Getspinn</option>";
                 providerList +="<option value='13'>Freecasinodeal.com/nz (New Zealand)</option>";
                 providerList +="<option value='14'>DK - Signesmail</option>";
+                providerList +="<option value='15'>DK - abbie</option>";
+                providerList +="<option value='16'>FI - abbie</option>";
+                providerList +="<option value='17'>NO - abbie</option>";
+                providerList +="<option value='18'>SE - abbie</option>";
+
             }else if(providerId == 2){
                 providerList +="<option value='1'>NO - deveroper</option>";
                 providerList +="<option value='2'>SE - deveroper - Loan</option>";
