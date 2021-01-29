@@ -432,6 +432,7 @@
             providerList +="<option value='16'>FI - abbie</option>";
             providerList +="<option value='17'>NO - abbie</option>";
             providerList +="<option value='18'>SE - abbie</option>";
+            providerList +="<option value='19'>FreeCasinodeal/ca (Canada)</option>";
 
         }else if(providerId == 2){
             providerList +="<option value='1'>NO - deveroper</option>";

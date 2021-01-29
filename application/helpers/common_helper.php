@@ -632,7 +632,8 @@ function getAweverProviderListName($providerListId){
         '15' => 'DK - abbie',
         '16' => 'FI - abbie',
         '17' => 'NO - abbie',
-        '18' => 'SE - abbie'
+        '18' => 'SE - abbie',
+        '19' => 'FreeCasinodeal/ca (Canada)'
     );
     return $aweberList[$providerListId];
 }
@@ -722,7 +723,8 @@ function getLiveRepostAweverProviderID($providerListId){
         "15" => "71",  // DK - abbie
         "16" => "72",  // FI - abbie
         "17" => "73",  // NO - abbie
-        "18" => "74",  // SE - abbie
+        "18" => "74",  // SE - abbie,
+        "19" => "75",  // FreeCasinodeal/ca (Canada)
     );
     return $provider[$providerListId];
 }
