@@ -422,6 +422,7 @@ class Live_delivery_api extends CI_Controller
 
                     } else {
                         //data save to live_delivery_data table
+                        $isEmailChecked    = 0;
                         $isFail            = 1;
                         $sucFailMsgIndex   = 4; //api key is not active
                         $response['error'] = 'Api key is not active. Please contact to admin';
