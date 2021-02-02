@@ -220,6 +220,7 @@ class Cron_provider_user_csv extends CI_Controller
             "17" => "73", // NO - abbie
             "18" => "74", // SE - abbie
             "19" => "75", // FreeCasinodeal/ca (Canada)
+            "20" => "76", // FelinaFinans/se
         );
         return $provider[$providerId];
     

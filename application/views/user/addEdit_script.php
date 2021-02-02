@@ -433,7 +433,7 @@
             providerList +="<option value='17'>NO - abbie</option>";
             providerList +="<option value='18'>SE - abbie</option>";
             providerList +="<option value='19'>FreeCasinodeal/ca (Canada)</option>";
-
+            providerList +="<option value='20'>FelinaFinans/se</option>";
         }else if(providerId == 2){
             providerList +="<option value='1'>NO - deveroper</option>";
             providerList +="<option value='2'>SE - deveroper - Loan</option>";

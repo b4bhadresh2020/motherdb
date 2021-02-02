@@ -633,7 +633,8 @@ function getAweverProviderListName($providerListId){
         '16' => 'FI - abbie',
         '17' => 'NO - abbie',
         '18' => 'SE - abbie',
-        '19' => 'FreeCasinodeal/ca (Canada)'
+        '19' => 'FreeCasinodeal/ca (Canada)',
+        '20' => 'FelinaFinans/se'
     );
     return $aweberList[$providerListId];
 }
@@ -725,6 +726,7 @@ function getLiveRepostAweverProviderID($providerListId){
         "17" => "73",  // NO - abbie
         "18" => "74",  // SE - abbie,
         "19" => "75",  // FreeCasinodeal/ca (Canada)
+        "20" => "76",  // FelinaFinans/se
     );
     return $provider[$providerListId];
 }
