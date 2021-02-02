@@ -62,7 +62,7 @@ class Mdl_sendinblue extends CI_Model {
                         "ADDRESS"=> @$getData['address'],
                         "CITY"          => @$getData['city'],
                         "ZIPCODE"   => @$getData['postCode'],
-                        "GENDER"   => @$getData['gender'] 
+                        "GENDER"   => strtolower($getData['gender']) 
                 )
             );  
 

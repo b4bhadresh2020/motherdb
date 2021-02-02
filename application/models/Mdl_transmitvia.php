@@ -34,7 +34,7 @@ class Mdl_transmitvia extends CI_Model {
             'EMAIL'   => $getData['emailId'], // the confirmation email will be sent!!! Use valid email address
             'FNAME'   => $getData['firstName'],
             'LNAME'   => $getData['lastName'],
-            'GENDER'   => $getData['gender']
+            'GENDER'   => strtolower($getData['gender'])
         ));
 
         // DISPLAY RESPONSE

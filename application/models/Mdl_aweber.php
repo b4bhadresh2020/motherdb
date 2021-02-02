@@ -62,7 +62,7 @@ class Mdl_aweber extends CI_Model {
                 'email' => $getData['emailId'],
                 'name' => $getData['firstName'].' '.$getData['lastName'],
                 'ip_address' => '',
-                'custom_fields' => array('Fname' => $getData['firstName'],'Lname' => $getData['lastName'],'phone no' => $getData['phone'],'gender' => $getData['gender'], 'birthdate' =>  $getData['birthDate'])
+                'custom_fields' => array('Fname' => $getData['firstName'],'Lname' => $getData['lastName'],'phone no' => $getData['phone'],'gender' => strtolower($getData['gender']), 'birthdate' =>  $getData['birthDate'])
             );
 
             if(!empty($tagValue)){

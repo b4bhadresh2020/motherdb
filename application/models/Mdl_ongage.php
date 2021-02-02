@@ -44,7 +44,7 @@ class Mdl_ongage extends CI_Model {
                 'email' => $getData['emailId'],
                 'first_name' => $getData['firstName'],
                 'last_name' => $getData['lastName'],
-                'gender' => $getData['gender'],
+                'gender' => strtolower($getData['gender']),
                 'phone' => $getData['phone'],
                 'country' => $getData['country'],
                 'address' => $getData['address']." ".$getData['city']." ".$getData['postCode'],

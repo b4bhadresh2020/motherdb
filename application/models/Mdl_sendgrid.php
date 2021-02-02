@@ -64,7 +64,7 @@ class Mdl_sendgrid extends CI_Model {
                         "country"       => @$getData['country'],
                         "postal_code"   => @$getData['postCode'],
                         "custom_fields" => array(
-                            "w1_T" => @$getData['gender'],
+                            "w1_T" => strtolower($getData['gender']),
                             "w2_T" => @$getData['phone'],
                             "w3_T" => @$getData['birthDate'],
                             "w4_T" => @$tagValue
