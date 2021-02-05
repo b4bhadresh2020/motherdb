@@ -1,0 +1,19 @@
+.no-result {
+    min-height: 500px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.no-result i {
+    font-size: 80px;
+    color: #ddd;
+}
+.no-result .msg {
+    font-size: 16px;
+    color: #878787;
+    margin-top: 10px;
+}
+#canvas {
+    display: none;
+}

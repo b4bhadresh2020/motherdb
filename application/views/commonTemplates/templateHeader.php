@@ -25,6 +25,7 @@
     <link href="<?php echo base_url(); ?>assets/css/countryWiseKeywordPercentage.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/css/jquery-confirm.min.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/css/bootstrap-multiselect.css" rel="stylesheet">
+    <link href="<?php echo base_url();?>assets/css/custom.css" rel="stylesheet">
     
 
     <!-- <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/fonts/fontawesome-webfont-fa.css" /> -->
