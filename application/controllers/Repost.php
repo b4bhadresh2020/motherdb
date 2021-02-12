@@ -22,7 +22,7 @@ class Repost extends CI_Controller
         // $condition = array('mailProvider' => 'egoi');
         $condition = array();
         $is_single = FALSE;
-        $getLiveDeliveryAllApiKeys = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(), 'apikey,groupName,keyword,mailProvider');
+        $getLiveDeliveryAllApiKeys = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(array('liveDeliveryId' => 'desc')), 'apikey,groupName,keyword,mailProvider');
 
         $data['apikeys'] = $getLiveDeliveryAllApiKeys;
         $data['load_page'] = 'repost';

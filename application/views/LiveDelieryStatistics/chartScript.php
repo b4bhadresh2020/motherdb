@@ -24,6 +24,7 @@
                     success: function(response) {
                         $('.no-result').hide();
                         var provider = JSON.parse(response);
+                        console.log(provider);
                         var provider_name = [];
                         var queue_live_delivery = [];
                         var send_live_delivery  = [];

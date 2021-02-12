@@ -20,8 +20,8 @@ class LiveDelieryStatistics extends CI_Controller
         //get all apikey 
         $condition = array();
         $is_single = FALSE;
-        $getLiveDeliveryAllApiKeys = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(), 'apikey,groupName,keyword,mailProvider');
-
+        $getLiveDeliveryAllApiKeys = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(array('liveDeliveryId' => 'desc')), 'liveDeliveryId ,apikey,groupName,keyword,mailProvider');
+      
         $data['apikeys'] = $getLiveDeliveryAllApiKeys;
         $data['load_page'] = 'liveDeliveryStatistics';
         $data['headerTitle'] = "Live Delivery Statistics";
@@ -50,24 +50,35 @@ class LiveDelieryStatistics extends CI_Controller
             unset($mailProviders[$key]);
         }
         $providerIds = implode(',',$mailProviders);
+        $provider_delay = json_decode($providerData['delay'],true);
         if(!empty($providerIds)) {
-            $data['providerDetail'] = $this->db->select('id,listname')->where('id IN('. $providerIds .')')->get('providers')->result_array();
-        }
+            $providers = $this->db->select('id,listname')->where('id IN('. $providerIds .')')->get('providers')->result_array();
+            foreach($providers as $key => $provider){
+                $providers[$key]['delay'] = $provider_delay[$provider['id']];
+            }
+            $delay = array();
+            foreach($providers as $key => $provider){
+                $delay[$key] = $provider['delay'];
+            }
+            array_multisort($delay, SORT_ASC, $providers);
+        }   
         // get live delivery data
         $userDelays = json_decode($providerData['delay'],true);
-        
         $live_delivery = [];
-        if(!empty($userDelays)) {
-            foreach($userDelays As $kud => $userDelay) {
-                if($userDelay == 0) {
+       
+        if(!empty($providers)) {
+            foreach($providers As $key => $provider) {
+                $pid = $provider['id'];
+                if($provider['delay'] == 0) {
                     $total_send = $this->db->select('count(l.liveDeliveryDataId) AS total')
                     ->from('live_delivery_data As l')
                     ->where('DATE_FORMAT(l.createdDate,"%Y-%m-%d")',$deliveryDate)
                     ->where('l.apikey', $apikey)
                     ->get()->row_array();
                   
-                    $live_delivery[$kud]['queue_record'] = $total_send['total'];
-                    $live_delivery[$kud]['send_record'] = $total_send['total'];
+                    $live_delivery[$key]['id'] = $pid;
+                    $live_delivery[$key]['queue_record'] = $total_send['total'];
+                    $live_delivery[$key]['send_record'] = $total_send['total'];
                     
                 } else {
                     $aweberList = getProviderList(AWEBER);
@@ -91,83 +102,86 @@ class LiveDelieryStatistics extends CI_Controller
                     // Total queue data 
                     $this->db->select('count(l.liveDeliveryDataId) AS total');
                     $this->db->from('live_delivery_data As l');
-                    if (in_array($kud, $aweberListIds)) {
+                    if (in_array($pid, $aweberListIds)) {
                         $this->db->join('aweber_delay_user_data AS ad','ad.liveDeliveryDataId = l.liveDeliveryDataId','left');
-                    } else if(in_array($kud, $transmitviaListIds)) {
+                    } else if(in_array($pid, $transmitviaListIds)) {
                         $this->db->join('transmitvia_delay_user_data AS td','td.liveDeliveryDataId = l.liveDeliveryDataId','left');
-                    } else if(in_array($kud, $constantContactListIds)) {
+                    } else if(in_array($pid, $constantContactListIds)) {
                         $this->db->join('contact_delay_user_data AS cd','cd.liveDeliveryDataId = l.liveDeliveryDataId','left');
-                    } else if(in_array($kud, $ongageListIds)) {
+                    } else if(in_array($pid, $ongageListIds)) {
                         $this->db->join('ongage_delay_user_data AS od','od.liveDeliveryDataId = l.liveDeliveryDataId','left');
-                    } else if(in_array($kud, $sendgridListIds)) {
+                    } else if(in_array($pid, $sendgridListIds)) {
                         $this->db->join('sendgrid_delay_user_data AS sgd','sgd.liveDeliveryDataId = l.liveDeliveryDataId','left');
-                    } else if(in_array($kud, $sendInBlueListIds)) {
+                    } else if(in_array($pid, $sendInBlueListIds)) {
                         $this->db->join('sendinblue_delay_user_data AS sbd','sbd.liveDeliveryDataId = l.liveDeliveryDataId','left');
                     }
 
                     $this->db->where('l.apikey', $apikey);
                     $this->db->where('DATE_FORMAT(l.createdDate,"%Y-%m-%d")',$deliveryDate);
-                    if (in_array($kud, $aweberListIds)) {
-                        $this->db->where('ad.providerId', $kud);
-                    } else if (in_array($kud, $transmitviaListIds)) {
-                        $this->db->where('td.providerId', $kud);
-                    } else if (in_array($kud, $constantContactListIds)) {
-                        $this->db->where('cd.providerId', $kud);
-                    } else if (in_array($kud, $ongageListIds)) {
-                        $this->db->where('od.providerId', $kud);
-                    } else if (in_array($kud, $sendgridListIds)) {
-                        $this->db->where('sgd.providerId', $kud);
-                    } else if (in_array($kud, $sendInBlueListIds)) {
-                        $this->db->where('sbd.providerId', $kud);
+                    if (in_array($pid, $aweberListIds)) {
+                        $this->db->where('ad.providerId', $pid);
+                    } else if (in_array($pid, $transmitviaListIds)) {
+                        $this->db->where('td.providerId', $pid);
+                    } else if (in_array($pid, $constantContactListIds)) {
+                        $this->db->where('cd.providerId', $pid);
+                    } else if (in_array($pid, $ongageListIds)) {
+                        $this->db->where('od.providerId', $pid);
+                    } else if (in_array($pid, $sendgridListIds)) {
+                        $this->db->where('sgd.providerId', $pid);
+                    } else if (in_array($pid, $sendInBlueListIds)) {
+                        $this->db->where('sbd.providerId', $pid);
                     }
                     $total_queue = $this->db->get()->row_array();
                    
                      // Total send data 
                      $this->db->select('count(l.liveDeliveryDataId) AS total');
                      $this->db->from('live_delivery_data As l');
-                     if (in_array($kud, $aweberListIds)) {
+                     if (in_array($pid, $aweberListIds)) {
                          $this->db->join('aweber_delay_user_data AS ad','ad.liveDeliveryDataId = l.liveDeliveryDataId','left');
-                     } else if(in_array($kud, $transmitviaListIds)) {
+                     } else if(in_array($pid, $transmitviaListIds)) {
                          $this->db->join('transmitvia_delay_user_data AS td','td.liveDeliveryDataId = l.liveDeliveryDataId','left');
-                     } else if(in_array($kud, $constantContactListIds)) {
+                     } else if(in_array($pid, $constantContactListIds)) {
                          $this->db->join('contact_delay_user_data AS cd','cd.liveDeliveryDataId = l.liveDeliveryDataId','left');
-                     } else if(in_array($kud, $ongageListIds)) {
+                     } else if(in_array($pid, $ongageListIds)) {
                          $this->db->join('ongage_delay_user_data AS od','od.liveDeliveryDataId = l.liveDeliveryDataId','left');
-                     } else if(in_array($kud, $sendgridListIds)) {
+                     } else if(in_array($pid, $sendgridListIds)) {
                          $this->db->join('sendgrid_delay_user_data AS sgd','sgd.liveDeliveryDataId = l.liveDeliveryDataId','left');
-                     } else if(in_array($kud, $sendInBlueListIds)) {
+                     } else if(in_array($pid, $sendInBlueListIds)) {
                          $this->db->join('sendinblue_delay_user_data AS sbd','sbd.liveDeliveryDataId = l.liveDeliveryDataId','left');
                      }
  
                      $this->db->where('l.apikey', $apikey);
                      $this->db->where('DATE_FORMAT(l.createdDate,"%Y-%m-%d")',$deliveryDate);
-                     if (in_array($kud, $aweberListIds)) {
-                         $this->db->where('ad.providerId', $kud);
+                     if (in_array($pid, $aweberListIds)) {
+                         $this->db->where('ad.providerId', $pid);
                          $this->db->where('ad.status', 1);
-                     } else if (in_array($kud, $transmitviaListIds)) {
-                         $this->db->where('td.providerId', $kud);
+                     } else if (in_array($pid, $transmitviaListIds)) {
+                         $this->db->where('td.providerId', $pid);
                          $this->db->where('td.status', 1);
-                     } else if (in_array($kud, $constantContactListIds)) {
-                         $this->db->where('cd.providerId', $kud);
+                     } else if (in_array($pid, $constantContactListIds)) {
+                         $this->db->where('cd.providerId', $pid);
                          $this->db->where('cd.status', 1);
-                     } else if (in_array($kud, $ongageListIds)) {
-                         $this->db->where('od.providerId', $kud);
+                     } else if (in_array($pid, $ongageListIds)) {
+                         $this->db->where('od.providerId', $pid);
                          $this->db->where('od.status', 1);
-                     } else if (in_array($kud, $sendgridListIds)) {
-                         $this->db->where('sgd.providerId', $kud);
+                     } else if (in_array($pid, $sendgridListIds)) {
+                         $this->db->where('sgd.providerId', $pid);
                          $this->db->where('sgd.status', 1);
-                     } else if (in_array($kud, $sendInBlueListIds)) {
-                         $this->db->where('sbd.providerId', $kud);
+                     } else if (in_array($pid, $sendInBlueListIds)) {
+                         $this->db->where('sbd.providerId', $pid);
                          $this->db->where('sbd.status', 1);
                      }
                     $total_send = $this->db->get()->row_array();
 
-                    $live_delivery[$kud]['queue_record'] = $total_queue['total'];
-                    $live_delivery[$kud]['send_record'] = $total_send['total'];
+                    $live_delivery[$key]['id'] = $pid;
+                    $live_delivery[$key]['queue_record'] = $total_queue['total'];
+                    $live_delivery[$key]['send_record'] = $total_send['total'];
                 }
             }            
         }
+        $data['providerDetail'] = $providers;
         $data['live_delivery'] = $live_delivery;
+        
         echo json_encode($data);
     }
 }
