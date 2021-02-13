@@ -178,6 +178,52 @@ function GetAllRecordCount($table_name = '', $condition = array(), $is_single = 
     return $res;
 }
 
+function GetAllRecordCountIn($table_name = '', $condition = array(), $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $is_in = array(), $selected_rows = '') {
+    $ci = & get_instance();
+    if ($condition && count($condition))
+        $ci->db->where($condition);
+    
+    if ($is_in && count($is_in)) {
+        foreach ($is_in as $key => $val) {
+            $ci->db->where_in($key, $val);
+        }
+    }
+    
+    if ($is_like && count($is_like)) {
+        foreach ($is_like as $key => $val) {
+            $cur_filter = array();
+            $cur_filter = $val;
+            foreach ($cur_filter as $key1 => $val1) {
+                $ci->db->like($key1, $val1);
+            }
+        }
+    }
+    if ($or_like && count($or_like)) {
+        foreach ($or_like as $key => $val) {
+            $cur_filter = array();
+            $cur_filter = $val;
+            foreach ($cur_filter as $key1 => $val1) {
+                $ci->db->or_like($key1, $val1);
+            }
+        }
+    }
+    if ($order_by && count($order_by)) {
+        foreach ($order_by as $key => $val) {
+            $cur_filter = array();
+            $cur_filter = $val;
+            foreach ($cur_filter as $key1 => $val1) {
+                $order = $val1 ? $val1 : 'asc';
+                $ci->db->order_by($key1, $order);
+            }
+        }
+    }
+    if($selected_rows != "") {
+        $ci->db->select($selected_rows);
+    }
+    $res = $ci->db->count_all_results($table_name);
+    return $res;
+}
+
 function GetAllRecordIn($table_name = '', $condition = array(), $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $is_in = array(), $selected_rows = '') {
     $ci = & get_instance();
     if ($condition && count($condition))
