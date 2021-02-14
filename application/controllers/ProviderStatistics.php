@@ -31,6 +31,14 @@ class ProviderStatistics extends CI_Controller
 
     function getMailProviderData()
     {
+        $response_messages = [
+            "1" => [ "success" => "success", "subscriber_exist" => "400 -", "auth_fail" => "401 -", "bad_fail" => "403 -","blacklisted" => "blacklisted", "host" => "resolve host"],
+            "2" => [ "success" => "success", "subscriber_exist" => "subscriber already", "auth_fail" => "Service Unavailable", "bad_fail" => "Bad Request", "blacklisted" => "blacklisted", "host" => "resolve host"],
+            "3" => [ "success" => "success", "subscriber_exist" => "400 -", "auth_fail" => "401 -", "bad_fail" => "Bad Request", "blacklisted" => "blacklisted", "host" => "Wrong provider"],
+            "4" => [ "success" => "success", "subscriber_exist" => "412 " ,  "auth_fail" => "401 -", "bad_fail" => "429 ", "blacklisted" => "blacklisted", "host" => "resolve host"],
+            "5" => [ "success" => "success", "subscriber_exist" => "400 -", "auth_fail" => "401 -", "bad_fail" => "Bad Request", "blacklisted" => "blacklisted", "host" => "resolve host"],
+            "6" => [ "success" => "success", "subscriber_exist" => "Contact already exist", "auth_fail" => "401 -", "bad_fail" => "Invalid phone number", "blacklisted" => "blacklisted", "host" => "Request already received"],
+        ];
         $apikey = $this->input->post('apikey');
         $deliveryDate = $this->input->post('deliveryDate');
         
@@ -38,7 +46,8 @@ class ProviderStatistics extends CI_Controller
         $liveDeliveryStastic = array();
 
         // fetch mail provider data from providers table
-        $providerCondition   = array('isInActive' => 0);
+        //$providerCondition   = array('isInActive' => 0);
+        $providerCondition   = array('apikey' => '45754a36795461653447446c485a5152587177342f413d3d');
         $is_single           = false;
         $liveDeliveries      = GetAllRecord(LIVE_DELIVERY, $providerCondition, $is_single, [], [], [], 'apikey,mailProvider,delay,isDuplicate,groupName,keyword');
 
@@ -70,122 +79,133 @@ class ProviderStatistics extends CI_Controller
                 $providerDetail = GetAllRecordIn(PROVIDERS,[],false,[],[],[],$is_in,'id,listname,response_field,provider');
             }
 
-            foreach ($providerDetail as $key => $provider) {
-                if($provider['provider'] == AWEBER){
-                    $providerDetail[$key]['delay'] = $mailProvidersDelay[$provider['id']];
-                }else{
+            if(isset($providerDetail) && count($providerDetail)){
+                foreach ($providerDetail as $key => $provider) {
                     $providerDetail[$key]['delay'] = 0;
-                }
-
-                // check isduplicate is enable/disable
-                if(array_key_exists($provider['id'],$mailProvidersDuplicateFlag)){
-                    $providerDetail[$key]['isDuplicate'] = 1;
-                }else{
-                    $providerDetail[$key]['isDuplicate'] = 0;
-                }
-            }
-
-            // get live deivery data as per status wise.
-            $this->db->select("isFail,sucFailMsgIndex,count(*) as total");
-            $this->db->from(LIVE_DELIVERY_DATA);
-            $this->db->where("apikey",$apikey);
-            $this->db->where("DATE(createdDate)",$deliveryDate);
-            $this->db->group_by("sucFailMsgIndex");
-            $liveDeliveryStatusCounter = $this->db->get()->result_array();
-
-            $liveDeliveryStastic[$apikey]['success'] = 0;
-            $liveDeliveryStastic[$apikey]['duplicate'] = 0;
-            $liveDeliveryStastic[$apikey]['failed'] = 0;
-            $liveDeliveryStastic[$apikey]['total'] = 0;
-
-            foreach ($liveDeliveryStatusCounter as $counter) {
-                if($counter['sucFailMsgIndex'] == 0){
-                    // add total number of success records
-                    $liveDeliveryStastic[$apikey]['success'] = $counter['total'];                      
-                }else if($counter['sucFailMsgIndex'] == 1){
-                    // add total number of duplicate records
-                    $liveDeliveryStastic[$apikey]['duplicate'] = $counter['total'];                    
-                }else{
-                    // add total number of failed records                    
-                    $liveDeliveryStastic[$apikey]['failed'] = $counter['total'];                    
-                }            
-                // add all the status counter in total
-                $liveDeliveryStastic[$apikey]['total'] += $counter['total'];
-            }  
-            
-            // Get total number of records per provider wise from live delivery table those are instant send.
-            foreach ($providerDetail as $key => $provider) {
-                $condition = array();
-                $condition['apikey'] = $apikey;
-                $condition['DATE(createdDate)'] = $deliveryDate;
-                if($provider['isDuplicate']){
-                    $is_in = array('sucFailMsgIndex' => [1]);
-                }else{
-                    $is_in = array('sucFailMsgIndex' => [0,1]);
-                }
-                
-
-                if($provider['delay'] == 0){
-                    // get data from live delivery table  
-
-                    $is_like = array(array($provider['response_field'] => '%success%'));
-                    $providerDetail[$key]['success'] = GetAllRecordCountIn(LIVE_DELIVERY_DATA,$condition,true,$is_like,[],[],$is_in);
-
-                    $is_like = array(array($provider['response_field'] => '%400 -%'));
-                    $providerDetail[$key]['subscriber_exist'] = GetAllRecordCountIn(LIVE_DELIVERY_DATA,$condition,true,$is_like,[],[],$is_in);
-                    
-                    $is_like = array(array($provider['response_field'] => '%401 -%'));
-                    $providerDetail[$key]['auth_fail'] = GetAllRecordCountIn(LIVE_DELIVERY_DATA,$condition,true,$is_like,[],[],$is_in);
-                    
-                    $is_like = array(array($provider['response_field'] => '%403 -%'));
-                    $providerDetail[$key]['bad_fail'] = GetAllRecordCountIn(LIVE_DELIVERY_DATA,$condition,true,$is_like,[],[],$is_in);
-
-                }else{
-                    // get data from delay table.
-                    $delayTableName = "";
-                    switch($provider['provider']){
-                        case 1:
-                            $delayTableName = AWEBER_DELAY_USER_DATA;
-                            break;
-                        case 2:
-                            $delayTableName = TRANSMITVIA_DELAY_USER_DATA;
-                            break;
-                        case 3:
-                            $delayTableName = CONTACT_DELAY_USER_DATA;
-                            break;
-                        case 4:
-                            $delayTableName = ONGAGE_DELAY_USER_DATA;
-                            break;
-                        case 5:
-                            $delayTableName = SENDGRID_DELAY_USER_DATA;
-                            break;
-                        case 6:
-                            $delayTableName = SENDINBLUE_DELAY_USER_DATA;
-                            break; 
-
+                    if($provider['provider'] == AWEBER){
+                        $providerDetail[$key]['delay'] = $mailProvidersDelay[$provider['id']];
                     }
-                    $is_in = array("sucFailMsgIndex" => [0,1]);
-                    $liveDeliveriesID = GetAllRecordIn(LIVE_DELIVERY_DATA, $condition, $is_single, [], [], [],$is_in, 'liveDeliveryDataId');
-
-                    $is_in      = array("liveDeliveryDataId" => $liveDeliveriesID);
-                    $delay_condition = array("providerId" => $provider['id']);
-                    
-                    $is_like    = array(array("response" => "%success%"));
-                    $providerDetail[$key]['success'] = GetAllRecordCountIn($delayTableName,$delay_condition,true,$is_like,[],[],$is_in); 
-
-                    $is_like    = array(array("response" => "%400 -%"));
-                    $providerDetail[$key]['success'] = GetAllRecordCountIn($delayTableName,$delay_condition,true,$is_like,[],[],$is_in); 
-
-                    $is_like    = array(array("response" => "%401 -%"));
-                    $providerDetail[$key]['success'] = GetAllRecordCountIn($delayTableName,$delay_condition,true,$is_like,[],[],$is_in); 
-
-                    $is_like    = array(array("response" => "%403 -%"));
-                    $providerDetail[$key]['success'] = GetAllRecordCountIn($delayTableName,$delay_condition,true,$is_like,[],[],$is_in); 
+    
+                    // check isduplicate is enable/disable
+                    if(array_key_exists($provider['id'],$mailProvidersDuplicateFlag)){
+                        $providerDetail[$key]['isDuplicate'] = 1;
+                    }else{
+                        $providerDetail[$key]['isDuplicate'] = 0;
+                    }
                 }
-
-                $liveDeliveryStastic[$apikey]['providerDetail'] = $providerDetail;
+    
+                // get live deivery data as per status wise.
+                $this->db->select("isFail,sucFailMsgIndex,count(*) as total");
+                $this->db->from(LIVE_DELIVERY_DATA);
+                $this->db->where("apikey",$apikey);
+                $this->db->where("DATE(createdDate)",$deliveryDate);
+                $this->db->group_by("sucFailMsgIndex");
+                $liveDeliveryStatusCounter = $this->db->get()->result_array();
+    
+                $liveDeliveryStastic[$apikey]['success'] = 0;
+                $liveDeliveryStastic[$apikey]['duplicate'] = 0;
+                $liveDeliveryStastic[$apikey]['failed'] = 0;
+                $liveDeliveryStastic[$apikey]['total'] = 0;
+    
+                foreach ($liveDeliveryStatusCounter as $counter) {
+                    if($counter['sucFailMsgIndex'] == 0){
+                        // add total number of success records
+                        $liveDeliveryStastic[$apikey]['success'] = $counter['total'];                      
+                    }else if($counter['sucFailMsgIndex'] == 1){
+                        // add total number of duplicate records
+                        $liveDeliveryStastic[$apikey]['duplicate'] = $counter['total'];                    
+                    }else{
+                        // add total number of failed records                    
+                        $liveDeliveryStastic[$apikey]['failed'] = $counter['total'];                    
+                    }            
+                    // add all the status counter in total
+                    $liveDeliveryStastic[$apikey]['total'] += $counter['total'];
+                }  
                 
+                // Get total number of records per provider wise from live delivery table those are instant send.
+                foreach ($providerDetail as $key => $provider) {
+                    $condition = array();
+                    $condition['apikey'] = $apikey;
+                    $condition['DATE(createdDate)'] = $deliveryDate;
+                    if($provider['isDuplicate']){
+                        $is_in = array('sucFailMsgIndex' => [1]);
+                    }else{
+                        $is_in = array('sucFailMsgIndex' => [0,1]);
+                    }
+                    
+                    $providerDetail[$key]['success'] = 0;
+                    $providerDetail[$key]['subscriber_exist'] = 0;
+                    $providerDetail[$key]['auth_fail'] = 0;
+                    $providerDetail[$key]['bad_fail'] = 0;
+    
+                    if($provider['delay'] == 0){
+                        // get data from live delivery table  
+    
+                        $is_like = array(array($provider['response_field'] => $response_messages[$provider['provider']]['success']));
+                        $providerDetail[$key]['success'] = GetAllRecordCountIn(LIVE_DELIVERY_DATA,$condition,true,$is_like,[],[],$is_in);
+    
+                        $is_like = array(array($provider['response_field'] => $response_messages[$provider['provider']]['subscriber_exist']));
+                        $providerDetail[$key]['subscriber_exist'] = GetAllRecordCountIn(LIVE_DELIVERY_DATA,$condition,true,$is_like,[],[],$is_in);
+                        
+                        $is_like = array(array($provider['response_field'] => $response_messages[$provider['provider']]['auth_fail']));
+                        $providerDetail[$key]['auth_fail'] = GetAllRecordCountIn(LIVE_DELIVERY_DATA,$condition,true,$is_like,[],[],$is_in);
+                        
+                        $is_like = array(array($provider['response_field'] => $response_messages[$provider['provider']]['bad_fail']));
+                        $providerDetail[$key]['bad_fail'] = GetAllRecordCountIn(LIVE_DELIVERY_DATA,$condition,true,$is_like,[],[],$is_in);
+    
+                    }else{
+                        // get data from delay table.
+                        $delayTableName = "";
+                        switch($provider['provider']){
+                            case 1:
+                                $delayTableName = AWEBER_DELAY_USER_DATA;
+                                break;
+                            case 2:
+                                $delayTableName = TRANSMITVIA_DELAY_USER_DATA;
+                                break;
+                            case 3:
+                                $delayTableName = CONTACT_DELAY_USER_DATA;
+                                break;
+                            case 4:
+                                $delayTableName = ONGAGE_DELAY_USER_DATA;
+                                break;
+                            case 5:
+                                $delayTableName = SENDGRID_DELAY_USER_DATA;
+                                break;
+                            case 6:
+                                $delayTableName = SENDINBLUE_DELAY_USER_DATA;
+                                break; 
+    
+                        }
+                        
+                        $liveDeliveriesInfo = GetAllRecordIn(LIVE_DELIVERY_DATA, $condition, $is_single, [], [], [],$is_in, 'liveDeliveryDataId');
+                        
+                        $liveDeliveriesID = [];
+                        foreach ($liveDeliveriesInfo as $value) {
+                            array_push($liveDeliveriesID,$value['liveDeliveryDataId']);
+                        }
+    
+                        if(count($liveDeliveriesID)){
+                            $is_in      = array("liveDeliveryDataId" => $liveDeliveriesID);
+                            $delay_condition = array("providerId" => $provider['id']);
+    
+                            $is_like    = array(array("response" => $response_messages[$provider['provider']]['success']));
+                            $providerDetail[$key]['success'] = GetAllRecordCountIn($delayTableName,$delay_condition,true,$is_like,[],[],$is_in); 
+    
+                            $is_like    = array(array("response" => $response_messages[$provider['provider']]['subscriber_exist']));
+                            $providerDetail[$key]['subscriber_exist'] = GetAllRecordCountIn($delayTableName,$delay_condition,true,$is_like,[],[],$is_in);                            
+    
+                            $is_like    = array(array("response" => $response_messages[$provider['provider']]['auth_fail']));
+                            $providerDetail[$key]['auth_fail'] = GetAllRecordCountIn($delayTableName,$delay_condition,true,$is_like,[],[],$is_in); 
+    
+                            $is_like    = array(array("response" => $response_messages[$provider['provider']]['bad_fail']));
+                            $providerDetail[$key]['bad_fail'] = GetAllRecordCountIn($delayTableName,$delay_condition,true,$is_like,[],[],$is_in); 
+                        }
+                    }    
+                    $liveDeliveryStastic[$apikey]['providerDetail'] = $providerDetail;
+                }
             }
+
         }  
         pre($liveDeliveryStastic);
         die;
