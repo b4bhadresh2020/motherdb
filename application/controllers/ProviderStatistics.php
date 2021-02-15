@@ -47,7 +47,7 @@ class ProviderStatistics extends CI_Controller
 
         // fetch mail provider data from providers table
         //$providerCondition   = array('isInActive' => 0);
-        $providerCondition   = array('apikey' => '45754a36795461653447446c485a5152587177342f413d3d');
+        $providerCondition   = array('apikey' => $apikey);
         $is_single           = false;
         $liveDeliveries      = GetAllRecord(LIVE_DELIVERY, $providerCondition, $is_single, [], [], [], 'apikey,mailProvider,delay,isDuplicate,groupName,keyword');
 
@@ -137,6 +137,37 @@ class ProviderStatistics extends CI_Controller
                     $providerDetail[$key]['subscriber_exist'] = 0;
                     $providerDetail[$key]['auth_fail'] = 0;
                     $providerDetail[$key]['bad_fail'] = 0;
+                    $providerDetail[$key]['blacklisted'] = 0;
+                    $providerDetail[$key]['host'] = 0;
+
+                    // get data from delay table.
+                    $delayTableName = "";
+                    switch($provider['provider']){
+                        case 1:
+                            $delayTableName = AWEBER_DELAY_USER_DATA;
+                            $providerDetail[$key]['provider_name'] = "Aweber";
+                            break;
+                        case 2:
+                            $delayTableName = TRANSMITVIA_DELAY_USER_DATA;
+                            $providerDetail[$key]['provider_name'] = "Transmitvia";
+                            break;
+                        case 3:
+                            $delayTableName = CONTACT_DELAY_USER_DATA;
+                            $providerDetail[$key]['provider_name'] = "Constant Contact";
+                            break;
+                        case 4:
+                            $delayTableName = ONGAGE_DELAY_USER_DATA;
+                            $providerDetail[$key]['provider_name'] = "Ongage";
+                            break;
+                        case 5:
+                            $delayTableName = SENDGRID_DELAY_USER_DATA;
+                            $providerDetail[$key]['provider_name'] = "Sendgrid";
+                            break;
+                        case 6:
+                            $delayTableName = SENDINBLUE_DELAY_USER_DATA;
+                            $providerDetail[$key]['provider_name'] = "Sendinblue";
+                            break; 
+                    }
     
                     if($provider['delay'] == 0){
                         // get data from live delivery table  
@@ -152,31 +183,14 @@ class ProviderStatistics extends CI_Controller
                         
                         $is_like = array(array($provider['response_field'] => $response_messages[$provider['provider']]['bad_fail']));
                         $providerDetail[$key]['bad_fail'] = GetAllRecordCountIn(LIVE_DELIVERY_DATA,$condition,true,$is_like,[],[],$is_in);
+                        
+                        $is_like = array(array($provider['response_field'] => $response_messages[$provider['provider']]['blacklisted']));
+                        $providerDetail[$key]['blacklisted'] = GetAllRecordCountIn(LIVE_DELIVERY_DATA,$condition,true,$is_like,[],[],$is_in);
+                        
+                        $is_like = array(array($provider['response_field'] => $response_messages[$provider['provider']]['host']));
+                        $providerDetail[$key]['host'] = GetAllRecordCountIn(LIVE_DELIVERY_DATA,$condition,true,$is_like,[],[],$is_in);
     
-                    }else{
-                        // get data from delay table.
-                        $delayTableName = "";
-                        switch($provider['provider']){
-                            case 1:
-                                $delayTableName = AWEBER_DELAY_USER_DATA;
-                                break;
-                            case 2:
-                                $delayTableName = TRANSMITVIA_DELAY_USER_DATA;
-                                break;
-                            case 3:
-                                $delayTableName = CONTACT_DELAY_USER_DATA;
-                                break;
-                            case 4:
-                                $delayTableName = ONGAGE_DELAY_USER_DATA;
-                                break;
-                            case 5:
-                                $delayTableName = SENDGRID_DELAY_USER_DATA;
-                                break;
-                            case 6:
-                                $delayTableName = SENDINBLUE_DELAY_USER_DATA;
-                                break; 
-    
-                        }
+                    }else{                        
                         
                         $liveDeliveriesInfo = GetAllRecordIn(LIVE_DELIVERY_DATA, $condition, $is_single, [], [], [],$is_in, 'liveDeliveryDataId');
                         
@@ -200,6 +214,12 @@ class ProviderStatistics extends CI_Controller
     
                             $is_like    = array(array("response" => $response_messages[$provider['provider']]['bad_fail']));
                             $providerDetail[$key]['bad_fail'] = GetAllRecordCountIn($delayTableName,$delay_condition,true,$is_like,[],[],$is_in); 
+                            
+                            $is_like    = array(array("response" => $response_messages[$provider['provider']]['blacklisted']));
+                            $providerDetail[$key]['blacklisted'] = GetAllRecordCountIn($delayTableName,$delay_condition,true,$is_like,[],[],$is_in); 
+                            
+                            $is_like    = array(array("response" => $response_messages[$provider['provider']]['host']));
+                            $providerDetail[$key]['host'] = GetAllRecordCountIn($delayTableName,$delay_condition,true,$is_like,[],[],$is_in); 
                         }
                     }    
                     $liveDeliveryStastic[$apikey]['providerDetail'] = $providerDetail;
@@ -207,7 +227,21 @@ class ProviderStatistics extends CI_Controller
             }
 
         }  
-        pre($liveDeliveryStastic);
-        die;
+        //get all apikey 
+        $condition = array();
+        $is_single = FALSE;
+        $allLiveDeliveries = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(), 'apikey,groupName,keyword,mailProvider');
+
+        $data['apikeys'] = $allLiveDeliveries;
+        $data['selectedApikey'] = $apikey;
+        $data['deliveryDate'] = $deliveryDate;
+        $data['liveDeliveryStastic'] = $liveDeliveryStastic;
+        $data['load_page'] = 'providerStatistics';
+        $data['headerTitle'] = "Provider Statistics";
+        $data["curTemplateName"] = "providerStatistics/report";
+
+        /* pre($data);
+        die; */
+        $this->load->view('commonTemplates/templateLayout', $data);
     }
 }

@@ -118,7 +118,7 @@
                     <li class="<?php echo (@$load_page == 'liveDelivery')?"active":"";?>" title = "Live Delivery" ><a href="<?php echo base_url('liveDelivery/manage');?>" ><i class="ti-announcement"></i> Live Delivery </a></li>
                     <li class="<?php echo (@$load_page == 'liveDeliveryStat')?"active":"";?>" title = "Live Delivery Stat" ><a href="<?php echo base_url('liveDeliveryStat/manage');?>" class="color-green" ><i class="ti-announcement"></i> Live Delivery Stat </a></li>
                     <li class="<?php echo (@$load_page == 'liveDeliveryUndefinedApiKeyStat')?"active":"";?>" title = "Live Delivery Undefined APIkey Stat" ><a href="<?php echo base_url('liveDeliveryUndefinedApiKeyStat/manage');?>" <?php if($hours <= 24 && $hours >= 0){ echo 'class="color-red"'; }else{ echo 'class="color-green"'; } ?> ><i class="ti-announcement"></i> Live Delivery Undefined API Key Stat </a></li>
-                    <li class="<?php echo (@$load_page == 'liveDeliveryStatistics')?"active":"";?>" title = "Live Delivery Statistics" ><a href="<?php echo base_url('LiveDelieryStatistics/chart');?>" class="color-green" ><i class="ti-announcement"></i> Live Delivery Statistics </a></li>
+                    <li class="<?php echo (@$load_page == 'providerStatistics')?"active":"";?>" title = "Live Delivery Statistics" ><a href="<?php echo base_url('providerStatistics');?>" class="color-green" ><i class="ti-announcement"></i> Live Delivery Statistics </a></li>
                     
 
                     <li class="label">Cronjob Status </li>
