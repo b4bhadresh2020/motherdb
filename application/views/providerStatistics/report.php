@@ -44,7 +44,7 @@
                                                             <?php 
                                                             foreach ($apikeys as $apikey) {                                                                                                             
                                                             ?>
-                                                                <option value="<?php echo $apikey['apikey']; ?>" <?php echo ($selectedApikey == $apikey['apikey'])?"selected":""?>> <?php echo $apikey['groupName'].'-'.$apikey['keyword'].' ('.$apikey['apikey'].')'; ?></option>
+                                                                <option value="<?php echo $apikey['apikey']; ?>" <?php echo (@$selectedApikey == $apikey['apikey'])?"selected":""?>> <?php echo $apikey['groupName'].'-'.$apikey['keyword'].' ('.$apikey['apikey'].')'; ?></option>
                                                             <?php 
                                                             }
                                                         ?>
@@ -140,6 +140,7 @@
                                 </div>
                             </div>
                             <div class="card-body" style="margin-top: 50px;">
+                                <h4>Report Base On Provider Response</h4>
                                 <div class="table-responsive">
                                         <table class="table table-bordered">
                                             <thead>
