@@ -103,20 +103,22 @@ foreach($sendInBlueList as $list){
                                                 <label>API Key  (Group-Keyword) *</label>
                                                 <select class="form-control" name="country" id="select_apikey">
                                                     <option value="">Select Api Key</option>
-                                                    <?php 
-                                                        foreach ($apikeys as $apikey) {     
-                                                          $providers = json_decode($apikey['mailProvider']);
-                                                          $providersName = array();
-                                                          foreach($providers as $provider){
-                                                            $providersName[] = $mailProviders[$provider];
-                                                          }
-                                                          $providersIdString = implode(",",$providers);
-                                                          $providersNameString = implode(", ",$providersName);                                                                            
-                                                    ?>
-                                                    <option value="<?php echo $apikey['apikey']; ?>" data-provider="<?php echo $providersNameString; ?>" data-providerid="<?php echo $providersIdString; ?>"> <?php echo $apikey['groupName'].'-'.$apikey['keyword'].' ('.$apikey['apikey'].')'; ?></option>
-                                                    <?php 
-                                                        }
-                                                    ?>
+                                                    <?php foreach ($apikeys as $country => $apikeyGroup){?>
+                                                        <optgroup label="<?php echo $country; ?>"> 
+                                                            <?php 
+                                                                foreach ($apikeyGroup as $apikey) {     
+                                                                $providers = json_decode($apikey['mailProvider']);
+                                                                $providersName = array();
+                                                                foreach($providers as $provider){
+                                                                    $providersName[] = $mailProviders[$provider];
+                                                                }
+                                                                $providersIdString = implode(",",$providers);
+                                                                $providersNameString = implode(", ",$providersName);                                                                            
+                                                            ?>
+                                                            <option value="<?php echo $apikey['apikey']; ?>" data-provider="<?php echo $providersNameString; ?>" data-providerid="<?php echo $providersIdString; ?>"> <?php echo $apikey['groupName'].'-'.$apikey['keyword'].' ('.$apikey['apikey'].')'; ?></option>
+                                                            <?php } ?>
+                                                        </optgroup> 
+                                                    <?php  } ?>
                                                 </select>
                                             </div>
                                         </div>

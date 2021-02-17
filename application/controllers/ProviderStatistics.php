@@ -18,11 +18,16 @@ class ProviderStatistics extends CI_Controller
         $data = array();
 
         //get all apikey 
-        $condition = array();
+        $condition = array("isInActive" => 0);
         $is_single = FALSE;
-        $liveDeliveries = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(), 'apikey,groupName,keyword,mailProvider');
+        $liveDeliveries = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(array("country","ASC"),array('liveDeliveryId' => 'desc')), 'country,apikey,groupName,keyword,mailProvider');
 
-        $data['apikeys'] = $liveDeliveries;
+        $liveDeliveriesGroups = [];
+        foreach ($liveDeliveries as $key => $liveDelivery) {
+            $liveDeliveriesGroups[$liveDelivery['country']][] = $liveDelivery;
+        }
+
+        $data['apikeys'] = $liveDeliveriesGroups;
         $data['load_page'] = 'providerStatistics';
         $data['headerTitle'] = "Provider Statistics";
         $data["curTemplateName"] = "providerStatistics/report";
@@ -228,11 +233,16 @@ class ProviderStatistics extends CI_Controller
 
         }  
         //get all apikey 
-        $condition = array();
+        $condition = array("isInActive" => 0);
         $is_single = FALSE;
-        $allLiveDeliveries = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(), 'apikey,groupName,keyword,mailProvider');
+        $allLiveDeliveries = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(array("country","ASC"),array('liveDeliveryId' => 'desc')), 'country,apikey,groupName,keyword,mailProvider');
 
-        $data['apikeys'] = $allLiveDeliveries;
+        $liveDeliveriesGroups = [];
+        foreach ($allLiveDeliveries as $key => $liveDelivery) {
+            $liveDeliveriesGroups[$liveDelivery['country']][] = $liveDelivery;
+        }
+
+        $data['apikeys'] = $liveDeliveriesGroups;
         $data['selectedApikey'] = $apikey;
         $data['deliveryDate'] = $deliveryDate;
         $data['liveDeliveryStastic'] = $liveDeliveryStastic;

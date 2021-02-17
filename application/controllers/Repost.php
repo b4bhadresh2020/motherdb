@@ -20,11 +20,16 @@ class Repost extends CI_Controller
         //get all apikey 
 
         // $condition = array('mailProvider' => 'egoi');
-        $condition = array();
+        $condition = array("isInActive" => 0);
         $is_single = FALSE;
-        $getLiveDeliveryAllApiKeys = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(array('liveDeliveryId' => 'desc')), 'apikey,groupName,keyword,mailProvider');
+        $getLiveDeliveryAllApiKeys = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(array("country","ASC"),array('liveDeliveryId' => 'desc')), 'country,apikey,groupName,keyword,mailProvider');
 
-        $data['apikeys'] = $getLiveDeliveryAllApiKeys;
+        $liveDeliveriesGroups = [];
+        foreach ($getLiveDeliveryAllApiKeys as $key => $liveDelivery) {
+            $liveDeliveriesGroups[$liveDelivery['country']][] = $liveDelivery;
+        }
+
+        $data['apikeys'] = $liveDeliveriesGroups;
         $data['load_page'] = 'repost';
         $data['headerTitle'] = "Repost";
         $data["curTemplateName"] = "repost/addEdit";

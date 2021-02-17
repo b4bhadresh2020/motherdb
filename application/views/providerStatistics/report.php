@@ -42,12 +42,16 @@
                                                     <select class="form-control" name="apikey" id="select_apikey" required>
                                                         <option value="">Select Api Key</option>
                                                             <?php 
-                                                            foreach ($apikeys as $apikey) {                                                                                                             
+                                                            foreach ($apikeys as $country => $apikeyGroup){
                                                             ?>
-                                                                <option value="<?php echo $apikey['apikey']; ?>" <?php echo (@$selectedApikey == $apikey['apikey'])?"selected":""?>> <?php echo $apikey['groupName'].'-'.$apikey['keyword'].' ('.$apikey['apikey'].')'; ?></option>
-                                                            <?php 
-                                                            }
-                                                        ?>
+                                                                <optgroup label="<?php echo $country; ?>"> 
+                                                                <?php    
+                                                                    foreach ($apikeyGroup as $apikey){                                                                  
+                                                                ?>
+                                                                    <option value="<?php echo $apikey['apikey']; ?>" <?php echo (@$selectedApikey == $apikey['apikey'])?"selected":""?>> <?php echo $apikey['groupName'].'-'.$apikey['keyword'].' ('.$apikey['apikey'].')'; ?></option>
+                                                                <?php  } ?>
+                                                                </optgroup> 
+                                                            <?php  } ?>
                                                     </select>
                                                 </div>
                                             </div>

@@ -1,8 +1,13 @@
 <?php 
     
+    $liveDeliveriesGroups = [];
+
     $condition = array('isInActive' => 0);
     $is_single = FALSE;
-    $getApiKeys = GetAllRecord(LIVE_DELIVERY,$condition,$is_single,array(),array(),array(array('liveDeliveryId' => 'DESC')),'apikey,groupName,keyword');
+    $getApiKeys = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(array("country","ASC"),array('liveDeliveryId' => 'desc')), 'country,apikey,groupName,keyword,mailProvider');
+    foreach ($getApiKeys as $key => $liveDelivery) {
+        $liveDeliveriesGroups[$liveDelivery['country']][] = $liveDelivery;
+    }
 ?>
 
 
@@ -52,12 +57,14 @@
                                                 <label>Select Apikey (Group-Keyword)</label>
                                                 <select name="apikey" id="apikey" class="form-control" >
 
-                                                    <?php foreach ($getApiKeys as $value) { ?>
-                                                        
-                                                        <option value="<?php echo $value['apikey']; ?>" <?php if($value['apikey'] == @$_GET['apikey']){ echo 'selected'; } ?> ><?php echo $value['groupName'].'-'.$value['keyword'].' ('.$value['apikey'].')'; ?></option>
-
-                                                    <?php } ?>
-
+                                                    <?php foreach ($liveDeliveriesGroups as $country =>  $apikeyGroup) { ?>
+                                                        <optgroup label="<?php echo $country; ?>"> 
+                                                            <?php foreach ($apikeyGroup as $value){                                                                  
+                                                            ?>
+                                                            <option value="<?php echo $value['apikey']; ?>" <?php if($value['apikey'] == @$_GET['apikey']){ echo 'selected'; } ?> ><?php echo $value['groupName'].'-'.$value['keyword'].' ('.$value['apikey'].')'; ?></option>
+                                                            <?php } ?>
+                                                        </optgroup> 
+                                                    <?php  } ?>
                                                 </select>
                                             </div>
                                            
