@@ -242,6 +242,7 @@ class Cron_provider_user_csv extends CI_Controller
             "12" => "63",  // New zealand  - Kare 
             "13" => "69",  // Denmark  - Kare 
             "14" => "70",  // Denmark  - Camilla 
+            "15" => "77",  // FI - Test
         );
         return $provider[$providerId];
     }

@@ -458,8 +458,8 @@
             providerList +="<option value='21'>SE - Amazon</option>";
             providerList +="<option value='22'>FI - Amazon</option>";
         }else if(providerId == 4){
-            providerList +="<option value='1'>Australia-camilla</option>";
-            providerList +="<option value='2'>Australia - Kare</option>";
+            providerList +="<option value='1'>SE - Test</option>";
+            providerList +="<option value='2'>DK - Test</option>";
             providerList +="<option value='3'>Canada - Camilla</option>";
             providerList +="<option value='4'>Canada - Kare</option>";
             providerList +="<option value='5'>Sweden - Camilla</option>";
@@ -469,9 +469,10 @@
             providerList +="<option value='9'>Finland  - Camilla</option>";
             providerList +="<option value='10'>Finland  - Kare</option>";
             providerList +="<option value='11'>New Zealand  - Camilla</option>";
-            providerList +="<option value='12'>New Zealand  - Kare</option>";
+            providerList +="<option value='12'>NO - Test</option>";
             providerList +="<option value='13'>Denmark  - Kare</option>";
             providerList +="<option value='14'>Denmark  - Camilla</option>";
+            providerList +="<option value='15'>FI - Test</option>";
         }else if(providerId == 5){
             providerList +="<option value='1'>CA</option>";
         }else if(providerId == 6){
