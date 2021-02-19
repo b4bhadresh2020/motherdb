@@ -39,17 +39,30 @@ class Cron_sendgrid_delay_user extends CI_Controller
                 $isDuplicate = array();
             }
             
-            if(!array_key_exists($user['providerId'],$isDuplicate) || (array_key_exists($user['providerId'],$isDuplicate) && $user['sucFailMsgIndex'] == 1)){
-                if (@$user['birthdateDay'] != '0' && @$user['birthdateMonth'] != '0' && @$user['birthdateYear'] != '0') {
-                    $birthDate  = $user['birthdateYear'] . '-' . $user['birthdateMonth'] . '-' . $user['birthdateDay'];
-                    $user['birthDate'] = date('Y-m-d', strtotime($birthDate));
+            //check user alrady send to the particular list or not.                
+            $isExistCondition = array(
+                'emailId' => $user['emailId'],
+                $providerData[$user['providerId']]['response_field'].'!=' => "" 
+            );
+
+            $isExist = GetAllRecordCount(LIVE_DELIVERY_DATA,$isExistCondition,true,[],[],[]);
+            
+            if($isExist == 0){
+                if(!array_key_exists($user['providerId'],$isDuplicate) || (array_key_exists($user['providerId'],$isDuplicate) && $user['sucFailMsgIndex'] == 1)){
+                    if (@$user['birthdateDay'] != '0' && @$user['birthdateMonth'] != '0' && @$user['birthdateYear'] != '0') {
+                        $birthDate  = $user['birthdateYear'] . '-' . $user['birthdateMonth'] . '-' . $user['birthdateDay'];
+                        $user['birthDate'] = date('Y-m-d', strtotime($birthDate));
+                    }else{
+                        $user['birthDate'] = "";
+                    } 
+                    $response = $this->mdl_sendgrid->AddEmailToSendgridSubscriberList($user,$user['providerId']);
                 }else{
-                    $user['birthDate'] = "";
-                } 
-                $response = $this->mdl_sendgrid->AddEmailToSendgridSubscriberList($user,$user['providerId']);
+                    $response = array("result" => "success","data" => "Duplicate condition not satisfied");
+                }
             }else{
-                $response = array("result" => "success","data" => "Duplicate condition not satisfied");
+                $response = array("result" => "error","error" => array("msg" => "001 - Request already served to this list"));
             }
+                
             $responseField = $providerData[$user['providerId']]['response_field'];
 
             // Update response in live delivery user data table

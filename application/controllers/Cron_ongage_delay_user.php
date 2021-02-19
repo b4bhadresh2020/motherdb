@@ -38,11 +38,23 @@ class Cron_ongage_delay_user extends CI_Controller
                 $isDuplicate = array();
             }
 
-            if(!array_key_exists($user['providerId'],$isDuplicate) || (array_key_exists($user['providerId'],$isDuplicate) && $user['sucFailMsgIndex'] == 1)){
-                $response = $this->mdl_ongage->AddEmailToOngageSubscriberList($user,$user['providerId']);
+            //check user alrady send to the particular list or not.                
+            $isExistCondition = array(
+                'emailId' => $user['emailId'],
+                $providerData[$user['providerId']]['response_field'].'!=' => "" 
+            );
+
+            $isExist = GetAllRecordCount(LIVE_DELIVERY_DATA,$isExistCondition,true,[],[],[]);
+            
+            if($isExist == 0){
+                if(!array_key_exists($user['providerId'],$isDuplicate) || (array_key_exists($user['providerId'],$isDuplicate) && $user['sucFailMsgIndex'] == 1)){
+                    $response = $this->mdl_ongage->AddEmailToOngageSubscriberList($user,$user['providerId']);
+                }else{
+                    $response = array("result" => "success","data" => "Duplicate condition not satisfied");
+                } 
             }else{
-                $response = array("result" => "success","data" => "Duplicate condition not satisfied");
-            } 
+                $response = array("result" => "error","error" => array("msg" => "001 - Request already served to this list"));
+            }    
             
             $responseField = $providerData[$user['providerId']]['response_field'];
 
