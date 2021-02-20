@@ -44,15 +44,10 @@ class Cron_transmitvia_delay_user extends CI_Controller
                 $isDuplicate = array();
             }
 
-            //check user alrady send to the particular list or not.                
-            $isExistCondition = array(
-                'emailId' => $user['emailId'],
-                $providerData[$user['providerId']]['response_field'].'!=' => "" 
-            );
+            //check user alrady send to the particular list or not.
+            $isNotExist = checkRecordAlreadySendToProviderList($user['emailId'],$user['providerId']);  
 
-            $isExist = GetAllRecordCount(LIVE_DELIVERY_DATA,$isExistCondition,true,[],[],[]);
-
-            if($isExist == 0){
+            if($isNotExist){
                 if(!array_key_exists($user['providerId'],$isDuplicate) || (array_key_exists($user['providerId'],$isDuplicate) && $user['sucFailMsgIndex'] == 1)){
                     $response = $this->mdl_transmitvia->AddEmailToTransmitSubscriberList($user,$transmitviaProviderData['code']);
                 }else{

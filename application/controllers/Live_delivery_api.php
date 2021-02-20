@@ -509,13 +509,8 @@ class Live_delivery_api extends CI_Controller
                 $is_single           = true;
                 $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
                 
-                //check user alrady send to the particular list or not.                
-                $isExistCondition = array(
-                    'emailId' => $lastDeliveryData['emailId'],
-                    $providerData['response_field'].'!=' => "" 
-                );
-
-                $isExist = GetAllRecordCount(LIVE_DELIVERY_DATA,$isExistCondition,true,[],[],[]);
+                //check user alrady send to the particular list or not.
+                $isNotExist = checkRecordAlreadySendToProviderList($lastDeliveryData['emailId'],$mailProvider);
 
                 //send user data to egoi
                 if ($mailProvider == 'egoi') {
@@ -566,7 +561,7 @@ class Live_delivery_api extends CI_Controller
                     }
 
                     // send data to aweber if user is successfully added or duplicate and record not already send to the list.
-                    if ($sendToMailProvider == 1 && $isExist == 0) {
+                    if ($sendToMailProvider == 1 && $isNotExist) {
 
                         $country             = $getLiveDeliveryData['country'];
                         $validCountryForAweber = countryThasListedInAweber();

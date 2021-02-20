@@ -1531,3 +1531,31 @@ function getProviderIdUsingTransmitviaList($code){
     $provider = GetAllRecord(PROVIDERS,$condition,$is_single);
     return $provider['id'];   
 }
+
+function checkRecordAlreadySendToProviderList($email,$provider){
+    $ci = & get_instance();
+
+    $ci->db->from(EMAIL_HISTORY_DATA);
+    $ci->db->join(LIVE_DELIVERY_DATA, LIVE_DELIVERY_DATA.'liveDeliveryDataId'."=".EMAIL_HISTORY_DATA.'liveDeliveryDataId');
+    $ci->db->where("providerId",$provider);
+    $ci->db->where("emailId",$email);
+    $ci->db->where('status !=',0);
+    $liveDeliveryCount = $ci->db->count_all_results();
+
+    if($liveDeliveryCount == 0){
+        $ci->db->from(EMAIL_HISTORY_DATA);
+        $ci->db->join(USER, USER.'userId'."=".EMAIL_HISTORY_DATA.'userId');
+        $ci->db->where("providerId",$provider);
+        $ci->db->where("emailId",$email);
+        $ci->db->where('status !=',0);
+        $liveRepostCount = $ci->db->count_all_results();
+        if($liveRepostCount == 0){
+            return true;
+        }else{
+            return false;
+        }
+    }else{
+        return false;
+    }
+
+}

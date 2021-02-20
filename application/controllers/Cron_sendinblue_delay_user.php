@@ -40,15 +40,10 @@ class Cron_sendinblue_delay_user extends CI_Controller
             }else{
                 $isDuplicate = array();
             }
-            //check user alrady send to the particular list or not.                
-            $isExistCondition = array(
-                'emailId' => $user['emailId'],
-                $providerData[$user['providerId']]['response_field'].'!=' => "" 
-            );
-
-            $isExist = GetAllRecordCount(LIVE_DELIVERY_DATA,$isExistCondition,true,[],[],[]);
+            //check user alrady send to the particular list or not.
+            $isNotExist = checkRecordAlreadySendToProviderList($user['emailId'],$user['providerId']);  
             
-            if($isExist == 0){
+            if($isNotExist){
                 if(!array_key_exists($user['providerId'],$isDuplicate) || (array_key_exists($user['providerId'],$isDuplicate) && $user['sucFailMsgIndex'] == 1)){
                     if (@$user['birthdateDay'] != '0' && @$user['birthdateMonth'] != '0' && @$user['birthdateYear'] != '0') {
                         $birthDate  = $user['birthdateYear'] . '-' . $user['birthdateMonth'] . '-' . $user['birthdateDay'];
@@ -63,7 +58,7 @@ class Cron_sendinblue_delay_user extends CI_Controller
             }else{
                 $response = array("result" => "error","error" => array("msg" => "001 - Request already served to this list"));
             }
-                    
+
             $responseField = $providerData[$user['providerId']]['response_field'];
 
             // Update response in live delivery user data table
