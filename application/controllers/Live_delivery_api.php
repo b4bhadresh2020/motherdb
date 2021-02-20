@@ -486,7 +486,7 @@ class Live_delivery_api extends CI_Controller
         $lastDeliveryData        = GetAllRecord(LIVE_DELIVERY_DATA, $liveDeliveryCondition, $is_single); 
 
         //we will not send from local
-        if ($_SERVER['HTTP_HOST'] == 'localhost') {
+        if ($_SERVER['HTTP_HOST'] != 'localhost') {
 
             $mailProviders = json_decode($getLiveDeliveryData['mailProvider']);
 
@@ -712,7 +712,7 @@ class Live_delivery_api extends CI_Controller
                         $condition = array('liveDeliveryDataId' => $liveDeliveryDataId);
                         $is_insert = false;
                         $responseField = $providerData['response_field'];
-                        $response = array("result" => "error","error" => array("msg" => "001 - Request already served to this list"));;
+                        $response = array("result" => "error","error" => array("msg" => "001 - Request already served to this list"));
                         $updateArr = array($responseField => json_encode($response));
                         ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
                     }
