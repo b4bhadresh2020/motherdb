@@ -503,6 +503,15 @@ class Live_delivery_api extends CI_Controller
             } 
 
             foreach($mailProviders as $mailProvider){
+
+                // fetch mail provider data from providers table
+                $providerCondition   = array('id' => $mailProvider);
+                $is_single           = true;
+                $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
+                
+                //check user alrady send to the particular list or not.
+                $isNotExist = checkRecordAlreadySendToProviderList($lastDeliveryData['emailId'],$mailProvider);
+
                 //send user data to egoi
                 if ($mailProvider == 'egoi') {
 
@@ -535,12 +544,7 @@ class Live_delivery_api extends CI_Controller
 
                     }
 
-                }else if ($mailProvider != 'egoi') {                
-                    
-                    // fetch mail provider data from providers table
-                    $providerCondition   = array('id' => $mailProvider);
-                    $is_single           = true;
-                    $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
+                }else if ($mailProvider != 'egoi') {   
 
                     // check condition for send data to provider or not. 
                     /* Condition 
@@ -556,8 +560,8 @@ class Live_delivery_api extends CI_Controller
                         $sendToMailProvider = 1;
                     }
 
-                    // send data to aweber if user is successfully added or duplicate
-                    if ($sendToMailProvider == 1) {
+                    // send data to aweber if user is successfully added or duplicate and record not already send to the list.
+                    if ($sendToMailProvider == 1 && $isNotExist) {
 
                         $country             = $getLiveDeliveryData['country'];
                         $validCountryForAweber = countryThasListedInAweber();
@@ -698,6 +702,14 @@ class Live_delivery_api extends CI_Controller
                             $updateArr = array($responseField => json_encode($response));
                             ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
                         }                        
+                    }else{
+                        //update to live delivery data response
+                        $condition = array('liveDeliveryDataId' => $liveDeliveryDataId);
+                        $is_insert = false;
+                        $responseField = $providerData['response_field'];
+                        $response = array("result" => "error","error" => array("msg" => "001 - Request already served to this list"));
+                        $updateArr = array($responseField => json_encode($response));
+                        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
                     }
                 }
             }

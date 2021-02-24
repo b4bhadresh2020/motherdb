@@ -37,16 +37,24 @@ class Cron_aweber_delay_user extends CI_Controller
             }else{
                 $isDuplicate = array();
             } 
-            if(!array_key_exists($user['providerId'],$isDuplicate) || (array_key_exists($user['providerId'],$isDuplicate) && $user['sucFailMsgIndex'] == 1)){
-                if (@$user['birthdateDay'] != '0' && @$user['birthdateMonth'] != '0' && @$user['birthdateYear'] != '0') {
-                    $birthDate  = $user['birthdateYear'] . '-' . $user['birthdateMonth'] . '-' . $user['birthdateDay'];
-                    $user['birthDate'] = date('Y-m-d', strtotime($birthDate));
+
+            //check user alrady send to the particular list or not.
+            $isNotExist = checkRecordAlreadySendToProviderList($user['emailId'],$user['providerId']);        
+
+            if($isNotExist){
+                if(!array_key_exists($user['providerId'],$isDuplicate) || (array_key_exists($user['providerId'],$isDuplicate) && $user['sucFailMsgIndex'] == 1)){
+                    if (@$user['birthdateDay'] != '0' && @$user['birthdateMonth'] != '0' && @$user['birthdateYear'] != '0') {
+                        $birthDate  = $user['birthdateYear'] . '-' . $user['birthdateMonth'] . '-' . $user['birthdateDay'];
+                        $user['birthDate'] = date('Y-m-d', strtotime($birthDate));
+                    }else{
+                        $user['birthDate'] = "";
+                    } 
+                    $response = $this->mdl_aweber_cron->AddEmailToAweberSubscriberList($user,$user['country'],$user['providerId']);
                 }else{
-                    $user['birthDate'] = "";
-                } 
-                $response = $this->mdl_aweber_cron->AddEmailToAweberSubscriberList($user,$user['country'],$user['providerId']);
+                    $response = array("result" => "success","data" => "Duplicate condition not satisfied");
+                }
             }else{
-                $response = array("result" => "success","data" => "Duplicate condition not satisfied");
+                $response = array("result" => "error","error" => array("msg" => "001 - Request already served to this list"));
             }
             
             $responseField = $providerData[$user['providerId']]['response_field'];
