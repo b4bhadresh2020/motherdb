@@ -24,6 +24,23 @@ class MailProviderStatistics extends CI_Controller
 
     function getMailProviderData()
     {
+        
+        $provider = $this->input->post('provider');
+        $list = $this->input->post('list');
+        $deliveryDate = $this->input->post('deliveryDate');
+        
+        //get all apikey 
+        $condition = array("isInActive" => 0);
+        $is_single = FALSE;
+        $liveDeliveries = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(array("mailProvider" => $list)), array(), array(), 'apikey,mailProvider');
+
+        pre($liveDeliveries);
+        die;
+
+        /* foreach ($liveDeliveries as $liveDelivery) {
+            
+        } */
+
         $data['load_page'] = 'mailProviderStatistics';
         $data['headerTitle'] = "Mail Provider Statistics";
         $data["curTemplateName"] = "mailProviderStatistics/report";

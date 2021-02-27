@@ -1,7 +1,7 @@
 <script type="text/javascript">
     var BASE_URL = "<?php echo base_url(); ?>";
 
-    $(document).on("change","#providerName",function(){
+    $(document).on("change","#provider",function(){
         var provider = $(this).val();
         if(provider){
             $.ajax({
@@ -11,9 +11,9 @@
                 success:function(response){
                     var liveDiliveries = JSON.parse(response);
 
-                    $("#listName").html("<option value='0'> Select List Name </option>");
+                    $("#list").html("<option value='0'> Select List Name </option>");
                     $.each(liveDiliveries,function(index,value){
-                        $("#listName").append("<option value='"+value.id+"'>"+value.listname+"</option>");
+                        $("#list").append("<option value='"+value.id+"'>"+value.listname+"</option>");
                     });
                 }
 
