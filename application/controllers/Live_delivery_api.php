@@ -544,8 +544,7 @@ class Live_delivery_api extends CI_Controller
 
                     }
 
-                }else if ($mailProvider != 'egoi') {   
-
+                }else if ($mailProvider != 'egoi') { 
                     // check condition for send data to provider or not. 
                     /* Condition 
                        1. if duplicate true then record must be duplicate (fail message index must be 1). 
@@ -583,13 +582,13 @@ class Live_delivery_api extends CI_Controller
                                     // NO DELAY INSTANT SEND DATA TO AWEBER
                                     $response = $this->mdl_aweber->AddEmailToAweberSubscriberList($lastDeliveryData,$country,$mailProvider);
                                     // ADD RECORD IN HISTORY
-                                    addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);
+                                    addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
                                 }else{
                                     // ADD DATA IN QUEUE FOR DELAY SENDING
                                     addToAweberSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
                                     // ADD RECORD IN HISTORY
                                     $response = null;
-                                    addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);
+                                    addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
                                 }                                                               
                             } else {
                                 $response = array("result" => "error", "error" => array("msg" => "Country is not defined in Aweber"));
@@ -604,12 +603,12 @@ class Live_delivery_api extends CI_Controller
                                 $this->load->model('mdl_constantcontact');
                                 $response = $this->mdl_constantcontact->AddEmailToContactSubscriberList($lastDeliveryData,$mailProvider);
                                 // ADD RECORD IN HISTORY
-                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
                             }else{
                                 addToContactSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
                                 // ADD RECORD IN HISTORY
                                 $response = null;
-                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
                             }
                         }else if($providerData['provider'] == TRANSMITVIA){
                             $delayDay = 0;
@@ -621,12 +620,12 @@ class Live_delivery_api extends CI_Controller
                                 $this->load->model('mdl_transmitvia');                            
                                 $response = $this->mdl_transmitvia->AddEmailToTransmitSubscriberList($lastDeliveryData,$providerData['code']);
                                 // ADD RECORD IN HISTORY
-                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
                             }else{
                                 addToTransmitviaSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
                                 // ADD RECORD IN HISTORY
                                 $response = null;
-                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
                             }
                         }else if($providerData['provider'] == ONGAGE){
                             $delayDay = 0;
@@ -638,12 +637,12 @@ class Live_delivery_api extends CI_Controller
                                 $this->load->model('mdl_ongage');                            
                                 $response = $this->mdl_ongage->AddEmailToOngageSubscriberList($lastDeliveryData,$mailProvider);
                                 // ADD RECORD IN HISTORY
-                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
                             }else{
                                 addToOngageSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
                                 // ADD RECORD IN HISTORY
                                 $response = null;
-                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
                             }
                         }else if($providerData['provider'] == SENDGRID){
                             $lastDeliveryData['birthDate'] = "";
@@ -660,13 +659,13 @@ class Live_delivery_api extends CI_Controller
                                 // NO DELAY INSTANT SEND DATA TO SENDGRID
                                 $response = $this->mdl_sendgrid->AddEmailToSendgridSubscriberList($lastDeliveryData,$mailProvider);
                                 // ADD RECORD IN HISTORY
-                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
                             }else{
                                 // ADD DATA IN QUEUE FOR DELAY SENDING
                                 addToSendgridSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
                                 // ADD RECORD IN HISTORY
                                 $response = null;
-                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
                             } 
                         }else if($providerData['provider'] == SENDINBLUE){
                             $lastDeliveryData['birthDate'] = "";
@@ -683,13 +682,13 @@ class Live_delivery_api extends CI_Controller
                                 // NO DELAY INSTANT SEND DATA TO SENDGRID
                                 $response = $this->mdl_sendinblue->AddEmailToSendInBlueSubscriberList($lastDeliveryData,$mailProvider);
                                 // ADD RECORD IN HISTORY
-                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
                             }else{
                                 // ADD DATA IN QUEUE FOR DELAY SENDING
                                 addToSendinblueSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
                                 // ADD RECORD IN HISTORY
                                 $response = null;
-                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword']);
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
                             } 
                         }else{
                             $response = array("result" => "error", "error" => array("msg" => "Wrong provider"));

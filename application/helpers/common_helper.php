@@ -1471,11 +1471,12 @@ function addToSendinblueSubscriberQueue($liveDeliveryDataId,$mailProvider,$delay
     ManageData(SENDINBLUE_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
-function addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$groupName,$keyword){
+function addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$groupName,$keyword,$emailId = NULL){
     $historyData = array(
         'liveDeliveryDataId' => $lastDeliveryData['liveDeliveryDataId'],
         'providerId' => $mailProvider,
         'provider' => $provider,
+        'emailId' => (isset($lastDeliveryData['emailId']) && $lastDeliveryData['emailId'] !="")?$lastDeliveryData['emailId']:$emailId,
         'groupName' => $groupName,
         'keyword' => $keyword,
         'updateDate' => date("Y-m-d"),
@@ -1497,11 +1498,12 @@ function addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,
     ManageData(EMAIL_HISTORY_DATA, $condition, $historyData, $is_insert);
 }
 
-function addRecordInHistoryFromCSV($lastDeliveryData,$mailProvider,$provider,$response,$groupName,$keyword){
+function addRecordInHistoryFromCSV($lastDeliveryData,$mailProvider,$provider,$response,$groupName,$keyword,$emailId = NULL){
     $historyData = array(
         'userId' => isset($lastDeliveryData['userId'])?$lastDeliveryData['userId']:"-",
         'providerId' => $mailProvider,
         'provider' => $provider,
+        'emailId' => (isset($lastDeliveryData['emailId']) && $lastDeliveryData['emailId'] !="")?$lastDeliveryData['emailId']:$emailId,
         'groupName' => $groupName,
         'keyword' => $keyword,
         'updateDate' => date("Y-m-d"),
@@ -1535,25 +1537,20 @@ function getProviderIdUsingTransmitviaList($code){
 function checkRecordAlreadySendToProviderList($email,$provider){
     $ci = & get_instance();
 
+    $condition = array(
+        "providerId" => $provider,
+        "emailId" => $email,
+        "status <>" => 0
+    );
+    
+    $ci->db->select("count(historyId) as total");
     $ci->db->from(EMAIL_HISTORY_DATA);
-    $ci->db->join(LIVE_DELIVERY_DATA, LIVE_DELIVERY_DATA.'.liveDeliveryDataId'."=".EMAIL_HISTORY_DATA.'.liveDeliveryDataId');
-    $ci->db->where("providerId",$provider);
-    $ci->db->where("emailId",$email);
-    $ci->db->where('status !=',0);
-    $liveDeliveryCount = $ci->db->count_all_results();
+    $ci->db->where($condition);
+    $query_result = $ci->db->get()->row_array();
+    $liveDeliveryCount = $query_result['total'];    
 
     if($liveDeliveryCount == 0){
-        $ci->db->from(EMAIL_HISTORY_DATA);
-        $ci->db->join(USER, USER.'.userId'."=".EMAIL_HISTORY_DATA.'.userId');
-        $ci->db->where("providerId",$provider);
-        $ci->db->where("emailId",$email);
-        $ci->db->where('status !=',0);
-        $liveRepostCount = $ci->db->count_all_results();
-        if($liveRepostCount == 0){
-            return true;
-        }else{
-            return false;
-        }
+        return true;
     }else{
         return false;
     }
