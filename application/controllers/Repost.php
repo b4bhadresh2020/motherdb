@@ -128,7 +128,7 @@ class Repost extends CI_Controller
             $this->load->model('mdl_aweber');
             $response = $this->mdl_aweber->AddEmailToAweberSubscriberList($apiDataDetail, $country, $mailProvider);
             // ADD RECORD IN HISTORY
-            addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword);
+            addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
         } else {
             $response = array("result" => "error", "error" => array("msg" => "Country is not defined in Aweber"));
         }
@@ -158,7 +158,7 @@ class Repost extends CI_Controller
         $response = $this->mdl_constantcontact->AddEmailToContactSubscriberList($apiDataDetail, $mailProvider);
 
         // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response,$groupName, $keyword);
+        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response,$groupName, $keyword,$apiDataDetail['emailId']);
 
         //update to live delivery data
         $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
@@ -186,7 +186,7 @@ class Repost extends CI_Controller
         $response = $this->mdl_transmitvia->AddEmailToTransmitSubscriberList($apiDataDetail, $providerData['code']);
 
         // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response,$groupName, $keyword);
+        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response,$groupName, $keyword,$apiDataDetail['emailId']);
         
         //update to live delivery data
         $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
@@ -213,7 +213,7 @@ class Repost extends CI_Controller
         $response = $this->mdl_ongage->AddEmailToOngageSubscriberList($apiDataDetail, $mailProvider);
 
         // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response,$groupName, $keyword);
+        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response,$groupName, $keyword,$apiDataDetail['emailId']);
 
         //update to live delivery data
         $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
@@ -247,7 +247,7 @@ class Repost extends CI_Controller
         $this->load->model('mdl_sendgrid');
         $response = $this->mdl_sendgrid->AddEmailToSendgridSubscriberList($apiDataDetail, $mailProvider);
         // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword);
+        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
 
         //update to live delivery data
         $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
@@ -281,7 +281,7 @@ class Repost extends CI_Controller
         $this->load->model('mdl_sendinblue');
         $response = $this->mdl_sendinblue->AddEmailToSendInBlueSubscriberList($apiDataDetail, $mailProvider);
         // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword);
+        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
 
         //update to live delivery data
         $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);

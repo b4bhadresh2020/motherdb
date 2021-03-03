@@ -94,24 +94,22 @@ class Cron_provider_user_csv extends CI_Controller
                         //$responseField = "aweberResponse";
                         if($totalTodaySendRecord <= $provider['perDayRecord']){
                             // send data as per selected provider
-
                             if($provider['providerName'] == AWEBER){
                                 $country = $provider['country'];
                                 $validCountryForAweber = $this->countryListedInAweber();
                                 $mailProvider = $this->getAweberMailProviderId($provider["providerList"]);
-                               
+                                $responseField = "aweberResponse";
+
                                 //check user alrady send to the particular list or not.
-                                $isNotExist = checkRecordAlreadySendToProviderList($userData['emailId'],$mailProvider);  
-                                
+                                $isNotExist = checkRecordAlreadySendToProviderList($userData['emailId'],$mailProvider);                                
                                 if($isNotExist){
-                                    $responseField = "aweberResponse";
                                     if (in_array(strtoupper($country), $validCountryForAweber)) {       
                                         if (@$userData['birthdateDay'] != '' && @$userData['birthdateMonth'] != '' && @$userData['birthdateYear'] != '') {
                                             $birthDate              = $userData['birthdateYear'] . '-' . $userData['birthdateMonth'] . '-' . $userData['birthdateDay'];
                                             $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
                                         } 
                                         $response = $this->mdl_aweber->AddEmailToAweberSubscriberList($userData,$country,$mailProvider);
-                                        addRecordInHistoryFromCSV($userData, $mailProvider, AWEBER, $response,$provider['groupName'],$provider['keyword']);
+                                        addRecordInHistoryFromCSV($userData, $mailProvider, AWEBER, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
                                     } else {
                                         $response = array("result" => "error", "error" => array("msg" => "Country is not defined in Aweber"));
                                     }
@@ -120,46 +118,40 @@ class Cron_provider_user_csv extends CI_Controller
                                 }
                             }else if($provider['providerName'] == TRANSMITVIA){
                                 $responseField = "transmitviaResponse";
-                                $mailProvider = $this->getTransmitviaMailProviderId($provider["providerList"]); 
-                                
+                                $mailProvider = $this->getTransmitviaMailProviderId($provider["providerList"]);                                
                                 //check user alrady send to the particular list or not.
-                                $isNotExist = checkRecordAlreadySendToProviderList($userData['emailId'],$mailProvider);  
-                                
+                                $isNotExist = checkRecordAlreadySendToProviderList($userData['emailId'],$mailProvider);                                
                                 if($isNotExist){
                                     $response = $this->mdl_transmitvia->AddEmailToTransmitSubscriberList($userData,$mailProvider);
                                     // GET ORIGINAL PROVIDER ID FROM PROVIDERS SCHEMA
                                     $mailProviderOriginal = getProviderIdUsingTransmitviaList($mailProvider);
-                                    addRecordInHistoryFromCSV($userData, $mailProviderOriginal, TRANSMITVIA, $response,$provider['groupName'],$provider['keyword']);
+                                    addRecordInHistoryFromCSV($userData, $mailProviderOriginal, TRANSMITVIA, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
                                 }else{
                                     $response = array("result" => "error","error" => array("msg" => "001 - Request already served to this list"));
                                 }    
                             }else if($provider['providerName'] == ONGAGE){
                                 $responseField = "ongageResponse";
-                                $mailProvider = $this->getOngageMailProviderId($provider["providerList"]); 
-                                
+                                $mailProvider = $this->getOngageMailProviderId($provider["providerList"]);                                
                                 //check user alrady send to the particular list or not.
-                                $isNotExist = checkRecordAlreadySendToProviderList($userData['emailId'],$mailProvider);  
-                                
+                                $isNotExist = checkRecordAlreadySendToProviderList($userData['emailId'],$mailProvider);                                
                                 if($isNotExist){
                                     $response = $this->mdl_ongage->AddEmailToOngageSubscriberList($userData,$mailProvider);
-                                    addRecordInHistoryFromCSV($userData, $mailProvider, ONGAGE, $response,$provider['groupName'],$provider['keyword']);
+                                    addRecordInHistoryFromCSV($userData, $mailProvider, ONGAGE, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
                                 }else{
                                     $response = array("result" => "error","error" => array("msg" => "001 - Request already served to this list"));
-                                }     
+                                }    
                             }else if($provider['providerName'] == SENDGRID){
                                 if (@$userData['birthdateDay'] != '' && @$userData['birthdateMonth'] != '' && @$userData['birthdateYear'] != '') {
                                     $birthDate              = $userData['birthdateYear'] . '-' . $userData['birthdateMonth'] . '-' . $userData['birthdateDay'];
                                     $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
                                 } 
                                 $responseField = "sendgridResponse";
-                                $mailProvider = $this->getSendgridMailProviderId($provider["providerList"]); 
-                                
+                                $mailProvider = $this->getSendgridMailProviderId($provider["providerList"]);                                
                                 //check user alrady send to the particular list or not.
-                                $isNotExist = checkRecordAlreadySendToProviderList($userData['emailId'],$mailProvider);  
-                                
+                                $isNotExist = checkRecordAlreadySendToProviderList($userData['emailId'],$mailProvider);                                
                                 if($isNotExist){
                                     $response = $this->mdl_sendgrid->AddEmailToSendgridSubscriberList($userData,$mailProvider);
-                                    addRecordInHistoryFromCSV($userData, $mailProvider, SENDGRID, $response,$provider['groupName'],$provider['keyword']);
+                                    addRecordInHistoryFromCSV($userData, $mailProvider, SENDGRID, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
                                 }else{
                                     $response = array("result" => "error","error" => array("msg" => "001 - Request already served to this list"));
                                 }    
@@ -169,14 +161,12 @@ class Cron_provider_user_csv extends CI_Controller
                                     $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
                                 } 
                                 $responseField = "sendinblueResponse";
-                                $mailProvider = $this->getSendInBlueMailProviderId($provider["providerList"]);  
-                                
+                                $mailProvider = $this->getSendInBlueMailProviderId($provider["providerList"]);                                
                                 //check user alrady send to the particular list or not.
-                                $isNotExist = checkRecordAlreadySendToProviderList($userData['emailId'],$mailProvider);  
-                                
+                                $isNotExist = checkRecordAlreadySendToProviderList($userData['emailId'],$mailProvider);                                
                                 if($isNotExist){
                                     $response = $this->mdl_sendinblue->AddEmailToSendInBlueSubscriberList($userData,$mailProvider);
-                                    addRecordInHistoryFromCSV($userData, $mailProvider, SENDINBLUE, $response,$provider['groupName'],$provider['keyword']);
+                                    addRecordInHistoryFromCSV($userData, $mailProvider, SENDINBLUE, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
                                 }else{
                                     $response = array("result" => "error","error" => array("msg" => "001 - Request already served to this list"));
                                 }    
