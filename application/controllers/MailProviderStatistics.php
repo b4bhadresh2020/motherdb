@@ -32,14 +32,19 @@ class MailProviderStatistics extends CI_Controller
         //get all apikey 
         $condition = array("isInActive" => 0);
         $is_single = FALSE;
-        $liveDeliveries = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(array("mailProvider" => $list)), array(), array(), 'apikey,mailProvider');
+        $liveDeliveries = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(array("mailProvider" => '"'.$list.'"')), array(), array(), 'apikey,mailProvider,delay');
 
-        pre($liveDeliveries);
+        $liveDeliveryDelay = [];
+        foreach ($liveDeliveries as $liveDelivery) {
+            if(!empty($liveDelivery['delay'])){
+                $delays = json_decode($liveDelivery['delay'],true);
+                $liveDeliveryDelay[$liveDelivery['apikey']] = $delays[$list];
+            }else{
+                $liveDeliveryDelay[$liveDelivery['apikey']] = 0;
+            }
+        }
+        pre($liveDeliveryDelay);
         die;
-
-        /* foreach ($liveDeliveries as $liveDelivery) {
-            
-        } */
 
         $data['load_page'] = 'mailProviderStatistics';
         $data['headerTitle'] = "Mail Provider Statistics";
