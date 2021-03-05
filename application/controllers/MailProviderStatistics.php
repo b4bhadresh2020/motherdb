@@ -30,14 +30,14 @@ class MailProviderStatistics extends CI_Controller
         $deliveryDate = $this->input->post('deliveryDate');
 
         $providerStatisticalData = [];
-
+        
         $response_messages = [
-            "1" => [ "success" => "success", "subscriber_exist" => "400 -", "auth_fail" => "401 -", "bad_fail" => "403 -","blacklisted" => "blacklisted", "host" => "resolve host"],
-            "2" => [ "success" => "success", "subscriber_exist" => "subscriber already", "auth_fail" => "Service Unavailable", "bad_fail" => "Bad Request", "blacklisted" => "blacklisted", "host" => "resolve host"],
-            "3" => [ "success" => "success", "subscriber_exist" => "400 -", "auth_fail" => "401 -", "bad_fail" => "Bad Request", "blacklisted" => "blacklisted", "host" => "Wrong provider"],
-            "4" => [ "success" => "success", "subscriber_exist" => "412 " ,  "auth_fail" => "401 -", "bad_fail" => "429 ", "blacklisted" => "blacklisted", "host" => "resolve host"],
-            "5" => [ "success" => "success", "subscriber_exist" => "400 -", "auth_fail" => "401 -", "bad_fail" => "Bad Request", "blacklisted" => "blacklisted", "host" => "resolve host"],
-            "6" => [ "success" => "success", "subscriber_exist" => "Contact already exist", "auth_fail" => "401 -", "bad_fail" => "Invalid phone number", "blacklisted" => "blacklisted", "host" => "Request already received"],
+            "1" => [ "success" => "success", "subscriber_exist" => "400 -", "auth_fail" => "401 -", "bad_fail" => "403 -","blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
+            "2" => [ "success" => "success", "subscriber_exist" => "subscriber already", "auth_fail" => "Service Unavailable", "bad_fail" => "Bad Request", "blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
+            "3" => [ "success" => "success", "subscriber_exist" => "400 -", "auth_fail" => "401 -", "bad_fail" => "Bad Request", "blacklisted" => "blacklisted", "host" => "Wrong provider", "manual" => "already served"],
+            "4" => [ "success" => "success", "subscriber_exist" => "412 " ,  "auth_fail" => "401 -", "bad_fail" => "429 ", "blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
+            "5" => [ "success" => "success", "subscriber_exist" => "400 -", "auth_fail" => "401 -", "bad_fail" => "Bad Request", "blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
+            "6" => [ "success" => "success", "subscriber_exist" => "Contact already exist", "auth_fail" => "401 -", "bad_fail" => "Invalid phone number", "blacklisted" => "blacklisted", "host" => "Request already received", "manual" => "already served"],
         ];
 
         //get provider detail
@@ -89,75 +89,99 @@ class MailProviderStatistics extends CI_Controller
                 break; 
         }
         
-        // GET DATA FROM LIVE DELIVERY DATA TABLE
-        $this->db->select('apikey,groupName,keyword,
-                            count(*) as total,
-                            SUM(CASE 
-                                WHEN '.$providerListDetail["response_field"].' like "%'.$response_messages[$providerListDetail['provider']]['success'].'%" THEN 1
-                                ELSE 0
-                            END) AS success,
-                            SUM(CASE 
-                                WHEN '.$providerListDetail["response_field"].' like "%'.$response_messages[$providerListDetail['provider']]['subscriber_exist'].'%" THEN 1
-                                ELSE 0
-                            END) AS subscriber_exist,
-                            SUM(CASE 
-                                WHEN '.$providerListDetail["response_field"].' like "%'.$response_messages[$providerListDetail['provider']]['auth_fail'].'%" THEN 1
-                                ELSE 0
-                            END) AS auth_fail,
-                            SUM(CASE 
-                                WHEN '.$providerListDetail["response_field"].' like "%'.$response_messages[$providerListDetail['provider']]['bad_fail'].'%" THEN 1
-                                ELSE 0
-                            END) AS bad_fail,
-                            SUM(CASE 
-                                WHEN '.$providerListDetail["response_field"].' like "%'.$response_messages[$providerListDetail['provider']]['blacklisted'].'%" THEN 1
-                                ELSE 0
-                            END) AS blacklisted,
-                            SUM(CASE 
-                                WHEN '.$providerListDetail["response_field"].' like "%'.$response_messages[$providerListDetail['provider']]['host'].'%" THEN 1
-                                ELSE 0
-                            END) AS host');
-        $this->db->from(LIVE_DELIVERY_DATA);
-        $this->db->where_in("apikey",$liveDeliveryInstant);
-        $this->db->where("DATE(createdDate)",$deliveryDate);
-        $this->db->group_by("apikey");
-        $liveDeliveryInstantData = $this->db->get()->result_array();
+        if(count($liveDeliveryInstant)>0){
+            // GET DATA FROM LIVE DELIVERY DATA TABLE
+            $this->db->select('apikey,groupName,keyword,
+                                count(*) as total,
+                                SUM(CASE 
+                                    WHEN '.$providerListDetail["response_field"].' like "%'.$response_messages[$providerListDetail['provider']]['success'].'%" THEN 1
+                                    ELSE 0
+                                END) AS success,
+                                SUM(CASE 
+                                    WHEN '.$providerListDetail["response_field"].' like "%'.$response_messages[$providerListDetail['provider']]['subscriber_exist'].'%" THEN 1
+                                    ELSE 0
+                                END) AS subscriber_exist,
+                                SUM(CASE 
+                                    WHEN '.$providerListDetail["response_field"].' like "%'.$response_messages[$providerListDetail['provider']]['auth_fail'].'%" THEN 1
+                                    ELSE 0
+                                END) AS auth_fail,
+                                SUM(CASE 
+                                    WHEN '.$providerListDetail["response_field"].' like "%'.$response_messages[$providerListDetail['provider']]['bad_fail'].'%" THEN 1
+                                    ELSE 0
+                                END) AS bad_fail,
+                                SUM(CASE 
+                                    WHEN '.$providerListDetail["response_field"].' like "%'.$response_messages[$providerListDetail['provider']]['blacklisted'].'%" THEN 1
+                                    ELSE 0
+                                END) AS blacklisted,
+                                SUM(CASE 
+                                    WHEN '.$providerListDetail["response_field"].' like "%'.$response_messages[$providerListDetail['provider']]['host'].'%" THEN 1
+                                    ELSE 0
+                                END) AS host,
+                                SUM(CASE 
+                                    WHEN '.$providerListDetail["response_field"].' like "%'.$response_messages[$providerListDetail['provider']]['manual'].'%" THEN 1
+                                    ELSE 0
+                                END) AS manual');
+            $this->db->from(LIVE_DELIVERY_DATA);
+            $this->db->where_in("apikey",$liveDeliveryInstant);
+            $this->db->where("DATE(createdDate)",$deliveryDate);
+            $this->db->group_by("apikey");
+            $liveDeliveryInstantData = $this->db->get()->result_array();
+        }else{
+            $liveDeliveryInstantData = [];
+        }    
 
-        // GET DATA FROM LIVE DELIVERY DATA TABLE
-        $this->db->select('apikey,groupName,keyword,
-                            count(*) as total,
-                            SUM(CASE 
-                                WHEN response like "%'.$response_messages[$providerListDetail['provider']]['success'].'%" THEN 1
-                                ELSE 0
-                            END) AS success,
-                            SUM(CASE 
-                                WHEN response like "%'.$response_messages[$providerListDetail['provider']]['subscriber_exist'].'%" THEN 1
-                                ELSE 0
-                            END) AS subscriber_exist,
-                            SUM(CASE 
-                                WHEN response like "%'.$response_messages[$providerListDetail['provider']]['auth_fail'].'%" THEN 1
-                                ELSE 0
-                            END) AS auth_fail,
-                            SUM(CASE 
-                                WHEN response like "%'.$response_messages[$providerListDetail['provider']]['bad_fail'].'%" THEN 1
-                                ELSE 0
-                            END) AS bad_fail,
-                            SUM(CASE 
-                                WHEN response like "%'.$response_messages[$providerListDetail['provider']]['blacklisted'].'%" THEN 1
-                                ELSE 0
-                            END) AS blacklisted,
-                            SUM(CASE 
-                                WHEN response like "%'.$response_messages[$providerListDetail['provider']]['host'].'%" THEN 1
-                                ELSE 0
-                            END) AS host');
-        $this->db->from($delayTableName);
-        $this->db->join(LIVE_DELIVERY_DATA,LIVE_DELIVERY_DATA.'.liveDeliveryDataId ='.$delayTableName.'.liveDeliveryDataId');
-        $this->db->where_in("apikey",$liveDeliveryDelay);
-        $this->db->where("deliveryDate",$deliveryDate);
-        $this->db->where("providerId",$list);
-        $this->db->group_by("apikey");
-        $liveDeliveryDelayData = $this->db->get()->result_array();
+        if(count($liveDeliveryDelay)){
+            // GET DATA FROM LIVE DELIVERY DATA TABLE
+            $this->db->select('apikey,groupName,keyword,
+                                count(*) as total,
+                                SUM(CASE 
+                                    WHEN response like "%'.$response_messages[$providerListDetail['provider']]['success'].'%" THEN 1
+                                    ELSE 0
+                                END) AS success,
+                                SUM(CASE 
+                                    WHEN response like "%'.$response_messages[$providerListDetail['provider']]['subscriber_exist'].'%" THEN 1
+                                    ELSE 0
+                                END) AS subscriber_exist,
+                                SUM(CASE 
+                                    WHEN response like "%'.$response_messages[$providerListDetail['provider']]['auth_fail'].'%" THEN 1
+                                    ELSE 0
+                                END) AS auth_fail,
+                                SUM(CASE 
+                                    WHEN response like "%'.$response_messages[$providerListDetail['provider']]['bad_fail'].'%" THEN 1
+                                    ELSE 0
+                                END) AS bad_fail,
+                                SUM(CASE 
+                                    WHEN response like "%'.$response_messages[$providerListDetail['provider']]['blacklisted'].'%" THEN 1
+                                    ELSE 0
+                                END) AS blacklisted,
+                                SUM(CASE 
+                                    WHEN response like "%'.$response_messages[$providerListDetail['provider']]['host'].'%" THEN 1
+                                    ELSE 0
+                                END) AS host,
+                                SUM(CASE 
+                                    WHEN response like "%'.$response_messages[$providerListDetail['provider']]['manual'].'%" THEN 1
+                                    ELSE 0
+                                END) AS manual');
+            $this->db->from($delayTableName);
+            $this->db->join(LIVE_DELIVERY_DATA,LIVE_DELIVERY_DATA.'.liveDeliveryDataId ='.$delayTableName.'.liveDeliveryDataId');
+            $this->db->where_in("apikey",$liveDeliveryDelay);
+            $this->db->where("deliveryDate",$deliveryDate);
+            $this->db->where("providerId",$list);
+            $this->db->group_by("apikey");
+            $liveDeliveryDelayData = $this->db->get()->result_array();
+        }else{
+            $liveDeliveryDelayData = [];
+        }
 
-        $liveDeliveryStastic = array_merge($liveDeliveryInstantData,$liveDeliveryDelayData);
+        if(count($liveDeliveryInstantData) > 0 && count($liveDeliveryDelayData) > 0){
+            $liveDeliveryStastic = array_merge($liveDeliveryInstantData,$liveDeliveryDelayData);
+        }else if(count($liveDeliveryInstantData) > 0){
+            $liveDeliveryStastic = $liveDeliveryInstantData;
+        }else if(count($liveDeliveryDelayData) > 0){
+            $liveDeliveryStastic = $liveDeliveryDelayData;
+        }else{
+            $liveDeliveryStastic = [];
+        }
                 
         $data['load_page'] = 'mailProviderStatistics';
         $data['headerTitle'] = "Mail Provider Statistics";

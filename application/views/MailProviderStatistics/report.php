@@ -90,12 +90,13 @@
                                                 <th>Bad Request</th>
                                                 <th>Blacklist</th>
                                                 <th>Host Rejected</th>
-                                                <th>Total</th>
+                                                <th>Manual Rejected</th>
+                                                <!-- <th>Total</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php 
-                                                if(isset($liveDeliveryStastic)){                     
+                                                if(isset($liveDeliveryStastic) && count($liveDeliveryStastic)){                     
                                                 foreach ($liveDeliveryStastic as $key => $providerStatistic) {?>
                                             <tr>
                                                 <td><?php echo $key + 1; ?></td>
@@ -108,7 +109,8 @@
                                                 <td><?php echo $providerStatistic['bad_fail']?></td>
                                                 <td><?php echo $providerStatistic['blacklisted']?></td>
                                                 <td><?php echo $providerStatistic['host']?></td>
-                                                <td><?php echo $providerStatistic['total']?></td>
+                                                <td><?php echo $providerStatistic['manual']?></td>
+                                                <!-- <td><?php echo $providerStatistic['total']?></td> -->
                                             </tr>
                                             <?php }} ?>
                                         </tbody>
@@ -122,5 +124,5 @@
         </div>
     </div>
 </div>
-<?php $this->load->view('MailProviderStatistics/report_script'); ?>
+<?php $this->load->view('mailProviderStatistics/report_script'); ?>
 
