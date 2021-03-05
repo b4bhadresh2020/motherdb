@@ -69,7 +69,55 @@
                             </div>
                         </div>
                     </div>
-                </form>                 
+                </form>  
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4>Report Base On Provider Response</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>APIKEY</th>
+                                                <th>Group Name</th>
+                                                <th>Keyword</th>
+                                                <th>Success</th>
+                                                <th>Subscriber Exist</th>
+                                                <th>Auth Fail</th>
+                                                <th>Bad Request</th>
+                                                <th>Blacklist</th>
+                                                <th>Host Rejected</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php 
+                                                if(isset($liveDeliveryStastic)){                     
+                                                foreach ($liveDeliveryStastic as $key => $providerStatistic) {?>
+                                            <tr>
+                                                <td><?php echo $key + 1; ?></td>
+                                                <td><?php echo $providerStatistic['apikey'] ?></td>
+                                                <td><?php echo $providerStatistic['groupName'] ?></td>
+                                                <td><?php echo $providerStatistic['keyword'] ?></td>  
+                                                <td><?php echo $providerStatistic['success']?></td>
+                                                <td><?php echo $providerStatistic['subscriber_exist']?></td>
+                                                <td><?php echo $providerStatistic['auth_fail']?></td>
+                                                <td><?php echo $providerStatistic['bad_fail']?></td>
+                                                <td><?php echo $providerStatistic['blacklisted']?></td>
+                                                <td><?php echo $providerStatistic['host']?></td>
+                                                <td><?php echo $providerStatistic['total']?></td>
+                                            </tr>
+                                            <?php }} ?>
+                                        </tbody>
+                                    </table>
+                                </div>                               
+                            </div>
+                        </div>
+                    </div>
+                </div>               
             </section>
         </div>
     </div>
