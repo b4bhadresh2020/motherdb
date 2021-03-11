@@ -113,9 +113,18 @@ foreach($sendInBlueList as $list){
                                                                     $providersName[] = $mailProviders[$provider];
                                                                 }
                                                                 $providersIdString = implode(",",$providers);
-                                                                $providersNameString = implode(", ",$providersName);                                                                            
+                                                                $providersNameString = implode(", ",$providersName);  
+                                                                
+                                                                if($apikey['live_status'] == 1){
+                                                                    $liveDeliveryStatusHighlight = "green";
+                                                                }else if($apikey['live_status'] == 2){
+                                                                    $liveDeliveryStatusHighlight = "orange";
+                                                                }else{
+                                                                    $liveDeliveryStatusHighlight = "red";
+                                                                } 
+                                                                
                                                             ?>
-                                                            <option value="<?php echo $apikey['apikey']; ?>" data-provider="<?php echo $providersNameString; ?>" data-providerid="<?php echo $providersIdString; ?>"> <?php echo $apikey['groupName'].'-'.$apikey['keyword'].' ('.$apikey['apikey'].')'; ?></option>
+                                                            <option value="<?php echo $apikey['apikey']; ?>" data-provider="<?php echo $providersNameString; ?>" data-providerid="<?php echo $providersIdString; ?>" style="color:<?php echo $liveDeliveryStatusHighlight; ?>"> <?php echo $apikey['groupName'].'-'.$apikey['keyword'].' ('.$apikey['apikey'].')'; ?></option>
                                                             <?php } ?>
                                                         </optgroup> 
                                                     <?php  } ?>

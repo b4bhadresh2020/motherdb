@@ -22,7 +22,7 @@ class Repost extends CI_Controller
         // $condition = array('mailProvider' => 'egoi');
         $condition = array("isInActive" => 0);
         $is_single = FALSE;
-        $getLiveDeliveryAllApiKeys = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(array("country","ASC"),array('liveDeliveryId' => 'desc')), 'country,apikey,groupName,keyword,mailProvider');
+        $getLiveDeliveryAllApiKeys = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(array("country","ASC"),array('liveDeliveryId' => 'desc')), 'country,apikey,groupName,keyword,mailProvider,live_status');
 
         $liveDeliveriesGroups = [];
         foreach ($getLiveDeliveryAllApiKeys as $key => $liveDelivery) {
