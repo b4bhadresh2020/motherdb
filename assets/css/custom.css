@@ -17,3 +17,37 @@
 #canvas {
     display: none;
 }
+
+.green-bg{
+    background-color: #3f5c19;
+    color: #fff;
+}
+
+.yellow-bg{
+    background-color: #e5ad06;
+    color: #fff;
+}
+
+.red-bg{
+    background-color: #f6685e;
+    color: #fff;
+}
+
+.blue-bg{
+    background-color: #5262bc;
+    color: #fff;
+}
+
+.black-bg{
+    background-color: #333333;
+    color: #fff;
+}
+
+.sky-bg{
+    background-color: #2ba58f;
+    color: #fff;
+}
+
+.table-header-font-small{
+    font-size: 12px;
+}

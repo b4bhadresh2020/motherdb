@@ -79,7 +79,7 @@
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
                                         <thead>
-                                            <tr>
+                                            <tr class="table-header-font-small">
                                                 <th>#</th>
                                                 <th>APIKEY</th>
                                                 <th>Group Name</th>
@@ -91,26 +91,28 @@
                                                 <th>Blacklist</th>
                                                 <th>Host Rejected</th>
                                                 <th>Manual Rejected</th>
-                                                <!-- <th>Total</th> -->
+                                                <th>Total</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php 
                                                 if(isset($liveDeliveryStastic) && count($liveDeliveryStastic)){                     
-                                                foreach ($liveDeliveryStastic as $key => $providerStatistic) {?>
+                                                    foreach ($liveDeliveryStastic as $key => $providerStatistic) {
+                                                        $total = $providerStatistic['success'] + $providerStatistic['subscriber_exist'] + $providerStatistic['auth_fail'] + $providerStatistic['bad_fail'] + $providerStatistic['blacklisted'] + $providerStatistic['host'] + $providerStatistic['manual'];
+                                            ?>
                                             <tr>
                                                 <td><?php echo $key + 1; ?></td>
                                                 <td><?php echo $providerStatistic['apikey'] ?></td>
                                                 <td><?php echo $providerStatistic['groupName'] ?></td>
                                                 <td><?php echo $providerStatistic['keyword'] ?></td>  
-                                                <td><?php echo $providerStatistic['success']?></td>
-                                                <td><?php echo $providerStatistic['subscriber_exist']?></td>
-                                                <td><?php echo $providerStatistic['auth_fail']?></td>
-                                                <td><?php echo $providerStatistic['bad_fail']?></td>
-                                                <td><?php echo $providerStatistic['blacklisted']?></td>
-                                                <td><?php echo $providerStatistic['host']?></td>
-                                                <td><?php echo $providerStatistic['manual']?></td>
-                                                <!-- <td><?php echo $providerStatistic['total']?></td> -->
+                                                <td class="green-bg text-center"><?php echo $providerStatistic['success']?></td>
+                                                <td class="yellow-bg text-center"><?php echo $providerStatistic['subscriber_exist']?></td>
+                                                <td class="red-bg text-center"><?php echo $providerStatistic['auth_fail']?></td>
+                                                <td class="blue-bg text-center"><?php echo $providerStatistic['bad_fail']?></td>
+                                                <td class="black-bg text-center"><?php echo $providerStatistic['blacklisted']?></td>
+                                                <td class="sky-bg text-center"><?php echo $providerStatistic['host']?></td>
+                                                <td class="text-center"><?php echo $providerStatistic['manual']?></td>
+                                                <td><?php echo $total ?></td>
                                             </tr>
                                             <?php }} ?>
                                         </tbody>
