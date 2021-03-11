@@ -10,7 +10,6 @@
     }
 ?>
 
-
 <style type="text/css">
     #goToTop {
       display: none;
@@ -53,9 +52,9 @@
 
                                             <div id="error_msg"></div>
 
-                                            <div class="form-group">
+                                            <div class="form-group custom-select">
                                                 <label>Select Apikey (Group-Keyword)</label>
-                                                <select name="apikey" id="apikey" class="form-control" >
+                                                <select name="apikey" id="apikey" class="form-control selectpicker" >
 
                                                     <?php foreach ($liveDeliveriesGroups as $country =>  $apikeyGroup) { ?>
                                                         <optgroup label="<?php echo $country; ?>"> 
@@ -566,5 +565,4 @@
         </div>
     </div>
 </div>
-
 <?php $this->load->view('liveDeliveryStat/live_delivery_stat_data_script'); ?>
