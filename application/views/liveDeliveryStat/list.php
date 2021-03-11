@@ -154,8 +154,44 @@
                                                 <div class="col-lg-3">
                                                     <input type="submit"  name="reset" value="Reset" class="form-control btn btn-default" >
                                                 </div>
-                                            </div>
-                                                
+                                                <?php 
+                                                    $apikey = "";
+                                                    $chooseFilter = "";                                                    
+                                                    $chooseSucFailRes = "";
+                                                    $globleSearch = "";
+                                                    $startDate = "";
+                                                    $endDate = "";
+
+                                                    if (@$_GET['apikey']) {
+                                                        $apikey = $_GET['apikey'];
+                                                    }
+
+                                                    if (@$_GET['chooseFilter']) {
+                                                        $chooseFilter = $_GET['chooseFilter'];
+                                                    }
+
+                                                    if (@$_GET['chooseSucFailRes'] !="") {
+                                                        $chooseSucFailRes = $_GET['chooseSucFailRes'];
+                                                    }
+
+                                                    if (@$_GET['globleSearch']) {
+                                                        $globleSearch = $_GET['globleSearch'];
+                                                    }
+
+                                                    if (@$_GET['startDate']) {
+                                                        $startDate = $_GET['startDate'];
+                                                    }                                                    
+
+                                                    if (@$_GET['endDate']) {
+                                                        $endDate = $_GET['endDate'];
+                                                    }
+                                                ?>
+                                                <div class="col-lg-4">
+                                                    <a href="<?php echo base_url('liveDeliveryStat/exportCsv/'.$apikey.'/'.$chooseFilter.'/'.$chooseSucFailRes.'/'.$globleSearch.'/'.$startDate.'/'.$endDate); ?>" class="form-control btn btn-warning" >Export CSV</a>
+                                                </div>
+
+                                            </div> 
+
                                         </div>
 
                                         <?php 

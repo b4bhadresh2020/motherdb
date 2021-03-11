@@ -42,6 +42,82 @@ class LiveDeliveryStat extends CI_Controller {
      *  list code ends here
      */
 
+    public function exportCsv($apikey = '', $chooseFilter = '', $chooseSucFailRes = '', $globleSearch = '', $startDate = '', $endDate = '', $start = 0, $perpage = 500000)
+    {
+        $getData = array(
+            'apikey'            => $apikey,
+            'chooseFilter'      => $chooseFilter,
+            'chooseSucFailRes'  => $chooseSucFailRes,            
+            'globleSearch' => urldecode($globleSearch),
+            'startDate' => $startDate,
+            'endDate'   => $endDate,
+        );
+
+        $userDataResponse = $this->mdl_live_delivery->getLiveDeliveryStatData($getData,$start,$perpage,TRUE);
+        $userdata         = $userDataResponse['filteredData'];
+        $userdataCount    = count($userdata);
+        if ($userdataCount > 0) {
+
+            $reArrangeArray = array();
+            $keyArr         = array('firstName', 'lastName', 'emailId', 'address', 'postCode', 'city', 'phone', 'gender', 'birthdateDay', 'birthdateMonth', 'birthdateYear', 'ip', 'createdDate');
+
+            for ($i = 0; $i < $userdataCount; $i++) {
+
+                foreach ($keyArr as $value) {
+                    $reArrangeArray[$i][$value] = $userdata[$i][$value];
+                }
+
+            }
+
+            // file creation
+            if ($start == 0) {
+
+                $header   = array('Full Name', 'Last Name', 'Email Id', 'Address', 'Postcode', 'City', 'Phone', 'Gender', 'Birthdate Day', 'Birthdate Month', 'Birthdate Year', 'Ip', 'Created on');
+                
+                $filename = 'liveuserdata_' . date('Y-m-d H:i:s') . '_Total_' . $userdataCount . '_Entries.csv';
+                
+                header("Content-Description: File Transfer");
+                header("Content-Disposition: attachment; filename=$filename");
+                header("Content-Type: application/csv; ");
+
+                $file = fopen('php://output', 'w');
+                fputcsv($file, $header);
+                fclose($file);
+            }
+
+            $file = fopen('php://output', 'w');
+            foreach ($reArrangeArray as $key => $line) {
+                fputcsv($file, $line);
+            }
+            fclose($file);
+            exit;
+
+        } else if (count($userdata) == 0 && $start != 0) {
+            exit;
+        } else {
+
+            $header         = array();
+            $reArrangeArray = array(array('', 'There is no data !'));
+            $filename       = 'blank_excel_' . date('Y-m-d H:i:s') . ".csv";
+
+            header("Content-Description: File Transfer");
+            header("Content-Disposition: attachment; filename=$filename");
+            header("Content-Type: application/csv; ");
+
+            // file creation
+            $file = fopen('php://output', 'w');
+
+            fputcsv($file, $header);
+            foreach ($reArrangeArray as $key => $line) {
+                fputcsv($file, $line);
+            }
+            fclose($file);
+            exit;
+
+        }
+
+    }
+
 
      /*
      *  delete code starts here
