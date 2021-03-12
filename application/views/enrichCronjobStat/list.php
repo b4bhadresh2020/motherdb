@@ -49,7 +49,7 @@
                                                         }
 
                                                         $percentage = ($curEntry['totalUpdatedRecords']/$curEntry['totalRecords']) * 100;
-                                                        $percentage = reformat_number_format($percentage);
+                                                        $percentage = number_format((float)$percentage, 8, '.', '');
 
                                                     ?>
                                                     <tr>

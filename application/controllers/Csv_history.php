@@ -28,7 +28,7 @@ class Csv_history extends CI_Controller
         $dataCount = $responseData['totalCount'];
         $export_files_data = $responseData['export_files_data'];
 
-        $data = pagination_data('unsubscribe/manage/', $dataCount, $start, 3, $perPage, $export_files_data);
+        $data = pagination_data('csv_history/manage/', $dataCount, $start, 3, $perPage, $export_files_data);
 
         $data['load_page'] = 'csv_history';
         $data["curTemplateName"] = "csv_history/list";

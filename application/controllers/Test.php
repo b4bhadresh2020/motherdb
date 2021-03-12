@@ -92,6 +92,46 @@ class Test extends CI_Controller
         
     }
 
+    /*function calculateTime(){
 
+        $condition = array('emailId' => 'hannegjorup@gmail.com');
+        $is_single = TRUE;
+        $order_by = array('userId' => 'DESC');
+        $started = microtime(true);
+        $data = GetAllRecord(TEST,$condition,$is_single,array(),array(),array($order_by)); 
+        $end = microtime(true);
+        $difference = $end - $started;
+ 
+        //Format the time so that it only shows 10 decimal places.
+        $queryTime = number_format($difference, 10);
+         
+        //Print out the seconds it took for the query to execute.
+        echo "SQL query took $queryTime seconds.";
+        pre(last_query());
+
+
+        $condition = array('emailId' => 'hannegjorup@gmail.com');
+        $is_single = TRUE;
+        $order_by = array('userId' => 'DESC');
+
+        $started1 = microtime(true);
+
+        $this->db->limit(1);
+        $data = GetAllRecord(TEST,$condition,$is_single,array(),array(),array($order_by)); 
+
+        $end1 = microtime(true);
+        $difference1 = $end1 - $started1;
+ 
+        //Format the time so that it only shows 10 decimal places.
+        $queryTime1 = number_format($difference1, 10);
+         
+        //Print out the seconds it took for the query to execute.
+        echo "SQL query took $queryTime1 seconds.";
+        pre(last_query());
+
+
+
+
+    }*/
     
 }

@@ -114,7 +114,7 @@
                                                         <!-- <td><?php echo $type; ?></td> -->
                                                         <td><?php echo date('d-m-Y H:i:s',strtotime($curEntry['createdDate'])); ?></td>
                                                         <td style="text-align: center;">
-                                                            <a href="<?php echo $curEntry['redirectUrl']; ?>" class="btn btn-info btn-xs" title = "View"><i class="ti-eye"></i></a>
+                                                            <!-- <a href="<?php echo $curEntry['redirectUrl']; ?>" class="btn btn-info btn-xs" title = "View"><i class="ti-eye"></i></a> -->
 
                                                             <a class="btn btn-danger btn-xs" data-deleteUrl="<?php echo site_url("history/delete/" . @$historyId) ?>" href="javascript:;" onclick="javascript:deleteEntry(this);" title="Delete"><i class="ti-close"></i></a>
                                                             

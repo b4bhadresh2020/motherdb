@@ -39,19 +39,11 @@ class Cron_constantcontact_delay_user extends CI_Controller
                 $isDuplicate = array();
             }
             
-            //check user alrady send to the particular list or not.
-            $isNotExist = checkRecordAlreadySendToProviderList($user['emailId'],$user['providerId']);  
-            
-            if($isNotExist){
-                if(!array_key_exists($user['providerId'],$isDuplicate) || (array_key_exists($user['providerId'],$isDuplicate) && $user['sucFailMsgIndex'] == 1)){
-                    $response = $this->mdl_constantcontact->AddEmailToContactSubscriberList($user,$user['providerId']);   
-                }else{
-                    $response = array("result" => "success","data" => "Duplicate condition not satisfied");
-                }
+            if(!array_key_exists($user['providerId'],$isDuplicate) || (array_key_exists($user['providerId'],$isDuplicate) && $user['sucFailMsgIndex'] == 1)){
+                $response = $this->mdl_constantcontact->AddEmailToContactSubscriberList($user,$user['providerId']);   
             }else{
-                $response = array("result" => "error","error" => array("msg" => "001 - Request already served to this list"));
-            }
-
+                $response = array("result" => "success","data" => "Duplicate condition not satisfied");
+            }    
             $responseField = $providerData[$user['providerId']]['response_field'];
 
             // Update response in live delivery user data table
