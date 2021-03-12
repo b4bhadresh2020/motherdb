@@ -24,10 +24,13 @@ class TrackLiveDeliveryStatus extends CI_Controller
             
             if(isset($latestLiveDelivery['createdDate'])){
 
-                $timeDiffInMinute = round((time() - strtotime($latestLiveDelivery['createdDate'])) / 60);
-                if($timeDiffInMinute < 30){
+                $todayDate = date("Y-m-d");
+                $yesterdayDate = date('Y-m-d',strtotime("-1 days"));
+                $lastDeliveryDate = date("Y-m-d",strtotime($latestLiveDelivery['createdDate']));
+
+                if($lastDeliveryDate == $todayDate){
                     $status = 1;
-                }else if($timeDiffInMinute > 30 && $timeDiffInMinute < 720){
+                }else if($lastDeliveryDate == $yesterdayDate){
                     $status = 2;
                 }
 
