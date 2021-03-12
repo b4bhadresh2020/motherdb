@@ -23,8 +23,8 @@ class Mdl_sendinblue_update extends CI_Model {
             $data = array(                
                 "updateEnabled" => false,
                 "attributes" => array(
-                        //"SMS"  => @$getData['phone'],
-                        "GENDER"   => @$getData['gender'] 
+                        "SMS"  => @$getData['phone'],
+                        //"GENDER"   => @$getData['gender'] 
                 )
             );  
 

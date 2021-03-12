@@ -680,7 +680,12 @@ function getAweverProviderListName($providerListId){
         '17' => 'NO - abbie',
         '18' => 'SE - abbie',
         '19' => 'FreeCasinodeal/ca (Canada)',
-        '20' => 'FelinaFinans/se'
+        '20' => 'FelinaFinans/se',
+        '21' => 'New_gratispresent',
+        '22' => 'New_velkomstgaven_dk',
+        '23' => 'New_velkomstgaven_com',
+        '24' => 'New_velkomstgaven1_com',
+        '25' => 'New_unelmalaina'
     );
     return $aweberList[$providerListId];
 }
@@ -774,6 +779,11 @@ function getLiveRepostAweverProviderID($providerListId){
         "18" => "74",  // SE - abbie,
         "19" => "75",  // FreeCasinodeal/ca (Canada)
         "20" => "76",  // FelinaFinans/se
+        "21" => "78", // New_gratispresent
+        "22" => "79", // New_velkomstgaven_dk
+        "23" => "80", // New_velkomstgaven_com
+        "24" => "81", // New_velkomstgaven1_com
+        "25" => "82", // New_unelmalaina
     );
     return $provider[$providerListId];
 }
@@ -1532,27 +1542,4 @@ function getProviderIdUsingTransmitviaList($code){
     $is_single = TRUE;
     $provider = GetAllRecord(PROVIDERS,$condition,$is_single);
     return $provider['id'];   
-}
-
-function checkRecordAlreadySendToProviderList($email,$provider){
-    $ci = & get_instance();
-
-    $condition = array(
-        "providerId" => $provider,
-        "emailId" => $email,
-        "status <>" => 0
-    );
-    
-    $ci->db->select("count(historyId) as total");
-    $ci->db->from(EMAIL_HISTORY_DATA);
-    $ci->db->where($condition);
-    $query_result = $ci->db->get()->row_array();
-    $liveDeliveryCount = $query_result['total'];    
-
-    if($liveDeliveryCount == 0){
-        return true;
-    }else{
-        return false;
-    }
-
 }

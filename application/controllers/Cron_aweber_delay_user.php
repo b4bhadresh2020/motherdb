@@ -27,9 +27,12 @@ class Cron_aweber_delay_user extends CI_Controller
         $this->db->join(LIVE_DELIVERY,'live_delivery_data.apikey=live_delivery.apikey');
         $this->db->where($condition);
         $this->db->order_by('deliveryTimestamp');
-        $this->db->limit(500);
+        $this->db->limit(140);
         $query=$this->db->get();
         $userData= $query->result_array();
+        
+        // pre($userData);
+        // die;
 
         foreach($userData as $user){            
             if(isset($user['isDuplicate']) && !empty($user['isDuplicate'])){
@@ -37,24 +40,16 @@ class Cron_aweber_delay_user extends CI_Controller
             }else{
                 $isDuplicate = array();
             } 
-
-            //check user alrady send to the particular list or not.
-            $isNotExist = checkRecordAlreadySendToProviderList($user['emailId'],$user['providerId']);        
-
-            if($isNotExist){
-                if(!array_key_exists($user['providerId'],$isDuplicate) || (array_key_exists($user['providerId'],$isDuplicate) && $user['sucFailMsgIndex'] == 1)){
-                    if (@$user['birthdateDay'] != '0' && @$user['birthdateMonth'] != '0' && @$user['birthdateYear'] != '0') {
-                        $birthDate  = $user['birthdateYear'] . '-' . $user['birthdateMonth'] . '-' . $user['birthdateDay'];
-                        $user['birthDate'] = date('Y-m-d', strtotime($birthDate));
-                    }else{
-                        $user['birthDate'] = "";
-                    } 
-                    $response = $this->mdl_aweber_cron->AddEmailToAweberSubscriberList($user,$user['country'],$user['providerId']);
+            if(!array_key_exists($user['providerId'],$isDuplicate) || (array_key_exists($user['providerId'],$isDuplicate) && $user['sucFailMsgIndex'] == 1)){
+                if (@$user['birthdateDay'] != '0' && @$user['birthdateMonth'] != '0' && @$user['birthdateYear'] != '0') {
+                    $birthDate  = $user['birthdateYear'] . '-' . $user['birthdateMonth'] . '-' . $user['birthdateDay'];
+                    $user['birthDate'] = date('Y-m-d', strtotime($birthDate));
                 }else{
-                    $response = array("result" => "success","data" => "Duplicate condition not satisfied");
-                }
+                    $user['birthDate'] = "";
+                } 
+                $response = $this->mdl_aweber_cron->AddEmailToAweberSubscriberList($user,$user['country'],$user['providerId']);
             }else{
-                $response = array("result" => "error","error" => array("msg" => "001 - Request already served to this list"));
+                $response = array("result" => "success","data" => "Duplicate condition not satisfied");
             }
             
             $responseField = $providerData[$user['providerId']]['response_field'];

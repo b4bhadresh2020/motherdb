@@ -16,7 +16,7 @@ class UpdateSendInBlue extends CI_Controller
         echo "process begin <br>";
         //get file data
         $condition = array(
-            "sendinblueca != " => null
+            "sendinblueno != " => null
         );
         $is_single = FALSE;
         $liveDeliveryData = GetAllRecord(LIVE_DELIVERY_DATA,$condition,$is_single,array(),array(),array(),"emailId,gender,phone"); 
