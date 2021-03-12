@@ -566,3 +566,4 @@
     </div>
 </div>
 <?php $this->load->view('liveDeliveryStat/live_delivery_stat_data_script'); ?>
+<script src="<?php echo base_url();?>/assets/js/bootstrap-select.js"></script>

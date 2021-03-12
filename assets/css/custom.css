@@ -52,13 +52,6 @@
     font-size: 12px;
 }
 /* START: custom select  */
-/*!
- * Bootstrap-select v1.11.0 (https://silviomoreto.github.io/bootstrap-select)
- *
- * Copyright 2013-2016 bootstrap-select
- * Licensed under MIT (https://github.com/silviomoreto/bootstrap-select/blob/master/LICENSE)
- */
-
  select.bs-select-hidden,
  select.selectpicker {
    display: none !important;
@@ -342,7 +335,17 @@
    float: none;
  }
  .custom-select .bootstrap-select.form-control {
-     height: 32px!important;
+     height: 39px!important;
+ }
+ .custom-select button.btn-default {
+    height: 42px;
+    border-radius: 0px;
+    border-color: #e7e7e7!important;
+    color: #333;
+    background-color: #fff!important;
+ }
+ .custom-select .btn-group.open .dropdown-toggle {
+   box-shadow: none;
  }
  /*# sourceMappingURL=bootstrap-select.css.map */
 /* END: custom select  */

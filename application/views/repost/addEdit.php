@@ -99,9 +99,9 @@ foreach($sendInBlueList as $list){
 
                                     <div class="row">
                                         <div class="col-lg-8">
-                                            <div class="form-group">
+                                            <div class="form-group custom-select">
                                                 <label>API Key  (Group-Keyword) *</label>
-                                                <select class="form-control" name="country" id="select_apikey">
+                                                <select class="form-control selectpicker" name="country" id="select_apikey">
                                                     <option value="">Select Api Key</option>
                                                     <?php foreach ($apikeys as $country => $apikeyGroup){?>
                                                         <optgroup label="<?php echo $country; ?>"> 
@@ -165,4 +165,5 @@ foreach($sendInBlueList as $list){
 <?php
     $this->load->view('repost/addEdit_script');
 ?>
+<script src="<?php echo base_url();?>/assets/js/bootstrap-select.js"></script>
 
