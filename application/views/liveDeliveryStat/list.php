@@ -186,7 +186,7 @@
                                                     }
                                                 ?>
                                                 <div class="col-lg-4">
-                                                    <a href="<?php echo base_url('liveDeliveryStat/exportCsv/'.$apikey.'/'.$chooseFilter.'/'.$chooseSucFailRes.'/'.$globleSearch.'/'.$startDate.'/'.$endDate); ?>" class="form-control btn btn-warning" >Export CSV</a>
+                                                    <a href="<?php echo base_url('liveDeliveryStat/exportCsv?apikey='.$apikey.'&chooseFilter='.$chooseFilter.'&chooseSucFailRes='.$chooseSucFailRes.'&globleSearch='.$globleSearch.'&startDate='.$startDate.'&endDate='.$endDate); ?>" class="form-control btn btn-warning" >Export CSV</a>
                                                 </div>
 
                                             </div> 

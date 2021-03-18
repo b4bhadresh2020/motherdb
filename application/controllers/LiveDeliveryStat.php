@@ -42,17 +42,20 @@ class LiveDeliveryStat extends CI_Controller {
      *  list code ends here
      */
 
-    public function exportCsv($apikey = '', $chooseFilter = '', $chooseSucFailRes = '', $globleSearch = '', $startDate = '', $endDate = '', $start = 0, $perpage = 500000)
+    public function exportCsv()
     {
-        $getData = array(
-            'apikey'            => $apikey,
-            'chooseFilter'      => $chooseFilter,
-            'chooseSucFailRes'  => $chooseSucFailRes,            
-            'globleSearch' => urldecode($globleSearch),
-            'startDate' => $startDate,
-            'endDate'   => $endDate,
-        );
+        $start = 0;
+        $perpage = 500000;
 
+        $getData = array(
+            'apikey'            => $_GET['apikey'],
+            'chooseFilter'      => $_GET['chooseFilter'],
+            'chooseSucFailRes'  => $_GET['chooseSucFailRes'],            
+            'globleSearch' => urldecode($_GET['globleSearch']),
+            'startDate' => $_GET['startDate'],
+            'endDate'   => $_GET['endDate'],
+        );
+        
         $userDataResponse = $this->mdl_live_delivery->getLiveDeliveryStatData($getData,$start,$perpage,TRUE);
         $userdata         = $userDataResponse['filteredData'];
         $userdataCount    = count($userdata);
