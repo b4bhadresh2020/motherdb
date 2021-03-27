@@ -1,3 +1,33 @@
+<style>
+    .multiselect-dropdown .btn-group {
+        width: 100%;
+    }
+    .multiselect-dropdown .multiselect.dropdown-toggle {
+        width: 100%;
+        text-align: left;       
+    }
+    .multiselect-dropdown .multiselect.dropdown-toggle  .multiselect-selected-text {
+        max-width: 100%;
+        display: inline-block;
+        vertical-align: middle;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .multiselect-dropdown .multiselect.dropdown-toggle .caret {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%)
+    }
+    .multiselect-dropdown .multiselect-container {
+        width: 100%;
+        overflow-x: hidden;
+    }
+    .multiselect-dropdown .multiselect-container>li>a>label {
+        white-space: pre-line;
+    }
+</style>
 <?php 
 $countries = getCountry();
 ?>
