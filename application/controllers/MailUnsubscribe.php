@@ -50,6 +50,41 @@ class MailUnsubscribe extends CI_Controller
         $country = $this->input->post('country');
         $list = $this->input->post('list');
         $email = $this->input->post('email'); 
-        echo "true";
+        
+        if($provider == AWEBER){
+            $this->load->model('mdl_aweber_unsubscribe');
+            foreach ($list as $listID) {   
+                
+                // fetch mail provider data from providers table
+                $providerCondition   = array('id' => $listID);
+                $is_single           = true;
+                $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
+                
+                // SEND DATA FOR UNSUBSCRIBE
+                $response = $this->mdl_aweber_unsubscribe->makeUnsubscribe($email,$listID);
+
+                // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
+                if($response["result"] == "success"){
+                    $data = [
+                        "provider_id" => $listID,
+                        "email"       => $email,
+                        "name"        => $response["data"]["name"],
+                        "status"      => 1, // success
+                        "response"    => $response["data"]["updated_at"]
+                    ];
+                }else{
+                    $data = [
+                        "provider_id" => $listID,
+                        "email"       => $email,
+                        "name"        => NULL,
+                        "status"      => 2, // error
+                        "response"    => $response["msg"]
+                    ];
+                }
+                // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+
+            }
+        }
     }
 }
