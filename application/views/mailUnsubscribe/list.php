@@ -75,10 +75,10 @@ $countries = getCountry();
                                                         <select class="form-control" name="provider" id="provider">
                                                             <option value="0">Select Provider</option>                                                        
                                                             <option value="1">Aweber</option>                                                        
-                                                            <option value="2">Transmitvia</option>                                                        
+                                                            <!-- <option value="2">Transmitvia</option>                                                        
                                                             <option value="4">Ongage</option>                                                        
                                                             <option value="5">Sendgrid</option>                                                        
-                                                            <option value="6">Sendinblue</option>                                                        
+                                                            <option value="6">Sendinblue</option>  -->                                                       
                                                         </select>
                                                     </div>
                                             </div>
@@ -213,10 +213,10 @@ $countries = getCountry();
                                     <select class="form-control" name="provider" id="popupProvider">
                                         <option value="0">Select Provider</option>                                                        
                                         <option value="1">Aweber</option>                                                        
-                                        <option value="2">Transmitvia</option>                                                        
+                                        <!-- <option value="2">Transmitvia</option>                                                        
                                         <option value="4">Ongage</option>                                                        
                                         <option value="5">Sendgrid</option>                                                        
-                                        <option value="6">Sendinblue</option>                                                        
+                                        <option value="6">Sendinblue</option> -->                                                        
                                     </select>
                                 </div>
                             </div>
