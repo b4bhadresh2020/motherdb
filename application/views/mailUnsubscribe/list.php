@@ -119,7 +119,7 @@ $countries = getCountry();
                                             <div class="col-lg-2">
                                                 <div class="form-group">
                                                     <label>Email Id</label>
-                                                    <input class="form-control" type="text" id="email" name="email" value="<?php echo isset($email)?$email:''?>">
+                                                    <input class="form-control" type="text" name="email" value="<?php echo isset($email)?$email:''?>">
                                                 </div>  
                                             </div>
                                         </div>                                    
@@ -171,7 +171,7 @@ $countries = getCountry();
                                                 <td><?php echo $providerName; ?></td>
                                                 <td><?php echo $unsubscriber['country']; ?></td>
                                                 <td><?php echo $unsubscriber['listname']; ?></td>
-                                                <td><?php echo ($status == 1)?"Success":"Failed"; ?></td>
+                                                <td><?php echo ($unsubscriber['status'] == 1)?"Success":"Failed"; ?></td>
                                                 <td><?php echo $unsubscriber['response']; ?></td>
                                             </tr>
                                             <?php }} ?>
