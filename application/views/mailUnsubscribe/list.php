@@ -57,7 +57,7 @@ $countries = getCountry();
             </div>
             <!-- /# row -->
             <section id="main-content"> 
-                <form class="form-horizontal" method="post" action="<?php echo base_url('mailUnsubscribe/getUnsubscriberData/'); ?>">             
+                <form class="form-horizontal" method="get" action="<?php echo base_url('mailUnsubscribe/getUnsubscriberData/0'); ?>">             
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card alert">
@@ -96,14 +96,30 @@ $countries = getCountry();
                                             <div class="col-lg-2">
                                                 <div class="form-group">
                                                     <label>List Name *</label>
-                                                    <select class="form-control" name="list" id="list" required>
+                                                    <select class="form-control" name="list" id="list">
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-lg-2">
                                                 <div class="form-group">
                                                     <label>Date</label>
-                                                    <input class="form-control" type="date" id="deliveryDate" name="deliveryDate" value="<?php echo isset($deliveryDate)?$deliveryDate:date('Y-m-d');?>" required>
+                                                    <input class="form-control" type="date" id="deliveryDate" name="deliveryDate" value="<?php echo isset($deliveryDate)?$deliveryDate:''?>">
+                                                </div>  
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <div class="form-group">
+                                                    <label>Status</label>
+                                                    <select id="status" name="status" class="form-control">
+                                                        <option value="0">All</option>
+                                                        <option value="1" <?php echo isset($status) && ($status == 1) ? "selected":'' ?>>Success</option>
+                                                        <option value="2" <?php echo isset($status) && ($status == 2) ? "selected":'' ?>>Failed</option>
+                                                    </select>    
+                                                </div>  
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <div class="form-group">
+                                                    <label>Email Id</label>
+                                                    <input class="form-control" type="text" id="email" name="email" value="<?php echo isset($email)?$email:''?>">
                                                 </div>  
                                             </div>
                                         </div>                                    
@@ -125,9 +141,51 @@ $countries = getCountry();
                                 <h4>Unsubscriber User List</h4>
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
-                                        
+                                    <thead>
+                                            <tr class="table-header-font-small">
+                                                <th>#</th>
+                                                <th>Email</th>
+                                                <th>Unsubscribe Date</th>
+                                                <th>Provider</th>
+                                                <th>Country</th>
+                                                <th>List</th>
+                                                <th>Status</th>
+                                                <th>Response</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php 
+                                                if(isset($listArr) && count($listArr)){                     
+                                                    foreach ($listArr as $key => $unsubscriber) {
+                                                        $providerName = "";
+                                                        if($unsubscriber["provider"] == AWEBER){
+                                                            $providerName = "Aweber";
+                                                        }else if($unsubscriber["provider"] == ONGAGE){
+                                                            $providerName = "Ongage";
+                                                        }
+                                            ?>
+                                            <tr>
+                                                <td><?php echo $key + 1; ?></td>
+                                                <td><?php echo $unsubscriber['email']; ?></td>
+                                                <td><?php echo $unsubscriber['created_at']; ?></td>
+                                                <td><?php echo $providerName; ?></td>
+                                                <td><?php echo $unsubscriber['country']; ?></td>
+                                                <td><?php echo $unsubscriber['listname']; ?></td>
+                                                <td><?php echo ($status == 1)?"Success":"Failed"; ?></td>
+                                                <td><?php echo $unsubscriber['response']; ?></td>
+                                            </tr>
+                                            <?php }} ?>
+                                        </tbody>
                                     </table>
-                                </div>                               
+                                </div>  
+                                <div class="row">
+                                    <div class="col-lg-6 " style="padding-top: 25px;">
+                                        <div class="datatable_pageinfo"><?php echo @$pageinfo; ?></div>
+                                    </div>
+                                    <div class="col-lg-6 ">
+                                        <div class="paginate_links pull-right"><?php echo @$links; ?></div>
+                                    </div>
+                                </div>                             
                             </div>
                         </div>
                     </div>
@@ -145,7 +203,7 @@ $countries = getCountry();
                         <h5 style="margin-bottom: 20px;"><strong>Add Unsubscriber Information</strong></h5>
                         <div class="row">
                             <div class="col-lg-12">
-                                <div id="popupSucErrMsg"></div>
+                                <div id="popupSucErrMsg" class="alert btn-danger" role="alert" style="display: none;color:#ffffff"></div>
                             </div>
                         </div>
                         <div class="row">
@@ -176,7 +234,7 @@ $countries = getCountry();
                             <div class="col-lg-4">
                                 <div class="form-group multiselect-dropdown">
                                     <label style="width:100%">List Name *</label>
-                                    <select class="form-control" name="list[]" id="popupList" multiple="multiple" required>                                        
+                                    <select class="form-control" name="list[]" id="popupList" multiple="multiple">                                        
                                     </select>
                                 </div>
                             </div>                            
@@ -197,6 +255,32 @@ $countries = getCountry();
                         </div>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="responsePopup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <h5 style="margin-bottom: 20px;"><strong>Unsubscriber List Information</strong></h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h5 class="alert-success-label" style="margin-bottom: 20px;"><strong>Successfully Unsubscriber List</strong></h5>
+                        <div class="alert alert-success" role="alert"></div>
+                        <h5 class="alert-danger-label" style="margin-bottom: 20px;"><strong>Failed Unsubscriber List</strong></h5>
+                        <div class="alert alert-danger" role="alert"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

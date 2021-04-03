@@ -1,11 +1,16 @@
 <script type="text/javascript">
     var BASE_URL = "<?php echo base_url(); ?>";
     var selectedProvider = "<?php echo @$provider ?>";
+    var selectedcountry = "<?php echo @$country ?>";
     var selectedList     = "<?php echo @$list ?>";    
 
     if(selectedProvider !=""){
         $("#provider").val(selectedProvider);
-        listData(selectedProvider);
+    }
+
+    if(selectedcountry !=""){
+        $("#country").val(selectedcountry);
+        listData(selectedProvider,selectedcountry);
     }
 
     if(selectedList !=""){
@@ -97,13 +102,44 @@
     }
 
     $(document).on("click",".unsubscribe",function(){
-        $.ajax({
-            url : BASE_URL + 'mailUnsubscribe/unsubscribe',
-            type:"post",
-            data:$("#unsubscribeForm").serialize(),
-            success:function(response){
-                console.log("success");
-            }
-        });
+        if($("#popupProvider").val() == 0){
+            $("#popupSucErrMsg").html("Please select provider").show();
+        }else if($("#popupCountry").val() == ""){
+            $("#popupSucErrMsg").html("Please select country").show();
+        }else if($("#popupList :selected").length == 0){
+            $("#popupSucErrMsg").html("Please select list").show();
+        }else if($("#email").val() == ""){
+            $("#popupSucErrMsg").html("Please enter email address").show();
+        }else{
+            $(".unsubscribe").prop('disabled', true);
+            $.ajax({
+                url : BASE_URL + 'mailUnsubscribe/unsubscribe',
+                type:"post",
+                data:$("#unsubscribeForm").serialize(),
+                success:function(response){
+                    $("#popupSucErrMsg").html("").hide();
+                    $("#unsubscribeForm").trigger("reset");
+                    $("#popupList option").remove();
+                    $('#popupList').multiselect('rebuild');
+
+                    var data = JSON.parse(response);
+                    
+                    if(data.successList != ""){
+                        $(".alert-success").html(data.successList);
+                    }else{
+                        $(".alert-success-label,.alert-success").hide();
+                    }
+                    if(data.failList != ""){
+                        $(".alert-danger").html(data.failList);
+                    }else{
+                        $(".alert-danger-label,.alert-danger").hide();
+                    }
+
+                    $("#addUnsubscriber").modal('hide');
+                    $("#responsePopup").modal('show');
+
+                }
+            });
+        }
     });
 </script>
