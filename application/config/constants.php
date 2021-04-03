@@ -136,6 +136,7 @@ define("ONGAGE_DELAY_USER_DATA"			,	"ongage_delay_user_data");
 define("SENDGRID_DELAY_USER_DATA"		,	"sendgrid_delay_user_data");
 define("SENDINBLUE_DELAY_USER_DATA"		,	"sendinblue_delay_user_data");
 define("EMAIL_HISTORY_DATA"				,	"email_history_data");
+define("PROVIDER_UNSUBSCRIBER"			,	"provider_unsubscriber");
 
 
 //from other db

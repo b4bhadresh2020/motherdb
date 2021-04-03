@@ -119,7 +119,11 @@
                     <li class="<?php echo (@$load_page == 'liveDeliveryStat')?"active":"";?>" title = "Live Delivery Stat" ><a href="<?php echo base_url('liveDeliveryStat/manage');?>" class="color-green" ><i class="ti-announcement"></i> Live Delivery Stat </a></li>
                     <li class="<?php echo (@$load_page == 'liveDeliveryUndefinedApiKeyStat')?"active":"";?>" title = "Live Delivery Undefined APIkey Stat" ><a href="<?php echo base_url('liveDeliveryUndefinedApiKeyStat/manage');?>" <?php if($hours <= 24 && $hours >= 0){ echo 'class="color-red"'; }else{ echo 'class="color-green"'; } ?> ><i class="ti-announcement"></i> Live Delivery Undefined API Key Stat </a></li>
                     <li class="<?php echo (@$load_page == 'mailProviderStatistics')?"active":"";?>" title = "Live Provider Statistics" ><a href="<?php echo base_url('mailProviderStatistics');?>" class="color-green" ><i class="ti-announcement"></i> Live Provider Statistics </a></li>
+
+
+                    <li class="label">Email Unsubscribe</li>
                     
+                        <li class="<?php echo (@$load_page == 'mailUnsubscribe')?"active":"";?>" title = "Email Unsubscribe" ><a href="<?php echo base_url('mailUnsubscribe'); ?>" ><i class="ti-timer"></i> Email Unsubscribe </a></li>
 
                     <li class="label">Cronjob Status </li>
                         
