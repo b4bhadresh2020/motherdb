@@ -172,7 +172,7 @@ $countries = getCountry();
                                                 <td><?php echo $unsubscriber['country']; ?></td>
                                                 <td><?php echo $unsubscriber['listname']; ?></td>
                                                 <td><?php echo ($unsubscriber['status'] == 1)?"Success":"Failed"; ?></td>
-                                                <td><?php echo $unsubscriber['response']; ?></td>
+                                                <td><?php echo ($unsubscriber['status'] == 1)? "Unsubscriber at: ".date("Y-m-d H:i:s",strtotime($unsubscriber['response'])):$unsubscriber['response']; ?></td>
                                             </tr>
                                             <?php }} ?>
                                         </tbody>

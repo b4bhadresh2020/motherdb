@@ -31,6 +31,7 @@
         var country = $("#country").val();
         var provider = $(this).val();
         if(country && provider != 0){
+            $('#sucErrMsg').text("").hide();
             listData(provider,country);
         }
     }); 
@@ -39,6 +40,7 @@
         var country = $(this).val();
         var provider = $("#provider").val();
         if(country && provider != 0){
+            $('#sucErrMsg').text("").hide();
             listData(provider,country);
         }else if(provider == 0){
             $('#sucErrMsg').text('Please select provider').addClass('alert alert-danger');
@@ -54,11 +56,10 @@
             data:{ provider:provider,country:country},
             success:function(response){
                 var liveDiliveries = JSON.parse(response);
-
                 $("#list").html("<option value='0'> Select List Name </option>");
                 $.each(liveDiliveries,function(index,value){
                     $("#list").append("<option value='"+value.id+"'>"+value.listname+"</option>");
-                });
+                });                
             }
 
         });
@@ -92,7 +93,7 @@
                 var liveDiliveries = JSON.parse(response);
                 $.each(liveDiliveries,function(index,value){
                     $("#popupList").append("<option value='"+value.id+"'>"+value.listname+"</option>");
-                });
+                });                
                 $("#popupList").multiselect("destroy");
                 $('#popupList').multiselect({
                     includeSelectAllOption: true,
