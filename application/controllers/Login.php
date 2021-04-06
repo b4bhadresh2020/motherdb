@@ -10,8 +10,10 @@ class Login extends CI_Controller {
 
         parent::__construct();
 
-        if(is_logged()){
+        if(is_logged() && is_admin()){
             redirect("adminHome");
+        }else if(is_logged() && !is_admin()){
+            redirect("mailUnsubscribe");
         }
 
         $this->load->library('GoogleAuthenticator');
@@ -43,11 +45,16 @@ class Login extends CI_Controller {
             $logindata = array(
                 'adminId'    => $curAdminInfo['adminId'],
                 'adminUname' => $curAdminInfo['adminUname'],
-                'name'       => 'admin',
+                'name'       => $curAdminInfo['fullname'],
+                'role'       => $curAdminInfo['role']
             );
             
             $this->session->set_userdata($logindata);
-            redirect('adminHome');
+            if($curAdminInfo['role'] == 0){
+                redirect('adminHome');
+            }else{
+                redirect('mailUnsubscribe');
+            }
         }
         
         

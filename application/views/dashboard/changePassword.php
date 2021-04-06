@@ -53,7 +53,7 @@
                                                 }
                                             ?>
                                         </div>
-                                        <form method="post" action="<?php echo base_url('adminHome/changePassword');?>">
+                                        <form method="post" action="<?php echo base_url('changePassword');?>">
                                             
                                             <div class="form-group">
                                                 <p class="text-muted m-b-15 f-s-12">New Password</p>

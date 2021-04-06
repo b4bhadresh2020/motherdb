@@ -974,6 +974,14 @@ function is_logged() {
         return false;
 }
 
+function is_admin() {
+    $ci = & get_instance();
+    if ($ci->session->userdata('role') == 0)
+        return true;
+    else
+        return false;
+}
+
 function GetCurUserInfo() {
     $ci = & get_instance();
     $curUserId = $ci->session->userdata('adminId');

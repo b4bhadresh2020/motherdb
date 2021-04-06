@@ -8,8 +8,11 @@ class General_batch_stat extends CI_Controller
 	public function __construct() {
         parent::__construct();
 
-        if(!is_logged())
+        if(!is_logged()){
             redirect(base_url());
+        }else if(is_logged() && !is_admin()){
+            redirect("mailUnsubscribe");
+        }
 
         $this->load->model('mdl_general_batch_stat');
     }

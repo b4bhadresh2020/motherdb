@@ -9,8 +9,10 @@ class UserList extends CI_Controller
     {
         parent::__construct();
 
-        if (!is_logged()) {
+        if(!is_logged()){
             redirect(base_url());
+        }else if(is_logged() && !is_admin()){
+            redirect("mailUnsubscribe");
         }
 
         $this->load->model('user_list_model');

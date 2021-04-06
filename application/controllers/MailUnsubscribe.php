@@ -9,8 +9,9 @@ class MailUnsubscribe extends CI_Controller
     {
         parent::__construct();
 
-        if (!is_logged())
+        if(!is_logged()){
             redirect(base_url());
+        }
 
         $this->load->model('mdl_provider_unsubscriber');    
     }

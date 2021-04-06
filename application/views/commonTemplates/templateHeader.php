@@ -26,6 +26,7 @@
     <link href="<?php echo base_url();?>assets/css/jquery-confirm.min.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/css/bootstrap-multiselect.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/css/custom.css" rel="stylesheet">
+    <link href="<?php echo base_url();?>assets/css/alertify.css" rel="stylesheet">
     
 
     <!-- <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/fonts/fontawesome-webfont-fa.css" /> -->
@@ -45,14 +46,14 @@
 <body>
     <?php 
         $color_blue = '#245e79'; 
-        $color_green = '#3f5d18';
+        $color_green = '#3f5d18'; 
     ?>
     <div class="sidebar sidebar-hide-to-small sidebar-shrink sidebar-gestures">
         <div class="nano">
             <div class="nano-content">
                 <ul>
                     
-
+                    <?php if(is_admin()) { ?>
                     <li class="label">Main</li>
                     <li class="<?php echo (@$load_page == 'dashboard')?"active":"";?>" title = "dashboard"><a href="<?php echo base_url('adminHome');?>"><i class="ti-home"></i> Dashboard </a>
                     </li>
@@ -62,6 +63,8 @@
                     <li class="<?php echo (@$load_page == 'user')?"active":"";?>" title = "Upload User CSV" ><a href="<?php echo base_url('user/manage');?>" ><i class="ti-files"></i> Upload User CSV </a> </li>
 
                     <li class="<?php echo (@$load_page == 'userlist')?"active":"";?>" title = "User List" ><a href="<?php echo base_url('userList/manage');?>"><i class="ti-user" ></i>User List </a> </li> 
+
+                    <li class="<?php echo (@$load_page == 'employee')?"active":"";?>" title = "Employee" ><a href="<?php echo base_url('employee/manage');?>"><i class="ti-user" ></i>Employee List </a> </li> 
 
                     <li class="label">Enrichment</li>
                    
@@ -115,16 +118,18 @@
 
                     <li class="label">Live Delivery Section</li>
                    
-                    <li class="<?php echo (@$load_page == 'liveDelivery')?"active":"";?>" title = "Live Delivery" ><a href="<?php echo base_url('liveDelivery/manage');?>" ><i class="ti-announcement"></i> Live Delivery </a></li>
-                    <li class="<?php echo (@$load_page == 'liveDeliveryStat')?"active":"";?>" title = "Live Delivery Stat" ><a href="<?php echo base_url('liveDeliveryStat/manage');?>" class="color-green" ><i class="ti-announcement"></i> Live Delivery Stat </a></li>
-                    <li class="<?php echo (@$load_page == 'liveDeliveryUndefinedApiKeyStat')?"active":"";?>" title = "Live Delivery Undefined APIkey Stat" ><a href="<?php echo base_url('liveDeliveryUndefinedApiKeyStat/manage');?>" <?php if($hours <= 24 && $hours >= 0){ echo 'class="color-red"'; }else{ echo 'class="color-green"'; } ?> ><i class="ti-announcement"></i> Live Delivery Undefined API Key Stat </a></li>
-                    <li class="<?php echo (@$load_page == 'mailProviderStatistics')?"active":"";?>" title = "Live Provider Statistics" ><a href="<?php echo base_url('mailProviderStatistics');?>" class="color-green" ><i class="ti-announcement"></i> Live Provider Statistics </a></li>
+                        <li class="<?php echo (@$load_page == 'liveDelivery')?"active":"";?>" title = "Live Delivery" ><a href="<?php echo base_url('liveDelivery/manage');?>" ><i class="ti-announcement"></i> Live Delivery </a></li>
+                        <li class="<?php echo (@$load_page == 'liveDeliveryStat')?"active":"";?>" title = "Live Delivery Stat" ><a href="<?php echo base_url('liveDeliveryStat/manage');?>" class="color-green" ><i class="ti-announcement"></i> Live Delivery Stat </a></li>
+                        <li class="<?php echo (@$load_page == 'liveDeliveryUndefinedApiKeyStat')?"active":"";?>" title = "Live Delivery Undefined APIkey Stat" ><a href="<?php echo base_url('liveDeliveryUndefinedApiKeyStat/manage');?>" <?php if($hours <= 24 && $hours >= 0){ echo 'class="color-red"'; }else{ echo 'class="color-green"'; } ?> ><i class="ti-announcement"></i> Live Delivery Undefined API Key Stat </a></li>
+                        <li class="<?php echo (@$load_page == 'mailProviderStatistics')?"active":"";?>" title = "Live Provider Statistics" ><a href="<?php echo base_url('mailProviderStatistics');?>" class="color-green" ><i class="ti-announcement"></i> Live Provider Statistics </a></li>
 
-
+                    <?php } ?>
+                    
                     <li class="label">Email Unsubscribe</li>
                     
                         <li class="<?php echo (@$load_page == 'mailUnsubscribe')?"active":"";?>" title = "Email Unsubscribe" ><a href="<?php echo base_url('mailUnsubscribe'); ?>" ><i class="ti-timer"></i> Email Unsubscribe </a></li>
-
+                    
+                    <?php if(is_admin()) { ?>
                     <li class="label">Cronjob Status </li>
                         
                         <li class="<?php echo (@$load_page == 'cronStat')?"active":"";?>" title = "Cron Status" ><a href="<?php echo base_url('cronjobStat/manage'); ?>" ><i class="ti-timer"></i> User Cronjob </a></li>
@@ -183,6 +188,7 @@
 
                     <li class="label">System</li>
                     <li title="Logout"><a href="<?php echo base_url('adminHome/logout');?>"><i class="ti-power-off"></i> Logout</a></li>
+                    <?php } ?>
                 </ul>
             </div>
         </div>
@@ -214,9 +220,11 @@
                         
                         <div class="dropdown-content-body">
                             <ul>
-                                <li><a href="<?php echo base_url('adminHome/changePassword');?>"><i class="ti-lock"></i> <span>Change Password</span></a></li>
+                                <li><a href="<?php echo base_url('changePassword');?>"><i class="ti-lock"></i> <span>Change Password</span></a></li>
+                                <?php if(is_admin()){ ?>
                                 <li><a href="<?php echo base_url('siteConfig');?>"><i class="ti-settings"></i> <span>Setting</span></a></li>
-                                <li><a href="<?php echo base_url('adminHome/logout');?>"><i class="ti-power-off"></i> <span>Logout</span></a></li>
+                                <?php } ?>
+                                <li><a href="<?php echo base_url('logout');?>"><i class="ti-power-off"></i> <span>Logout</span></a></li>
                             </ul>
                         </div>
                     </div>

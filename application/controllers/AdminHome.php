@@ -10,6 +10,8 @@ class AdminHome extends CI_Controller
         parent::__construct();
         if (!is_logged()) {
             redirect(base_url());
+        }else if(is_logged() && !is_admin()){
+            redirect("mailUnsubscribe");
         }
 
         $this->load->model('mdl_batchstat');
@@ -141,8 +143,6 @@ class AdminHome extends CI_Controller
 
         return $returnArrCountry;
     }
-
-
 
     public function CountryWise()
     {
@@ -282,23 +282,5 @@ class AdminHome extends CI_Controller
             echo 0;
         }
     }
-    /*
-     *  logout code starts here
-     */
-
-    public function logout()
-    {
-        $user_data = $this->session->all_userdata();
-        foreach ($user_data as $key => $value) {
-            if ($key != 'session_id' && $key != 'ip_address' && $key != 'user_agent' && $key != 'last_activity') {
-                $this->session->unset_userdata($key);
-            }
-        }
-        $this->session->sess_destroy();
-        redirect('login');
-    }
-
-    /*
- *  logout code ends here
- */
+    
 }
