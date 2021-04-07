@@ -69,7 +69,7 @@ class MailUnsubscribe extends CI_Controller
         $condition = array("provider" => $provider);
         $is_in = array("country" => $country);
         $is_single = FALSE;
-        $liveDeliveries = GetAllRecordIn(PROVIDERS, $condition, $is_single, array(), array(), array(),$is_in,'id,listname');
+        $liveDeliveries = GetAllRecordIn(PROVIDERS, $condition, $is_single, array(), array(), array(),$is_in,'id,listname,displayname');
         echo json_encode($liveDeliveries);
     }
 

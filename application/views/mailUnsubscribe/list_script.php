@@ -58,7 +58,7 @@
                 var liveDiliveries = JSON.parse(response);
                 $("#list").html("<option value='0'> Select List Name </option>");
                 $.each(liveDiliveries,function(index,value){
-                    $("#list").append("<option value='"+value.id+"'>"+value.listname+"</option>");
+                    $("#list").append("<option value='"+value.id+"'>"+value.displayname+"</option>");
                 });                
             }
 
@@ -92,7 +92,7 @@
             success:function(response){
                 var liveDiliveries = JSON.parse(response);
                 $.each(liveDiliveries,function(index,value){
-                    $("#popupList").append("<option value='"+value.id+"'>"+value.listname+"</option>");
+                    $("#popupList").append("<option value='"+value.id+"'>"+value.displayname+"</option>");
                 });                
                 $("#popupList").multiselect("destroy");
                 $('#popupList').multiselect({

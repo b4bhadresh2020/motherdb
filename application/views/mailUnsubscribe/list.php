@@ -26,11 +26,10 @@
     }
     .multiselect-dropdown .multiselect-container>li>a>label {
         white-space: pre-line;
+        word-break: break-all;
     }
 </style>
-<?php 
-$countries = getCountry();
-?>
+
 <div class="content-wrap">
     <div class="main">
         <div class="container-fluid">
@@ -87,9 +86,13 @@ $countries = getCountry();
                                                     <label>Country *</label>
                                                     <select id="country" name="country" class="form-control">
                                                         <option value="">Select Country</option>
-                                                        <?php foreach ($countries as $ctry) { ?>
-                                                            <option value="<?php echo $ctry['country']; ?>"><?php echo $ctry['country']; ?></option>
-                                                        <?php } ?>
+                                                        <option value="DK">DK</option>
+                                                        <option value="SE">SE</option>
+                                                        <option value="NOR">NOR</option>
+                                                        <option value="FI">FI</option>
+                                                        <option value="CA">CA</option>
+                                                        <option value="NL">NL</option>
+                                                        <option value="NZ">NZ</option>
                                                     </select>
                                                 </div>
                                             </div>                                            
@@ -170,7 +173,7 @@ $countries = getCountry();
                                                 <td><?php echo $unsubscriber['created_at']; ?></td>
                                                 <td><?php echo $providerName; ?></td>
                                                 <td><?php echo $unsubscriber['country']; ?></td>
-                                                <td><?php echo $unsubscriber['listname']; ?></td>
+                                                <td><?php echo $unsubscriber['displayname']; ?></td>
                                                 <td><?php echo ($unsubscriber['status'] == 1)?"Success":"Failed"; ?></td>
                                                 <td><?php echo ($unsubscriber['status'] == 1)? "Unsubscriber at: ".date("Y-m-d H:i:s",strtotime($unsubscriber['response'])):$unsubscriber['response']; ?></td>
                                             </tr>
@@ -220,18 +223,22 @@ $countries = getCountry();
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Country *</label>
                                     <select id="popupCountry" name="country" class="form-control">
                                         <option value="">Select Country</option>
-                                        <?php foreach ($countries as $ctry) { ?>
-                                            <option value="<?php echo $ctry['country']; ?>"><?php echo $ctry['country']; ?></option>
-                                        <?php } ?>
+                                        <option value="DK">DK</option>
+                                        <option value="SE">SE</option>
+                                        <option value="NOR">NOR</option>
+                                        <option value="FI">FI</option>
+                                        <option value="CA">CA</option>
+                                        <option value="NL">NL</option>
+                                        <option value="NZ">NZ</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-5">
                                 <div class="form-group multiselect-dropdown">
                                     <label style="width:100%">List Name *</label>
                                     <select class="form-control" name="list[]" id="popupList" multiple="multiple">                                        
