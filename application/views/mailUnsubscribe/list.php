@@ -201,6 +201,7 @@
     <div class="modal-dialog msg-delete-box" role="document" style="width: 40%;">
         <div class="modal-content">
             <div class="modal-body">
+            <div class="page-loader"><div class="loader"></div></div>
                 <form id="unsubscribeForm" name="unsubscribeForm" method="post" action="#">                
                     <div class="x_panel" style="border: none;">
                         <h5 style="margin-bottom: 20px;"><strong>Add Unsubscriber Information</strong></h5>

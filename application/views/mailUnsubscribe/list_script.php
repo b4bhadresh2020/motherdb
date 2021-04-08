@@ -113,11 +113,13 @@
             $("#popupSucErrMsg").html("Please enter email address").show();
         }else{
             $(".unsubscribe").prop('disabled', true);
+            $(".page-loader").show();
             $.ajax({
                 url : BASE_URL + 'mailUnsubscribe/unsubscribe',
                 type:"post",
                 data:$("#unsubscribeForm").serialize(),
                 success:function(response){
+                    $(".page-loader").hide();
                     $("#popupSucErrMsg").html("").hide();
                     $("#unsubscribeForm").trigger("reset");
                     $("#popupList option").remove();
