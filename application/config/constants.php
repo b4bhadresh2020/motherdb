@@ -175,6 +175,11 @@ define('ONGAGE_ACCOUNTS', 'ongage_accounts');
 define('TELIA_DOMAIN', 'telia.com');
 define('LUUKKU_DOMAIN', 'luukku.com');
 
+define('PP_DOMAIN', 'pp.inet.fi');
+define('PP2_DOMAIN', 'pp2.inet.fi');
+define('PP5_DOMAIN', 'pp5.inet.fi');
+define('PP9_DOMAIN', 'pp9.inet.fi');
+
 
 /*
  * 	 -> google 2 factor, dont change it if you dont have proper reason
