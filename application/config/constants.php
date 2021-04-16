@@ -149,8 +149,8 @@ define('AWEBER_API_PATH'	, 'https://api.aweber.com/1.0/');
 define('AWEBER_OAUTH_URL'	, 'https://auth.aweber.com/oauth2/');
 define('AWEBER_TOKEN_URL'	, 'https://auth.aweber.com/oauth2/token');
 
-define('AWEBER_CLIENT_ID'	, 'aiksK3SFkAuxpzMZcG05l2CXO3ENKZWs');
-define('AWEBER_CLIENT_SECRET', 'axo2r1Tk6jC4DyRr4vA0RYLsAOGTHrgs');
+define('AWEBER_CLIENT_ID'	, 'HoK3UZHUYHg9D6jPPkKa0noJTYCbJ4Hs');
+define('AWEBER_CLIENT_SECRET', '3kTNs5HT8CE7PemGAHENrDvnak6rOHWc');
 
 // Enter your Constant Contact APIKEY and ACCESS_TOKEN
 define("CONSTANT_CONTACT_APIKEY", "7a8gcmnmtnzdtgjmaakupvzm");
