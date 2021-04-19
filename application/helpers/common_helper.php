@@ -654,7 +654,8 @@ function getProviderName($providerId){
         '2' => 'Transmitvia',
         '4' => 'Ongage',
         '5' => 'Sendgrid',
-        '6' => 'Sendinblue'
+        '6' => 'Sendinblue',
+        '7' => 'Sendpulse'
     );
     return $providerNames[$providerId];
 }
@@ -755,6 +756,15 @@ function getSendInBlueProviderListName($providerListId){
         "4" => "SE"
     );
     return $sendInBlueList[$providerListId];
+}
+
+function getSendPulseProviderListName($providerListId){
+    $sendPulseList = array(
+        "1" => "NO",
+        "2" => "CA",
+        "3" => "SE"
+    );
+    return $sendPulseList[$providerListId];
 }
 
 function getLiveRepostAweverProviderID($providerListId){

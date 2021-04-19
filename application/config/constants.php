@@ -167,6 +167,7 @@ define('CONSTANTCONTACT', '3');
 define('ONGAGE', '4');
 define('SENDGRID', '5');
 define('SENDINBLUE', '6');
+define('SENDPULSE', '7');
 define('PROVIDERS', 'providers');
 define('AWEBER_ACCOUNTS', 'aweber_accounts');
 define('ONGAGE_ACCOUNTS', 'ongage_accounts');
