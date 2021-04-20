@@ -485,7 +485,11 @@
             providerList +="<option value='2'>CA</option>";
             providerList +="<option value='3'>NZ</option>";
             providerList +="<option value='4'>SE</option>";
-        }else{
+        } else if(providerId == 7){
+            providerList +="<option value='1'>NO</option>";
+            providerList +="<option value='2'>CA</option>";
+            providerList +="<option value='3'>SE</option>";
+        } else{
             providerList +="<option value='0'>Select Provider List</option>";
         }
 

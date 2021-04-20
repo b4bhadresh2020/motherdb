@@ -459,31 +459,8 @@ class Live_delivery_api extends CI_Controller
         echo json_encode($response);
     }
 
-    public function addToLiveDeliveryDataTable($sucFailMsgIndex = 0, $isFail = 0, $isEmailChecked = 0)
-    {     
-        $getData = array(
-            'apikey' => '4a6165536a556544704d6f4c637032587247476334513d3d',
-            'emailId' => 'khushi@gmail.com',
-            'firstName' => 'khushi',
-            'lastName' => 'patel',
-            'phone' => '1234567890',
-            'gender' => 'male',
-            'address' => 'surat',
-            'postCode' => 'post352140code',
-            'city' => 'surat',
-            'birthdateDay' => 12,
-            'birthdateMonth' => 12,
-            'birthdateYear' => 1999,
-            'age' => 'age',
-            'ip' => 'ip',
-            'optinurl' => 'optinurl',
-            'optindate' => 'optindate',
-            'tag' => 'tag'
-        );
-        $condition           = array('apikey' => '4a6165536a556544704d6f4c637032587247476334513d3d');
-        $is_single           = true;
-        $getLiveDeliveryData = GetAllRecord(LIVE_DELIVERY, $condition, $is_single);
-       
+    public function addToLiveDeliveryDataTable($getData, $getLiveDeliveryData, $sucFailMsgIndex, $isFail, $isEmailChecked)
+    {    
         //add in live delivery data database
         $condition = array();
         $is_insert = true;
@@ -586,7 +563,7 @@ class Live_delivery_api extends CI_Controller
                     }else if($isDuplicate == 0 && ($sucFailMsgIndex == 0 || $sucFailMsgIndex == 1)){
                         $sendToMailProvider = 1;
                     }
-                    $sendToMailProvider = 1;
+                    
                     // send data to aweber if user is successfully added or duplicate
                     if ($sendToMailProvider == 1) {
 
@@ -725,19 +702,19 @@ class Live_delivery_api extends CI_Controller
                                 $lastDeliveryData['birthDate'] = date('Y-m-d', strtotime($birthDate));
                             } 
                             $this->load->model('mdl_sendpulse');
-                            // LOGIC FOR SEND DATA TO SENDGRID OR QUEUE                            
+                            // LOGIC FOR SEND DATA TO SENDPULSE OR QUEUE                            
                             //$delayDay = $delays[$mailProvider];
                             $delayDay = 0;
                             $provider = SENDPULSE;
                             if($delayDay == 0){
-                                // NO DELAY INSTANT SEND DATA TO SENDGRID
+                                // NO DELAY INSTANT SEND DATA TO SENDPULSE
                                 $response = $this->mdl_sendpulse->AddEmailToSendpulseSubscriberList($lastDeliveryData,$mailProvider);
-                                die;
+                               
                                 // ADD RECORD IN HISTORY
                                 addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
                             }else{
                                 // ADD DATA IN QUEUE FOR DELAY SENDING
-                                addToSendgridSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
+                                addToSendpulseSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
                                 // ADD RECORD IN HISTORY
                                 $response = null;
                                 addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
