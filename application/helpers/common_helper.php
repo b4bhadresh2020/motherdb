@@ -685,14 +685,11 @@ function getAweverProviderListName($providerListId){
         '22' => 'New_velkomstgaven_dk',
         '23' => 'New_velkomstgaven_com',
         '24' => 'New_velkomstgaven1_com',
-        '25' => 'New_unelmalaina',
-        '26' => 'NO - Sendpulse',
-        '27' => 'CA - Sendpulse',
-        '28' => 'SE - Sendpulse',
-        '29' => 'Freecasinodeal/NZ (olivia)',
-        '30' => 'Freecasinodeal/CA (sofia)',
-        '31' => 'Freecasinodeal/NO (emma)',
-        '32' => 'Freecasinodeal/FI (aida)',
+        '25' => 'New_unelmalaina',        
+        '26' => 'Freecasinodeal/NZ (olivia)',
+        '27' => 'Freecasinodeal/CA (sofia)',
+        '28' => 'Freecasinodeal/NO (emma)',
+        '29' => 'Freecasinodeal/FI (aida)',
     );
     return $aweberList[$providerListId];
 }
@@ -791,13 +788,10 @@ function getLiveRepostAweverProviderID($providerListId){
         "23" => "80", // New_velkomstgaven_com
         "24" => "81", // New_velkomstgaven1_com
         "25" => "82", // New_unelmalaina
-        "26" => "83", // NO-Sendpulse
-        "27" => "84", // CA-Sendpulse
-        "28" => "85", // SE-Sendpulse
-        "29" => "86", // Freecasinodeal/NZ/olivia
-        "30" => "87", // Freecasinodeal/CA/sofia
-        "31" => "88", // Freecasinodeal/NO/emma
-        "32" => "89", // Freecasinodeal/FI/aida
+        "26" => "86", // Freecasinodeal/NZ/olivia
+        "27" => "87", // Freecasinodeal/CA/sofia
+        "28" => "88", // Freecasinodeal/NO/emma
+        "29" => "89", // Freecasinodeal/FI/aida
     );
     return $provider[$providerListId];
 }
