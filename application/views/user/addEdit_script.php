@@ -439,6 +439,14 @@
             providerList +="<option value='23'>New_velkomstgaven_com</option>";
             providerList +="<option value='24'>New_velkomstgaven1_com</option>";
             providerList +="<option value='25'>New_unelmalaina</option>";
+            providerList +="<option value='26'>NO - Sendpulse</option>";
+            providerList +="<option value='27'>CA - Sendpulse</option>";
+            providerList +="<option value='28'>SE - Sendpulse</option>";
+            providerList +="<option value='29'>Freecasinodeal/NZ (olivia)</option>";
+            providerList +="<option value='30'>Freecasinodeal/CA (sofia)</option>";
+            providerList +="<option value='31'>Freecasinodeal/NO (emma)</option>";
+            providerList +="<option value='32'>Freecasinodeal/FI (aida)</option>";
+
         }else if(providerId == 2){
             providerList +="<option value='1'>NO - deveroper</option>";
             providerList +="<option value='2'>SE - deveroper - Loan</option>";
