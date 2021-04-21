@@ -72,6 +72,11 @@
                 providerList +="<option value='23'>New_velkomstgaven_com</option>";
                 providerList +="<option value='24'>New_velkomstgaven1_com</option>";
                 providerList +="<option value='25'>New_unelmalaina</option>";
+                providerList +="<option value='26'>Freecasinodeal/NZ (olivia)</option>";
+                providerList +="<option value='27'>Freecasinodeal/CA (sofia)</option>";
+                providerList +="<option value='28'>Freecasinodeal/NO (emma)</option>";
+                providerList +="<option value='29'>Freecasinodeal/FI (aida)</option>";
+
             }else if(providerId == 2){
                 providerList +="<option value='1'>NO - deveroper</option>";
                 providerList +="<option value='2'>SE - deveroper - Loan</option>";

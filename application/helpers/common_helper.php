@@ -685,7 +685,11 @@ function getAweverProviderListName($providerListId){
         '22' => 'New_velkomstgaven_dk',
         '23' => 'New_velkomstgaven_com',
         '24' => 'New_velkomstgaven1_com',
-        '25' => 'New_unelmalaina'
+        '25' => 'New_unelmalaina',        
+        '26' => 'Freecasinodeal/NZ (olivia)',
+        '27' => 'Freecasinodeal/CA (sofia)',
+        '28' => 'Freecasinodeal/NO (emma)',
+        '29' => 'Freecasinodeal/FI (aida)',
     );
     return $aweberList[$providerListId];
 }
@@ -784,6 +788,10 @@ function getLiveRepostAweverProviderID($providerListId){
         "23" => "80", // New_velkomstgaven_com
         "24" => "81", // New_velkomstgaven1_com
         "25" => "82", // New_unelmalaina
+        "26" => "86", // Freecasinodeal/NZ/olivia
+        "27" => "87", // Freecasinodeal/CA/sofia
+        "28" => "88", // Freecasinodeal/NO/emma
+        "29" => "89", // Freecasinodeal/FI/aida
     );
     return $provider[$providerListId];
 }
