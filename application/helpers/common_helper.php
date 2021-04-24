@@ -690,6 +690,17 @@ function getAweverProviderListName($providerListId){
         '27' => 'Freecasinodeal/CA (sofia)',
         '28' => 'Freecasinodeal/NO (emma)',
         '29' => 'Freecasinodeal/FI (aida)',
+        '30' => 'Frejasmail1/SE',
+        '31' => 'Frejasmail2/SE',
+        '32' => 'Signesmail1/DK',
+        '33' => 'Katariinasmail1/FI',
+        '34' => 'Signesmail1/NO',
+        '35' => 'Signesmail2/NO',
+        '36' => 'Abbiesmail1/CA',
+        '37' => 'Abbiesmail2/CA',
+        '38' => 'Ashleysmail/NZ',
+        '39' => 'Ashleysmail1/NZ',
+
     );
     return $aweberList[$providerListId];
 }
@@ -792,6 +803,16 @@ function getLiveRepostAweverProviderID($providerListId){
         "27" => "87", // Freecasinodeal/CA/sofia
         "28" => "88", // Freecasinodeal/NO/emma
         "29" => "89", // Freecasinodeal/FI/aida
+        "30" => "90", // Frejasmail1/SE  
+        "31" => "91", // Frejasmail2/SE   
+        "32" => "92", // Signesmail1/DK   
+        "33" => "93", // Katariinasmail1/FI   
+        "34" => "94", // Signesmail1/NO   
+        "35" => "95", // Signesmail2/NO  
+        "36" => "96", // Abbiesmail1/CA   
+        "37" => "97", // Abbiesmail2/CA  
+        "38" => "98", // Ashleysmail/NZ   
+        "39" => "99", // Ashleysmail1/NZ 
     );
     return $provider[$providerListId];
 }

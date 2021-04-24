@@ -443,6 +443,16 @@
             providerList +="<option value='27'>Freecasinodeal/CA (sofia)</option>";
             providerList +="<option value='28'>Freecasinodeal/NO (emma)</option>";
             providerList +="<option value='29'>Freecasinodeal/FI (aida)</option>";
+            providerList +="<option value='30'>Frejasmail1/SE</option>";
+            providerList +="<option value='31'>Frejasmail2/SE</option>";
+            providerList +="<option value='32'>Signesmail1/DK</option>";
+            providerList +="<option value='33'>Katariinasmail1/FI</option>";
+            providerList +="<option value='34'>Signesmail1/NO</option>";
+            providerList +="<option value='35'>Signesmail2/NO</option>";
+            providerList +="<option value='36'>Abbiesmail1/CA</option>";
+            providerList +="<option value='37'>Abbiesmail2/CA</option>";
+            providerList +="<option value='38'>Ashleysmail/NZ</option>";
+            providerList +="<option value='39'>Ashleysmail1/NZ</option>";
 
         }else if(providerId == 2){
             providerList +="<option value='1'>NO - deveroper</option>";

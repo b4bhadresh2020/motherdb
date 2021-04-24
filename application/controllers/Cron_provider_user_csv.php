@@ -230,6 +230,16 @@ class Cron_provider_user_csv extends CI_Controller
             "27" => "87", // Freecasinodeal/CA/sofia
             "28" => "88", // Freecasinodeal/NO/emma
             "29" => "89", // Freecasinodeal/FI/aida
+            "30" => "90", // Frejasmail1/SE  
+            "31" => "91", // Frejasmail2/SE   
+            "32" => "92", // Signesmail1/DK   
+            "33" => "93", // Katariinasmail1/FI   
+            "34" => "94", // Signesmail1/NO   
+            "35" => "95", // Signesmail2/NO  
+            "36" => "96", // Abbiesmail1/CA   
+            "37" => "97", // Abbiesmail2/CA  
+            "38" => "98", // Ashleysmail/NZ   
+            "39" => "99", // Ashleysmail1/NZ  
         );
         return $provider[$providerId];
     
