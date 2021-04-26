@@ -453,7 +453,20 @@
             providerList +="<option value='37'>Abbiesmail2/CA</option>";
             providerList +="<option value='38'>Ashleysmail/NZ</option>";
             providerList +="<option value='39'>Ashleysmail1/NZ</option>";
-
+            providerList +="<option value='40'>Signesmail/DK</option>";
+            providerList +="<option value='41'>Velkomstgaven/NO</option>";
+            providerList +="<option value='42'>Velkomstgaven1/NO</option>";
+            providerList +="<option value='43'>Gratispresent/SE</option>";
+            providerList +="<option value='44'>Gratispresent1/SE</option>";
+            providerList +="<option value='45'>FelinaFinans/SE</option>";
+            providerList +="<option value='46'>FelinaFinans1/SE</option>";
+            providerList +="<option value='47'>FelinaFinansmail/SE</option>";
+            providerList +="<option value='48'>Unelmalaina/FI</option>";
+            providerList +="<option value='49'>Unelmalaina1/FI</option>";
+            providerList +="<option value='50'>Velkomstgaven/DK</option>";
+            providerList +="<option value='51'>Velkomstgaven1/DK</option>";
+            providerList +="<option value='52'>Getspinn1/CA</option>";
+            providerList +="<option value='53'>Getspinnmail/CA</option>";
         }else if(providerId == 2){
             providerList +="<option value='1'>NO - deveroper</option>";
             providerList +="<option value='2'>SE - deveroper - Loan</option>";

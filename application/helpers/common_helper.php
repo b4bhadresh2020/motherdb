@@ -700,7 +700,20 @@ function getAweverProviderListName($providerListId){
         '37' => 'Abbiesmail2/CA',
         '38' => 'Ashleysmail/NZ',
         '39' => 'Ashleysmail1/NZ',
-
+        '40' => 'Signesmail/DK',
+        '41' => 'Velkomstgaven/NO',
+        '42' => 'Velkomstgaven1/NO',
+        '43' => 'Gratispresent/SE',
+        '44' => 'Gratispresent1/SE',
+        '45' => 'FelinaFinans/SE',
+        '46' => 'FelinaFinans1/SE',
+        '47' => 'FelinaFinansmail/SE',
+        '48' => 'Unelmalaina/FI',
+        '49' => 'Unelmalaina1/FI',
+        '50' => 'Velkomstgaven/DK',
+        '51' => 'Velkomstgaven1/DK',
+        '52' => 'Getspinn1/CA',
+        '53' => 'Getspinnmail/CA',
     );
     return $aweberList[$providerListId];
 }
