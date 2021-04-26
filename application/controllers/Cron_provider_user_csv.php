@@ -226,6 +226,34 @@ class Cron_provider_user_csv extends CI_Controller
             "23" => "80", // New_velkomstgaven_com
             "24" => "81", // New_velkomstgaven1_com
             "25" => "82", // New_unelmalaina
+            "26" => "86", // Freecasinodeal/NZ/olivia
+            "27" => "87", // Freecasinodeal/CA/sofia
+            "28" => "88", // Freecasinodeal/NO/emma
+            "29" => "89", // Freecasinodeal/FI/aida
+            "30" => "90", // Frejasmail1/SE  
+            "31" => "91", // Frejasmail2/SE   
+            "32" => "92", // Signesmail1/DK   
+            "33" => "93", // Katariinasmail1/FI   
+            "34" => "94", // Signesmail1/NO   
+            "35" => "95", // Signesmail2/NO  
+            "36" => "96", // Abbiesmail1/CA   
+            "37" => "97", // Abbiesmail2/CA  
+            "38" => "98", // Ashleysmail/NZ   
+            "39" => "99", // Ashleysmail1/NZ  
+            "40" => "100", // Signesmail/DK
+            "41" => "101", // Velkomstgaven/NO
+            "42" => "102", // Velkomstgaven1/NO
+            "43" => "103", // Gratispresent/SE
+            "44" => "104", // Gratispresent1/SE
+            "45" => "105", // FelinaFinans/SE
+            "46" => "106", // FelinaFinans1/SE
+            "47" => "107", // FelinaFinansmail/SE
+            "48" => "108", // Unelmalaina/FI
+            "49" => "109", // Unelmalaina1/FI
+            "50" => "110", // Velkomstgaven/DK
+            "51" => "111", // Velkomstgaven1/DK
+            "52" => "112", // Getspinn1/CA
+            "53" => "113", // Getspinnmail/CA
         );
         return $provider[$providerId];
     

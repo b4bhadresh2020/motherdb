@@ -686,7 +686,35 @@ function getAweverProviderListName($providerListId){
         '22' => 'New_velkomstgaven_dk',
         '23' => 'New_velkomstgaven_com',
         '24' => 'New_velkomstgaven1_com',
-        '25' => 'New_unelmalaina'
+        '25' => 'New_unelmalaina',        
+        '26' => 'Freecasinodeal/NZ (olivia)',
+        '27' => 'Freecasinodeal/CA (sofia)',
+        '28' => 'Freecasinodeal/NO (emma)',
+        '29' => 'Freecasinodeal/FI (aida)',
+        '30' => 'Frejasmail1/SE',
+        '31' => 'Frejasmail2/SE',
+        '32' => 'Signesmail1/DK',
+        '33' => 'Katariinasmail1/FI',
+        '34' => 'Signesmail1/NO',
+        '35' => 'Signesmail2/NO',
+        '36' => 'Abbiesmail1/CA',
+        '37' => 'Abbiesmail2/CA',
+        '38' => 'Ashleysmail/NZ',
+        '39' => 'Ashleysmail1/NZ',
+        '40' => 'Signesmail/DK',
+        '41' => 'Velkomstgaven/NO',
+        '42' => 'Velkomstgaven1/NO',
+        '43' => 'Gratispresent/SE',
+        '44' => 'Gratispresent1/SE',
+        '45' => 'FelinaFinans/SE',
+        '46' => 'FelinaFinans1/SE',
+        '47' => 'FelinaFinansmail/SE',
+        '48' => 'Unelmalaina/FI',
+        '49' => 'Unelmalaina1/FI',
+        '50' => 'Velkomstgaven/DK',
+        '51' => 'Velkomstgaven1/DK',
+        '52' => 'Getspinn1/CA',
+        '53' => 'Getspinnmail/CA',
     );
     return $aweberList[$providerListId];
 }
@@ -794,6 +822,20 @@ function getLiveRepostAweverProviderID($providerListId){
         "23" => "80", // New_velkomstgaven_com
         "24" => "81", // New_velkomstgaven1_com
         "25" => "82", // New_unelmalaina
+        "26" => "86", // Freecasinodeal/NZ/olivia
+        "27" => "87", // Freecasinodeal/CA/sofia
+        "28" => "88", // Freecasinodeal/NO/emma
+        "29" => "89", // Freecasinodeal/FI/aida
+        "30" => "90", // Frejasmail1/SE  
+        "31" => "91", // Frejasmail2/SE   
+        "32" => "92", // Signesmail1/DK   
+        "33" => "93", // Katariinasmail1/FI   
+        "34" => "94", // Signesmail1/NO   
+        "35" => "95", // Signesmail2/NO  
+        "36" => "96", // Abbiesmail1/CA   
+        "37" => "97", // Abbiesmail2/CA  
+        "38" => "98", // Ashleysmail/NZ   
+        "39" => "99", // Ashleysmail1/NZ 
     );
     return $provider[$providerListId];
 }
