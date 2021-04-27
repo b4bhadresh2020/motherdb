@@ -107,7 +107,11 @@
                                                             case 6:                                                                
                                                                 $providerName = 'Sendinblue';
                                                                 $response = $curEntry['sendinblueResponse'];
-                                                                break;    
+                                                                break; 
+                                                            case 7:                                                                
+                                                                $providerName = 'Sendpulse';
+                                                                $response = $curEntry['sendpulseResponse'];
+                                                                break;   
                                                         }
                                                         if($curEntry['status'] == 0){
                                                             $response_staus = "Pending";
@@ -116,7 +120,11 @@
                                                             $decodeResponse = json_decode($response,true);
                                                             $response_staus = "Send Success";
                                                             if($decodeResponse['result'] == "success"){
-                                                                $response_messgae = "ID - ".$decodeResponse['data']['id'];
+                                                                if(@$decodeResponse['data']['id'])  {
+                                                                    $response_messgae = "ID - ".$decodeResponse['data']['id'];
+                                                                } else {
+                                                                    $response_messgae = $decodeResponse['data']['msg'];
+                                                                }
                                                             }else{
                                                                 $response_messgae = $decodeResponse['error']['msg'];
                                                             }

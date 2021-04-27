@@ -14,6 +14,7 @@ class Cron_provider_user_csv extends CI_Controller
         $this->load->model('mdl_ongage');
         $this->load->model('mdl_sendgrid');
         $this->load->model('mdl_sendinblue');
+        $this->load->model('mdl_sendpulse');
     }
 
     public function index() {
@@ -30,7 +31,7 @@ class Cron_provider_user_csv extends CI_Controller
         );
         $is_single = FALSE;
         $csvProviderData = GetAllRecord(CSV_FILE_PROVIDER_DATA,$condition,$is_single,array(),array(),array());
-
+       
         //loopwise check csv file and send data to provider
         foreach ($csvProviderData as $provider) {
 
@@ -48,9 +49,10 @@ class Cron_provider_user_csv extends CI_Controller
             echo $startTotalMinute . "<br>";
             echo $endTotalMinute . "<br>";
             die; */
-            
+           
             // Here we check current time not exceed with end time of country wise
             if($currentTotalMinute >= $startTotalMinute && $currentTotalMinute <= $endTotalMinute){
+                
                 //create log file.
                 $responseFilePath = APPPATH."logs/csvcron/provider_".$provider["id"].".txt";
                 $writeFile = fopen($responseFilePath, 'a');
@@ -66,7 +68,7 @@ class Cron_provider_user_csv extends CI_Controller
                     'status' => 0                
                 );
                 $totalQueueRecord = GetAllRecordCount(CSV_CRON_USER_DATA,$sentRecordCondition,$is_single,array(),array(),array());          
-
+                
                 if($totalQueueRecord){
                     // get today total number of send records
                     $is_single = TRUE;
@@ -139,7 +141,16 @@ class Cron_provider_user_csv extends CI_Controller
                                 $mailProvider = $this->getSendInBlueMailProviderId($provider["providerList"]);                                
                                 $response = $this->mdl_sendinblue->AddEmailToSendInBlueSubscriberList($userData,$mailProvider);
                                 addRecordInHistoryFromCSV($userData, $mailProvider, SENDINBLUE, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
-                            }   
+                            } else if($provider['providerName'] == SENDPULSE){
+                                if (@$userData['birthdateDay'] != '' && @$userData['birthdateMonth'] != '' && @$userData['birthdateYear'] != '') {
+                                    $birthDate              = $userData['birthdateYear'] . '-' . $userData['birthdateMonth'] . '-' . $userData['birthdateDay'];
+                                    $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
+                                } 
+                                $responseField = "sendpulseResponse";
+                                $mailProvider = $this->getSendPulseProviderId($provider["providerList"]);                                
+                                $response = $this->mdl_sendpulse->AddEmailToSendpulseSubscriberList($userData,$mailProvider);
+                                addRecordInHistoryFromCSV($userData, $mailProvider, SENDPULSE, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
+                            }  
                             // update status of sended record
                             $is_insert = FALSE;
                             $updateCondition = array('providerUserId' => $userData['providerUserId']);
@@ -321,6 +332,15 @@ class Cron_provider_user_csv extends CI_Controller
             "2" => "65",  // CA
             "3" => "66",  // NZ
             "4" => "67"  // SE
+        );
+        return $provider[$providerId];
+    }
+
+    public function getSendPulseProviderId($providerId){
+        $provider = array(
+            "1" => "83",  // NO
+            "2" => "84",  // CA
+            "3" => "85",  // SE
         );
         return $provider[$providerId];
     }
