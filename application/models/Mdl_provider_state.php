@@ -13,7 +13,7 @@ class Mdl_provider_state extends CI_Model
     public function get_state_data($getData,$providerID){ 
         
         $providerStatusInfo = array();        
-
+        
         $apikey = @$getData['apikey'];
         $currentDate = date("Y-m-d");
         $deliveryDate = isset($getData['deliveryDate']) && $getData['deliveryDate'] != "" ? $getData['deliveryDate'] : date("Y-m-d", strtotime('monday this week'));
@@ -51,7 +51,7 @@ class Mdl_provider_state extends CI_Model
                 $condition['apikey'] = $apikey;
                 $this->db->join(LIVE_DELIVERY_DATA,LIVE_DELIVERY_DATA.'.liveDeliveryDataId = '.EMAIL_HISTORY_DATA.'.liveDeliveryDataId');
             }
-
+           
             // GET LIVE DELIVERY STATE
             $this->db->select('count(*) as total,email_history_data.keyword,updateDate');
             $this->db->from(EMAIL_HISTORY_DATA);
@@ -69,12 +69,13 @@ class Mdl_provider_state extends CI_Model
             //GET LIVE REPOST STATE
             $this->db->select('count(*) as total,email_history_data.keyword,updateDate');
             $this->db->from(EMAIL_HISTORY_DATA);
+            $this->db->join(LIVE_DELIVERY_DATA,LIVE_DELIVERY_DATA.'.liveDeliveryDataId = '.EMAIL_HISTORY_DATA.'.liveDeliveryDataId');
             $this->db->where($condition);
             $this->db->where('email_history_data.liveDeliveryDataId is NULL', NULL, FALSE);
             $this->db->group_by("email_history_data.keyword,updateDate");
             $query=$this->db->get();
             $statusResponse=$query->result_array();
-
+            
             foreach($statusResponse as $record){
                 $statusInfo[$provider['listname']][$record['updateDate']]["liverepost_success"][$record['keyword']] = $record['total'];                            
                 $statusInfo[$provider['listname']][$record['updateDate']]["liverepost_success"]['total'] += $record['total'];

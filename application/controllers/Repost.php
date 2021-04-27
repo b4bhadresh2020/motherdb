@@ -51,7 +51,7 @@ class Repost extends CI_Controller
 
         $qry = "SELECT * FROM live_delivery_data WHERE apikey = '{$apikey}' AND emailId != '' AND (sucFailMsgIndex = 0 OR sucFailMsgIndex = 1) GROUP BY emailId";
         $getApiKeyData = GetDatabyqry($qry);
-
+      
         $response = array();
         if (count($getApiKeyData) > 0) {
 
@@ -66,7 +66,7 @@ class Repost extends CI_Controller
             $response['provider'] = $getApiKey[0]['mailProvider'];
             $response['msg'] = 'No Data Available for this Api Key';
         }
-
+        
         echo json_encode($response);
     }
 
@@ -283,6 +283,40 @@ class Repost extends CI_Controller
 
         $this->load->model('mdl_sendinblue');
         $response = $this->mdl_sendinblue->AddEmailToSendInBlueSubscriberList($apiDataDetail, $mailProvider);
+        // ADD RECORD IN HISTORY
+        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
+
+        //update to live delivery data
+        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
+        $is_insert = FALSE;
+        $responseField = $providerData['response_field'];
+        $updateArr = array($responseField => json_encode($response));
+        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
+    }
+
+    function addDataToSendpulse()
+    {
+
+        $apiDataDetail = $this->input->post('apiDataDetail');
+        $mailProvider = $this->input->post('provider');
+        $groupName = $this->input->post('groupName');
+        $keyword = $this->input->post('keyword');
+        $provider = SENDPULSE;
+
+        // fetch mail provider data from providers table
+        $providerCondition   = array('id' => $mailProvider);
+        $is_single           = true;
+        $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
+
+        if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
+
+            $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
+
+            $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
+        }
+
+        $this->load->model('mdl_sendpulse');
+        $response = $this->mdl_sendpulse->AddEmailToSendpulseSubscriberList($apiDataDetail, $mailProvider);
         // ADD RECORD IN HISTORY
         addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
 
