@@ -58,10 +58,10 @@ class Live_delivery_api extends CI_Controller
                                         $notToCheckFuther = 4; // Telia MX Block	
                                     } else if($emailAddressChunk[1] == LUUKKU_DOMAIN) {
                                         $notToCheckFuther = 5; // Luukku MX Block	
-                                    } else if(($emailAddressChunk[1] == PP_DOMAIN) || ($emailAddressChunk[1] == PP2_DOMAIN) || ($emailAddressChunk[1] == PP5_DOMAIN) || ($emailAddressChunk[1] == PP9_DOMAIN) ) {
+                                    } else if(startsWith($emailAddressChunk[1],PP_DOMAIN_START) && endsWith($emailAddressChunk[1],PP_DOMAIN_END)) {
                                         $notToCheckFuther = 6; // PP MX Block	
                                     } 
-
+                                    
                                     // check live email check flag is on
                                     if ($notToCheckFuther == 0 && $getLiveDeliveryData['checkEmail'] == 1) {
                                         $checkEmailResponse = isValidDeliverableEmail($_GET['emailId']);
