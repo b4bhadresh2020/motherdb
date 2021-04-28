@@ -33,89 +33,127 @@ class Cron_aweber_delay_user extends CI_Controller
         
         // pre($userData);
         // die;
+        foreach($userData as $user){    
+            $emailAddressChunk = explode("@",$user['emailId']);
+            if($emailAddressChunk[1] == TELIA_DOMAIN || $emailAddressChunk[1] == LUUKKU_DOMAIN || (startsWith($emailAddressChunk[1],PP_DOMAIN_START) && endsWith($emailAddressChunk[1],PP_DOMAIN_END))){
 
-        foreach($userData as $user){            
-            if(isset($user['isDuplicate']) && !empty($user['isDuplicate'])){
-                $isDuplicate = json_decode($user['isDuplicate'],true);
-            }else{
-                $isDuplicate = array();
-            } 
-            if(!array_key_exists($user['providerId'],$isDuplicate) || (array_key_exists($user['providerId'],$isDuplicate) && $user['sucFailMsgIndex'] == 1)){
-                if (@$user['birthdateDay'] != '0' && @$user['birthdateMonth'] != '0' && @$user['birthdateYear'] != '0') {
-                    $birthDate  = $user['birthdateYear'] . '-' . $user['birthdateMonth'] . '-' . $user['birthdateDay'];
-                    $user['birthDate'] = date('Y-m-d', strtotime($birthDate));
+                $responseField = $providerData[$user['providerId']]['response_field'];
+                $response = array("result" => "error","error" => array("msg" => "MX Block"));
+                // Update response in live delivery user data table
+                $condition = array('liveDeliveryDataId' => $user['liveDeliveryDataId']);
+                $is_insert = false;
+                $updateArr = array($responseField => json_encode($response));
+                ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
+
+                // Update response in aweber queue user data table
+                $queueCondition = array('id' => $user['id']);
+                $is_insert = false;
+                $queueUpdateArr = array(
+                    "status" => 1,
+                    "response" => json_encode($response),
+                    "updatedDate" => date("Y-m-d H:i:s")
+                );
+                ManageData(AWEBER_DELAY_USER_DATA, $queueCondition, $queueUpdateArr, $is_insert);
+
+                // Update response in aweber history data.
+                $historyData = array(       
+                    'groupName' => $user['groupName'],
+                    'keyword' => $user['keyword'],
+                    'updateDate' => date("Y-m-d"),
+                    'updateDateTime' => date("Y-m-d H:i:s"),
+                    'response' => json_encode($response),
+                    'status' => 2 // error - already subscribe + other error (mx block(telia, lukku, pp))
+                );
+                $historyCondition = array(
+                    'liveDeliveryDataId' => $user['liveDeliveryDataId'],
+                    'providerId' => $user['providerId']
+                );
+                $is_insert = false;
+                ManageData(EMAIL_HISTORY_DATA, $historyCondition, $historyData, $is_insert);
+
+            } else {
+                if(isset($user['isDuplicate']) && !empty($user['isDuplicate'])){
+                    $isDuplicate = json_decode($user['isDuplicate'],true);
                 }else{
-                    $user['birthDate'] = "";
+                    $isDuplicate = array();
                 } 
-                $response = $this->mdl_aweber_cron->AddEmailToAweberSubscriberList($user,$user['country'],$user['providerId']);
-            }else{
-                $response = array("result" => "success","data" => "Duplicate condition not satisfied");
-            }
-            
-            $responseField = $providerData[$user['providerId']]['response_field'];
-
-            // Update response in live delivery user data table
-            $condition = array('liveDeliveryDataId' => $user['liveDeliveryDataId']);
-            $is_insert = false;
-            $updateArr = array($responseField => json_encode($response));
-            ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
-
-            // Update response in aweber queue user data table
-            $queueCondition = array('id' => $user['id']);
-            $is_insert = false;
-            
-            if($response['result'] == "success"){
-                    $queueUpdateArr = array(
-                        "status" => 1,
-                        "response" => json_encode($response),
-                        "updatedDate" => date("Y-m-d H:i:s")
-                    );
-            }else{
-                if(strpos($response["error"]["msg"], '401') !== false){
-                    $queueUpdateArr = array(
-                        "status" => 0,
-                        "response" => json_encode($response),
-                        "updatedDate" => date("Y-m-d H:i:s")
-                    );
+                if(!array_key_exists($user['providerId'],$isDuplicate) || (array_key_exists($user['providerId'],$isDuplicate) && $user['sucFailMsgIndex'] == 1)){
+                    if (@$user['birthdateDay'] != '0' && @$user['birthdateMonth'] != '0' && @$user['birthdateYear'] != '0') {
+                        $birthDate  = $user['birthdateYear'] . '-' . $user['birthdateMonth'] . '-' . $user['birthdateDay'];
+                        $user['birthDate'] = date('Y-m-d', strtotime($birthDate));
+                    }else{
+                        $user['birthDate'] = "";
+                    } 
+                    $response = $this->mdl_aweber_cron->AddEmailToAweberSubscriberList($user,$user['country'],$user['providerId']);
                 }else{
-                    $queueUpdateArr = array(
-                        "status" => 1,
-                        "response" => json_encode($response),
-                        "updatedDate" => date("Y-m-d H:i:s")
-                    );
+                    $response = array("result" => "success","data" => "Duplicate condition not satisfied");
                 }
-            }
-            
-            ManageData(AWEBER_DELAY_USER_DATA, $queueCondition, $queueUpdateArr, $is_insert);
+                
+                $responseField = $providerData[$user['providerId']]['response_field'];
 
-            // Update response in aweber history data.
-            $historyData = array(       
-                'groupName' => $user['groupName'],
-                'keyword' => $user['keyword'],
-                'updateDate' => date("Y-m-d"),
-                'updateDateTime' => date("Y-m-d H:i:s"),
-                'response' => json_encode($response)
-            );
-            if($response != null){
+                // Update response in live delivery user data table
+                $condition = array('liveDeliveryDataId' => $user['liveDeliveryDataId']);
+                $is_insert = false;
+                $updateArr = array($responseField => json_encode($response));
+                ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
+
+                // Update response in aweber queue user data table
+                $queueCondition = array('id' => $user['id']);
+                $is_insert = false;
+                
                 if($response['result'] == "success"){
-                    $historyData['status'] = 1; // success
+                        $queueUpdateArr = array(
+                            "status" => 1,
+                            "response" => json_encode($response),
+                            "updatedDate" => date("Y-m-d H:i:s")
+                        );
                 }else{
                     if(strpos($response["error"]["msg"], '401') !== false){
-                        $historyData['status'] = 0; // error - Bad Request (auth)
+                        $queueUpdateArr = array(
+                            "status" => 0,
+                            "response" => json_encode($response),
+                            "updatedDate" => date("Y-m-d H:i:s")
+                        );
                     }else{
-                        $historyData['status'] = 2; // error - already subscribe + other error
+                        $queueUpdateArr = array(
+                            "status" => 1,
+                            "response" => json_encode($response),
+                            "updatedDate" => date("Y-m-d H:i:s")
+                        );
                     }
                 }
-            }else{
-                $historyData['status'] = 0; // pending
-            }
+                
+                ManageData(AWEBER_DELAY_USER_DATA, $queueCondition, $queueUpdateArr, $is_insert);
 
-            $historyCondition = array(
-                'liveDeliveryDataId' => $user['liveDeliveryDataId'],
-                'providerId' => $user['providerId']
-            );
-            $is_insert = false;
-            ManageData(EMAIL_HISTORY_DATA, $historyCondition, $historyData, $is_insert);
+                // Update response in aweber history data.
+                $historyData = array(       
+                    'groupName' => $user['groupName'],
+                    'keyword' => $user['keyword'],
+                    'updateDate' => date("Y-m-d"),
+                    'updateDateTime' => date("Y-m-d H:i:s"),
+                    'response' => json_encode($response)
+                );
+                if($response != null){
+                    if($response['result'] == "success"){
+                        $historyData['status'] = 1; // success
+                    }else{
+                        if(strpos($response["error"]["msg"], '401') !== false){
+                            $historyData['status'] = 0; // error - Bad Request (auth)
+                        }else{
+                            $historyData['status'] = 2; // error - already subscribe + other error
+                        }
+                    }
+                }else{
+                    $historyData['status'] = 0; // pending
+                }
+
+                $historyCondition = array(
+                    'liveDeliveryDataId' => $user['liveDeliveryDataId'],
+                    'providerId' => $user['providerId']
+                );
+                $is_insert = false;
+                ManageData(EMAIL_HISTORY_DATA, $historyCondition, $historyData, $is_insert);
+            }
         }        
     }        
 }
