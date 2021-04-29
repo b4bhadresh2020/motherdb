@@ -254,6 +254,7 @@ class Cron_provider_user_csv extends CI_Controller
             "51" => "111", // Velkomstgaven1/DK
             "52" => "112", // Getspinn1/CA
             "53" => "113", // Getspinnmail/CA
+            "54" => "114", // Freecamail/CA
         );
         return $provider[$providerId];
     
