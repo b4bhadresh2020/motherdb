@@ -715,6 +715,7 @@ function getAweverProviderListName($providerListId){
         '51' => 'Velkomstgaven1/DK',
         '52' => 'Getspinn1/CA',
         '53' => 'Getspinnmail/CA',
+        '54' => 'Freecamail/CA',
     );
     return $aweberList[$providerListId];
 }
