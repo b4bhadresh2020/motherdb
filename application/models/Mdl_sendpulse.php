@@ -49,8 +49,13 @@ class Mdl_sendpulse extends CI_Model {
             } else{
                 return array("result" => "error","error" => array("msg" => "Unknown Error Response"));
             }
-        }catch (\GuzzleHttp\Exception\ClientException $e) {            
-                return array("result" => "error","error" => array("msg" => "Bad Request"));            
+        }catch (\GuzzleHttp\Exception\ClientException $e) {   
+            $statusCode = $e->getResponse()->getStatusCode();         
+            if($statusCode == "400"){
+                return array("result" => "error","error" => array("msg" => $statusCode." - Subscriber already subscribed"));
+            }else{
+                return array("result" => "error","error" => array("msg" => $statusCode." - Bad Request"));
+            }            
         }
     } 
 }
