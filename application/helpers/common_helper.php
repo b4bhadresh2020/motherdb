@@ -827,6 +827,21 @@ function getLiveRepostAweverProviderID($providerListId){
         "37" => "97", // Abbiesmail2/CA  
         "38" => "98", // Ashleysmail/NZ   
         "39" => "99", // Ashleysmail1/NZ 
+        "40" => "100", // Signesmail/DK
+        "41" => "101", // Velkomstgaven/NO
+        "42" => "102", // Velkomstgaven1/NO
+        "43" => "103", // Gratispresent/SE
+        "44" => "104", // Gratispresent1/SE
+        "45" => "105", // FelinaFinans/SE
+        "46" => "106", // FelinaFinans1/SE
+        "47" => "107", // FelinaFinansmail/SE
+        "48" => "108", // Unelmalaina/FI
+        "49" => "109", // Unelmalaina1/FI
+        "50" => "110", // Velkomstgaven/DK
+        "51" => "111", // Velkomstgaven1/DK
+        "52" => "112", // Getspinn1/CA
+        "53" => "113", // Getspinnmail/CA
+        "54" => "114", // Freecamail/CA
     );
     return $provider[$providerListId];
 }
