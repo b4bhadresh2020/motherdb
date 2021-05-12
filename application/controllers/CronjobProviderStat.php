@@ -125,7 +125,7 @@ class CronjobProviderStat extends CI_Controller {
             
             $dataCount = $responseData['totalCount'];
             $cronjobProviderHistoryData = $responseData['cronjobProviderHistoryData'];
-
+            
             $data = pagination_data('CronjobProviderStat/historyData/', $dataCount, $start, 3, $perPage,$cronjobProviderHistoryData);
             $data['headerTitle'] = "Cronjob Provider History";
             $data['load_page'] = 'cronProviderHistory';

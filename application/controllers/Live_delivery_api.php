@@ -434,6 +434,7 @@ class Live_delivery_api extends CI_Controller
                         $sucFailMsgIndex   = 4; //api key is not active
                         $response['error'] = 'Api key is not active. Please contact to admin';
                     }
+                   
                     //add data to live delivery table
                     $this->addToLiveDeliveryDataTable($_GET, $getLiveDeliveryData, $sucFailMsgIndex, $isFail, $isEmailChecked);
                 } else {
@@ -459,7 +460,7 @@ class Live_delivery_api extends CI_Controller
     }
 
     public function addToLiveDeliveryDataTable($getData, $getLiveDeliveryData, $sucFailMsgIndex, $isFail, $isEmailChecked)
-    {        
+    {    
         //add in live delivery data database
         $condition = array();
         $is_insert = true;
@@ -508,7 +509,7 @@ class Live_delivery_api extends CI_Controller
             }else{
                 $duplicates = array();
             } 
-
+            
             foreach($mailProviders as $mailProvider){
                 //send user data to egoi
                 if ($mailProvider == 'egoi') {
@@ -562,13 +563,13 @@ class Live_delivery_api extends CI_Controller
                     }else if($isDuplicate == 0 && ($sucFailMsgIndex == 0 || $sucFailMsgIndex == 1)){
                         $sendToMailProvider = 1;
                     }
-
+                    
                     // send data to aweber if user is successfully added or duplicate
                     if ($sendToMailProvider == 1) {
 
                         $country             = $getLiveDeliveryData['country'];
                         $validCountryForAweber = countryThasListedInAweber();
-
+                       
                         if($providerData['provider'] == AWEBER){
                             $lastDeliveryData['birthDate'] = "";
                             if (in_array(strtoupper($country), $validCountryForAweber)) {
@@ -694,7 +695,31 @@ class Live_delivery_api extends CI_Controller
                                 $response = null;
                                 addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
                             } 
-                        }else{
+                        } else if($providerData['provider'] == SENDPULSE) {
+                            $lastDeliveryData['birthDate'] = "";
+                            if (@$lastDeliveryData['birthdateDay'] != '0' && @$lastDeliveryData['birthdateMonth'] != '0' && @$lastDeliveryData['birthdateYear'] != '0') {
+                                $birthDate            = $lastDeliveryData['birthdateYear'] . '-' . $lastDeliveryData['birthdateMonth'] . '-' . $lastDeliveryData['birthdateDay'];
+                                $lastDeliveryData['birthDate'] = date('Y-m-d', strtotime($birthDate));
+                            } 
+                            $this->load->model('mdl_sendpulse');
+                            // LOGIC FOR SEND DATA TO SENDPULSE OR QUEUE                            
+                            //$delayDay = $delays[$mailProvider];
+                            $delayDay = 0;
+                            $provider = SENDPULSE;
+                            if($delayDay == 0){
+                                // NO DELAY INSTANT SEND DATA TO SENDPULSE
+                                $response = $this->mdl_sendpulse->AddEmailToSendpulseSubscriberList($lastDeliveryData,$mailProvider);
+                               
+                                // ADD RECORD IN HISTORY
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
+                            }else{
+                                // ADD DATA IN QUEUE FOR DELAY SENDING
+                                addToSendpulseSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
+                                // ADD RECORD IN HISTORY
+                                $response = null;
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
+                            } 
+                        } else{
                             $response = array("result" => "error", "error" => array("msg" => "Wrong provider"));
                         }    
                         if(isset($delayDay) && $delayDay == 0){

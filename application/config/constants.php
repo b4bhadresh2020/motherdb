@@ -135,6 +135,7 @@ define("CONTACT_DELAY_USER_DATA"		,	"contact_delay_user_data");
 define("ONGAGE_DELAY_USER_DATA"			,	"ongage_delay_user_data");
 define("SENDGRID_DELAY_USER_DATA"		,	"sendgrid_delay_user_data");
 define("SENDINBLUE_DELAY_USER_DATA"		,	"sendinblue_delay_user_data");
+define("SENDPULSE_DELAY_USER_DATA"		,	"sendpulse_delay_user_data");
 define("EMAIL_HISTORY_DATA"				,	"email_history_data");
 define("PROVIDER_UNSUBSCRIBER"			,	"provider_unsubscriber");
 
@@ -160,6 +161,8 @@ define("CONSTANT_CONTACT_ACCESS_TOKEN", "d11e5c72-767e-48b5-a723-79dcb8318cd5");
 define('ONGAGE_API_PATH'	, 'https://api.ongage.net/');
 define('ONGAGE_API_CONTACT_PATH'	,'/api/contacts/');
 
+// sendpulse constant
+define('SENDPULSE_TOKEN_URL', 'https://api.sendpulse.com/oauth/access_token');
 
 define('AWEBER'	, '1');
 define('TRANSMITVIA', '2');
@@ -167,9 +170,11 @@ define('CONSTANTCONTACT', '3');
 define('ONGAGE', '4');
 define('SENDGRID', '5');
 define('SENDINBLUE', '6');
+define('SENDPULSE', '7');
 define('PROVIDERS', 'providers');
 define('AWEBER_ACCOUNTS', 'aweber_accounts');
 define('ONGAGE_ACCOUNTS', 'ongage_accounts');
+define('SENDPULSE_ACCOUNTS','sendpulse_accounts');
 
 // MX Block account
 define('TELIA_DOMAIN', 'telia.com');

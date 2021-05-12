@@ -5,6 +5,7 @@ $constantContactList = getProviderList(CONSTANTCONTACT);
 $ongageList = getProviderList(ONGAGE);
 $sendgridList = getProviderList(SENDGRID);
 $sendInBlueList = getProviderList(SENDINBLUE);
+$sendPulseList = getProviderList(SENDPULSE);
 
 $mailProviders = array(    
     'egoi' => 'E-goi',
@@ -38,6 +39,11 @@ foreach($sendgridList as $list){
 // Add Sendinblue list in mail provider
 foreach($sendInBlueList as $list){
     $mailProviders[$list['id']] = $list['listname']." (Sendinblue)";
+}
+
+// Add Sendpulse list in mail provider
+foreach($sendPulseList as $list) {
+    $mailProviders[$list['id']] = $list['listname']. " (Sendpulse)";
 }
 
 ?>

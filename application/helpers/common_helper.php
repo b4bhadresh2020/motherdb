@@ -654,7 +654,8 @@ function getProviderName($providerId){
         '2' => 'Transmitvia',
         '4' => 'Ongage',
         '5' => 'Sendgrid',
-        '6' => 'Sendinblue'
+        '6' => 'Sendinblue',
+        '7' => 'Sendpulse'
     );
     return $providerNames[$providerId];
 }
@@ -784,6 +785,15 @@ function getSendInBlueProviderListName($providerListId){
         "4" => "SE"
     );
     return $sendInBlueList[$providerListId];
+}
+
+function getSendPulseProviderListName($providerListId){
+    $sendPulseList = array(
+        "1" => "NO",
+        "2" => "CA",
+        "3" => "SE"
+    );
+    return $sendPulseList[$providerListId];
 }
 
 function getLiveRepostAweverProviderID($providerListId){
@@ -1547,6 +1557,20 @@ function addToSendinblueSubscriberQueue($liveDeliveryDataId,$mailProvider,$delay
     ManageData(SENDINBLUE_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
+function addToSendpulseSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+    $liveDeliveryDelayData = array(
+        "liveDeliveryDataId" => $liveDeliveryDataId,
+        "providerId" => $mailProvider,
+        "delayDay" => $delayDay,
+        "currentTimestamp" => time(),
+        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "status" => 0
+    );
+    $condition = array();
+    $is_insert = true;
+    ManageData(SENDPULSE_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
+}
 function addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$groupName,$keyword,$emailId = NULL){
     $historyData = array(
         'liveDeliveryDataId' => $lastDeliveryData['liveDeliveryDataId'],

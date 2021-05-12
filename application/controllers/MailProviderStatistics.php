@@ -31,7 +31,7 @@ class MailProviderStatistics extends CI_Controller
         $provider = $this->input->post('provider');
         $list = $this->input->post('list');
         $deliveryDate = $this->input->post('deliveryDate');
-
+        
         $providerStatisticalData = [];
         
         $response_messages = [
@@ -41,6 +41,7 @@ class MailProviderStatistics extends CI_Controller
             "4" => [ "success" => "success", "subscriber_exist" => "412 " ,  "auth_fail" => "401 -", "bad_fail" => "429 ", "blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
             "5" => [ "success" => "success", "subscriber_exist" => "400 -", "auth_fail" => "401 -", "bad_fail" => "Bad Request", "blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
             "6" => [ "success" => "success", "subscriber_exist" => "Contact already exist", "auth_fail" => "401 -", "bad_fail" => "Invalid phone number", "blacklisted" => "blacklisted", "host" => "Request already received", "manual" => "already served"],
+            "7" => [ "success" => "success", "subscriber_exist" => "400 -", "auth_fail" => "401 -", "bad_fail" => "Bad Request","blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
         ];
 
         //get provider detail
@@ -90,6 +91,9 @@ class MailProviderStatistics extends CI_Controller
             case 6:
                 $delayTableName = SENDINBLUE_DELAY_USER_DATA;
                 break; 
+            case 7:
+                $delayTableName = SENDPULSE_DELAY_USER_DATA;
+                break;
         }
         
         if(count($liveDeliveryInstant)>0){
@@ -132,7 +136,7 @@ class MailProviderStatistics extends CI_Controller
         }else{
             $liveDeliveryInstantData = [];
         }    
-
+       
         if(count($liveDeliveryDelay)){
             // GET DATA FROM LIVE DELIVERY DATA TABLE
             $this->db->select('apikey,groupName,keyword,
