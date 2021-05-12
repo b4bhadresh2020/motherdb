@@ -8,6 +8,8 @@
     $sendgridList = getProviderList(SENDGRID);
     $sendInBlueList = getProviderList(SENDINBLUE);
     $sendPulseList = getProviderList(SENDPULSE);
+    $mailerliteList = getProviderList(MAILERLITE);
+
 
     $mailProviders = array(
         'egoi' => 'E-goi'
@@ -46,6 +48,11 @@
     // Add Sendpulse list in mail provider
     foreach($sendPulseList as $list){
         $mailProviders[$list['id']] = $list['listname']. " (Sendpulse)";
+    }
+
+    // Add Mailerlite list in mail provider
+    foreach($mailerliteList as $list){
+        $mailProviders[$list['id']] = $list['listname']. " (Mailerlite)";
     }
 
     $identifiers = array(

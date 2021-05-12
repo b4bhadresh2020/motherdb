@@ -494,7 +494,7 @@ class Live_delivery_api extends CI_Controller
         $lastDeliveryData        = GetAllRecord(LIVE_DELIVERY_DATA, $liveDeliveryCondition, $is_single); 
 
         //we will not send from local
-        if ($_SERVER['HTTP_HOST'] != 'localhost') {
+        if ($_SERVER['HTTP_HOST'] == 'localhost') {
 
             $mailProviders = json_decode($getLiveDeliveryData['mailProvider']);
 
@@ -715,6 +715,25 @@ class Live_delivery_api extends CI_Controller
                             }else{
                                 // ADD DATA IN QUEUE FOR DELAY SENDING
                                 addToSendpulseSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
+                                // ADD RECORD IN HISTORY
+                                $response = null;
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
+                            } 
+                        } else if($providerData['provider'] == MAILERLITE) {
+                            $this->load->model('mdl_mailerlite');
+                            // LOGIC FOR SEND DATA TO SENDPULSE OR QUEUE                            
+                            //$delayDay = $delays[$mailProvider];
+                            $delayDay = 0;
+                            $provider = MAILERLITE;
+                            if($delayDay == 0){
+                                // NO DELAY INSTANT SEND DATA TO SENDPULSE
+                                $response = $this->mdl_mailerlite->AddEmailToMailerliteSubscriberList($lastDeliveryData,$mailProvider);
+                               
+                                // ADD RECORD IN HISTORY
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
+                            }else{
+                                // ADD DATA IN QUEUE FOR DELAY SENDING
+                                addToMailerliteSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
                                 // ADD RECORD IN HISTORY
                                 $response = null;
                                 addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
