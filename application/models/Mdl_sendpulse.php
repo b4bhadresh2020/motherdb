@@ -27,16 +27,45 @@ class Mdl_sendpulse extends CI_Model {
             $sendpulseAccountData   = GetAllRecord(SENDPULSE_ACCOUNTS, $sendpulseCondition, $is_single);        
             $accessToken = $sendpulseAccountData['accessToken'];
             
+            // Find tag value
+            if(isset($getData["otherLable"]) && isset($getData["other"])){
+                $otherLabel = json_decode($getData["otherLable"]);
+                $otherData = json_decode($getData["other"]);
+
+                $searchIndex = array_search("Tag",$otherLabel,true);
+                if($searchIndex !== FALSE){
+                    $tagValue = $otherData[$searchIndex];
+                }else{
+                    $tagValue = "";
+                }  
+            }else if(isset($getData["tag"])){
+                $tagValue = $getData["tag"];
+            }else{
+                $tagValue = "";
+            }
+
+            $details = [[
+                'email' => $getData['emailId'],
+                'variables' => [
+                    'Name' => $getData['firstName'] . ' ' . $getData['lastName'],
+                    'First Name' => $getData['firstName'],
+                    'Last Name' => $getData['lastName'],
+                    'Phone' => $getData['phone'],
+                    'Gender' => $getData['gender'],
+                    'Birthdate' => $getData['birthDate'],
+                    'Tags'  => $tagValue
+                ]
+            ]];
+            $variables = json_encode($details);
+            
             //LIST ID 
             $list_id = $providerData['code'];      
             $newsubscriberUrl = "https://api.sendpulse.com/addressbooks/". $list_id ."/emails";
             $data = array(
                 "id" => $list_id,
-                "emails" => array(
-                    $getData['emailId']
-                )
-            );  
-           
+                "emails" => $variables
+            );
+            
             $body = $client->post($newsubscriberUrl, [
                 'json' => $data, 
                 'headers' => ['Authorization' => 'Bearer ' . $accessToken]
