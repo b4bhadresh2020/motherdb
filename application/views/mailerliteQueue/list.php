@@ -5,20 +5,14 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card alert">
-                            <div class="row">
-                                <div class="col-md-12 text-right">
-                                    <a href="<?php echo site_url('/cronjobProviderStat/manage')?>"><b>Back to cron list</b></a>
-                                </div>
-                            </div>
                             <div class="card-header">
                                 <h4>Filters</h4>
                             </div>
                             <div class="card-body">
-                                <div class="horizontal-form-elements">                                    
-                                    <form class="form-horizontal" method="get" action="<?php echo base_url('CronjobProviderStat/historyData/0'); ?>">
+                                <div class="horizontal-form-elements">
+                                    <form class="form-horizontal" method="get" action="<?php echo base_url('MailerliteQueue/manage/0'); ?>">
                                         <div class="row">
-                                            <div class="col-lg-8"> 
-                                                <input type="hidden" name='id' value="<?php echo $_GET['id'];?>">                                               
+                                            <div class="col-lg-8">                                                
                                                 <div class="row">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
@@ -28,10 +22,31 @@
                                                     </div>
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
-                                                            <label>Send Date</label>
-                                                            <input class="form-control" type="date" name="sendDate" value = "<?php echo @$_GET['sendDate']; ?>"  >
+                                                            <label>Delivery Date</label>
+                                                            <input class="form-control" type="date" name="deliveryDate" value = "<?php echo @$_GET['deliveryDate']; ?>"  >
                                                         </div>        
-                                                    </div>                                                                                                        
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Mailerlite Listname</label>
+                                                            <select name="providerId" class="form-control">
+                                                                <option value="">Select Mailerlite List</option>
+                                                                <?php foreach ($mailerliteList as $list) { ?>
+                                                                    <option value="<?php echo $list['id']; ?>" <?php if(@$_GET['providerId'] == $list['id']){ echo 'selected'; } ?> ><?php echo $list['listname']; ?></option>
+                                                                <?php } ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>  
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Status</label>
+                                                            <select name="status" class="form-control">
+                                                                <option value="-1" <?php if(@$_GET['status'] == "-1"){ echo 'selected'; } ?>>Select Status</option>
+                                                                <option value="0" <?php if(@$_GET['status'] == 0){ echo 'selected'; } ?> ><?php echo "Pending" ?></option>
+                                                                <option value="1" <?php if(@$_GET['status'] == 1){ echo 'selected'; } ?> ><?php echo "Send Success" ?></option>
+                                                            </select>
+                                                        </div>
+                                                    </div>  
                                                     <div class="col-lg-1">
                                                         <label>&nbsp;</label>
                                                         <input type="submit" value="Submit" class="form-control btn btn-dark" >
@@ -58,7 +73,7 @@
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <h4>Aweber Queue User List </h4>
+                                        <h4>Mailerlite Queue User List </h4>
                                     </div>
                                 </div>
                             </div>
@@ -71,10 +86,11 @@
                                                 <th>First Name</th>
                                                 <th>Last Name</th>
                                                 <th>Email ID</th>
-                                                <th>Provider Name</th>
+                                                <th>Provider List</th>
+                                                <th>Requset Datetime</th>
                                                 <th>Delivery Datetime</th>
                                                 <th>Status</th>
-                                                <th>Response</th>
+                                                <th>Mailerlite Response</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -82,53 +98,14 @@
                                                 $i = 0 + $start;
                                                 foreach ($listArr as $curEntry) {
                                                         $i++;    
-                                                        $providerName = "";
-                                                        switch ($curEntry['providerName']) {
-                                                            case 1:
-                                                                $providerName = 'Aweber';
-                                                                $response = $curEntry['aweberResponse'];
-                                                                break;
-                                                            case 2:
-                                                                $providerName = 'Transmitvia';
-                                                                $response = $curEntry['transmitviaResponse'];
-                                                                break;
-                                                            case 3:
-                                                                $providerName = 'Constant contact';
-                                                                $response = '';
-                                                                break;        
-                                                            case 4:
-                                                                $providerName = 'Ongage';
-                                                                $response = $curEntry['ongageResponse'];
-                                                                break;
-                                                            case 5:                                                                
-                                                                $providerName = 'Sendgrid';
-                                                                $response = $curEntry['sendgridResponse'];
-                                                                break;
-                                                            case 6:                                                                
-                                                                $providerName = 'Sendinblue';
-                                                                $response = $curEntry['sendinblueResponse'];
-                                                                break; 
-                                                            case 7:                                                                
-                                                                $providerName = 'Sendpulse';
-                                                                $response = $curEntry['sendpulseResponse'];
-                                                                break;
-                                                            case 8:                                                                
-                                                                $providerName = 'Mailerlite';
-                                                                $response = $curEntry['mailerliteResponse'];
-                                                                break;   
-                                                        }
                                                         if($curEntry['status'] == 0){
                                                             $response_staus = "Pending";
                                                             $response_messgae = "-";
                                                         }else{
-                                                            $decodeResponse = json_decode($response,true);
+                                                            $decodeResponse = json_decode($curEntry['response'],true);
                                                             $response_staus = "Send Success";
                                                             if($decodeResponse['result'] == "success"){
-                                                                if(@$decodeResponse['data']['id'])  {
-                                                                    $response_messgae = "ID - ".$decodeResponse['data']['id'];
-                                                                } else {
-                                                                    $response_messgae = $decodeResponse['data']['msg'];
-                                                                }
+                                                                $response_messgae = "ID - ".$decodeResponse['data']['id'];
                                                             }else{
                                                                 $response_messgae = $decodeResponse['error']['msg'];
                                                             }
@@ -139,8 +116,9 @@
                                                         <td><?php echo $curEntry['firstName']; ?></td>
                                                         <td><?php echo $curEntry['lastName']; ?></td>
                                                         <td><?php echo $curEntry['emailId']; ?></td>
-                                                        <td><?php echo $providerName; ?></td>
-                                                        <td><?php echo ($curEntry['sendDate']!="") ? date("d-m-Y H:i:s",strtotime($curEntry['sendDate'])):''; ?></td>
+                                                        <td><?php echo $curEntry['providerListName']; ?></td>
+                                                        <td><?php echo date("d-m-Y H:i:s",$curEntry['currentTimestamp']); ?></td>
+                                                        <td><?php echo date("d-m-Y H:i:s",$curEntry['deliveryTimestamp']); ?></td>     
                                                         <td><?php echo $response_staus; ?></td>                                  
                                                         <td><?php echo $response_messgae; ?></td>                                  
                                                     </tr>

@@ -90,7 +90,7 @@
                                                 <th>Requset Datetime</th>
                                                 <th>Delivery Datetime</th>
                                                 <th>Status</th>
-                                                <th>Aweber Response</th>
+                                                <th>Sendpulse Response</th>
                                             </tr>
                                         </thead>
                                         <tbody>
