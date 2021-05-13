@@ -46,7 +46,8 @@
                                                             <option value="4">Ongage</option>                                                        
                                                             <option value="5">Sendgrid</option>                                                        
                                                             <option value="6">Sendinblue</option> 
-                                                            <option value="7">Sendpulse</option>                                                       
+                                                            <option value="7">Sendpulse</option> 
+                                                            <option value="8">Mailerlite</option>                                                       
                                                         </select>
                                                     </div>
                                                 </div>

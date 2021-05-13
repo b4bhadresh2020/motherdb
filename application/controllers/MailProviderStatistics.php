@@ -42,6 +42,7 @@ class MailProviderStatistics extends CI_Controller
             "5" => [ "success" => "success", "subscriber_exist" => "400 -", "auth_fail" => "401 -", "bad_fail" => "Bad Request", "blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
             "6" => [ "success" => "success", "subscriber_exist" => "Contact already exist", "auth_fail" => "401 -", "bad_fail" => "Invalid phone number", "blacklisted" => "blacklisted", "host" => "Request already received", "manual" => "already served"],
             "7" => [ "success" => "success", "subscriber_exist" => "400 -", "auth_fail" => "401 -", "bad_fail" => "Bad Request","blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
+            "8" => [ "success" => "success", "subscriber_exist" => "400 -", "auth_fail" => "401 -", "bad_fail" => "Bad Request","blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
         ];
 
         //get provider detail
@@ -93,6 +94,9 @@ class MailProviderStatistics extends CI_Controller
                 break; 
             case 7:
                 $delayTableName = SENDPULSE_DELAY_USER_DATA;
+                break;
+            case 8:
+                $delayTableName = MAILERLITE_DELAY_USER_DATA;
                 break;
         }
         
@@ -189,7 +193,7 @@ class MailProviderStatistics extends CI_Controller
         }else{
             $liveDeliveryStastic = [];
         }
-                
+        
         $data['load_page'] = 'mailProviderStatistics';
         $data['headerTitle'] = "Mail Provider Statistics";
         $data['curTemplateName'] = "mailProviderStatistics/report";

@@ -790,21 +790,22 @@ function getSendInBlueProviderListName($providerListId){
 
 function getSendPulseProviderListName($providerListId){
     $sendPulseList = array(
-        "1" => "NO",
-        "2" => "CA",
-        "3" => "SE"
+        "1" => "NO", // NO-Sendpulse
+        "2" => "CA", // CA-Sendpulse
+        "3" => "SE" // SE-Sendpulse
     );
     return $sendPulseList[$providerListId];
 }
 
-// function getMailerliteProviderListName($providerListId){
-//     $mailerliteList = array(
-//         "1" => "NO",
-//         "2" => "CA",
-//         "3" => "SE"
-//     );
-//     return $mailerliteList[$providerListId];
-// }
+function getMailerliteProviderListName($providerListId){
+    $mailerliteList = array(
+        "1" => "DK-Velkomstgaven",
+        "2" => "NO-Velkomstgaven.com",
+        "3" => "NO-Velkomstgaven.com1",
+        "4" => "SE-Gratispresent"
+    );
+    return $mailerliteList[$providerListId];
+}
 
 function getLiveRepostAweverProviderID($providerListId){
     $provider = array(
