@@ -747,8 +747,8 @@ class Live_delivery_api extends CI_Controller
 
                             $this->load->model('mdl_mailjet');
                             // LOGIC FOR SEND DATA TO MAILJET OR QUEUE                            
-                            $delayDay = $delays[$mailProvider];
-                            // $delayDay = 0;
+                            // $delayDay = $delays[$mailProvider];
+                            $delayDay = 0;
                             $provider = MAILJET;
                             if($delayDay == 0){
                                 // NO DELAY INSTANT SEND DATA TO MAILJET
