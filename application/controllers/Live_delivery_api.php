@@ -721,12 +721,12 @@ class Live_delivery_api extends CI_Controller
                             } 
                         } else if($providerData['provider'] == MAILERLITE) {
                             $this->load->model('mdl_mailerlite');
-                            // LOGIC FOR SEND DATA TO SENDPULSE OR QUEUE                            
+                            // LOGIC FOR SEND DATA TO MAILERLITE OR QUEUE                            
                             //$delayDay = $delays[$mailProvider];
                             $delayDay = 0;
                             $provider = MAILERLITE;
                             if($delayDay == 0){
-                                // NO DELAY INSTANT SEND DATA TO SENDPULSE
+                                // NO DELAY INSTANT SEND DATA TO MAILERLITE
                                 $response = $this->mdl_mailerlite->AddEmailToMailerliteSubscriberList($lastDeliveryData,$mailProvider);
                                
                                 // ADD RECORD IN HISTORY
@@ -734,6 +734,30 @@ class Live_delivery_api extends CI_Controller
                             }else{
                                 // ADD DATA IN QUEUE FOR DELAY SENDING
                                 addToMailerliteSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
+                                // ADD RECORD IN HISTORY
+                                $response = null;
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
+                            } 
+                        } else if($providerData['provider'] == MAILJET) {
+                            $lastDeliveryData['birthDate'] = "";
+                            if (@$lastDeliveryData['birthdateDay'] != '0' && @$lastDeliveryData['birthdateMonth'] != '0' && @$lastDeliveryData['birthdateYear'] != '0') {
+                                $birthDate            = $lastDeliveryData['birthdateYear'] . '-' . $lastDeliveryData['birthdateMonth'] . '-' . $lastDeliveryData['birthdateDay'];
+                                $lastDeliveryData['birthDate'] = date('Y-m-d', strtotime($birthDate));
+                            } 
+
+                            $this->load->model('mdl_mailjet');
+                            // LOGIC FOR SEND DATA TO MAILJET OR QUEUE                            
+                            $delayDay = $delays[$mailProvider];
+                            // $delayDay = 0;
+                            $provider = MAILJET;
+                            if($delayDay == 0){
+                                // NO DELAY INSTANT SEND DATA TO MAILJET
+                                $response = $this->mdl_mailjet->AddEmailToMailjetSubscriberList($lastDeliveryData,$mailProvider);
+                                // ADD RECORD IN HISTORY
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
+                            }else{
+                                // ADD DATA IN QUEUE FOR DELAY SENDING
+                                addToMailjetSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
                                 // ADD RECORD IN HISTORY
                                 $response = null;
                                 addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);

@@ -137,6 +137,7 @@ define("SENDGRID_DELAY_USER_DATA"		,	"sendgrid_delay_user_data");
 define("SENDINBLUE_DELAY_USER_DATA"		,	"sendinblue_delay_user_data");
 define("SENDPULSE_DELAY_USER_DATA"		,	"sendpulse_delay_user_data");
 define("MAILERLITE_DELAY_USER_DATA"		,	"mailerlite_delay_user_data");
+define("MAILJET_DELAY_USER_DATA"		,	"mailjet_delay_user_data");
 define("EMAIL_HISTORY_DATA"				,	"email_history_data");
 define("PROVIDER_UNSUBSCRIBER"			,	"provider_unsubscriber");
 
@@ -173,11 +174,13 @@ define('SENDGRID', '5');
 define('SENDINBLUE', '6');
 define('SENDPULSE', '7');
 define('MAILERLITE', '8');
+define('MAILJET', '9');
 define('PROVIDERS', 'providers');
 define('AWEBER_ACCOUNTS', 'aweber_accounts');
 define('ONGAGE_ACCOUNTS', 'ongage_accounts');
 define('SENDPULSE_ACCOUNTS','sendpulse_accounts');
 define('MAILERLITE_ACCOUNTS','mailerlite_accounts');
+define('MAILJET_ACCOUNTS','mailjet_accounts');
 
 // MX Block account
 define('TELIA_DOMAIN', 'telia.com');
