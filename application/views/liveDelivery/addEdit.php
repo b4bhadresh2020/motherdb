@@ -9,6 +9,7 @@
     $sendInBlueList = getProviderList(SENDINBLUE);
     $sendPulseList = getProviderList(SENDPULSE);
     $mailerliteList = getProviderList(MAILERLITE);
+    $mailjetList = getProviderList(MAILJET);
 
 
     $mailProviders = array(
@@ -53,6 +54,11 @@
     // Add Mailerlite list in mail provider
     foreach($mailerliteList as $list){
         $mailProviders[$list['id']] = $list['listname']. " (Mailerlite)";
+    }
+
+    // Add Mailjet list in mail provider
+     foreach($mailjetList as $list){
+        $mailProviders[$list['id']] = $list['listname']. " (Mailjet)";
     }
 
     $identifiers = array(
