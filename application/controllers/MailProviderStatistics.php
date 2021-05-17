@@ -43,6 +43,7 @@ class MailProviderStatistics extends CI_Controller
             "6" => [ "success" => "success", "subscriber_exist" => "Contact already exist", "auth_fail" => "401 -", "bad_fail" => "Invalid phone number", "blacklisted" => "blacklisted", "host" => "Request already received", "manual" => "already served"],
             "7" => [ "success" => "success", "subscriber_exist" => "400 -", "auth_fail" => "401 -", "bad_fail" => "Bad Request","blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
             "8" => [ "success" => "success", "subscriber_exist" => "400 -", "auth_fail" => "401 -", "bad_fail" => "Bad Request","blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
+            "9" => [ "success" => "success", "subscriber_exist" => "subscriber already", "auth_fail" => "401 -", "bad_fail" => "Bad Request","blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
         ];
 
         //get provider detail
@@ -97,6 +98,9 @@ class MailProviderStatistics extends CI_Controller
                 break;
             case 8:
                 $delayTableName = MAILERLITE_DELAY_USER_DATA;
+                break;
+            case 9:
+                $delayTableName = MAILJET_DELAY_USER_DATA;
                 break;
         }
         

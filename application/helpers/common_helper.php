@@ -808,6 +808,14 @@ function getMailerliteProviderListName($providerListId){
     return $mailerliteList[$providerListId];
 }
 
+function getMailjetProviderListName($providerListId){
+    $mailerliteList = array(
+        "1" => "Velkomstgaven/DK",
+        "2" => "Gratispresent/SE"
+    );
+    return $mailerliteList[$providerListId];
+}
+
 function getLiveRepostAweverProviderID($providerListId){
     $provider = array(
         "1" => "14",  // Velkomstgaven.com (Norway) 

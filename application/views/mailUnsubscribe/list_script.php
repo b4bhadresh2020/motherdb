@@ -91,6 +91,7 @@
             data:{ provider:provider,country:country},
             success:function(response){
                 var liveDiliveries = JSON.parse(response);
+                $("#popupList").html('');
                 $.each(liveDiliveries,function(index,value){
                     $("#popupList").append("<option value='"+value.id+"'>"+value.displayname+"</option>");
                 });                

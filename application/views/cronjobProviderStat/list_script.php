@@ -156,6 +156,9 @@
                 providerList +="<option value='2'>NO-Velkomstgaven.com</option>";
                 providerList +="<option value='3'>NO-Velkomstgaven.com1</option>";
                 providerList +="<option value='4'>SE-Gratispresent</option>";
+            } else if(providerId == 9){
+                providerList +="<option value='1'>Velkomstgaven/DK</option>";
+                providerList +="<option value='2'>Gratispresent/SE</option>";
             } else{
                 providerList +="<option value='0'>Select Provider List</option>";
             }

@@ -52,19 +52,19 @@ class Mdl_mailjet extends CI_Model {
             $body = [
                 'Contacts' => [
                     [
-                        'Email' => $getData['emailId'],
+                        'Email' => @$getData['emailId'],
                         'IsExcludedFromCampaigns' => 'false',
-                        'Name' => $getData['firstName'] . ' ' . $getData['lastName'],
+                        'Name' => @$getData['firstName'] . ' ' . @$getData['lastName'],
                         'Properties' => [
-                            'name' => $getData['firstName'] . ' ' . $getData['lastName'],
-                            'firstname' => $getData['firstName'],
-                            'lastname' => $getData['lastName'],
-                            'phone' => $getData['phone'],
-                            'gender' => $getData['gender'],
-                            'address' => $getData['address'],
-                            'postcode' => $getData['postCode'],
-                            'city' => $getData['city'],
-                            'birthdate' => $getData['birthDate']. ' 00:00:00',
+                            'name' => @$getData['firstName'] . ' ' . @$getData['lastName'],
+                            'firstname' => @$getData['firstName'],
+                            'lastname' => @$getData['lastName'],
+                            'phone' => @$getData['phone'],
+                            'gender' => @$getData['gender'],
+                            'address' => @$getData['address'],
+                            'postcode' => @$getData['postCode'],
+                            'city' => @$getData['city'],
+                            'birthdate' => @$getData['birthDate']. ' 00:00:00',
                             'tag' => $tagValue
                         ]	
                     ]
@@ -83,6 +83,7 @@ class Mdl_mailjet extends CI_Model {
     
             // catch any exceptions thrown during the process and print the errors to screen
         } catch (\GuzzleHttp\Exception\ClientException $e) {
+            die;
             $statusCode = $e->getResponse()->getStatusCode();         
             if($statusCode == "400"){
                 return array("result" => "error","error" => array("msg" => $statusCode." - Bad Request"));

@@ -147,6 +147,7 @@
                         <li class="<?php echo (@$load_page == 'sendinblueQueue')?"active":"";?>" title = "Sendinblue Queue List" ><a href="<?php echo base_url('sendinblueQueue/manage'); ?>"><i class="ti-timer"></i> Sendinblue Queue List </a></li>
                         <li class="<?php echo (@$load_page == 'sendpulseQueue')?"active":"";?>" title = "Sendpulse Queue List" ><a href="<?php echo base_url('SendpulseQueue/manage'); ?>"><i class="ti-timer"></i> Sendpulse Queue List </a></li>
                         <li class="<?php echo (@$load_page == 'mailerliteQueue')?"active":"";?>" title = "Mailerlite Queue List" ><a href="<?php echo base_url('MailerliteQueue/manage'); ?>"><i class="ti-timer"></i> Mailerlite Queue List </a></li>
+                        <li class="<?php echo (@$load_page == 'mailjetQueue')?"active":"";?>" title = "Mailjet Queue List" ><a href="<?php echo base_url('MailjetQueue/manage'); ?>"><i class="ti-timer"></i> Mailjet Queue List </a></li>
 
                     <li class="label">Email Provider State </li>
 
@@ -158,6 +159,7 @@
                         <li class="<?php echo (@$load_page == 'sendinblue')?"active":"";?>" title = "Sendinblue State" ><a href="<?php echo base_url('providerState/sendinblue'); ?>" ><i class="ti-timer"></i> Sendinblue Email Stats </a></li>
                         <li class="<?php echo (@$load_page == 'sendpulse')?"active":"";?>" title = "Sendpulse State" ><a href="<?php echo base_url('providerState/sendpulse'); ?>" ><i class="ti-timer"></i> Sendpulse Email Stats </a></li>
                         <li class="<?php echo (@$load_page == 'mailerlite')?"active":"";?>" title = "Mailerlite State" ><a href="<?php echo base_url('providerState/mailerlite'); ?>" ><i class="ti-timer"></i> Mailerlite Email Stats </a></li>
+                        <li class="<?php echo (@$load_page == 'mailjet')?"active":"";?>" title = "Mailjet State" ><a href="<?php echo base_url('providerState/mailjet'); ?>" ><i class="ti-timer"></i> Mailjet Email Stats </a></li>
 
                     <li class="label">Stats </li>
                         

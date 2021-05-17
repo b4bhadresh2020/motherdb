@@ -186,4 +186,25 @@ class ProviderState extends CI_Controller {
         $data["curTemplateName"] = "providerState/list";
         $this->load->view('commonTemplates/templateLayout', $data);        
     }
+
+    function mailjet($start = 0) {
+        $data = array();
+        $apiKeys = GetAllRecord(LIVE_DELIVERY,array(),false,array(),array(),array());
+        if (@$this->input->get('reset')) {
+            $_GET = array();
+        }
+
+        $response = $this->mdl_provider_state->get_state_data($_GET,MAILJET);
+        $data['apiKeys'] = $apiKeys;
+        $data['providerStatusInfo'] = $response['providerStatusInfo'];
+        $data['weekDays'] = $response['weekDays'];
+        $data['liveDeliveryProvider'] = $response['liveDeliveryProvider'];
+        $data['liveRepostProvider'] = $response['liveRepostProvider'];
+        $data['headerTitle'] = "Email State Data";
+        $data['load_page'] = 'mailjet';
+        $data['formUrl'] = "providerState/mailjet/0";
+        $data['currentProviderName'] = "Mailjet";
+        $data["curTemplateName"] = "providerState/list";
+        $this->load->view('commonTemplates/templateLayout', $data);        
+    }
 }
