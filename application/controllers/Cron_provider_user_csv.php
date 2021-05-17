@@ -16,6 +16,7 @@ class Cron_provider_user_csv extends CI_Controller
         $this->load->model('mdl_sendinblue');
         $this->load->model('mdl_sendpulse');
         $this->load->model('mdl_mailerlite');
+        $this->load->model('mdl_mailjet');
     }
 
     public function index() {
@@ -32,7 +33,7 @@ class Cron_provider_user_csv extends CI_Controller
         );
         $is_single = FALSE;
         $csvProviderData = GetAllRecord(CSV_FILE_PROVIDER_DATA,$condition,$is_single,array(),array(),array());
-        
+        // pre($csvProviderData);die;
         //loopwise check csv file and send data to provider
         foreach ($csvProviderData as $provider) {
 
@@ -50,7 +51,7 @@ class Cron_provider_user_csv extends CI_Controller
             echo $startTotalMinute . "<br>";
             echo $endTotalMinute . "<br>";
             die; */
-           
+            
             // Here we check current time not exceed with end time of country wise
             if($currentTotalMinute >= $startTotalMinute && $currentTotalMinute <= $endTotalMinute){
                 
@@ -68,9 +69,10 @@ class Cron_provider_user_csv extends CI_Controller
                     'providerId' => $provider['id'],
                     'status' => 0                
                 );
-                $totalQueueRecord = GetAllRecordCount(CSV_CRON_USER_DATA,$sentRecordCondition,$is_single,array(),array(),array());          
+                $totalQueueRecord = GetAllRecordCount(CSV_CRON_USER_DATA,$sentRecordCondition,$is_single,array(),array(),array());  
                 
                 if($totalQueueRecord){
+                    
                     // get today total number of send records
                     $is_single = TRUE;
                     $sendRecordcondition = array(
@@ -89,7 +91,6 @@ class Cron_provider_user_csv extends CI_Controller
                     // get records as per limit   
                     $is_single = FALSE;             
                     $csvProviderUserData = GetRecordWithLimit(CSV_CRON_USER_DATA,$sentRecordCondition,'user','userId','userId','left',$is_single,array(),array(),array(),'','',$recordLimit);
-                    
                     foreach($csvProviderUserData as $userData){                  
 
                         $totalTodaySendRecord++;
@@ -160,6 +161,15 @@ class Cron_provider_user_csv extends CI_Controller
                                 $mailProvider = $this->getMailerliteProviderId($provider["providerList"]);                                
                                 $response = $this->mdl_mailerlite->AddEmailToMailerliteSubscriberList($userData,$mailProvider);
                                 addRecordInHistoryFromCSV($userData, $mailProvider, MAILERLITE, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
+                            } else if($provider['providerName'] == MAILJET){
+                                if (@$userData['birthdateDay'] != '' && @$userData['birthdateMonth'] != '' && @$userData['birthdateYear'] != '') {
+                                    $birthDate              = $userData['birthdateYear'] . '-' . $userData['birthdateMonth'] . '-' . $userData['birthdateDay'];
+                                    $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
+                                } 
+                                $responseField = "mailjetResponse";
+                                $mailProvider = $this->getMailjetProviderId($provider["providerList"]);                                
+                                $response = $this->mdl_mailjet->AddEmailToMailjetSubscriberList($userData,$mailProvider);
+                                addRecordInHistoryFromCSV($userData, $mailProvider, MAILJET, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
                             }  
                             // update status of sended record
                             $is_insert = FALSE;
@@ -362,6 +372,14 @@ class Cron_provider_user_csv extends CI_Controller
             "2" => "116",  // NO-Velkomstgaven.com
             "3" => "117",  // NO-Velkomstgaven.com1
             "4" => "118",  // SE-Gratispresent
+        );
+        return $provider[$providerId];
+    }
+
+    public function getMailjetProviderId($providerId){
+        $provider = array(
+            "1" => "119",  // Velkomstgaven/DK
+            "2" => "120",  // Gratispresent/SE
         );
         return $provider[$providerId];
     }

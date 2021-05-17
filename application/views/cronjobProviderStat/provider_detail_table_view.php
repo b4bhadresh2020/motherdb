@@ -28,6 +28,12 @@
                         $providerListName = getSendgridProviderListName($providerInfo['providerList']);
                     }else if($providerInfo['providerName'] == SENDINBLUE){
                         $providerListName = getSendInBlueProviderListName($providerInfo['providerList']);
+                    }else if($providerInfo['providerName'] == SENDPULSE){
+                        $providerListName = getSendPulseProviderListName($providerInfo['providerList']);
+                    }else if($providerInfo['providerName'] == MAILERLITE){
+                        $providerListName = getMailerliteProviderListName($providerInfo['providerList']);
+                    }else if($providerInfo['providerName'] == MAILJET){
+                        $providerListName = getMailjetProviderListName($providerInfo['providerList']);
                     }
                     ?> 
                     <tr>

@@ -18,7 +18,7 @@ class Cron_upload_csv extends CI_Controller
         $condition = array();
         $is_single = TRUE;
         $csvFileData = GetAllRecord(CSV_FILE_DATA,$condition,$is_single,array(),array(),array(array('csvFileDataId' => 'ASC')));
-        //pre($csvFileData);die;
+        // pre($csvFileData);die;
         if (count($csvFileData) > 0) {
 
             $this->updateConfigTable(1);        //update cron is running

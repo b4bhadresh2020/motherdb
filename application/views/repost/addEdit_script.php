@@ -94,6 +94,8 @@
 					sendEmailToSendpulse(apiData, provider, groupName, keyword);
 				} else if (providerId == 8) {
 					sendEmailToMailerlite(apiData, provider, groupName, keyword);
+				} else if (providerId == 9) {
+					sendEmailToMailjet(apiData, provider, groupName, keyword);
 				}
 			}
 		});
@@ -108,6 +110,7 @@
 	var sendEmailToSendInBlueCount = 0;
 	var sendEmailToSendpulseCount = 0;
 	var sendEmailToMailerliteCount = 0;
+	var sendEmailToMailjetCount = 0;
 
 	function sendEmailToEgoi(apiData) {
 		var apiDataDetail = apiData[sendEmailToEgoiCount];
@@ -438,5 +441,43 @@
 			}
 		});
 	}
+	
+	function sendEmailToMailjet(apiData, provider, groupName, keyword) {
+		var apiDataDetail = apiData[sendEmailToMailjetCount];
+
+		$.ajax({
+			url: BASEPATH + 'repost/addDataToMailjet',
+			type: 'post',
+			data: {
+				apiDataDetail: apiDataDetail,
+				provider: provider,
+				groupName: groupName,
+				keyword: keyword
+			},
+			success: function(response) {
+
+				userApiDataLength--;
+				if (userApiDataLength == 0) {
+
+					$('#sucErrMsg').text("Contacts has been added successfully !!!").addClass('alert alert-success');
+
+					var timeoutVar = setTimeout(function() {
+						clearTimeout(timeoutVar);
+						location.reload();
+					}, 2000);
+
+				} else {
+					$('#sucErrMsg').text('Approx ' + userApiDataLength + ' Records Left').addClass('alert alert-info');
+				}
+
+				sendEmailToMailjetCount++;
+				if (sendEmailToMailjetCount < apiData.length) {
+					sendEmailToMailjet(apiData, provider, groupName, keyword);
+				}
+
+			}
+		});
+	}
+
 	
 </script>
