@@ -703,8 +703,8 @@ class Live_delivery_api extends CI_Controller
                             } 
                             $this->load->model('mdl_sendpulse');
                             // LOGIC FOR SEND DATA TO SENDPULSE OR QUEUE                            
-                            //$delayDay = $delays[$mailProvider];
-                            $delayDay = 0;
+                            $delayDay = $delays[$mailProvider];
+                            // $delayDay = 0;
                             $provider = SENDPULSE;
                             if($delayDay == 0){
                                 // NO DELAY INSTANT SEND DATA TO SENDPULSE
@@ -722,8 +722,8 @@ class Live_delivery_api extends CI_Controller
                         } else if($providerData['provider'] == MAILERLITE) {
                             $this->load->model('mdl_mailerlite');
                             // LOGIC FOR SEND DATA TO MAILERLITE OR QUEUE                            
-                            //$delayDay = $delays[$mailProvider];
-                            $delayDay = 0;
+                            $delayDay = $delays[$mailProvider];
+                            // $delayDay = 0;
                             $provider = MAILERLITE;
                             if($delayDay == 0){
                                 // NO DELAY INSTANT SEND DATA TO MAILERLITE
@@ -747,8 +747,8 @@ class Live_delivery_api extends CI_Controller
 
                             $this->load->model('mdl_mailjet');
                             // LOGIC FOR SEND DATA TO MAILJET OR QUEUE                            
-                            // $delayDay = $delays[$mailProvider];
-                            $delayDay = 0;
+                            $delayDay = $delays[$mailProvider];
+                            // $delayDay = 0;
                             $provider = MAILJET;
                             if($delayDay == 0){
                                 // NO DELAY INSTANT SEND DATA TO MAILJET
