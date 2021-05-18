@@ -12,7 +12,7 @@ class Mdl_mailjet_unsubscribe extends CI_Model {
 
     
     function makeUnsubscribe($email,$mailjetListId){
-
+        
         try{
             // fetch mail provider data from providers table
             $providerCondition   = array('id' => $mailjetListId);
@@ -27,30 +27,42 @@ class Mdl_mailjet_unsubscribe extends CI_Model {
             $secret_key = $mailjetAccountData['secret_key'];
                     
             //LIST ID 
-            $list_id = $providerData['code'];     
-            $mj = new \Mailjet\Client($api_key, $secret_key);
-            $body = [
-                'Contacts' => [
-                    [
-                        'Email' => $email,
-                        'IsExcludedFromCampaigns' => 'false'
+            $list_id = $providerData['code'];
+
+            // check user is exist
+            $condition = array('providerId' => $mailjetListId ,'emailId' => $email, 'status'=> '1');
+            $is_single = TRUE;
+            $getEmailDetail = GetAllRecord(EMAIL_HISTORY_DATA,$condition,$is_single,array(),array(),array(),'emailId,response');
+            $emailresponse = json_decode($getEmailDetail['response'],true);
+
+            if(!empty($getEmailDetail) && $emailresponse['result'] == 'success'){
+                $mj = new \Mailjet\Client($api_key, $secret_key);
+                $body = [
+                    'Contacts' => [
+                        [
+                            'Email' => $email,
+                            'IsExcludedFromCampaigns' => 'false'
+                        ]
+                    ],
+                    'ContactsLists' => [
+                        [
+                            'ListID' => $list_id,
+                            'Action' => "unsub"
+                        ]
                     ]
-                ],
-                'ContactsLists' => [
-                    [
-                        'ListID' => $list_id,
-                        'Action' => "unsub"
-                    ]
-                ]
-            ];
-            
-            $response = $mj->post(Resources::$ContactManagemanycontacts, ['body' => $body]);
-            echo $response->success();
-            die;
-            // UPDATE SUSBCRIBER STATUS
-            // return array("result" => "success","data" => array("name" => $updateResponseBody['name'],"updated_at" => $updateResponseBody['unsubscribed_at']));
-            
-    
+                ];
+                
+                $response = $mj->post(Resources::$ContactManagemanycontacts, ['body' => $body]);
+                // get user contact details
+                $contactResponse = $mj->get(Resources::$Contact, ['id' => $email]);
+                $name = $contactResponse->getData()[0]['Name'];
+                $updated_at = date('Y-m-d H:i:s');
+              
+                // UPDATE SUSBCRIBER STATUS
+                return array("result" => "success","data" => array("name" => $name,"updated_at" => $updated_at));
+            } else {
+                return array("result" => "error","msg" => "Subscriber not found");
+            }     
         }catch (\GuzzleHttp\Exception\ClientException $e) {
             return array("result" => "error","msg" => "Bad request");
         }
