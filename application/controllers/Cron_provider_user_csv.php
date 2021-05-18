@@ -177,7 +177,7 @@ class Cron_provider_user_csv extends CI_Controller
                                     $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
                                 } 
                                 $responseField = "convertkitResponse";
-                                $mailProvider = $this->getMailjetProviderId($provider["providerList"]);                                
+                                $mailProvider = $this->getConvertkitProviderId($provider["providerList"]);                                
                                 $response = $this->mdl_convertkit->AddEmailToConvertkitSubscriberList($userData,$mailProvider);
                                 addRecordInHistoryFromCSV($userData, $mailProvider, CONVERTKIT, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
                             }  
@@ -394,6 +394,18 @@ class Cron_provider_user_csv extends CI_Controller
         return $provider[$providerId];
     }
 
+    public function getConvertkitProviderId($providerId){
+        $provider = array(
+            "1" => "121",  // DK
+            "2" => "122",  // SE
+            "3" => "123",  // NO
+            "4" => "124",  // FI
+            "5" => "125", // CA
+            "6" => "126"  // NZ
+        );
+        return $provider[$providerId];
+    }
+    
     public function convertTimeToMinute($time){
 
         $splitTime = explode(":",$time);

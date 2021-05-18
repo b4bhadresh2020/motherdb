@@ -955,6 +955,33 @@ function getLiveRepostSendInBlueProviderID($providerId){
     return $provider[$providerId];
 }
 
+function getLiveRepostSendPulseProviderID($providerId){
+    $provider = array(
+        "1" => "83",  // NO-Sendpulse
+        "2" => "84",  // CA-Sendpulse
+        "3" => "85",  // SE-Sendpulse
+    );
+    return $provider[$providerId];
+}
+
+function getLiveRepostMailerliteProviderID($providerId){
+    $provider = array(
+        "1" => "115",  // DK-Velkomstgaven
+        "2" => "116",  // NO-Velkomstgaven.com
+        "3" => "117",  // NO-Velkomstgaven.com1
+        "4" => "118",  // SE-Gratispresent
+    );
+    return $provider[$providerId];
+}
+
+function getLiveRepostMailjetProviderID($providerId){
+    $provider = array(
+        "1" => "119",  // Velkomstgaven/DK
+        "2" => "120",  // Gratispresent/SE
+    );
+    return $provider[$providerId];
+}
+
 function getLiveRepostConvertkitProviderID($providerId){
     $provider = array(
         "1" => "121",  // DK
