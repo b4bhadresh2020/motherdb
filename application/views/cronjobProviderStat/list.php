@@ -71,6 +71,14 @@
                                                             echo getSendgridProviderListName($curEntry['providerList']);
                                                          }else if($curEntry['providerName'] ==  SENDINBLUE ){
                                                             echo getSendInBlueProviderListName($curEntry['providerList']);
+                                                         }else if($curEntry['providerName'] ==  SENDPULSE ){
+                                                            echo getSendPulseProviderListName($curEntry['providerList']);
+                                                         }else if($curEntry['providerName'] ==  MAILERLITE ){
+                                                            echo getMailerliteProviderListName($curEntry['providerList']);
+                                                         }else if($curEntry['providerName'] ==  MAILJET ){
+                                                            echo getMailjetProviderListName($curEntry['providerList']);
+                                                         }else if($curEntry['providerName'] ==  CONVERTKIT ){
+                                                            echo getConvertkitProviderListName($curEntry['providerList']);
                                                          }
                                                          ?></td>
                                                         <td><?php echo date("d-m-Y",strtotime($curEntry['fromDate'])); ?></td>

@@ -20,13 +20,11 @@ class Mdl_provider_unsubscriber extends CI_Model
         $is_single = false;
         
         $totalCount = GetAllRecordCount(PROVIDER_UNSUBSCRIBER,$condition);
-
         $unsubscriberData = array();
         if ($totalCount > 0) {
             $this->db->limit($perpage,$start);
-            $unsubscriberData = JoinData(PROVIDER_UNSUBSCRIBER,$condition,PROVIDERS,"provider_id","id",'',false,["created_at" => "desc"],"email,provider,provider_unsubscriber.created_at,provider_unsubscriber.status,providers.country,providers.listname,providers.displayname,provider_unsubscriber.response");  
+            $unsubscriberData = JoinData(PROVIDER_UNSUBSCRIBER,$condition,PROVIDERS,"provider_id","id",'',false,[["created_at" => "desc"]],"email,provider,provider_unsubscriber.created_at,provider_unsubscriber.status,providers.country,providers.listname,providers.displayname,provider_unsubscriber.response");  
         }
-
         $response = array(
             'totalCount' => $totalCount,
             'unsubscriberData' => $unsubscriberData 
