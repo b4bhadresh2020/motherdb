@@ -34,6 +34,8 @@
                         $providerListName = getMailerliteProviderListName($providerInfo['providerList']);
                     }else if($providerInfo['providerName'] == MAILJET){
                         $providerListName = getMailjetProviderListName($providerInfo['providerList']);
+                    }else if($providerInfo['providerName'] == CONVERTKIT){
+                        $providerListName = getConvertkitProviderListName($providerInfo['providerList']);
                     }
                     ?> 
                     <tr>

@@ -526,6 +526,13 @@
         } else if(providerId == 9){
             providerList +="<option value='1'>Velkomstgaven/DK</option>";
             providerList +="<option value='2'>Gratispresent/SE</option>";
+        } else if(providerId == 10){
+            providerList +="<option value='1'>Camilla/DK</option>";
+            providerList +="<option value='2'>Camilla/SE</option>";
+            providerList +="<option value='3'>Camilla/NO</option>";
+            providerList +="<option value='4'>Camilla/FI</option>";
+            providerList +="<option value='5'>Camilla/CA</option>";
+            providerList +="<option value='6'>Camilla/NZ</option>";
         } else{
             providerList +="<option value='0'>Select Provider List</option>";
         }

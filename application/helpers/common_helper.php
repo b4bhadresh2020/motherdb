@@ -657,7 +657,8 @@ function getProviderName($providerId){
         '6' => 'Sendinblue',
         '7' => 'Sendpulse',
         '8' => 'Mailerlite',
-        '9' => 'Mailjet'
+        '9' => 'Mailjet',
+        '10' => 'Convertkit'
     );
     return $providerNames[$providerId];
 }
@@ -816,6 +817,18 @@ function getMailjetProviderListName($providerListId){
     return $mailerliteList[$providerListId];
 }
 
+function getConvertkitProviderListName($providerListId){
+    $mailerliteList = array(
+        "1" => "camilla/DK",
+        "2" => "camilla/SE",
+        "3" => "camilla/NO",
+        "4" => "camilla/FI",
+        "5" => "camilla/CA",
+        "6" => "camilla/NZ"
+    );
+    return $mailerliteList[$providerListId];
+}
+
 function getLiveRepostAweverProviderID($providerListId){
     $provider = array(
         "1" => "14",  // Velkomstgaven.com (Norway) 
@@ -938,6 +951,18 @@ function getLiveRepostSendInBlueProviderID($providerId){
         "2" => "65",  // CA
         "3" => "66",  // NZ
         "4" => "67"  // SE
+    );
+    return $provider[$providerId];
+}
+
+function getLiveRepostConvertkitProviderID($providerId){
+    $provider = array(
+        "1" => "121",  // DK
+        "2" => "122",  // SE
+        "3" => "123",  // NO
+        "4" => "124",  // FI
+        "5" => "125", // CA
+        "6" => "126"  // NZ
     );
     return $provider[$providerId];
 }
@@ -1621,6 +1646,22 @@ function addToMailjetSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay
     $is_insert = true;
     ManageData(MAILJET_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
+
+function addToConvertkitSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+    $liveDeliveryDelayData = array(
+        "liveDeliveryDataId" => $liveDeliveryDataId,
+        "providerId" => $mailProvider,
+        "delayDay" => $delayDay,
+        "currentTimestamp" => time(),
+        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "status" => 0
+    );
+    $condition = array();
+    $is_insert = true;
+    ManageData(CONVERTKIT_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
+}
+
 function addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$groupName,$keyword,$emailId = NULL){
     $historyData = array(
         'liveDeliveryDataId' => $lastDeliveryData['liveDeliveryDataId'],

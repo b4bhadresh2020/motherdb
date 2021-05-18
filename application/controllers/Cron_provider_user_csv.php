@@ -17,6 +17,7 @@ class Cron_provider_user_csv extends CI_Controller
         $this->load->model('mdl_sendpulse');
         $this->load->model('mdl_mailerlite');
         $this->load->model('mdl_mailjet');
+        $this->load->model('mdl_convertkit');
     }
 
     public function index() {
@@ -170,6 +171,15 @@ class Cron_provider_user_csv extends CI_Controller
                                 $mailProvider = $this->getMailjetProviderId($provider["providerList"]);                                
                                 $response = $this->mdl_mailjet->AddEmailToMailjetSubscriberList($userData,$mailProvider);
                                 addRecordInHistoryFromCSV($userData, $mailProvider, MAILJET, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
+                            } else if($provider['providerName'] == CONVERTKIT){
+                                if (@$userData['birthdateDay'] != '' && @$userData['birthdateMonth'] != '' && @$userData['birthdateYear'] != '') {
+                                    $birthDate              = $userData['birthdateYear'] . '-' . $userData['birthdateMonth'] . '-' . $userData['birthdateDay'];
+                                    $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
+                                } 
+                                $responseField = "convertkitResponse";
+                                $mailProvider = $this->getMailjetProviderId($provider["providerList"]);                                
+                                $response = $this->mdl_convertkit->AddEmailToConvertkitSubscriberList($userData,$mailProvider);
+                                addRecordInHistoryFromCSV($userData, $mailProvider, CONVERTKIT, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
                             }  
                             // update status of sended record
                             $is_insert = FALSE;

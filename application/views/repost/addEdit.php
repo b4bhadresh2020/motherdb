@@ -8,6 +8,7 @@ $sendInBlueList = getProviderList(SENDINBLUE);
 $sendPulseList = getProviderList(SENDPULSE);
 $mailerliteList = getProviderList(MAILERLITE);
 $mailjetList = getProviderList(MAILJET);
+$convertkitList = getProviderList(CONVERTKIT);
 
 $mailProviders = array(    
     'egoi' => 'E-goi',
@@ -56,6 +57,11 @@ foreach($mailerliteList as $list) {
 // Add Mailjet list in mail provider
 foreach($mailjetList as $list) {
     $mailProviders[$list['id']] = $list['listname']. " (Mailjet)";
+}
+
+// Add Convertkit list in mail provider
+foreach($convertkitList as $list) {
+    $mailProviders[$list['id']] = $list['listname']. " (Convertkit)";
 }
 ?>
 <style>

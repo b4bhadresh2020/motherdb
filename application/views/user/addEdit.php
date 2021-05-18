@@ -143,6 +143,7 @@
                                                         <option value="7">Sendpulse</option>
                                                         <option value="8">Mailerlite</option>
                                                         <option value="9">Mailjet</option>                                                       
+                                                        <option value="10">Convertkit</option>                                                      
                                                     </select>
                                                 </div>
                                             </div>
