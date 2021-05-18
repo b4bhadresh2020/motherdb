@@ -217,7 +217,7 @@
         <div class="modal-content">
             <div class="modal-body">
             <div class="page-loader"><div class="loader"></div></div>
-                <form id="unsubscribeForm" name="unsubscribeForm" method="post" action="#">                
+                <form id="unsubscribeForm" name="unsubscribeForm" method="post" action="#" autocomplete="off">                
                     <div class="x_panel" style="border: none;">
                         <h5 style="margin-bottom: 20px;"><strong>Add Unsubscriber Information</strong></h5>
                         <div class="row">
