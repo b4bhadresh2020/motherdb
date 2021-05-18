@@ -83,7 +83,6 @@ class Mdl_mailjet extends CI_Model {
     
             // catch any exceptions thrown during the process and print the errors to screen
         } catch (\GuzzleHttp\Exception\ClientException $e) {
-            die;
             $statusCode = $e->getResponse()->getStatusCode();         
             if($statusCode == "400"){
                 return array("result" => "error","error" => array("msg" => $statusCode." - Bad Request"));
