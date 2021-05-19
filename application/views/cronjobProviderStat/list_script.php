@@ -167,6 +167,11 @@
                 providerList +="<option value='4'>Camilla/FI</option>";
                 providerList +="<option value='5'>Camilla/CA</option>";
                 providerList +="<option value='6'>Camilla/NZ</option>";
+                providerList +="<option value='7'>Velkomstgaven/NOR</option>";
+                providerList +="<option value='8'>Gratispresent/SE</option>";
+                providerList +="<option value='9'>Velkomstgaven1/NOR</option>";
+                providerList +="<option value='10'>Unelmalaina/FI</option>";
+                providerList +="<option value='11'>Velkomstgaven/DK</option>";
             } else{
                 providerList +="<option value='0'>Select Provider List</option>";
             }

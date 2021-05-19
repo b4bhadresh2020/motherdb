@@ -825,7 +825,12 @@ function getConvertkitProviderListName($providerListId){
         "3" => "camilla/NO",
         "4" => "camilla/FI",
         "5" => "camilla/CA",
-        "6" => "camilla/NZ"
+        "6" => "camilla/NZ",
+        "7" => "Velkomstgaven/NOR",
+        "8" => "Gratispresent/SE",
+        "9" => "Velkomstgaven1/NOR",
+        "10" => "Unelmalaina/FI",
+        "11" => "Velkomstgaven/DK"
     );
     return $mailerliteList[$providerListId];
 }
@@ -990,8 +995,13 @@ function getLiveRepostConvertkitProviderID($providerId){
         "2" => "122",  // SE
         "3" => "123",  // NO
         "4" => "124",  // FI
-        "5" => "125", // CA
-        "6" => "126"  // NZ
+        "5" => "125",  // CA
+        "6" => "126",  // NZ
+        "7" => "128",  // NOR
+        "8" => "129",  // SE
+        "9" => "130",  // NOR
+        "10" => "131", // FI
+        "11" => "132"  // DK
     );
     return $provider[$providerId];
 }
