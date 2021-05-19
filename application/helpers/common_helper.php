@@ -812,7 +812,8 @@ function getMailerliteProviderListName($providerListId){
 function getMailjetProviderListName($providerListId){
     $mailerliteList = array(
         "1" => "Velkomstgaven/DK",
-        "2" => "Gratispresent/SE"
+        "2" => "Gratispresent/SE",
+        "3" => "Velkomstgaven/NOR"
     );
     return $mailerliteList[$providerListId];
 }
@@ -978,6 +979,7 @@ function getLiveRepostMailjetProviderID($providerId){
     $provider = array(
         "1" => "119",  // Velkomstgaven/DK
         "2" => "120",  // Gratispresent/SE
+        "3" => "127"  // Velkomstgaven/NOR
     );
     return $provider[$providerId];
 }
