@@ -402,7 +402,10 @@ class Cron_provider_user_csv extends CI_Controller
             "3" => "123",  // NO
             "4" => "124",  // FI
             "5" => "125", // CA
-            "6" => "126"  // NZ
+            "6" => "126",  // NZ
+            "7" => "128",  // NOR
+            "8" => "129",  // SE
+            "9" => "130",  // NOR
         );
         return $provider[$providerId];
     }
