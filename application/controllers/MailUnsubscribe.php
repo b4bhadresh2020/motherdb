@@ -73,13 +73,20 @@ class MailUnsubscribe extends CI_Controller
     }
 
     function unsubscribe(){
-        
         $provider = $this->input->post('provider');
         $country = $this->input->post('country');
         $list = $this->input->post('list');
         $email = $this->input->post('email'); 
         $successUnsubscribe = [];
         $failUnsubscribe = [];
+
+        //LIST ID EMPTY GET COUNTRY WISE LIST
+        if(empty($list)){
+            $listCondition         = array('country' =>  $country);
+            $is_single             = false;
+            $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
+            $list = array_column($getListIDByCountry,'id');
+        }
 
         // GET UNSUBSCRIBER LIST USING EMAIL ID
         
