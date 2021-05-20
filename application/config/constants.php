@@ -156,6 +156,9 @@ define('AWEBER_TOKEN_URL'	, 'https://auth.aweber.com/oauth2/token');
 define('AWEBER_CLIENT_ID'	, 'HoK3UZHUYHg9D6jPPkKa0noJTYCbJ4Hs');
 define('AWEBER_CLIENT_SECRET', '3kTNs5HT8CE7PemGAHENrDvnak6rOHWc');
 
+//convertkit constant
+define('CONVERTKIT_API_PATH','https://api.convertkit.com/v3/');
+
 // Enter your Constant Contact APIKEY and ACCESS_TOKEN
 define("CONSTANT_CONTACT_APIKEY", "7a8gcmnmtnzdtgjmaakupvzm");
 define("CONSTANT_CONTACT_ACCESS_TOKEN", "d11e5c72-767e-48b5-a723-79dcb8318cd5");
