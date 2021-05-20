@@ -108,8 +108,6 @@
             $("#popupSucErrMsg").html("Please select provider").show();
         }else if($("#popupCountry").val() == ""){
             $("#popupSucErrMsg").html("Please select country").show();
-        }else if($("#popupList :selected").length == 0){
-            $("#popupSucErrMsg").html("Please select list").show();
         }else if($("#email").val() == ""){
             $("#popupSucErrMsg").html("Please enter email address").show();
         }else{
