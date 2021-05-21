@@ -44,6 +44,14 @@ class Mdl_sendpulse extends CI_Model {
                 $tagValue = "";
             }
 
+             // LOG ENTRY
+             $logPath    = FCPATH."log/sendpulse/";
+             $fileName   = date("Ymd")."_log.txt"; 
+             $logFile    = fopen($logPath.$fileName,"a");
+             $logData    = $getData['emailId']." ".$getData['firstName']." ".$getData['lastName']." ".time()."\n";
+             fwrite($logFile,$logData);
+             fclose($logFile);
+
             $details = [[
                 'email' => $getData['emailId'],
                 'variables' => [

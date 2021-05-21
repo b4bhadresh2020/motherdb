@@ -132,7 +132,7 @@
                                         </div>                                    
                                         <button type="submit" class="btn btn-success" id="btn_insert">Submit</button>
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addUnsubscriber">
-                                            Add New Unsubscriber
+                                            Delete Subscriber
                                         </button>
                                     </div>
                                 </div>
@@ -220,7 +220,7 @@
             <div class="page-loader"><div class="loader"></div></div>
                 <form id="unsubscribeForm" name="unsubscribeForm" method="post" action="#" autocomplete="off">                
                     <div class="x_panel" style="border: none;">
-                        <h5 style="margin-bottom: 20px;"><strong>Add Unsubscriber Information</strong></h5>
+                        <h5 style="margin-bottom: 20px;"><strong>Delete Subscriber Information</strong></h5>
                         <div class="row">
                             <div class="col-lg-12">
                                 <div id="popupSucErrMsg" class="alert btn-danger" role="alert" style="display: none;color:#ffffff"></div>

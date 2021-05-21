@@ -430,6 +430,40 @@ class Repost extends CI_Controller
         ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
     }
 
+    function addDataToMarketingPlatform()
+    {
+
+        $apiDataDetail = $this->input->post('apiDataDetail');
+        $mailProvider = $this->input->post('provider');
+        $groupName = $this->input->post('groupName');
+        $keyword = $this->input->post('keyword');
+        $provider = MARKETING_PLATFORM;
+
+        // fetch mail provider data from providers table
+        $providerCondition   = array('id' => $mailProvider);
+        $is_single           = true;
+        $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
+
+        if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
+
+            $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
+
+            $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
+        }
+
+        $this->load->model('mdl_marketing_platform');
+        $response = $this->mdl_marketing_platform->AddEmailToMarketingPlatformSubscriberList($apiDataDetail, $mailProvider);
+        // ADD RECORD IN HISTORY
+        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
+
+        //update to live delivery data
+        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
+        $is_insert = FALSE;
+        $responseField = $providerData['response_field'];
+        $updateArr = array($responseField => json_encode($response));
+        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
+    }
+
     function getProvider()
     {
         $mailProvider = $this->input->post('id');

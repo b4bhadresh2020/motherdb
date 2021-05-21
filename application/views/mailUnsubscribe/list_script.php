@@ -22,6 +22,7 @@
     $(document).ready(function(){
         $('#popupList').multiselect({
             includeSelectAllOption: true,
+            nonSelectedText: 'All'
         });
         $(".multiselect-dropdown .btn-group").css({"width":"100%"});
         $(".multiselect-dropdown .btn-group .multiselect").css({"width":"100%"});
@@ -56,7 +57,7 @@
             data:{ provider:provider,country:country},
             success:function(response){
                 var liveDiliveries = JSON.parse(response);
-                $("#list").html("<option value='0'> Select List Name </option>");
+                $("#list").html("<option value='0'> All Select </option>");
                 $.each(liveDiliveries,function(index,value){
                     $("#list").append("<option value='"+value.id+"'>"+value.displayname+"</option>");
                 });                
@@ -98,6 +99,7 @@
                 $("#popupList").multiselect("destroy");
                 $('#popupList').multiselect({
                     includeSelectAllOption: true,
+                    nonSelectedText: 'All'
                 });
             }
         });

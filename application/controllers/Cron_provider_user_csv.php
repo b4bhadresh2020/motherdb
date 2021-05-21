@@ -18,6 +18,7 @@ class Cron_provider_user_csv extends CI_Controller
         $this->load->model('mdl_mailerlite');
         $this->load->model('mdl_mailjet');
         $this->load->model('mdl_convertkit');
+        $this->load->model('mdl_marketing_platform');
     }
 
     public function index() {
@@ -180,6 +181,15 @@ class Cron_provider_user_csv extends CI_Controller
                                 $mailProvider = $this->getConvertkitProviderId($provider["providerList"]);                                
                                 $response = $this->mdl_convertkit->AddEmailToConvertkitSubscriberList($userData,$mailProvider);
                                 addRecordInHistoryFromCSV($userData, $mailProvider, CONVERTKIT, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
+                            }  else if($provider['providerName'] == MARKETING_PLATFORM){
+                                if (@$userData['birthdateDay'] != '' && @$userData['birthdateMonth'] != '' && @$userData['birthdateYear'] != '') {
+                                    $birthDate              = $userData['birthdateYear'] . '-' . $userData['birthdateMonth'] . '-' . $userData['birthdateDay'];
+                                    $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
+                                } 
+                                $responseField = "marketingPlatformResponse";
+                                $mailProvider = $this->getMarketingPlatformProviderId($provider["providerList"]);                                
+                                $response = $this->mdl_marketing_platform->AddEmailToMarketingPlatformSubscriberList($userData,$mailProvider);
+                                addRecordInHistoryFromCSV($userData, $mailProvider, MARKETING_PLATFORM, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
                             }  
                             // update status of sended record
                             $is_insert = FALSE;
@@ -408,6 +418,20 @@ class Cron_provider_user_csv extends CI_Controller
             "9" => "130",  // NOR
             "10" => "131", // FI
             "11" => "132"  // DK
+        );
+        return $provider[$providerId];
+    }
+
+    public function getMarketingPlatformProviderId($providerId){
+        $provider = array(
+            "1" => "133",  // SE-Gratispresent
+            "2" => "134",  // NO-Velkomstgaven
+            "3" => "135",  // DK-Velkomstgaven
+            "4" => "136",  // FI-Unelmalaina
+            "5" => "137",  // FreeCasinoDeal-CA
+            "6" => "138",  // FreeCasinoDeal-FI
+            "7" => "139",  // FreeCasinoDeal-NO
+            "8" => "140",  // FreeCasinoDeal-NZ        
         );
         return $provider[$providerId];
     }

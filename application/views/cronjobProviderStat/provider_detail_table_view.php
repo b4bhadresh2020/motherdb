@@ -36,6 +36,8 @@
                         $providerListName = getMailjetProviderListName($providerInfo['providerList']);
                     }else if($providerInfo['providerName'] == CONVERTKIT){
                         $providerListName = getConvertkitProviderListName($providerInfo['providerList']);
+                    }else if($providerInfo['providerName'] == MARKETING_PLATFORM){
+                        $providerListName = getMarketingPlatformProviderListName($providerInfo['providerList']);
                     }
                     ?> 
                     <tr>

@@ -658,7 +658,8 @@ function getProviderName($providerId){
         '7' => 'Sendpulse',
         '8' => 'Mailerlite',
         '9' => 'Mailjet',
-        '10' => 'Convertkit'
+        '10' => 'Convertkit',
+        '11' => 'MarketingPlatform'
     );
     return $providerNames[$providerId];
 }
@@ -810,16 +811,16 @@ function getMailerliteProviderListName($providerListId){
 }
 
 function getMailjetProviderListName($providerListId){
-    $mailerliteList = array(
+    $mailjetList = array(
         "1" => "Velkomstgaven/DK",
         "2" => "Gratispresent/SE",
         "3" => "Velkomstgaven/NOR"
     );
-    return $mailerliteList[$providerListId];
+    return $mailjetList[$providerListId];
 }
 
 function getConvertkitProviderListName($providerListId){
-    $mailerliteList = array(
+    $convertkitList = array(
         "1" => "camilla/DK",
         "2" => "camilla/SE",
         "3" => "camilla/NO",
@@ -832,7 +833,21 @@ function getConvertkitProviderListName($providerListId){
         "10" => "Unelmalaina/FI",
         "11" => "Velkomstgaven/DK"
     );
-    return $mailerliteList[$providerListId];
+    return $convertkitList[$providerListId];
+}
+
+function getMarketingPlatformProviderListName($providerListId){
+    $marketingPlatformList = array(
+        "1" => "SE-Gratispresent",
+        "2" => "NO-Velkomstgaven",
+        "3" => "DK-Velkomstgaven",
+        "4" => "FI-Unelmalaina",
+        "5" => "FreeCasinoDeal-CA",
+        "6" => "FreeCasinoDeal-FI",
+        "7" => "FreeCasinoDeal-NO",
+        "8" => "FreeCasinoDeal-NZ",
+    );
+    return $marketingPlatformList[$providerListId];
 }
 
 function getLiveRepostAweverProviderID($providerListId){
@@ -1006,6 +1021,19 @@ function getLiveRepostConvertkitProviderID($providerId){
     return $provider[$providerId];
 }
 
+function getLiveRepostMarketingPlatformProviderID($providerId){
+    $provider = array(
+        "1" => "133",  // SE-Gratispresent
+        "2" => "134",  // NO-Velkomstgaven
+        "3" => "135",  // DK-Velkomstgaven
+        "4" => "136",  // FI-Unelmalaina
+        "5" => "137",  // FreeCasinoDeal-CA
+        "6" => "138",  // FreeCasinoDeal-FI
+        "7" => "139",  // FreeCasinoDeal-NO
+        "8" => "140",  // FreeCasinoDeal-NZ        
+    );
+    return $provider[$providerId];
+}
 
 /*
   ++++++++++++++++++++++++++++++++++++++++++++++
@@ -1699,6 +1727,21 @@ function addToConvertkitSubscriberQueue($liveDeliveryDataId,$mailProvider,$delay
     $condition = array();
     $is_insert = true;
     ManageData(CONVERTKIT_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
+}
+
+function addToMarketingPlatformSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+    $liveDeliveryDelayData = array(
+        "liveDeliveryDataId" => $liveDeliveryDataId,
+        "providerId" => $mailProvider,
+        "delayDay" => $delayDay,
+        "currentTimestamp" => time(),
+        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "status" => 0
+    );
+    $condition = array();
+    $is_insert = true;
+    ManageData(MARKETING_PLATFORM_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
 function addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$groupName,$keyword,$emailId = NULL){

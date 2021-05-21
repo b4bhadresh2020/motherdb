@@ -123,7 +123,11 @@
                                                             case 10:                                                                
                                                                 $providerName = 'Convertkit';
                                                                 $response = $curEntry['convertkitResponse'];
-                                                                break;   
+                                                                break; 
+                                                            case 11:                                                                
+                                                                $providerName = 'Marketing Platform';
+                                                                $response = $curEntry['marketingPlatformResponse'];
+                                                                break;  
                                                         }
                                                         if($curEntry['status'] == 0){
                                                             $response_staus = "Pending";
