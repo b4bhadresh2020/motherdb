@@ -62,6 +62,7 @@ class Mdl_marketing_platform extends CI_Model {
                 'Apitoken'  => $apiToken,
                 'listid' => $list_id,
                 'emailaddress' => @$getData['emailId'],
+                'status' => 'active',
                 'mobile' => @$getData['phone'],
                 'contactFields' => [
                     [
