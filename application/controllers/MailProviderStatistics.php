@@ -44,6 +44,8 @@ class MailProviderStatistics extends CI_Controller
             "7" => [ "success" => "success", "subscriber_exist" => "400 -", "auth_fail" => "401 -", "bad_fail" => "Bad Request","blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
             "8" => [ "success" => "success", "subscriber_exist" => "400 -", "auth_fail" => "401 -", "bad_fail" => "Bad Request","blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
             "9" => [ "success" => "success", "subscriber_exist" => "subscriber already", "auth_fail" => "401 -", "bad_fail" => "Bad Request","blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
+            "10" => [ "success" => "success", "subscriber_exist" => "subscriber already", "auth_fail" => "401 -", "bad_fail" => "Bad Request","blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
+            "11" => [ "success" => "success", "subscriber_exist" => "subscriber already", "auth_fail" => "401 -", "bad_fail" => "Bad Request","blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
         ];
 
         //get provider detail
@@ -102,6 +104,12 @@ class MailProviderStatistics extends CI_Controller
             case 9:
                 $delayTableName = MAILJET_DELAY_USER_DATA;
                 break;
+            case 10:
+                $delayTableName = CONVERTKIT_DELAY_USER_DATA;
+                break;
+            case 11:
+                $delayTableName = MARKETING_PLATFORM_DELAY_USER_DATA;
+                break;
         }
         
         if(count($liveDeliveryInstant)>0){
@@ -144,7 +152,7 @@ class MailProviderStatistics extends CI_Controller
         }else{
             $liveDeliveryInstantData = [];
         }    
-       
+        
         if(count($liveDeliveryDelay)){
             // GET DATA FROM LIVE DELIVERY DATA TABLE
             $this->db->select('apikey,groupName,keyword,
@@ -197,7 +205,7 @@ class MailProviderStatistics extends CI_Controller
         }else{
             $liveDeliveryStastic = [];
         }
-        
+
         $data['load_page'] = 'mailProviderStatistics';
         $data['headerTitle'] = "Mail Provider Statistics";
         $data['curTemplateName'] = "mailProviderStatistics/report";

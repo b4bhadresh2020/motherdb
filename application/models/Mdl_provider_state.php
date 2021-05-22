@@ -121,6 +121,41 @@ class Mdl_provider_state extends CI_Model
                 if(!in_array($allProvider[$originalProviderID],$liveRepostProvider)){
                     $liveRepostProvider[] = $allProvider[$originalProviderID]; 
                 }
+            }else if($provider['providerName'] == SENDGRID){
+                $originalProviderID = getLiveRepostSendgridProviderID($provider['providerList']);
+                if(!in_array($allProvider[$originalProviderID],$liveRepostProvider)){
+                    $liveRepostProvider[] = $allProvider[$originalProviderID]; 
+                }
+            }else if($provider['providerName'] == SENDINBLUE){
+                $originalProviderID = getLiveRepostSendInBlueProviderID($provider['providerList']);
+                if(!in_array($allProvider[$originalProviderID],$liveRepostProvider)){
+                    $liveRepostProvider[] = $allProvider[$originalProviderID]; 
+                }
+            }else if($provider['providerName'] == SENDPULSE){
+                $originalProviderID = getLiveRepostSendPulseProviderID($provider['providerList']);
+                if(!in_array($allProvider[$originalProviderID],$liveRepostProvider)){
+                    $liveRepostProvider[] = $allProvider[$originalProviderID]; 
+                }
+            }else if($provider['providerName'] == MAILERLITE){
+                $originalProviderID = getLiveRepostMailerliteProviderID($provider['providerList']);
+                if(!in_array($allProvider[$originalProviderID],$liveRepostProvider)){
+                    $liveRepostProvider[] = $allProvider[$originalProviderID]; 
+                }
+            }else if($provider['providerName'] == MAILJET){
+                $originalProviderID = getLiveRepostMailjetProviderID($provider['providerList']);
+                if(!in_array($allProvider[$originalProviderID],$liveRepostProvider)){
+                    $liveRepostProvider[] = $allProvider[$originalProviderID]; 
+                }
+            }else if($provider['providerName'] == CONVERTKIT){
+                $originalProviderID = getLiveRepostConvertkitProviderID($provider['providerList']);
+                if(!in_array($allProvider[$originalProviderID],$liveRepostProvider)){
+                    $liveRepostProvider[] = $allProvider[$originalProviderID]; 
+                }
+            }else if($provider['providerName'] == MARKETING_PLATFORM){
+                $originalProviderID = getLiveRepostMarketingPlatformProviderID($provider['providerList']);
+                if(!in_array($allProvider[$originalProviderID],$liveRepostProvider)){
+                    $liveRepostProvider[] = $allProvider[$originalProviderID]; 
+                }
             }            
         }
 

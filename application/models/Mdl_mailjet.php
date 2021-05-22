@@ -46,6 +46,13 @@ class Mdl_mailjet extends CI_Model {
             $tagValue = "";
         }
 
+        // LOG ENTRY
+        $logPath    = FCPATH."log/mailjet/";
+        $fileName   = date("Ymd")."_log.txt"; 
+        $logFile    = fopen($logPath.$fileName,"a");
+        $logData    = $getData['emailId']." ".$getData['firstName']." ".$getData['lastName']." ".time()."\n";
+        fwrite($logFile,$logData);
+        fclose($logFile);
 
         try {
             $mj = new \Mailjet\Client($api_key, $secret_key);

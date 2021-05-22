@@ -172,6 +172,15 @@
                 providerList +="<option value='9'>Velkomstgaven1/NOR</option>";
                 providerList +="<option value='10'>Unelmalaina/FI</option>";
                 providerList +="<option value='11'>Velkomstgaven/DK</option>";
+            } else if(providerId == 11){
+                providerList +="<option value='1'>SE-Gratispresent</option>";
+                providerList +="<option value='2'>NO-Velkomstgaven</option>";
+                providerList +="<option value='3'>DK-Velkomstgaven</option>";
+                providerList +="<option value='4'>FI-Unelmalaina</option>";
+                providerList +="<option value='5'>FreeCasinoDeal-CA</option>";
+                providerList +="<option value='6'>FreeCasinoDeal-FI</option>";
+                providerList +="<option value='7'>FreeCasinoDeal-NO</option>";
+                providerList +="<option value='8'>FreeCasinoDeal-NZ</option>";               
             } else{
                 providerList +="<option value='0'>Select Provider List</option>";
             }

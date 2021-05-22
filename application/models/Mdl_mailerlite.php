@@ -27,6 +27,14 @@ class Mdl_Mailerlite extends CI_Model {
             $mailerliteAccountData   = GetAllRecord(MAILERLITE_ACCOUNTS, $mailerliteCondition, $is_single);        
             $apiKey = $mailerliteAccountData['api_key'];
 
+            // LOG ENTRY
+            $logPath    = FCPATH."log/mailerlite/";
+            $fileName   = date("Ymd")."_log.txt"; 
+            $logFile    = fopen($logPath.$fileName,"a");
+            $logData    = $getData['emailId']." ".$getData['firstName']." ".$getData['lastName']." ".time()."\n";
+            fwrite($logFile,$logData);
+            fclose($logFile);
+
             $details = [
                 'email' => $getData['emailId'],
                 'name'  => $getData['firstName'] . ' ' . $getData['lastName'],

@@ -79,6 +79,8 @@
                                                             echo getMailjetProviderListName($curEntry['providerList']);
                                                          }else if($curEntry['providerName'] ==  CONVERTKIT ){
                                                             echo getConvertkitProviderListName($curEntry['providerList']);
+                                                         }else if($curEntry['providerName'] ==  MARKETING_PLATFORM ){
+                                                            echo getMarketingPlatformProviderListName($curEntry['providerList']);
                                                          }
                                                          ?></td>
                                                         <td><?php echo date("d-m-Y",strtotime($curEntry['fromDate'])); ?></td>
@@ -167,7 +169,9 @@
                                         <option value="6">Sendinblue</option> 
                                         <option value="7">Sendpulse</option>     
                                         <option value="8">Mailerlite</option>
-                                        <option value="9">Mailjet</option>                                                   
+                                        <option value="9">Mailjet</option>
+                                        <option value="10">Convertkit</option>                                                   
+                                        <option value="11">Marketing Platform</option>                                                   
                                     </select>
                                 </div>
                             </div>
