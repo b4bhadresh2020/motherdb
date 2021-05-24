@@ -19,6 +19,7 @@ class Cron_provider_user_csv extends CI_Controller
         $this->load->model('mdl_mailjet');
         $this->load->model('mdl_convertkit');
         $this->load->model('mdl_marketing_platform');
+        $this->load->model('mdl_ontraport');
     }
 
     public function index() {
@@ -190,6 +191,15 @@ class Cron_provider_user_csv extends CI_Controller
                                 $mailProvider = $this->getMarketingPlatformProviderId($provider["providerList"]);                                
                                 $response = $this->mdl_marketing_platform->AddEmailToMarketingPlatformSubscriberList($userData,$mailProvider);
                                 addRecordInHistoryFromCSV($userData, $mailProvider, MARKETING_PLATFORM, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
+                            }  else if($provider['providerName'] == ONTRAPORT){
+                                if (@$userData['birthdateDay'] != '' && @$userData['birthdateMonth'] != '' && @$userData['birthdateYear'] != '') {
+                                    $birthDate              = $userData['birthdateYear'] . '-' . $userData['birthdateMonth'] . '-' . $userData['birthdateDay'];
+                                    $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
+                                } 
+                                $responseField = "ontraportResponse";
+                                $mailProvider = $this->getOntraportProviderId($provider["providerList"]);                                
+                                $response = $this->mdl_ontraport->AddEmailToOntraportSubscriberList($userData,$mailProvider);
+                                addRecordInHistoryFromCSV($userData, $mailProvider, ONTRAPORT, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
                             }  
                             // update status of sended record
                             $is_insert = FALSE;
@@ -432,6 +442,18 @@ class Cron_provider_user_csv extends CI_Controller
             "6" => "138",  // FreeCasinoDeal-FI
             "7" => "139",  // FreeCasinoDeal-NO
             "8" => "140",  // FreeCasinoDeal-NZ        
+        );
+        return $provider[$providerId];
+    }
+
+    public function getOntraportProviderId($providerId){
+        $provider = array(
+            "1" => "141",  // Ontraport/SE
+            "2" => "142",  // Ontraport/NO
+            "3" => "143",  // Ontraport/FI
+            "4" => "144",  // Ontraport/DK
+            "5" => "145",  // Ontraport/CA
+            "6" => "146",  // Ontraport/NZ      
         );
         return $provider[$providerId];
     }

@@ -156,6 +156,11 @@ class Mdl_provider_state extends CI_Model
                 if(!in_array($allProvider[$originalProviderID],$liveRepostProvider)){
                     $liveRepostProvider[] = $allProvider[$originalProviderID]; 
                 }
+            }else if($provider['providerName'] == ONTRAPORT){
+                $originalProviderID = getLiveRepostOntraportProviderID($provider['providerList']);
+                if(!in_array($allProvider[$originalProviderID],$liveRepostProvider)){
+                    $liveRepostProvider[] = $allProvider[$originalProviderID]; 
+                }
             }            
         }
 

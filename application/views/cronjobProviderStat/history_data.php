@@ -127,6 +127,10 @@
                                                             case 11:                                                                
                                                                 $providerName = 'Marketing Platform';
                                                                 $response = $curEntry['marketingPlatformResponse'];
+                                                                break; 
+                                                            case 12:                                                                
+                                                                $providerName = 'Ontraport';
+                                                                $response = $curEntry['ontraportResponse'];
                                                                 break;  
                                                         }
                                                         if($curEntry['status'] == 0){

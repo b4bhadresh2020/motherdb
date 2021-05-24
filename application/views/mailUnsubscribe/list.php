@@ -82,7 +82,8 @@
                                                             <option value="8">Mailerlite</option>
                                                             <option value="9">Mailjet</option>
                                                             <option value="10">Convertkit</option>
-                                                            <option value="11">Marketing Platform</option>                                                       
+                                                            <option value="11">Marketing Platform</option>  
+                                                            <option value="12">Ontraport</option>                                                       
                                                         </select>
                                                     </div>
                                             </div>
@@ -184,6 +185,8 @@
                                                             $providerName = "Mailjet";
                                                         }else if($unsubscriber["provider"] == MARKETING_PLATFORM){
                                                             $providerName = "Marketing Platform";
+                                                        }else if($unsubscriber["provider"] == ONTRAPORT){
+                                                            $providerName = "Ontraport";
                                                         }
                                             ?>
                                             <tr>
@@ -244,7 +247,8 @@
                                         <option value="8">Mailerlite</option>
                                         <option value="9">Mailjet</option>   
                                         <option value="10">Convertkit</option>
-                                        <option value="11">Marketing Platform</option>                                                 
+                                        <option value="11">Marketing Platform</option>
+                                        <option value="12">Ontraport</option>                                                 
                                     </select>
                                 </div>
                             </div>
