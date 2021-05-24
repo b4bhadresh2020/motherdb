@@ -19,6 +19,7 @@ class Cron_provider_user_csv extends CI_Controller
         $this->load->model('mdl_mailjet');
         $this->load->model('mdl_convertkit');
         $this->load->model('mdl_marketing_platform');
+        $this->load->model('mdl_active_campaign');
     }
 
     public function index() {
@@ -190,7 +191,7 @@ class Cron_provider_user_csv extends CI_Controller
                                 $mailProvider = $this->getMarketingPlatformProviderId($provider["providerList"]);                                
                                 $response = $this->mdl_marketing_platform->AddEmailToMarketingPlatformSubscriberList($userData,$mailProvider);
                                 addRecordInHistoryFromCSV($userData, $mailProvider, MARKETING_PLATFORM, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
-                            }  
+                            }   
                             // update status of sended record
                             $is_insert = FALSE;
                             $updateCondition = array('providerUserId' => $userData['providerUserId']);

@@ -659,7 +659,8 @@ function getProviderName($providerId){
         '8' => 'Mailerlite',
         '9' => 'Mailjet',
         '10' => 'Convertkit',
-        '11' => 'MarketingPlatform'
+        '11' => 'MarketingPlatform',
+        '13' => 'ActiveCampaign'
     );
     return $providerNames[$providerId];
 }
@@ -1031,6 +1032,13 @@ function getLiveRepostMarketingPlatformProviderID($providerId){
         "6" => "138",  // FreeCasinoDeal-FI
         "7" => "139",  // FreeCasinoDeal-NO
         "8" => "140",  // FreeCasinoDeal-NZ        
+    );
+    return $provider[$providerId];
+}
+
+function getLiveRepostActiveCampaignProviderID($providerId){
+    $provider = array(
+        "1" => "147",  // Velkomstgaven/NOR
     );
     return $provider[$providerId];
 }
@@ -1742,6 +1750,21 @@ function addToMarketingPlatformSubscriberQueue($liveDeliveryDataId,$mailProvider
     $condition = array();
     $is_insert = true;
     ManageData(MARKETING_PLATFORM_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
+}
+
+function addToActiveCampaignSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+    $liveDeliveryDelayData = array(
+        "liveDeliveryDataId" => $liveDeliveryDataId,
+        "providerId" => $mailProvider,
+        "delayDay" => $delayDay,
+        "currentTimestamp" => time(),
+        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "status" => 0
+    );
+    $condition = array();
+    $is_insert = true;
+    ManageData(ACTIVE_CAMPAIGN_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
 function addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$groupName,$keyword,$emailId = NULL){
