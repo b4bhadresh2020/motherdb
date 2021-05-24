@@ -201,7 +201,16 @@ class Cron_provider_user_csv extends CI_Controller
                                 $mailProvider = $this->getOntraportProviderId($provider["providerList"]);                                
                                 $response = $this->mdl_ontraport->AddEmailToOntraportSubscriberList($userData,$mailProvider);
                                 addRecordInHistoryFromCSV($userData, $mailProvider, ONTRAPORT, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
-                            }   
+                            }  else if($provider['providerName'] == ACTIVE_CAMPAIGN){
+                                if (@$userData['birthdateDay'] != '' && @$userData['birthdateMonth'] != '' && @$userData['birthdateYear'] != '') {
+                                    $birthDate              = $userData['birthdateYear'] . '-' . $userData['birthdateMonth'] . '-' . $userData['birthdateDay'];
+                                    $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
+                                } 
+                                $responseField = "activeCampaignResponse";
+                                $mailProvider = $this->getActiveCampaignProviderId($provider["providerList"]);                                
+                                $response = $this->mdl_active_campaign->AddEmailToActiveCampaignSubscriberList($userData,$mailProvider);
+                                addRecordInHistoryFromCSV($userData, $mailProvider, ACTIVE_CAMPAIGN, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
+                            } 
                             // update status of sended record
                             $is_insert = FALSE;
                             $updateCondition = array('providerUserId' => $userData['providerUserId']);
@@ -459,6 +468,12 @@ class Cron_provider_user_csv extends CI_Controller
         return $provider[$providerId];
     }
     
+    public function getActiveCampaignProviderId($providerId){
+        $provider = array(
+            "1" => "147",  // Velkomstgaven/NOR
+        );
+        return $provider[$providerId];
+    }
     public function convertTimeToMinute($time){
 
         $splitTime = explode(":",$time);

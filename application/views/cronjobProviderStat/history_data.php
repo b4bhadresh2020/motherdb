@@ -131,6 +131,10 @@
                                                             case 12:                                                                
                                                                 $providerName = 'Ontraport';
                                                                 $response = $curEntry['ontraportResponse'];
+                                                                break; 
+                                                            case 13:                                                                
+                                                                $providerName = 'Active Campaign';
+                                                                $response = $curEntry['activeCampaignResponse'];
                                                                 break;  
                                                         }
                                                         if($curEntry['status'] == 0){

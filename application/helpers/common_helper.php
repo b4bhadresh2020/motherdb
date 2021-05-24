@@ -864,6 +864,13 @@ function getOntraportProviderListName($providerListId){
     return $ontraportList[$providerListId];
 }
 
+function getActiveCampaignProviderListName($providerListId){
+    $activeCampaignList = array(
+        "1" => "Velkomstgaven/NOR"        
+    );
+    return $activeCampaignList[$providerListId];
+}
+
 function getLiveRepostAweverProviderID($providerListId){
     $provider = array(
         "1" => "14",  // Velkomstgaven.com (Norway) 
@@ -1881,4 +1888,17 @@ function endsWith($string, $endString) {
         return true;
     }
     return (substr($string, -$len) === $endString);
+}
+
+function getSubscribeDetails($listId,$email) {
+    $condition = array(
+        'providerId' => $listId ,
+        'emailId' => $email,
+        'status'=> '1'
+    );
+    $is_single = TRUE;
+    $getEmailDetail = GetAllRecord(EMAIL_HISTORY_DATA,$condition,$is_single,array(),array(),array(),'emailId,response');
+    $emailResponse = json_decode($getEmailDetail['response'],true);
+    
+    return $emailResponse; 
 }

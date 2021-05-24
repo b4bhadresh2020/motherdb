@@ -83,6 +83,8 @@
                                                             echo getMarketingPlatformProviderListName($curEntry['providerList']);
                                                          }else if($curEntry['providerName'] ==  ONTRAPORT ){
                                                             echo getOntraportProviderListName($curEntry['providerList']);
+                                                         }else if($curEntry['providerName'] ==  ACTIVE_CAMPAIGN ){
+                                                            echo getActiveCampaignProviderListName($curEntry['providerList']);
                                                          }
                                                          ?></td>
                                                         <td><?php echo date("d-m-Y",strtotime($curEntry['fromDate'])); ?></td>
@@ -174,7 +176,8 @@
                                         <option value="9">Mailjet</option>
                                         <option value="10">Convertkit</option>                                                   
                                         <option value="11">Marketing Platform</option>
-                                        <option value="12">Ontraport</option>                                                   
+                                        <option value="12">Ontraport</option> 
+                                        <option value="13">Active Campaign</option>                                                   
                                     </select>
                                 </div>
                             </div>

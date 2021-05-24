@@ -40,6 +40,8 @@
                         $providerListName = getMarketingPlatformProviderListName($providerInfo['providerList']);
                     }else if($providerInfo['providerName'] == ONTRAPORT){
                         $providerListName = getOntraportProviderListName($providerInfo['providerList']);
+                    }else if($providerInfo['providerName'] == ACTIVE_CAMPAIGN){
+                        $providerListName = getActiveCampaignProviderListName($providerInfo['providerList']);
                     }
                     ?> 
                     <tr>
