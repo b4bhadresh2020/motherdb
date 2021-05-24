@@ -466,12 +466,39 @@ class Repost extends CI_Controller
 
     function addDataToOntraport()
     {
-
         $apiDataDetail = $this->input->post('apiDataDetail');
         $mailProvider = $this->input->post('provider');
         $groupName = $this->input->post('groupName');
         $keyword = $this->input->post('keyword');
         $provider = ONTRAPORT;
+        // fetch mail provider data from providers table
+        $providerCondition   = array('id' => $mailProvider);
+        $is_single           = true;
+        $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
+        if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
+            $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
+            $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
+        }
+        $this->load->model('mdl_ontraport');
+        $response = $this->mdl_ontraport->AddEmailToOntraportSubscriberList($apiDataDetail, $mailProvider);
+        // ADD RECORD IN HISTORY
+        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
+        //update to live delivery data
+        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
+        $is_insert = FALSE;
+        $responseField = $providerData['response_field'];
+        $updateArr = array($responseField => json_encode($response));
+        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
+    }
+
+    function addDataToActiveCampaign()
+    {
+
+        $apiDataDetail = $this->input->post('apiDataDetail');
+        $mailProvider = $this->input->post('provider');
+        $groupName = $this->input->post('groupName');
+        $keyword = $this->input->post('keyword');
+        $provider = ACTIVE_CAMPAIGN;
 
         // fetch mail provider data from providers table
         $providerCondition   = array('id' => $mailProvider);
@@ -485,8 +512,8 @@ class Repost extends CI_Controller
             $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
         }
 
-        $this->load->model('mdl_ontraport');
-        $response = $this->mdl_ontraport->AddEmailToOntraportSubscriberList($apiDataDetail, $mailProvider);
+        $this->load->model('mdl_active_campaign');
+        $response = $this->mdl_active_campaign->AddEmailToActiveCampaignSubscriberList($apiDataDetail, $mailProvider);
         // ADD RECORD IN HISTORY
         addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
 

@@ -555,6 +555,8 @@
                 providerList +="<option value='4'>Ontraport/DK</option>";
                 providerList +="<option value='5'>Ontraport/CA</option>";
                 providerList +="<option value='6'>Ontraport/NZ</option>";               
+        } else if(providerId == 13){
+                providerList +="<option value='1'>Velkomstgaven/NOR</option>";                             
         }  else{
             providerList +="<option value='0'>Select Provider List</option>";
         }

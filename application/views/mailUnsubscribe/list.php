@@ -84,6 +84,7 @@
                                                             <option value="10">Convertkit</option>
                                                             <option value="11">Marketing Platform</option>  
                                                             <option value="12">Ontraport</option>                                                       
+                                                            <option value="13">Active Campaign</option>
                                                         </select>
                                                     </div>
                                             </div>
@@ -187,6 +188,8 @@
                                                             $providerName = "Marketing Platform";
                                                         }else if($unsubscriber["provider"] == ONTRAPORT){
                                                             $providerName = "Ontraport";
+                                                        }else if($unsubscriber["provider"] == ACTIVE_CAMPAIGN){
+                                                            $providerName = "Active Campaign";
                                                         }
                                             ?>
                                             <tr>
@@ -248,7 +251,8 @@
                                         <option value="9">Mailjet</option>   
                                         <option value="10">Convertkit</option>
                                         <option value="11">Marketing Platform</option>
-                                        <option value="12">Ontraport</option>                                                 
+                                        <option value="12">Ontraport</option>     
+                                        <option value="13">Active Campaign</option>                                            
                                     </select>
                                 </div>
                             </div>

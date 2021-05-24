@@ -660,7 +660,8 @@ function getProviderName($providerId){
         '9' => 'Mailjet',
         '10' => 'Convertkit',
         '11' => 'MarketingPlatform',
-        '12' => 'Ontraport'
+        '12' => 'Ontraport',
+        '13' => 'ActiveCampaign'
     );
     return $providerNames[$providerId];
 }
@@ -863,6 +864,13 @@ function getOntraportProviderListName($providerListId){
     return $ontraportList[$providerListId];
 }
 
+function getActiveCampaignProviderListName($providerListId){
+    $activeCampaignList = array(
+        "1" => "Velkomstgaven/NOR"        
+    );
+    return $activeCampaignList[$providerListId];
+}
+
 function getLiveRepostAweverProviderID($providerListId){
     $provider = array(
         "1" => "14",  // Velkomstgaven.com (Norway) 
@@ -1055,7 +1063,14 @@ function getLiveRepostOntraportProviderID($providerId){
         "3" => "143",  // Ontraport/FI
         "4" => "144",  // Ontraport/DK
         "5" => "145",  // Ontraport/CA
-        "6" => "146",  // Ontraport/NZ  
+        "6" => "146",  // Ontraport/NZ
+    );
+    return $provider[$providerId];
+}
+
+function getLiveRepostActiveCampaignProviderID($providerId){
+    $provider = array(
+        "1" => "147",  // Velkomstgaven/NOR
     );
     return $provider[$providerId];
 }
@@ -1784,6 +1799,21 @@ function addToOntraportSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayD
     ManageData(ONTRAPORT_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
+function addToActiveCampaignSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+    $liveDeliveryDelayData = array(
+        "liveDeliveryDataId" => $liveDeliveryDataId,
+        "providerId" => $mailProvider,
+        "delayDay" => $delayDay,
+        "currentTimestamp" => time(),
+        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "status" => 0
+    );
+    $condition = array();
+    $is_insert = true;
+    ManageData(ACTIVE_CAMPAIGN_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
+}
+
 function addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$groupName,$keyword,$emailId = NULL){
     $historyData = array(
         'liveDeliveryDataId' => $lastDeliveryData['liveDeliveryDataId'],
@@ -1858,4 +1888,17 @@ function endsWith($string, $endString) {
         return true;
     }
     return (substr($string, -$len) === $endString);
+}
+
+function getSubscribeDetails($listId,$email) {
+    $condition = array(
+        'providerId' => $listId ,
+        'emailId' => $email,
+        'status'=> '1'
+    );
+    $is_single = TRUE;
+    $getEmailDetail = GetAllRecord(EMAIL_HISTORY_DATA,$condition,$is_single,array(),array(),array(),'emailId,response');
+    $emailResponse = json_decode($getEmailDetail['response'],true);
+    
+    return $emailResponse; 
 }

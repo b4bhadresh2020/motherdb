@@ -256,7 +256,6 @@ class ProviderState extends CI_Controller {
         if (@$this->input->get('reset')) {
             $_GET = array();
         }
-
         $response = $this->mdl_provider_state->get_state_data($_GET,ONTRAPORT);
         $data['apiKeys'] = $apiKeys;
         $data['providerStatusInfo'] = $response['providerStatusInfo'];
@@ -267,6 +266,27 @@ class ProviderState extends CI_Controller {
         $data['load_page'] = 'ontraport';
         $data['formUrl'] = "providerState/ontraport/0";
         $data['currentProviderName'] = "Ontraport";
+        $data["curTemplateName"] = "providerState/list";
+        $this->load->view('commonTemplates/templateLayout', $data);
+    }
+    
+    function activeCampaign($start = 0) {
+        $data = array();
+        $apiKeys = GetAllRecord(LIVE_DELIVERY,array(),false,array(),array(),array());
+        if (@$this->input->get('reset')) {
+            $_GET = array();
+        }
+
+        $response = $this->mdl_provider_state->get_state_data($_GET,ACTIVE_CAMPAIGN);
+        $data['apiKeys'] = $apiKeys;
+        $data['providerStatusInfo'] = $response['providerStatusInfo'];
+        $data['weekDays'] = $response['weekDays'];
+        $data['liveDeliveryProvider'] = $response['liveDeliveryProvider'];
+        $data['liveRepostProvider'] = $response['liveRepostProvider'];
+        $data['headerTitle'] = "Email State Data";
+        $data['load_page'] = 'activeCampaign';
+        $data['formUrl'] = "providerState/activeCampaign/0";
+        $data['currentProviderName'] = "Active Campaign";
         $data["curTemplateName"] = "providerState/list";
         $this->load->view('commonTemplates/templateLayout', $data);        
     }

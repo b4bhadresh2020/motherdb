@@ -13,6 +13,7 @@
     $convertkitList = getProviderList(CONVERTKIT);
     $marketingPlatformList = getProviderList(MARKETING_PLATFORM);
     $ontraportList = getProviderList(ONTRAPORT);
+    $activeCampaignList = getProviderList(ACTIVE_CAMPAIGN);
 
 
     $mailProviders = array(
@@ -77,6 +78,11 @@
      // Add Ontraport list in mail provider
      foreach($ontraportList as $list){
         $mailProviders[$list['id']] = $list['listname']. " (Ontraport)";
+    }
+
+    // Add Active Campaign list in mail provider
+    foreach($activeCampaignList as $list){
+        $mailProviders[$list['id']] = $list['listname']. " (Active Campaign)";
     }
 
     $identifiers = array(
