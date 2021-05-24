@@ -46,6 +46,7 @@ class MailProviderStatistics extends CI_Controller
             "9" => [ "success" => "success", "subscriber_exist" => "subscriber already", "auth_fail" => "401 -", "bad_fail" => "Bad Request","blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
             "10" => [ "success" => "success", "subscriber_exist" => "subscriber already", "auth_fail" => "401 -", "bad_fail" => "Bad Request","blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
             "11" => [ "success" => "success", "subscriber_exist" => "subscriber already", "auth_fail" => "401 -", "bad_fail" => "Bad Request","blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
+            "12" => [ "success" => "success", "subscriber_exist" => "subscriber already", "auth_fail" => "401 -", "bad_fail" => "Bad Request","blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
             "13" => [ "success" => "success", "subscriber_exist" => "subscriber already", "auth_fail" => "401 -", "bad_fail" => "Bad Request","blacklisted" => "blacklisted", "host" => "resolve host", "manual" => "already served"],
         ];
 
@@ -110,6 +111,9 @@ class MailProviderStatistics extends CI_Controller
                 break;
             case 11:
                 $delayTableName = MARKETING_PLATFORM_DELAY_USER_DATA;
+                break;
+            case 12:
+                $delayTableName = ONTRAPORT_DELAY_USER_DATA;
                 break;
             case 13:
                 $delayTableName = ACTIVE_CAMPAIGN_DELAY_USER_DATA;
