@@ -659,7 +659,8 @@ function getProviderName($providerId){
         '8' => 'Mailerlite',
         '9' => 'Mailjet',
         '10' => 'Convertkit',
-        '11' => 'MarketingPlatform'
+        '11' => 'MarketingPlatform',
+        '12' => 'Ontraport'
     );
     return $providerNames[$providerId];
 }
@@ -850,6 +851,18 @@ function getMarketingPlatformProviderListName($providerListId){
     return $marketingPlatformList[$providerListId];
 }
 
+function getOntraportProviderListName($providerListId){
+    $ontraportList = array(
+        "1" => "Ontraport/SE",
+        "2" => "Ontraport/NO",
+        "3" => "Ontraport/FI",
+        "4" => "Ontraport/DK",
+        "5" => "Ontraport/CA",
+        "6" => "Ontraport/NZ",
+    );
+    return $ontraportList[$providerListId];
+}
+
 function getLiveRepostAweverProviderID($providerListId){
     $provider = array(
         "1" => "14",  // Velkomstgaven.com (Norway) 
@@ -1031,6 +1044,18 @@ function getLiveRepostMarketingPlatformProviderID($providerId){
         "6" => "138",  // FreeCasinoDeal-FI
         "7" => "139",  // FreeCasinoDeal-NO
         "8" => "140",  // FreeCasinoDeal-NZ        
+    );
+    return $provider[$providerId];
+}
+
+function getLiveRepostOntraportProviderID($providerId){
+    $provider = array(
+        "1" => "141",  // Ontraport/SE
+        "2" => "142",  // Ontraport/NO
+        "3" => "143",  // Ontraport/FI
+        "4" => "144",  // Ontraport/DK
+        "5" => "145",  // Ontraport/CA
+        "6" => "146",  // Ontraport/NZ  
     );
     return $provider[$providerId];
 }
@@ -1742,6 +1767,21 @@ function addToMarketingPlatformSubscriberQueue($liveDeliveryDataId,$mailProvider
     $condition = array();
     $is_insert = true;
     ManageData(MARKETING_PLATFORM_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
+}
+
+function addToOntraportSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+    $liveDeliveryDelayData = array(
+        "liveDeliveryDataId" => $liveDeliveryDataId,
+        "providerId" => $mailProvider,
+        "delayDay" => $delayDay,
+        "currentTimestamp" => time(),
+        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "status" => 0
+    );
+    $condition = array();
+    $is_insert = true;
+    ManageData(ONTRAPORT_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
 function addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$groupName,$keyword,$emailId = NULL){

@@ -10,6 +10,7 @@ $mailerliteList = getProviderList(MAILERLITE);
 $mailjetList = getProviderList(MAILJET);
 $convertkitList = getProviderList(CONVERTKIT);
 $marketingPlatformList = getProviderList(MARKETING_PLATFORM);
+$ontraportList = getProviderList(ONTRAPORT);
 
 $mailProviders = array(    
     'egoi' => 'E-goi',
@@ -68,6 +69,11 @@ foreach($convertkitList as $list) {
 // Add Marketing Platform list in mail provider
 foreach($marketingPlatformList as $list) {
     $mailProviders[$list['id']] = $list['listname']. " (Marketing Platform)";
+}
+
+// Add Ontraport list in mail provider
+foreach($ontraportList as $list) {
+    $mailProviders[$list['id']] = $list['listname']. " (Ontraport)";
 }
 ?>
 <style>

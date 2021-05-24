@@ -38,6 +38,8 @@
                         $providerListName = getConvertkitProviderListName($providerInfo['providerList']);
                     }else if($providerInfo['providerName'] == MARKETING_PLATFORM){
                         $providerListName = getMarketingPlatformProviderListName($providerInfo['providerList']);
+                    }else if($providerInfo['providerName'] == ONTRAPORT){
+                        $providerListName = getOntraportProviderListName($providerInfo['providerList']);
                     }
                     ?> 
                     <tr>

@@ -548,7 +548,14 @@
                 providerList +="<option value='6'>FreeCasinoDeal-FI</option>";
                 providerList +="<option value='7'>FreeCasinoDeal-NO</option>";
                 providerList +="<option value='8'>FreeCasinoDeal-NZ</option>";               
-        } else{
+        } else if(providerId == 12){
+                providerList +="<option value='1'>Ontraport/SE</option>";
+                providerList +="<option value='2'>Ontraport/NO</option>";
+                providerList +="<option value='3'>Ontraport/FI</option>";
+                providerList +="<option value='4'>Ontraport/DK</option>";
+                providerList +="<option value='5'>Ontraport/CA</option>";
+                providerList +="<option value='6'>Ontraport/NZ</option>";               
+        }  else{
             providerList +="<option value='0'>Select Provider List</option>";
         }
 

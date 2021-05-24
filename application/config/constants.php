@@ -140,6 +140,7 @@ define("MAILERLITE_DELAY_USER_DATA"		,	"mailerlite_delay_user_data");
 define("MAILJET_DELAY_USER_DATA"		,	"mailjet_delay_user_data");
 define("CONVERTKIT_DELAY_USER_DATA"		,	"convertkit_delay_user_data");
 define("MARKETING_PLATFORM_DELAY_USER_DATA"		,	"marketing_platform_delay_user_data");
+define("ONTRAPORT_DELAY_USER_DATA"		,	"ontraport_delay_user_data");
 define("EMAIL_HISTORY_DATA"				,	"email_history_data");
 define("PROVIDER_UNSUBSCRIBER"			,	"provider_unsubscriber");
 
@@ -182,6 +183,7 @@ define('MAILERLITE', '8');
 define('MAILJET', '9');
 define('CONVERTKIT', '10');
 define('MARKETING_PLATFORM','11');
+define('ONTRAPORT', '12');
 define('PROVIDERS', 'providers');
 define('AWEBER_ACCOUNTS', 'aweber_accounts');
 define('ONGAGE_ACCOUNTS', 'ongage_accounts');
@@ -190,6 +192,7 @@ define('MAILERLITE_ACCOUNTS','mailerlite_accounts');
 define('MAILJET_ACCOUNTS','mailjet_accounts');
 define('CONVERTKIT_ACCOUNTS','convertkit_accounts');
 define('MARKETING_PLATFORM_ACCOUNTS','marketing_platform_accounts');
+define('ONTRAPORT_ACCOUNTS','ontraport_accounts');
 
 // MX Block account
 define('TELIA_DOMAIN', 'telia.com');

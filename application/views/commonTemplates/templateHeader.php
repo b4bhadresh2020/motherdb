@@ -150,6 +150,7 @@
                         <li class="<?php echo (@$load_page == 'mailjetQueue')?"active":"";?>" title = "Mailjet Queue List" ><a href="<?php echo base_url('MailjetQueue/manage'); ?>"><i class="ti-timer"></i> Mailjet Queue List </a></li>
                         <li class="<?php echo (@$load_page == 'convertkitQueue')?"active":"";?>" title = "Convertkit Queue List" ><a href="<?php echo base_url('ConvertkitQueue/manage'); ?>"><i class="ti-timer"></i> Convertkit Queue List </a></li>
                         <li class="<?php echo (@$load_page == 'marketingPlatformQueue')?"active":"";?>" title = "Marketing Platform Queue List" ><a href="<?php echo base_url('marketingPlatformQueue/manage'); ?>"><i class="ti-timer"></i> Marketing Platform Queue List </a></li>
+                        <li class="<?php echo (@$load_page == 'ontraportQueue')?"active":"";?>" title = "Ontraport Queue List" ><a href="<?php echo base_url('ontraportQueue/manage'); ?>"><i class="ti-timer"></i> Ontraport Queue List </a></li>
 
                     <li class="label">Email Provider State </li>
 
@@ -164,6 +165,7 @@
                         <li class="<?php echo (@$load_page == 'mailjet')?"active":"";?>" title = "Mailjet State" ><a href="<?php echo base_url('providerState/mailjet'); ?>" ><i class="ti-timer"></i> Mailjet Email Stats </a></li>
                         <li class="<?php echo (@$load_page == 'convertkit')?"active":"";?>" title = "Convertkit State" ><a href="<?php echo base_url('providerState/convertkit'); ?>" ><i class="ti-timer"></i> Convertkit Email Stats </a></li>
                         <li class="<?php echo (@$load_page == 'marketingPlatform')?"active":"";?>" title = "Marketing Platform State" ><a href="<?php echo base_url('providerState/marketingPlatform'); ?>" ><i class="ti-timer"></i> Marketing Platform Email Stats </a></li>
+                        <li class="<?php echo (@$load_page == 'ontraport')?"active":"";?>" title = "Ontraport State" ><a href="<?php echo base_url('providerState/ontraport'); ?>" ><i class="ti-timer"></i> Ontraport Email Stats </a></li>
 
                     <li class="label">Stats </li>
                         
