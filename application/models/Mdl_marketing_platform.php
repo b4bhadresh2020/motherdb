@@ -64,6 +64,7 @@ class Mdl_marketing_platform extends CI_Model {
                 'emailaddress' => @$getData['emailId'],
                 'status' => 'active',
                 'mobile' => @$getData['phone'],
+                'confirmed' => 'true',
                 'contactFields' => [
                     [
                         'fieldid' => '2',
