@@ -458,12 +458,12 @@ class Cron_provider_user_csv extends CI_Controller
 
     public function getOntraportProviderId($providerId){
         $provider = array(
-            "1" => "141",  // Ontraport/SE
-            "2" => "142",  // Ontraport/NO
-            "3" => "143",  // Ontraport/FI
-            "4" => "144",  // Ontraport/DK
-            "5" => "145",  // Ontraport/CA
-            "6" => "146",  // Ontraport/NZ      
+            "1" => "141",  // Gratispresentmail.se
+            "2" => "142",  // Freecasinodeal1/no
+            "3" => "143",  // Freecasinodeal1/fi
+            "4" => "144",  // Velkomstgavenmail.dk
+            "5" => "145",  // Freecasinodeal1/ca
+            "6" => "146",  // Freecasinodeal1/nz      
         );
         return $provider[$providerId];
     }

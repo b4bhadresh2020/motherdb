@@ -549,12 +549,12 @@
                 providerList +="<option value='7'>FreeCasinoDeal-NO</option>";
                 providerList +="<option value='8'>FreeCasinoDeal-NZ</option>";               
         } else if(providerId == 12){
-                providerList +="<option value='1'>Ontraport/SE</option>";
-                providerList +="<option value='2'>Ontraport/NO</option>";
-                providerList +="<option value='3'>Ontraport/FI</option>";
-                providerList +="<option value='4'>Ontraport/DK</option>";
-                providerList +="<option value='5'>Ontraport/CA</option>";
-                providerList +="<option value='6'>Ontraport/NZ</option>";               
+                providerList +="<option value='1'>Gratispresentmail.se</option>";
+                providerList +="<option value='2'>Freecasinodeal1/no</option>";
+                providerList +="<option value='3'>Freecasinodeal1/fi</option>";
+                providerList +="<option value='4'>Velkomstgavenmail.dk</option>";
+                providerList +="<option value='5'>Freecasinodeal1/ca</option>";
+                providerList +="<option value='6'>Freecasinodeal1/nz</option>";               
         } else if(providerId == 13){
                 providerList +="<option value='1'>Velkomstgaven/NOR</option>";                             
         }  else{
