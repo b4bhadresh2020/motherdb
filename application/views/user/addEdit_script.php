@@ -547,7 +547,8 @@
                 providerList +="<option value='5'>FreeCasinoDeal-CA</option>";
                 providerList +="<option value='6'>FreeCasinoDeal-FI</option>";
                 providerList +="<option value='7'>FreeCasinoDeal-NO</option>";
-                providerList +="<option value='8'>FreeCasinoDeal-NZ</option>";               
+                providerList +="<option value='8'>FreeCasinoDeal-NZ</option>";  
+                providerList +="<option value='9'>NO-Velkomstgaven1</option>";              
         } else if(providerId == 12){
                 providerList +="<option value='1'>Gratispresentmail.se</option>";
                 providerList +="<option value='2'>Freecasinodeal1/no</option>";
