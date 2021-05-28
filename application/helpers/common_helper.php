@@ -848,6 +848,7 @@ function getMarketingPlatformProviderListName($providerListId){
         "6" => "FreeCasinoDeal-FI",
         "7" => "FreeCasinoDeal-NO",
         "8" => "FreeCasinoDeal-NZ",
+        "9" => "NO-Velkomstgaven1"
     );
     return $marketingPlatformList[$providerListId];
 }
@@ -1051,7 +1052,8 @@ function getLiveRepostMarketingPlatformProviderID($providerId){
         "5" => "137",  // FreeCasinoDeal-CA
         "6" => "138",  // FreeCasinoDeal-FI
         "7" => "139",  // FreeCasinoDeal-NO
-        "8" => "140",  // FreeCasinoDeal-NZ        
+        "8" => "140",  // FreeCasinoDeal-NZ   
+        "9" => "148",  // NO-Velkomstgaven1     
     );
     return $provider[$providerId];
 }
