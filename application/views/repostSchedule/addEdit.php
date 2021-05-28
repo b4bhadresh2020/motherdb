@@ -283,7 +283,9 @@ foreach($activeCampaignList as $list) {
                                                         <td><?php echo date('H:i',strtotime($curEntry["deliveryStartTime"])); ?></td>
                                                         <td><?php echo date('H:i',strtotime($curEntry["deliveryEndTime"])); ?></td>
                                                         <td>
-                                                            <a href="<?php echo base_url('repostSchedule/addEdit?editId='. $repostScheduleId); ?>" class="btn btn-primary">edit</button>
+                                                            <?php if($curEntry['status'] == 0) { ?>  
+                                                                <a href="javascript:void(0);" class="btn btn-primary" data-repostScheduleId = '<?php echo $repostScheduleId; ?>' onclick="javascript:loadrepostSchedule(this);">edit</a>
+                                                            <?php } ?>
                                                             <a href="<?php echo $url; ?>" class="<?php echo $class; ?>"><?php echo $status; ?></a>
                                                         </td>
                                                     </tr>
@@ -312,6 +314,43 @@ foreach($activeCampaignList as $list) {
     </div>
 </div>
 
+<!-- START:: Edit repost schedule -DAB -->
+<div class="modal fade" id="editDataPopupRepostSchedule" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog msg-delete-box" role="document" style="width: 40%;">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form name="updateForm" method="post" action="<?php echo site_url('/repostSchedule/updateRepostScheduleData')?>">                
+                    <div class="x_panel" style="border: none;">
+                        <h5><strong>Update Repost Schedule Information</strong></h5>
+                        <input type="hidden" name="id" id="repostScheduleId"/>
+                        <div class="row">                           
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Start Time *</label>
+                                    <input type="time" class="form-control" id="deliveryStartTime" name="deliveryStartTime">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>End Time *</label>
+                                    <input type="time" class="form-control" id="deliveryEndTime" name="deliveryEndTime">
+                                </div>
+                            </div>                                                                              
+                        </div>    
+                        
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <button type="submit" name="submit" class="btn btn-success">Update</button>
+                                <a href="javascript:;" onclick="$('#editDataPopupRepostSchedule').modal('hide');" class="btn btn-primary">Close</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END:: Edit repost schedule -DAB -->
 <?php
     $this->load->view('repostSchedule/addEdit_script');
 ?>

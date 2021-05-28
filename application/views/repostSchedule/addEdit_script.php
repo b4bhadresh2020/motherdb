@@ -631,4 +631,22 @@
 			}
 		});
 	}
+
+	function loadrepostSchedule(curObj) {
+		var repostScheduleId = JSON.parse($(curObj).attr("data-repostScheduleId"));
+		$.ajax({
+			url: BASEPATH + 'repostSchedule/getRepostSchedule',
+			type : 'post',
+			data: {
+				repostScheduleId: repostScheduleId
+			},
+			success: function(response){
+				var repostScheduleData = JSON.parse(response);
+				$("#repostScheduleId").val(repostScheduleData.id);
+				$('#deliveryStartTime').val(repostScheduleData.deliveryStartTime);
+				$('#deliveryEndTime').val(repostScheduleData.deliveryEndTime);
+			}
+		});
+		$('#editDataPopupRepostSchedule').modal('show');
+	}
 </script>

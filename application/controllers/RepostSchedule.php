@@ -587,4 +587,39 @@ class RepostSchedule extends CI_Controller
         ManageData(REPOST_SCHEDULE, $condition, $updateArr, $is_insert);
         return redirect('repostSchedule/addEdit');
     }
+
+    function getProviderData(){        
+        $providerId = trim($this->input->post('providerId'));
+       //get file data
+       $condition = array(
+           'id' => $providerId
+       );
+       $is_single = TRUE;
+       $providerData = GetAllRecord(CSV_FILE_PROVIDER_DATA,$condition,$is_single,array(),array(),array()); 
+       echo json_encode($providerData);
+    }
+
+    function getRepostSchedule() {
+        $repostScheduleId = trim($this->input->post('repostScheduleId'));
+        // get data
+        $condition = array(
+            'id' => $repostScheduleId
+        );
+        $is_single = TRUE;
+        $repostScheduleData = GetAllRecord(REPOST_SCHEDULE,$condition,$is_single,array(),array(),array());
+        echo json_encode($repostScheduleData);
+    }
+
+    function updateRepostScheduleData(){         
+        $is_insert = FALSE;   
+        $condition = array(
+            'id' => $this->input->post('id')
+        );
+        $updateRecord = array(
+            'deliveryStartTime' => $this->input->post('deliveryStartTime'),                
+            'deliveryEndTime' => $this->input->post('deliveryEndTime')                    
+        );
+        ManageData(REPOST_SCHEDULE,$condition,$updateRecord,$is_insert);
+        redirect(site_url().'repostSchedule/addEdit');
+     }
 }
