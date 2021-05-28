@@ -40,11 +40,17 @@ class Mdl_ontraport extends CI_Model {
                 'lastname' => $getData['lastName'],
                 'email' => $getData['emailId'],
                 'office_phone' => $getData['phone'],
-                'fb_gender' => $getData['gender'],
-                'city' => $getData['city'],
-                'zip' => $getData['postCode'],
                 'contact_cat' => $list_id
             ];
+            if(isset($getData['gender']) && !empty($getData['gender'])) {
+                $details['fb_gender'] = $getData['gender'];
+            }
+            if(isset($getData['city']) && !empty($getData['city'])) {
+                $details['city'] = $getData['city'];
+            }
+            if(isset($getData['postCode']) && !empty($getData['postCode'])) {
+                $details['zip'] = $getData['postCode'];
+            }
             $data = json_encode($details);
             
             //LIST ID 
