@@ -1902,3 +1902,13 @@ function getSubscribeDetails($listId,$email) {
     
     return $emailResponse; 
 }
+
+function getProviderListCode($providerId) {
+    $CI = & get_instance();   
+    $condition = array(
+        'id' => $providerId
+    );
+    $is_single = TRUE;
+    $getProviderListCode = GetAllRecord(PROVIDERS, $condition, $is_single, array(), array(), array(),'code');
+    return $getProviderListCode['code'];
+}

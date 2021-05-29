@@ -83,463 +83,8 @@ class RepostSchedule extends CI_Controller
         }
         
         echo json_encode($response);
-    }
-
-
-
-    function addDataToEgoi()
-    {
-
-        $apiDataDetail = $this->input->post('apiDataDetail');
-        $country = $apiDataDetail['country'];
-
-        $validCountryForEgoi = countryThasListedInEgoi();
-
-        if (in_array(strtoupper($country), $validCountryForEgoi)) {
-
-            if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
-
-                $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
-
-                $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
-            }
-
-            $this->load->model('mdl_egoi');
-            $response = $this->mdl_egoi->sendDataToEgoi($apiDataDetail, $country);
-        } else {
-            $response = array("result" => "error", "error" => array("msg" => "Country is not defined in E-goi"));
-        }
-
-        //update to live delivery data
-        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
-        $is_insert = FALSE;
-        $updateArr = array('eGoiResponse' => json_encode($response));
-
-        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
-    }
-
-    function addDataToAweber()
-    {
-
-        $apiDataDetail = $this->input->post('apiDataDetail');
-        $mailProvider = $this->input->post('provider');
-        $groupName = $this->input->post('groupName');
-        $keyword = $this->input->post('keyword');
-        $country = $apiDataDetail['country'];
-        $provider = AWEBER;
-        $validCountryForAweber = countryThasListedInAweber();
-
-        // fetch mail provider data from providers table
-        $providerCondition   = array('id' => $mailProvider);
-        $is_single           = true;
-        $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
-
-        if (in_array(strtoupper($country), $validCountryForAweber)) {
-
-            if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
-
-                $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
-
-                $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
-            }
-
-            $this->load->model('mdl_aweber');
-            $response = $this->mdl_aweber->AddEmailToAweberSubscriberList($apiDataDetail, $country, $mailProvider);
-            // ADD RECORD IN HISTORY
-            addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
-        } else {
-            $response = array("result" => "error", "error" => array("msg" => "Country is not defined in Aweber"));
-        }
-
-        //update to live delivery data
-        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
-        $is_insert = FALSE;
-        $responseField = $providerData['response_field'];
-        $updateArr = array($responseField => json_encode($response));
-        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
-    }
-
-    function addDataToConstantContact()
-    {
-
-        $apiDataDetail = $this->input->post('apiDataDetail');
-        $mailProvider = $this->input->post('provider');
-        $groupName = $this->input->post('groupName');
-        $keyword = $this->input->post('keyword');
-        $provider = CONSTANTCONTACT;
-        // fetch mail provider data from providers table
-        $providerCondition   = array('id' => $mailProvider);
-        $is_single           = true;
-        $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
-
-        $this->load->model('mdl_constantcontact');
-        $response = $this->mdl_constantcontact->AddEmailToContactSubscriberList($apiDataDetail, $mailProvider);
-
-        // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response,$groupName, $keyword,$apiDataDetail['emailId']);
-
-        //update to live delivery data
-        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
-        $is_insert = FALSE;
-        $responseField = $providerData['response_field'];
-        $updateArr = array($responseField => json_encode($response));
-        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
-    }
-
-    function addDataToTransmitvia()
-    {
-
-        $apiDataDetail = $this->input->post('apiDataDetail');
-        $mailProvider = $this->input->post('provider');
-        $groupName = $this->input->post('groupName');
-        $keyword = $this->input->post('keyword');
-        $provider = TRANSMITVIA;
-
-        // fetch mail provider data from providers table
-        $providerCondition   = array('id' => $mailProvider);
-        $is_single           = true;
-        $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
-
-        $this->load->model('mdl_transmitvia');
-        $response = $this->mdl_transmitvia->AddEmailToTransmitSubscriberList($apiDataDetail, $providerData['code']);
-
-        // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response,$groupName, $keyword,$apiDataDetail['emailId']);
-        
-        //update to live delivery data
-        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
-        $is_insert = FALSE;
-        $responseField = $providerData['response_field'];
-        $updateArr = array($responseField => json_encode($response));
-        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
-    }
-
-    function addDataToOngage()
-    {
-
-        $apiDataDetail = $this->input->post('apiDataDetail');
-        $mailProvider = $this->input->post('provider');
-        $groupName = $this->input->post('groupName');
-        $keyword = $this->input->post('keyword');
-        $provider = ONGAGE;
-        // fetch mail provider data from providers table
-        $providerCondition   = array('id' => $mailProvider);
-        $is_single           = true;
-        $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
-
-        $this->load->model('mdl_ongage');
-        $response = $this->mdl_ongage->AddEmailToOngageSubscriberList($apiDataDetail, $mailProvider);
-
-        // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response,$groupName, $keyword,$apiDataDetail['emailId']);
-
-        //update to live delivery data
-        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
-        $is_insert = FALSE;
-        $responseField = $providerData['response_field'];
-        $updateArr = array($responseField => json_encode($response));
-        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
-    }
-
-    function addDataToSendgrid()
-    {
-
-        $apiDataDetail = $this->input->post('apiDataDetail');
-        $mailProvider = $this->input->post('provider');
-        $groupName = $this->input->post('groupName');
-        $keyword = $this->input->post('keyword');
-        $provider = SENDGRID;
-
-        // fetch mail provider data from providers table
-        $providerCondition   = array('id' => $mailProvider);
-        $is_single           = true;
-        $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
-
-        if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
-
-            $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
-
-            $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
-        }
-
-        $this->load->model('mdl_sendgrid');
-        $response = $this->mdl_sendgrid->AddEmailToSendgridSubscriberList($apiDataDetail, $mailProvider);
-        // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
-
-        //update to live delivery data
-        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
-        $is_insert = FALSE;
-        $responseField = $providerData['response_field'];
-        $updateArr = array($responseField => json_encode($response));
-        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
-    }
-
-    function addDataToSendInBlue()
-    {
-
-        $apiDataDetail = $this->input->post('apiDataDetail');
-        $mailProvider = $this->input->post('provider');
-        $groupName = $this->input->post('groupName');
-        $keyword = $this->input->post('keyword');
-        $provider = SENDINBLUE;
-
-        // fetch mail provider data from providers table
-        $providerCondition   = array('id' => $mailProvider);
-        $is_single           = true;
-        $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
-
-        if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
-
-            $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
-
-            $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
-        }
-
-        $this->load->model('mdl_sendinblue');
-        $response = $this->mdl_sendinblue->AddEmailToSendInBlueSubscriberList($apiDataDetail, $mailProvider);
-        // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
-
-        //update to live delivery data
-        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
-        $is_insert = FALSE;
-        $responseField = $providerData['response_field'];
-        $updateArr = array($responseField => json_encode($response));
-        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
-    }
-
-    function addDataToSendpulse()
-    {
-
-        $apiDataDetail = $this->input->post('apiDataDetail');
-        $mailProvider = $this->input->post('provider');
-        $groupName = $this->input->post('groupName');
-        $keyword = $this->input->post('keyword');
-        $provider = SENDPULSE;
-
-        // fetch mail provider data from providers table
-        $providerCondition   = array('id' => $mailProvider);
-        $is_single           = true;
-        $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
-
-        if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
-
-            $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
-
-            $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
-        }
-
-        $this->load->model('mdl_sendpulse');
-        $response = $this->mdl_sendpulse->AddEmailToSendpulseSubscriberList($apiDataDetail, $mailProvider);
-        // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
-
-        //update to live delivery data
-        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
-        $is_insert = FALSE;
-        $responseField = $providerData['response_field'];
-        $updateArr = array($responseField => json_encode($response));
-        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
-    }
-
-    function addDataToMailerlite()
-    {
-
-        $apiDataDetail = $this->input->post('apiDataDetail');
-        $mailProvider = $this->input->post('provider');
-        $groupName = $this->input->post('groupName');
-        $keyword = $this->input->post('keyword');
-        $provider = MAILERLITE;
-
-        // fetch mail provider data from providers table
-        $providerCondition   = array('id' => $mailProvider);
-        $is_single           = true;
-        $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
-
-        if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
-
-            $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
-
-            $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
-        }
-
-        $this->load->model('mdl_mailerlite');
-        $response = $this->mdl_mailerlite->AddEmailToMailerliteSubscriberList($apiDataDetail, $mailProvider);
-        // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
-
-        //update to live delivery data
-        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
-        $is_insert = FALSE;
-        $responseField = $providerData['response_field'];
-        $updateArr = array($responseField => json_encode($response));
-        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
-    }
-
-    function addDataToMailjet()
-    {
-
-        $apiDataDetail = $this->input->post('apiDataDetail');
-        $mailProvider = $this->input->post('provider');
-        $groupName = $this->input->post('groupName');
-        $keyword = $this->input->post('keyword');
-        $provider = MAILJET;
-
-        // fetch mail provider data from providers table
-        $providerCondition   = array('id' => $mailProvider);
-        $is_single           = true;
-        $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
-
-        if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
-
-            $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
-
-            $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
-        }
-
-        $this->load->model('mdl_mailjet');
-        $response = $this->mdl_mailjet->AddEmailToMailjetSubscriberList($apiDataDetail, $mailProvider);
-        // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
-
-        //update to live delivery data
-        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
-        $is_insert = FALSE;
-        $responseField = $providerData['response_field'];
-        $updateArr = array($responseField => json_encode($response));
-        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
-    }
-
-    function addDataToConvertkit()
-    {
-
-        $apiDataDetail = $this->input->post('apiDataDetail');
-        $mailProvider = $this->input->post('provider');
-        $groupName = $this->input->post('groupName');
-        $keyword = $this->input->post('keyword');
-        $provider = CONVERTKIT;
-
-        // fetch mail provider data from providers table
-        $providerCondition   = array('id' => $mailProvider);
-        $is_single           = true;
-        $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
-
-        if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
-
-            $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
-
-            $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
-        }
-
-        $this->load->model('mdl_convertkit');
-        $response = $this->mdl_convertkit->AddEmailToConvertkitSubscriberList($apiDataDetail, $mailProvider);
-        // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
-
-        //update to live delivery data
-        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
-        $is_insert = FALSE;
-        $responseField = $providerData['response_field'];
-        $updateArr = array($responseField => json_encode($response));
-        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
-    }
-
-    function addDataToMarketingPlatform()
-    {
-
-        $apiDataDetail = $this->input->post('apiDataDetail');
-        $mailProvider = $this->input->post('provider');
-        $groupName = $this->input->post('groupName');
-        $keyword = $this->input->post('keyword');
-        $provider = MARKETING_PLATFORM;
-
-        // fetch mail provider data from providers table
-        $providerCondition   = array('id' => $mailProvider);
-        $is_single           = true;
-        $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
-
-        if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
-
-            $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
-
-            $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
-        }
-
-        $this->load->model('mdl_marketing_platform');
-        $response = $this->mdl_marketing_platform->AddEmailToMarketingPlatformSubscriberList($apiDataDetail, $mailProvider);
-        // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
-
-        //update to live delivery data
-        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
-        $is_insert = FALSE;
-        $responseField = $providerData['response_field'];
-        $updateArr = array($responseField => json_encode($response));
-        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
-    }
-
-    function addDataToOntraport()
-    {
-        $apiDataDetail = $this->input->post('apiDataDetail');
-        $mailProvider = $this->input->post('provider');
-        $groupName = $this->input->post('groupName');
-        $keyword = $this->input->post('keyword');
-        $provider = ONTRAPORT;
-        // fetch mail provider data from providers table
-        $providerCondition   = array('id' => $mailProvider);
-        $is_single           = true;
-        $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
-        if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
-            $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
-            $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
-        }
-        $this->load->model('mdl_ontraport');
-        $response = $this->mdl_ontraport->AddEmailToOntraportSubscriberList($apiDataDetail, $mailProvider);
-        // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
-        //update to live delivery data
-        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
-        $is_insert = FALSE;
-        $responseField = $providerData['response_field'];
-        $updateArr = array($responseField => json_encode($response));
-        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
-    }
-
-    function addDataToActiveCampaign()
-    {
-
-        $apiDataDetail = $this->input->post('apiDataDetail');
-        $mailProvider = $this->input->post('provider');
-        $groupName = $this->input->post('groupName');
-        $keyword = $this->input->post('keyword');
-        $provider = ACTIVE_CAMPAIGN;
-
-        // fetch mail provider data from providers table
-        $providerCondition   = array('id' => $mailProvider);
-        $is_single           = true;
-        $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
-
-        if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
-
-            $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
-
-            $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
-        }
-
-        $this->load->model('mdl_active_campaign');
-        $response = $this->mdl_active_campaign->AddEmailToActiveCampaignSubscriberList($apiDataDetail, $mailProvider);
-        // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
-
-        //update to live delivery data
-        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
-        $is_insert = FALSE;
-        $responseField = $providerData['response_field'];
-        $updateArr = array($responseField => json_encode($response));
-        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
-    }
-
+    } 
+    
     function getProvider()
     {
         $mailProvider = $this->input->post('id');
@@ -554,28 +99,47 @@ class RepostSchedule extends CI_Controller
 
     //add schedule to repost schedule
     function addRepostSchedule(){
+        
         $repostScheduleData = $this->input->post();
+        $providers = $repostScheduleData['providers'];
 
         $this->load->model('mdl_repost_schedule');
         $repostScheduleData['providers'] = implode(',',$repostScheduleData['providers']);
+        $repostScheduleData['createdDate'] = date('Y-m-d H:i:s');
+        $repostScheduleData['updatedDate'] = date('Y-m-d H:i:s');
         $repostScheduleId = $this->mdl_repost_schedule->insertRepostSchedule($repostScheduleData);
 
+        $data['status'] = 'error';
+        $data['msg'] = 'Something went wrong!';
         if(!empty($repostScheduleId)){
              // fetch mail live delivery data from live deliverys table
             $liveDeliveryCondition   = array('apiKey' => $this->input->post('apiKey'));
             $is_single               = false;
-            $liveDeliveryData        = GetAllRecord(LIVE_DELIVERY_DATA, $liveDeliveryCondition, $is_single);
+            $liveDeliveryData        = GetAllRecord(LIVE_DELIVERY_DATA, $liveDeliveryCondition, $is_single, array(), array(),array(),'liveDeliveryDataId');
+            
             if(!empty($liveDeliveryData)){
-                $liveDeliveryDataId = array_column($liveDeliveryData, 'liveDeliveryDataId');
-                $liverDeliveryData = array(
-                    'liveDeliveryDataId' => implode(',',$liveDeliveryDataId),
-                    'repostScheduleId'   => $repostScheduleId
-                );
-                $this->mdl_repost_schedule->insertRepostScheduleLiveDeliveryData($liverDeliveryData);
+                $liveDeliveryDataId = array_column($liveDeliveryData,'liveDeliveryDataId');
+                foreach($providers as $provider) {
+                    // get provider list code from provider id
+                    $providerListCode = getProviderListCode($provider);
+                    foreach($liveDeliveryDataId as $liveDataId) {
+                        $liverDeliveryData = array(
+                            'liveDeliveryDataId' => $liveDataId,
+                            'providerId' => $provider,
+                            'providerListCode' => $providerListCode,
+                            'repostScheduleId'   => $repostScheduleId
+                        );
+                        $this->mdl_repost_schedule->insertRepostScheduleLiveDeliveryData($liverDeliveryData);
+                    }
+                }
             }
+            $data['status'] = 'success';
+            $data['msg'] = 'Repost schedule added successfully';
+        } else {
+            $data['status'] = 'error';
+            $data['msg'] = 'Repost schedule not added!';
         }
-
-        return redirect('repostSchedule/addEdit');
+        echo json_encode($data);
     }
 
     //update status

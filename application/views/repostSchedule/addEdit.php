@@ -131,7 +131,7 @@ foreach($activeCampaignList as $list) {
                         <div class="card alert">
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form method="post" action="<?php echo base_url('repostSchedule/addRepostSchedule'); ?>">
+                                    <form method="post" id="repostScheduleForm" action="<?php echo base_url('repostSchedule/addRepostSchedule'); ?>">
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div id="sucErrMsg"></div>
@@ -191,25 +191,25 @@ foreach($activeCampaignList as $list) {
                                             <div class="col-lg-3">
                                                 <div class="form-group">
                                                     <label>Start Date</label>
-                                                    <input class="form-control" type="date" name="deliveryStartDate" value = "<?php echo @$_GET['deliveryDate']; ?>"  >
+                                                    <input class="form-control" type="date" id="deliveryStartDate" name="deliveryStartDate" value = "<?php echo @$_GET['deliveryDate']; ?>"  >
                                                 </div>
                                             </div>
                                             <div class="col-lg-3">
                                                 <div class="form-group">
                                                     <label>End Date</label>
-                                                    <input class="form-control" type="date" name="deliveryEndDate" value = "<?php echo @$_GET['deliveryDate']; ?>"  >
+                                                    <input class="form-control" type="date" id="deliveryEndDate" name="deliveryEndDate" value = "<?php echo @$_GET['deliveryDate']; ?>"  >
                                                 </div>
                                             </div>
                                             <div class="col-lg-3">
                                                 <div class="form-group">
                                                     <label>Start Time</label>
-                                                    <input class="form-control" type="time" name="deliveryStartTime" value = "<?php echo @$_GET['deliveryDate']; ?>"  >
+                                                    <input class="form-control" type="time" id="deliveryStartTime" name="deliveryStartTime" value = "<?php echo @$_GET['deliveryDate']; ?>"  >
                                                 </div>
                                             </div>
                                             <div class="col-lg-3">
                                                 <div class="form-group">
                                                     <label>End Time</label>
-                                                    <input class="form-control" type="time" name="deliveryEndTime" value = "<?php echo @$_GET['deliveryDate']; ?>"  >
+                                                    <input class="form-control" type="time" id="deliveryEndTime" name="deliveryEndTime" value = "<?php echo @$_GET['deliveryDate']; ?>"  >
                                                 </div>
                                             </div>
                                         </div>
