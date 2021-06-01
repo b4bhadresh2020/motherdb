@@ -73,8 +73,8 @@
 			success: function(response){
 				var repostScheduleData = JSON.parse(response);
 				$("#repostScheduleId").val(repostScheduleData.id);
-				$('#deliveryStartTime').val(repostScheduleData.deliveryStartTime);
-				$('#deliveryEndTime').val(repostScheduleData.deliveryEndTime);
+				$('#editDeliveryStartTime').val(repostScheduleData.deliveryStartTime);
+				$('#editDeliveryEndTime').val(repostScheduleData.deliveryEndTime);
 			}
 		});
 		$('#editDataPopupRepostSchedule').modal('show');

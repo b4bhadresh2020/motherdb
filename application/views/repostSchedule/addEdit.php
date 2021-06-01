@@ -247,6 +247,7 @@ foreach($activeCampaignList as $list) {
                                                 <th>Start Time</th>
                                                 <th>End Time</th>
                                                 <th>Status</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -261,14 +262,17 @@ foreach($activeCampaignList as $list) {
 
                                                     if ($curEntry['status'] == '0') {
                                                         $status = 'Deactive'; 
-                                                        $class = "btn btn-danger";  
+                                                        $action = 'Active';
+                                                        $class = "btn btn-success";
                                                         $url = 'updateStatus/'.$curEntry["id"].'/1';                                                   
                                                     }else if($curEntry['status'] == '1'){
                                                         $status = 'Active';
-                                                        $class = "btn btn-success"; 
+                                                        $action = 'Deactive';
+                                                        $class = "btn btn-danger"; 
                                                         $url = 'updateStatus/'.$curEntry["id"].'/0';
                                                     }else if($curEntry['status'] == '2'){
-                                                        $status = 'Complete';
+                                                        $status = 'Completed';
+                                                        $action = 'Complete';
                                                         $class = "btn btn-primary";
                                                         $url = '#'; 
                                                     }
@@ -282,11 +286,12 @@ foreach($activeCampaignList as $list) {
                                                         <td><?php echo date('d-m-Y',strtotime($curEntry["deliveryEndDate"])); ?></td>
                                                         <td><?php echo date('H:i',strtotime($curEntry["deliveryStartTime"])); ?></td>
                                                         <td><?php echo date('H:i',strtotime($curEntry["deliveryEndTime"])); ?></td>
+                                                        <td><?php echo $status; ?></td>
                                                         <td>
                                                             <?php if($curEntry['status'] == 0) { ?>  
                                                                 <a href="javascript:void(0);" class="btn btn-primary" data-repostScheduleId = '<?php echo $repostScheduleId; ?>' onclick="javascript:loadrepostSchedule(this);">edit</a>
                                                             <?php } ?>
-                                                            <a href="<?php echo $url; ?>" class="<?php echo $class; ?>"><?php echo $status; ?></a>
+                                                            <a href="<?php echo $url; ?>" class="<?php echo $class; ?>"><?php echo $action; ?></a>
                                                         </td>
                                                     </tr>
                                             <?php } ?>
@@ -327,13 +332,13 @@ foreach($activeCampaignList as $list) {
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>Start Time *</label>
-                                    <input type="time" class="form-control" id="deliveryStartTime" name="deliveryStartTime">
+                                    <input type="time" class="form-control" id="editDeliveryStartTime" name="deliveryStartTime">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label>End Time *</label>
-                                    <input type="time" class="form-control" id="deliveryEndTime" name="deliveryEndTime">
+                                    <input type="time" class="form-control" id="editDeliveryEndTime" name="deliveryEndTime">
                                 </div>
                             </div>                                                                              
                         </div>    

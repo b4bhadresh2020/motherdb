@@ -32,6 +32,9 @@ class RepostSchedule extends CI_Controller
         if(!empty($data['listArr'])){
             foreach($data['listArr'] as $index=>$curEntry){
                 $providerNameArr = $this->mdl_repost_schedule->getProvider(explode(',',$curEntry["providers"]));
+                foreach($providerNameArr as $pi => $provider) {
+                    $providerNameArr[$pi]['listname'] = $provider['listname'] . " (" . getProviderName($provider['provider']) . ")";
+                }
                 $data['listArr'][$index]['providers'] = implode('<br>',array_column($providerNameArr,'listname'));
             }
         }
