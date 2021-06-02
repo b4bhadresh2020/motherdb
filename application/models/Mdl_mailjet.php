@@ -10,6 +10,7 @@ class Mdl_mailjet extends CI_Model {
 
     public function __construct() {
         parent::__construct();
+        require_once(FCPATH.'vendor/autoload.php');
     }
 
     function AddEmailToMailjetSubscriberList($getData,$mailjetListId){
@@ -84,10 +85,16 @@ class Mdl_mailjet extends CI_Model {
                 ]
             ];
             $response = $mj->post(Resources::$ContactManagemanycontacts, ['body' => $body]);
-            $jobID = $response->getData()[0]['JobID'];
+            $responseCode = $response->getStatus();
 
-            return array("result" => "success","data" => array("id" => $jobID));
-    
+            if($responseCode == "201") {
+                $jobID = $response->getData()[0]['JobID'];
+                return array("result" => "success","data" => array("id" => $jobID));
+            } else if ($responseCode == "401") {
+                return array("result" => "error","error" => array("msg" => "Unauthorized"));
+            } else {
+                return array("result" => "error","error" => array("msg" => "Unknown Error Response"));
+            }
             // catch any exceptions thrown during the process and print the errors to screen
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $statusCode = $e->getResponse()->getStatusCode();         
