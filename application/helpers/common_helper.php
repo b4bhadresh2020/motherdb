@@ -344,12 +344,10 @@ function JoinData($table_name = '', $condition = array(), $join_table = '', $tab
         foreach ($order_by as $key => $val) {
             $cur_filter = array();
             $cur_filter = $val;
-            $order = $val ? $val : 'asc';
-            $ci->db->order_by($key, $order);
-            // foreach ($cur_filter as $key1 => $val1) {
-            //     $order = $val1 ? $val1 : 'asc';
-            //     $ci->db->order_by($key1, $order);
-            // }
+            foreach ($cur_filter as $key1 => $val1) {
+                $order = $val1 ? $val1 : 'asc';
+                $ci->db->order_by($key1, $order);
+            }
         }
     }
     if($selected_rows)

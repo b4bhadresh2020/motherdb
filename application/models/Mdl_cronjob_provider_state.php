@@ -21,8 +21,10 @@ class Mdl_cronjob_provider_state extends CI_Model
 
         if ($dataCount > 0) {
             $this->db->limit($perpage,$start);
-            $order_by =array(
-                'id' => 'DESC'
+            $order_by = array(
+                array(
+                    'id' => 'DESC'
+                )
             );
             $is_single = false;
             $cronjobProviderStatData = JoinData(CSV_FILE_PROVIDER_DATA, $condition,CRON_STATUS,"cronStatusId","cronStatusId","left",$is_single,$order_by,'','');     
