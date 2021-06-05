@@ -144,6 +144,8 @@ define("ONTRAPORT_DELAY_USER_DATA"		,	"ontraport_delay_user_data");
 define("ACTIVE_CAMPAIGN_DELAY_USER_DATA", "active_campaign_delay_user_data");
 define("EMAIL_HISTORY_DATA"				,	"email_history_data");
 define("PROVIDER_UNSUBSCRIBER"			,	"provider_unsubscriber");
+define("REPOST_SCHEDULE"			    ,	"repost_schedule");
+define("REPOST_SCHEDULE_LIVE_DELIVERY_DATA" ,	"repost_schedule_live_delivery_data");
 
 
 //from other db

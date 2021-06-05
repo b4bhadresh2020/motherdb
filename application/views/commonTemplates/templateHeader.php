@@ -199,6 +199,7 @@
 
                     <li class="label">Repost</li>
                     <li class="<?php echo (@$load_page == 'repost')?"active":"";?>"  title="Repost"><a href="<?php echo base_url('repost/addEdit');?>" ><i class="ti-export"></i> Repost</a></li>
+                    <li class="<?php echo (@$load_page == 'repostSchedule')?"active":"";?>"  title="Repost Schedule"><a href="<?php echo base_url('repostSchedule/addEdit');?>" ><i class="ti-export"></i> Repost Schedule</a></li>
 
                     <li class="label">System</li>
                     <li title="Logout"><a href="<?php echo base_url('adminHome/logout');?>"><i class="ti-power-off"></i> Logout</a></li>
