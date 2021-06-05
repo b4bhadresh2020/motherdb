@@ -10,6 +10,7 @@ class Mdl_mailjet extends CI_Model {
 
     public function __construct() {
         parent::__construct();
+        require_once(FCPATH.'vendor/autoload.php');
     }
 
     function AddEmailToMailjetSubscriberList($getData,$mailjetListId){
@@ -56,6 +57,7 @@ class Mdl_mailjet extends CI_Model {
 
         try {
             $mj = new \Mailjet\Client($api_key, $secret_key);
+            
             $body = [
                 'Contacts' => [
                     [
@@ -83,14 +85,29 @@ class Mdl_mailjet extends CI_Model {
                     ]
                 ]
             ];
-            $response = $mj->post(Resources::$ContactManagemanycontacts, ['body' => $body]);
-            $jobID = $response->getData()[0]['JobID'];
+             
+            try {
+                $response = $mj->post(Resources::$ContactManagemanycontacts, ['body' => $body]);
+                $responseCode = $response->getStatus();
+             
+                if($responseCode == "201") {
+                    $jobID = $response->getData()[0]['JobID'];
+                    return array("result" => "success","data" => array("id" => $jobID));
+                } else if ($responseCode == "401") {
+                    return array("result" => "error","error" => array("msg" => "Unauthorized"));
+                } else {
+                    return array("result" => "error","error" => array("msg" => "Unknown Error Response"));
+                }
 
-            return array("result" => "success","data" => array("id" => $jobID));
-    
+            } catch(Exception $e) {
+                return array("result" => "error","error" => array("msg" => $e->getMessage()));
+            }
+
             // catch any exceptions thrown during the process and print the errors to screen
         } catch (\GuzzleHttp\Exception\ClientException $e) {
-            $statusCode = $e->getResponse()->getStatusCode();         
+            
+            $statusCode = $e->getResponse()->getStatusCode();      
+          
             if($statusCode == "400"){
                 return array("result" => "error","error" => array("msg" => $statusCode." - Bad Request"));
             }else{
