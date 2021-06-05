@@ -115,11 +115,13 @@ class RepostSchedule extends CI_Controller
         $data['status'] = 'error';
         $data['msg'] = 'Something went wrong!';
         if(!empty($repostScheduleId)){
-             // fetch mail live delivery data from live deliverys table
-            $liveDeliveryCondition   = array('apiKey' => $this->input->post('apiKey'));
-            $is_single               = false;
-            $liveDeliveryData        = GetAllRecord(LIVE_DELIVERY_DATA, $liveDeliveryCondition, $is_single, array(), array(),array(),'liveDeliveryDataId');
-            
+            $apikey = $this->input->post('apiKey');
+            $apiQry = "SELECT mailProvider,groupName,keyword FROM live_delivery WHERE apikey = '{$apikey}'";
+            $getApiKey = GetDatabyqry($apiQry);
+
+            // fetch mail live delivery data from live deliverys table
+            $qry = "SELECT * FROM live_delivery_data WHERE apikey = '{$apikey}' AND emailId != '' AND (sucFailMsgIndex = 0 OR sucFailMsgIndex = 1) GROUP BY emailId";
+            $liveDeliveryData = GetDatabyqry($qry);
             if(!empty($liveDeliveryData)){
                 $liveDeliveryDataId = array_column($liveDeliveryData,'liveDeliveryDataId');
                 foreach($providers as $provider) {
@@ -130,8 +132,11 @@ class RepostSchedule extends CI_Controller
                             'liveDeliveryDataId' => $liveDataId,
                             'providerId' => $provider,
                             'providerListCode' => $providerListCode,
-                            'repostScheduleId'   => $repostScheduleId
+                            'repostScheduleId'   => $repostScheduleId,
+                            'groupName'         =>   ($getApiKey[0]['groupName']) ? $getApiKey[0]['groupName'] : '',
+                            'keyword'           => ($getApiKey[0]['keyword']) ? $getApiKey[0]['keyword'] : ''
                         );
+                       
                         $this->mdl_repost_schedule->insertRepostScheduleLiveDeliveryData($liverDeliveryData);
                     }
                 }

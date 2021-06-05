@@ -38,6 +38,7 @@
 					data: $(this).serialize(),
 					success: function(response) {
 						var response = JSON.parse(response);
+						console.log(response);
 						if (response.status == 'success') {
 							$('#sucErrMsg').text(response.msg).addClass('alert alert-success');
 						} else {
