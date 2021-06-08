@@ -26,6 +26,13 @@ class Mdl_repost_schedule extends CI_Model
          ManageData(REPOST_SCHEDULE_LIVE_DELIVERY_DATA,$condition,$keywordDataArr,$is_insert);
     }
 
+    public function addRepostScheduleHistory($historyData) {
+        //  Insert repost schedule history in repost schedule history table
+        $condition = array();
+        $is_insert = TRUE;
+        ManageData(REPOST_SCHEDULE_HISTORY,$condition,$historyData,$is_insert);
+    }
+
     public function getRepostscheduleData($getData,$start,$perpage) {
 
         $condition = array();

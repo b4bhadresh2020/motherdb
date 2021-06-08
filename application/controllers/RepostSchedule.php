@@ -105,9 +105,18 @@ class RepostSchedule extends CI_Controller
         
         $repostScheduleData = $this->input->post();
         $providers = $repostScheduleData['providers'];
+        $apikey = $this->input->post('apiKey');
+        $deliveryStartDate = date('Y-m-d',strtotime($this->input->post('deliveryStartDate')));
+        $deliveryEndDate = date('Y-m-d',strtotime($this->input->post('deliveryEndDate')));
+        
+        // fetch mail live delivery data from live deliverys table
+        $qry = "SELECT liveDeliveryDataId FROM live_delivery_data WHERE apikey = '{$apikey}'  AND emailId != '' AND (sucFailMsgIndex = 0 OR sucFailMsgIndex = 1) AND DATE(createdDate) BETWEEN '{$deliveryStartDate}' AND '{$deliveryEndDate}'  GROUP BY emailId";
+        $liveDeliveryData = GetDatabyqry($qry);
+        $totalliveDeliveryRecord = count($liveDeliveryData);
 
         $this->load->model('mdl_repost_schedule');
         $repostScheduleData['providers'] = implode(',',$repostScheduleData['providers']);
+        $repostScheduleData['totalRecord'] = $totalliveDeliveryRecord;
         $repostScheduleData['createdDate'] = date('Y-m-d H:i:s');
         $repostScheduleData['updatedDate'] = date('Y-m-d H:i:s');
         $repostScheduleId = $this->mdl_repost_schedule->insertRepostSchedule($repostScheduleData);
@@ -115,16 +124,20 @@ class RepostSchedule extends CI_Controller
         $data['status'] = 'error';
         $data['msg'] = 'Something went wrong!';
         if(!empty($repostScheduleId)){
-            $apikey = $this->input->post('apiKey');
             $apiQry = "SELECT mailProvider,groupName,keyword FROM live_delivery WHERE apikey = '{$apikey}'";
             $getApiKey = GetDatabyqry($apiQry);
-
-            // fetch mail live delivery data from live deliverys table
-            $qry = "SELECT * FROM live_delivery_data WHERE apikey = '{$apikey}' AND emailId != '' AND (sucFailMsgIndex = 0 OR sucFailMsgIndex = 1) GROUP BY emailId";
-            $liveDeliveryData = GetDatabyqry($qry);
+            
             if(!empty($liveDeliveryData)){
                 $liveDeliveryDataId = array_column($liveDeliveryData,'liveDeliveryDataId');
                 foreach($providers as $provider) {
+                    // insert record in REPOST_SCHEDULE_HISTORY table
+                    $historyData = array(
+                        'repostScheduleId' => $repostScheduleId,
+                        'providerId' => $provider
+                    );
+
+                    $this->mdl_repost_schedule->addRepostScheduleHistory($historyData);
+
                     // get provider list code from provider id
                     $providerListCode = getProviderListCode($provider);
                     foreach($liveDeliveryDataId as $liveDataId) {
@@ -189,7 +202,8 @@ class RepostSchedule extends CI_Controller
         );
         $updateRecord = array(
             'deliveryStartTime' => $this->input->post('deliveryStartTime'),                
-            'deliveryEndTime' => $this->input->post('deliveryEndTime')                    
+            'deliveryEndTime' => $this->input->post('deliveryEndTime'),
+            'perDayRecord' => $this->input->post('perDayRecord')                           
         );
         ManageData(REPOST_SCHEDULE,$condition,$updateRecord,$is_insert);
         redirect(site_url().'repostSchedule/addEdit');

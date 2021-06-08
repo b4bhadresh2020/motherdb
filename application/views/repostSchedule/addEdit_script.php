@@ -76,6 +76,7 @@
 				$("#repostScheduleId").val(repostScheduleData.id);
 				$('#editDeliveryStartTime').val(repostScheduleData.deliveryStartTime);
 				$('#editDeliveryEndTime').val(repostScheduleData.deliveryEndTime);
+				$('#editperDayRecord').val(repostScheduleData.perDayRecord);
 			}
 		});
 		$('#editDataPopupRepostSchedule').modal('show');
