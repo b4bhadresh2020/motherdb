@@ -38,9 +38,9 @@ class RepostSchedule extends CI_Controller
                     $is_single = TRUE;
                     $getRepostScheduleHistoryData = GetAllRecord(REPOST_SCHEDULE_HISTORY, $condition, $is_single);
 
-                    $providerNameArr[$pi]['listname'] = $provider['listname'] . " (" . getProviderName($provider['provider']) . ")"."&nbsp&nbsp<b style='color:red;'>".$getRepostScheduleHistoryData['totalSend']."</b>";
+                    $providerNameArr[$pi]['listname'] = "<div>- " . $provider['listname'] . " (" . getProviderName($provider['provider']) . ")"."&nbsp&nbsp<span class='send-count'>".$getRepostScheduleHistoryData['totalSend']."</span></div>";
                 }
-                $data['listArr'][$index]['providers'] = implode('<br>',array_column($providerNameArr,'listname'));
+                $data['listArr'][$index]['providers'] = implode('',array_column($providerNameArr,'listname'));
             }
         }
         //get all apikey 
