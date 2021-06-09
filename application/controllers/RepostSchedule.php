@@ -32,8 +32,13 @@ class RepostSchedule extends CI_Controller
         if(!empty($data['listArr'])){
             foreach($data['listArr'] as $index=>$curEntry){
                 $providerNameArr = $this->mdl_repost_schedule->getProvider(explode(',',$curEntry["providers"]));
+                $providreIdArr = explode(',',$curEntry["providers"]);
                 foreach($providerNameArr as $pi => $provider) {
-                    $providerNameArr[$pi]['listname'] = $provider['listname'] . " (" . getProviderName($provider['provider']) . ")";
+                    $condition = array("providerId" => $providreIdArr[$pi],'repostScheduleId' => $curEntry['id']);
+                    $is_single = TRUE;
+                    $getRepostScheduleHistoryData = GetAllRecord(REPOST_SCHEDULE_HISTORY, $condition, $is_single);
+
+                    $providerNameArr[$pi]['listname'] = $provider['listname'] . " (" . getProviderName($provider['provider']) . ")"."&nbsp&nbsp<b style='color:red;'>".$getRepostScheduleHistoryData['totalSend']."</b>";
                 }
                 $data['listArr'][$index]['providers'] = implode('<br>',array_column($providerNameArr,'listname'));
             }
@@ -49,6 +54,9 @@ class RepostSchedule extends CI_Controller
         foreach ($getLiveDeliveryAllApiKeys as $key => $liveDelivery) {
             $liveDeliveriesGroups[$liveDelivery['country']][] = $liveDelivery;
         }
+        $condition = array("isInActive" => 0);
+        $is_single = FALSE;
+        $getLiveDeliveryAllApiKeys = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(array("country","ASC"),array('liveDeliveryId' => 'desc')), 'country,apikey,groupName,keyword,mailProvider,live_status');
 
         $data['apikeys'] = $liveDeliveriesGroups;
         $data['load_page'] = 'repostSchedule';
@@ -102,7 +110,6 @@ class RepostSchedule extends CI_Controller
 
     //add schedule to repost schedule
     function addRepostSchedule(){
-        
         $repostScheduleData = $this->input->post();
         $providers = $repostScheduleData['providers'];
         $apikey = $this->input->post('apiKey');
@@ -128,16 +135,18 @@ class RepostSchedule extends CI_Controller
             $getApiKey = GetDatabyqry($apiQry);
             
             if(!empty($liveDeliveryData)){
+               
                 $liveDeliveryDataId = array_column($liveDeliveryData,'liveDeliveryDataId');
                 foreach($providers as $provider) {
                     // insert record in REPOST_SCHEDULE_HISTORY table
+                   
                     $historyData = array(
                         'repostScheduleId' => $repostScheduleId,
-                        'providerId' => $provider
+                        'providerId' => $provider,
                     );
 
                     $this->mdl_repost_schedule->addRepostScheduleHistory($historyData);
-
+                    
                     // get provider list code from provider id
                     $providerListCode = getProviderListCode($provider);
                     foreach($liveDeliveryDataId as $liveDataId) {
