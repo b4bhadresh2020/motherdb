@@ -377,3 +377,10 @@
 }
  /*# sourceMappingURL=bootstrap-select.css.map */
 /* END: custom select  */
+.send-count {
+  color: #000000;
+  background-color: #1de9b6;
+  padding: 2px 5px;
+  border-radius: 5px;
+  font-size: 13px;
+}

@@ -146,7 +146,7 @@ define("EMAIL_HISTORY_DATA"				,	"email_history_data");
 define("PROVIDER_UNSUBSCRIBER"			,	"provider_unsubscriber");
 define("REPOST_SCHEDULE"			    ,	"repost_schedule");
 define("REPOST_SCHEDULE_LIVE_DELIVERY_DATA" ,	"repost_schedule_live_delivery_data");
-
+define("REPOST_SCHEDULE_HISTORY", "repost_schedule_history");
 
 //from other db
 define("SMS_UNSUBSCRIBER_LIST","sms_unsubscriber_list");

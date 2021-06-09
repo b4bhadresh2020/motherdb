@@ -200,16 +200,22 @@ foreach($activeCampaignList as $list) {
                                                     <input class="form-control" type="date" id="deliveryEndDate" name="deliveryEndDate" value = "<?php echo @$_GET['deliveryDate']; ?>"  >
                                                 </div>
                                             </div>
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-2">
                                                 <div class="form-group">
                                                     <label>Start Time</label>
                                                     <input class="form-control" type="time" id="deliveryStartTime" name="deliveryStartTime" value = "<?php echo @$_GET['deliveryDate']; ?>"  >
                                                 </div>
                                             </div>
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-2">
                                                 <div class="form-group">
                                                     <label>End Time</label>
                                                     <input class="form-control" type="time" id="deliveryEndTime" name="deliveryEndTime" value = "<?php echo @$_GET['deliveryDate']; ?>"  >
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <div class="form-group">
+                                                    <label>Per Day Limit *</label>
+                                                    <input type="number" class="form-control" id="perDayRecord" name="perDayRecord">
                                                 </div>
                                             </div>
                                         </div>
@@ -241,11 +247,13 @@ foreach($activeCampaignList as $list) {
                                             <tr>
                                                 <th>#</th>
                                                 <th>API Key</th>
+                                                <th>Total Records</th>
                                                 <th>Provider</th>
                                                 <th>Start Date</th>
                                                 <th>End Date</th>
                                                 <th>Start Time</th>
                                                 <th>End Time</th>
+                                                <th>Perday Records</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
@@ -281,11 +289,13 @@ foreach($activeCampaignList as $list) {
                                                     <tr>
                                                         <td><?php echo $i; ?></td>
                                                         <td><?php echo $curEntry["apiKey"]; ?></td>
+                                                        <td><?php echo $curEntry["totalRecord"]; ?></td>
                                                         <td><?php echo $curEntry["providers"]; ?></td>
                                                         <td><?php echo date('d-m-Y',strtotime($curEntry["deliveryStartDate"])); ?></td>
                                                         <td><?php echo date('d-m-Y',strtotime($curEntry["deliveryEndDate"])); ?></td>
                                                         <td><?php echo date('H:i',strtotime($curEntry["deliveryStartTime"])); ?></td>
                                                         <td><?php echo date('H:i',strtotime($curEntry["deliveryEndTime"])); ?></td>
+                                                        <td><?php echo $curEntry["perDayRecord"]; ?></td>
                                                         <td><?php echo $status; ?></td>
                                                         <td>
                                                             <?php if($curEntry['status'] == 0) { ?>  
@@ -329,18 +339,24 @@ foreach($activeCampaignList as $list) {
                         <h5><strong>Update Repost Schedule Information</strong></h5>
                         <input type="hidden" name="id" id="repostScheduleId"/>
                         <div class="row">                           
-                            <div class="col-lg-6">
+                            <div class="col-lg-4">
                                 <div class="form-group">
                                     <label>Start Time *</label>
                                     <input type="time" class="form-control" id="editDeliveryStartTime" name="deliveryStartTime">
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-4">
                                 <div class="form-group">
                                     <label>End Time *</label>
                                     <input type="time" class="form-control" id="editDeliveryEndTime" name="deliveryEndTime">
                                 </div>
-                            </div>                                                                              
+                            </div>  
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label>Per Day Limit *</label>
+                                    <input type="number" class="form-control" id="editperDayRecord" name="perDayRecord">
+                                </div>
+                            </div>                                                                            
                         </div>    
                         
                         <div class="row">

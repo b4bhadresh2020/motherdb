@@ -1627,8 +1627,8 @@ function addToAweberSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay)
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1642,8 +1642,8 @@ function addToTransmitviaSubscriberQueue($liveDeliveryDataId,$mailProvider,$dela
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1657,8 +1657,8 @@ function addToContactSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1672,8 +1672,8 @@ function addToOngageSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay)
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1687,8 +1687,8 @@ function addToSendgridSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDa
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1702,8 +1702,8 @@ function addToSendinblueSubscriberQueue($liveDeliveryDataId,$mailProvider,$delay
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1717,8 +1717,8 @@ function addToSendpulseSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayD
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1732,8 +1732,8 @@ function addToMailerliteSubscriberQueue($liveDeliveryDataId,$mailProvider,$delay
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1747,8 +1747,8 @@ function addToMailjetSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1762,8 +1762,8 @@ function addToConvertkitSubscriberQueue($liveDeliveryDataId,$mailProvider,$delay
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1777,8 +1777,8 @@ function addToMarketingPlatformSubscriberQueue($liveDeliveryDataId,$mailProvider
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1792,8 +1792,8 @@ function addToOntraportSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayD
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1807,8 +1807,8 @@ function addToActiveCampaignSubscriberQueue($liveDeliveryDataId,$mailProvider,$d
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
         "status" => 0
     );
     $condition = array();
