@@ -123,9 +123,9 @@ class Mdl_marketing_platform extends CI_Model {
                 return array("result" => "error","error" => array("msg" => "Unknown Error Response"));
             }
         }catch (\GuzzleHttp\Exception\ClientException $e) {            
-            $statusCode = $e->getResponse()->getStatusCode();         
-            if($statusCode == "400"){
-                return array("result" => "error","error" => array("msg" => $statusCode." - Bad Request"));
+            $statusCode = $e->getResponse()->getStatusCode(); 
+            if($statusCode == "400" || $statusCode == "401" || $statusCode == "403"){
+                return array("result" => "error","error" => array("msg" => $statusCode." - Bad Request - ". $e->getMessage()));
             }else{
                 return array("result" => "error","error" => array("msg" => $statusCode." - Subscriber already subscribed"));
             }            
