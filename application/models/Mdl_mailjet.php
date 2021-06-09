@@ -2,19 +2,19 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-// require the autoloader class if you haven't used composer to install the package
-require_once(APPPATH.'third_party/mailjet/vendor/autoload.php');
-use \Mailjet\Resources;
-
 class Mdl_mailjet extends CI_Model {
 
     public function __construct() {
         parent::__construct();
         require_once(FCPATH.'vendor/autoload.php');
     }
+    
 
     function AddEmailToMailjetSubscriberList($getData,$mailjetListId){
        
+        // Create a Guzzle client
+        $client = new GuzzleHttp\Client(); 
+        
         // fetch mail provider data from providers table
         $providerCondition   = array('id' => $mailjetListId);
         $is_single           = true;
@@ -55,8 +55,7 @@ class Mdl_mailjet extends CI_Model {
         fwrite($logFile,$logData);
         fclose($logFile);
 
-        try {
-            $mj = new \Mailjet\Client($api_key, $secret_key);
+        try {            
             
             $body = [
                 'Contacts' => [
@@ -85,13 +84,25 @@ class Mdl_mailjet extends CI_Model {
                     ]
                 ]
             ];
-             
+            $bodyData = json_encode($body); 
+            
             try {
-                $response = $mj->post(Resources::$ContactManagemanycontacts, ['body' => $body]);
-                $responseCode = $response->getStatus();
-             
+
+                $newsubscriberUrl = "https://api.mailjet.com/v3/REST/contact/managemanycontacts";
+                $body = $client->post($newsubscriberUrl, [
+                    'body' => $bodyData, 
+                    'headers' => [
+                        'Content-Type' => 'application/json'
+                    ],
+                    'auth' => [
+                        $api_key, $secret_key
+                    ]
+                ]);  
+                $responseCode = $body->getStatusCode();
+                $subscriber = json_decode($body->getBody(),true);
+            
                 if($responseCode == "201") {
-                    $jobID = $response->getData()[0]['JobID'];
+                    $jobID = $subscriber['Data'][0]['JobID'];
                     return array("result" => "success","data" => array("id" => $jobID));
                 } else if ($responseCode == "401") {
                     return array("result" => "error","error" => array("msg" => "Unauthorized"));
