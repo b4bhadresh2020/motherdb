@@ -32,13 +32,13 @@ class RepostSchedule extends CI_Controller
         if(!empty($data['listArr'])){
             foreach($data['listArr'] as $index=>$curEntry){
                 $providerNameArr = $this->mdl_repost_schedule->getProvider(explode(',',$curEntry["providers"]));
-                $providreIdArr = explode(',',$curEntry["providers"]);
                 foreach($providerNameArr as $pi => $provider) {
-                    $condition = array("providerId" => $providreIdArr[$pi],'repostScheduleId' => $curEntry['id']);
+                    $condition = array("providerId" => $provider['id'],'repostScheduleId' => $curEntry['id']);
                     $is_single = TRUE;
                     $getRepostScheduleHistoryData = GetAllRecord(REPOST_SCHEDULE_HISTORY, $condition, $is_single);
+                    $repostScheduleTotalSend = (!empty($getRepostScheduleHistoryData)) ? $getRepostScheduleHistoryData['totalSend'] : 0;
 
-                    $providerNameArr[$pi]['listname'] = "<div>- " . $provider['listname'] . " (" . getProviderName($provider['provider']) . ")"."&nbsp&nbsp<span class='send-count'>".$getRepostScheduleHistoryData['totalSend']."</span></div>";
+                    $providerNameArr[$pi]['listname'] = "<div>- " . $provider['listname'] . " (" . getProviderName($provider['provider']) . ")"."&nbsp&nbsp<span class='send-count'>".$repostScheduleTotalSend."</span></div>";
                 }
                 $data['listArr'][$index]['providers'] = implode('',array_column($providerNameArr,'listname'));
             }

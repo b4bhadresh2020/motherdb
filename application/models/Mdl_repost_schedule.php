@@ -59,7 +59,7 @@ class Mdl_repost_schedule extends CI_Model
 
     public function getProvider($providerIdArr){
         $ci = & get_instance();
-        $ci->db->select('listname,provider');
+        $ci->db->select('listname,provider,id');
         $ci->db->where_in('id',$providerIdArr);
         $res = $ci->db->get(PROVIDERS);
         return $res->result_array();
