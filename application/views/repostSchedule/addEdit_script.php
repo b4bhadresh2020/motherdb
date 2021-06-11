@@ -16,6 +16,7 @@
 			var deliveryEndDate =  $('#deliveryEndDate').val();
 			var deliveryStartTime = $('#deliveryStartTime').val();
 			var deliveryEndTime = $('#deliveryEndTime').val();
+			var liveDeliveryStatus = $('#liveDeliveryStatus').val();
 
 			if (select_apikey == '') {
 				$('#sucErrMsg').text('Please select API Key').addClass('alert alert-danger');
@@ -29,6 +30,8 @@
 				$('#sucErrMsg').text('Please select Start Time').addClass('alert alert-danger');
 			}else if(deliveryEndTime == '') {
 				$('#sucErrMsg').text('Please select End Time').addClass('alert alert-danger');
+			}else if(liveDeliveryStatus == '') {
+				$('#sucErrMsg').text('Please select Data Status').addClass('alert alert-danger');
 			} else {
 				$('#sucErrMsg').text('').removeClass('alert alert-danger');
 				//get data

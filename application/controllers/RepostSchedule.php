@@ -113,19 +113,27 @@ class RepostSchedule extends CI_Controller
         $repostScheduleData = $this->input->post();
         $providers = $repostScheduleData['providers'];
         $apikey = $this->input->post('apiKey');
+        $liveDeliveryStatus = $repostScheduleData['liveDeliveryStatus'];
         $deliveryStartDate = date('Y-m-d',strtotime($this->input->post('deliveryStartDate')));
         $deliveryEndDate = date('Y-m-d',strtotime($this->input->post('deliveryEndDate')));
         
         // fetch mail live delivery data from live deliverys table
-        $qry = "SELECT liveDeliveryDataId FROM live_delivery_data WHERE apikey = '{$apikey}'  AND emailId != '' AND (sucFailMsgIndex = 0 OR sucFailMsgIndex = 1) AND DATE(createdDate) BETWEEN '{$deliveryStartDate}' AND '{$deliveryEndDate}'  GROUP BY emailId";
+        if($liveDeliveryStatus == 2){
+            $sucFailMsgIndex = "0,1";
+        }else{
+            $sucFailMsgIndex = "$liveDeliveryStatus";
+        }
+        $qry = "SELECT liveDeliveryDataId FROM live_delivery_data WHERE apikey = '{$apikey}'  AND emailId != '' AND sucFailMsgIndex IN ($sucFailMsgIndex) AND DATE(createdDate) BETWEEN '{$deliveryStartDate}' AND '{$deliveryEndDate}'  GROUP BY emailId";
         $liveDeliveryData = GetDatabyqry($qry);
         $totalliveDeliveryRecord = count($liveDeliveryData);
-
+        
+        
         $this->load->model('mdl_repost_schedule');
         $repostScheduleData['providers'] = implode(',',$repostScheduleData['providers']);
         $repostScheduleData['totalRecord'] = $totalliveDeliveryRecord;
         $repostScheduleData['createdDate'] = date('Y-m-d H:i:s');
         $repostScheduleData['updatedDate'] = date('Y-m-d H:i:s');
+        $repostScheduleData['liveDeliveryStatus'] = $liveDeliveryStatus;
         $repostScheduleId = $this->mdl_repost_schedule->insertRepostSchedule($repostScheduleData);
 
         $data['status'] = 'error';

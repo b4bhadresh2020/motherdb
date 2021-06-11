@@ -188,13 +188,13 @@ foreach($activeCampaignList as $list) {
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-2">
                                                 <div class="form-group">
                                                     <label>Start Date</label>
                                                     <input class="form-control" type="date" id="deliveryStartDate" name="deliveryStartDate" value = "<?php echo @$_GET['deliveryDate']; ?>"  >
                                                 </div>
                                             </div>
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-2">
                                                 <div class="form-group">
                                                     <label>End Date</label>
                                                     <input class="form-control" type="date" id="deliveryEndDate" name="deliveryEndDate" value = "<?php echo @$_GET['deliveryDate']; ?>"  >
@@ -216,6 +216,17 @@ foreach($activeCampaignList as $list) {
                                                 <div class="form-group">
                                                     <label>Per Day Limit *</label>
                                                     <input type="number" class="form-control" id="perDayRecord" name="perDayRecord">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <div class="form-group custom-select">
+                                                    <label>Live Delivery Status</label>
+                                                    <select class="form-control selectpicker" name="liveDeliveryStatus" id="liveDeliveryStatus">
+                                                        <option value="">Select status</option>
+                                                        <option value="2">All</option>
+                                                        <option value="0">Success</option>
+                                                        <option value="1">Duplicate</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -254,6 +265,7 @@ foreach($activeCampaignList as $list) {
                                                 <th>Start Time</th>
                                                 <th>End Time</th>
                                                 <th>Perday Records</th>
+                                                <th>Live Delivery Status</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
@@ -285,6 +297,13 @@ foreach($activeCampaignList as $list) {
                                                         $url = '#'; 
                                                     }
 
+                                                    if ($curEntry['liveDeliveryStatus'] == '0') {
+                                                        $liveDeliveryStatus = "Success";
+                                                    }else if($curEntry['liveDeliveryStatus'] == '1'){
+                                                        $liveDeliveryStatus = "Duplicate";
+                                                    }else{
+                                                        $liveDeliveryStatus = "All";
+                                                    }
                                                     ?>
                                                     <tr>
                                                         <td><?php echo $i; ?></td>
@@ -296,6 +315,7 @@ foreach($activeCampaignList as $list) {
                                                         <td><?php echo date('H:i',strtotime($curEntry["deliveryStartTime"])); ?></td>
                                                         <td><?php echo date('H:i',strtotime($curEntry["deliveryEndTime"])); ?></td>
                                                         <td><?php echo $curEntry["perDayRecord"]; ?></td>
+                                                        <td><?php echo $liveDeliveryStatus; ?></td>
                                                         <td><?php echo $status; ?></td>
                                                         <td>
                                                             <?php if($curEntry['status'] == 0) { ?>  
