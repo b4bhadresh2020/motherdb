@@ -31,7 +31,7 @@
 			}else if(deliveryEndTime == '') {
 				$('#sucErrMsg').text('Please select End Time').addClass('alert alert-danger');
 			}else if(liveDeliveryStatus == '') {
-				$('#sucErrMsg').text('Please select Data Status').addClass('alert alert-danger');
+				$('#sucErrMsg').text('Please select Live Delivery Status').addClass('alert alert-danger');
 			} else {
 				$('#sucErrMsg').text('').removeClass('alert alert-danger');
 				//get data

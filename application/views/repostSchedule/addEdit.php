@@ -225,7 +225,7 @@ foreach($activeCampaignList as $list) {
                                                         <option value="">Select status</option>
                                                         <option value="2">All</option>
                                                         <option value="0">Success</option>
-                                                        <option value="1">Duplicate</option>
+                                                        <option value="1">Duplicates</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -300,7 +300,7 @@ foreach($activeCampaignList as $list) {
                                                     if ($curEntry['liveDeliveryStatus'] == '0') {
                                                         $liveDeliveryStatus = "Success";
                                                     }else if($curEntry['liveDeliveryStatus'] == '1'){
-                                                        $liveDeliveryStatus = "Duplicate";
+                                                        $liveDeliveryStatus = "Duplicates";
                                                     }else{
                                                         $liveDeliveryStatus = "All";
                                                     }
