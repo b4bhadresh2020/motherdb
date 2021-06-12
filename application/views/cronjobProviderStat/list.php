@@ -85,6 +85,8 @@
                                                             echo getOntraportProviderListName($curEntry['providerList']);
                                                          }else if($curEntry['providerName'] ==  ACTIVE_CAMPAIGN ){
                                                             echo getActiveCampaignProviderListName($curEntry['providerList']);
+                                                         }else if($curEntry['providerName'] ==  EXPERT_SENDER ){
+                                                            echo getExpertSenderProviderListName($curEntry['providerList']);
                                                          }
                                                          ?></td>
                                                         <td><?php echo date("d-m-Y",strtotime($curEntry['fromDate'])); ?></td>
@@ -178,6 +180,7 @@
                                         <option value="11">Marketing Platform</option>
                                         <option value="12">Ontraport</option> 
                                         <option value="13">Active Campaign</option>                                                   
+                                        <option value="14">Expert Sender</option>                                                   
                                     </select>
                                 </div>
                             </div>

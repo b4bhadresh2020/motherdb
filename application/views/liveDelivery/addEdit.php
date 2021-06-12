@@ -14,6 +14,7 @@
     $marketingPlatformList = getProviderList(MARKETING_PLATFORM);
     $ontraportList = getProviderList(ONTRAPORT);
     $activeCampaignList = getProviderList(ACTIVE_CAMPAIGN);
+    $expertSenderList = getProviderList(EXPERT_SENDER);
 
 
     $mailProviders = array(
@@ -83,6 +84,11 @@
     // Add Active Campaign list in mail provider
     foreach($activeCampaignList as $list){
         $mailProviders[$list['id']] = $list['listname']. " (Active Campaign)";
+    }
+
+    // Add Expert Sender list in mail provider
+    foreach($expertSenderList as $list){
+        $mailProviders[$list['id']] = $list['listname']. " (Expert Sender)";
     }
 
     $identifiers = array(

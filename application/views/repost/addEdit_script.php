@@ -104,7 +104,9 @@
                     sendEmailToOntraport(apiData, provider, groupName, keyword);
                 } else if (providerId == 13) {
 					sendEmailToActiveCampaign(apiData, provider, groupName, keyword);
-				} 
+				} else if (providerId == 14) {
+					sendEmailToExpertSender(apiData, provider, groupName, keyword);
+				}
 			}
 		});
 	}
@@ -123,6 +125,7 @@
 	var sendEmailToMarketingPlatformCount = 0;
 	var sendEmailToOntraportCount = 0;
 	var sendEmailToActiveCampaignCount = 0;
+	var sendEmailToExpertSenderCount = 0;
 
 	function sendEmailToEgoi(apiData) {
 		var apiDataDetail = apiData[sendEmailToEgoiCount];
@@ -626,6 +629,43 @@
 				sendEmailToActiveCampaignCount++;
 				if (sendEmailToActiveCampaignCount < apiData.length) {
 					sendEmailToActiveCampaign(apiData, provider, groupName, keyword);
+				}
+
+			}
+		});
+	}
+
+	function sendEmailToExpertSender(apiData, provider, groupName, keyword) {
+		var apiDataDetail = apiData[sendEmailToExpertSenderCount];
+
+		$.ajax({
+			url: BASEPATH + 'repost/addDataToExpertSender',
+			type: 'post',
+			data: {
+				apiDataDetail: apiDataDetail,
+				provider: provider,
+				groupName: groupName,
+				keyword: keyword
+			},
+			success: function(response) {
+
+				userApiDataLength--;
+				if (userApiDataLength == 0) {
+
+					$('#sucErrMsg').text("Contacts has been added successfully !!!").addClass('alert alert-success');
+
+					var timeoutVar = setTimeout(function() {
+						clearTimeout(timeoutVar);
+						location.reload();
+					}, 2000);
+
+				} else {
+					$('#sucErrMsg').text('Approx ' + userApiDataLength + ' Records Left').addClass('alert alert-info');
+				}
+
+				sendEmailToExpertSenderCount++;
+				if (sendEmailToExpertSenderCount < apiData.length) {
+					sendEmailToExpertSender(apiData, provider, groupName, keyword);
 				}
 
 			}
