@@ -82,7 +82,12 @@ class Mdl_expert_sender extends CI_Model {
                 $subscriber_id = $subscriber['Data']['SubscriberData']['Id'];
                 return array("result" => "success","data" => array("id" => $subscriber_id));    
             } else if($responseCode == 400) {
-                $errorMsg = $subscriber['ErrorMessage']['Messages']['Message'];
+                $errorMsg = 'Unknown Error Response';
+                if(isset($subscriber['ErrorMessage']['Messages']['Message'])) {
+                    $errorMsg = $subscriber['ErrorMessage']['Messages']['Message'];
+                } else {
+                    $errorMsg = $subscriber['ErrorMessage']['Message'];
+                }
                 return array("result" => "error","error" => array("msg" => $responseCode." - ".$errorMsg));
             } else{
                 return array("result" => "error","error" => array("msg" => "Unknown Error Response"));

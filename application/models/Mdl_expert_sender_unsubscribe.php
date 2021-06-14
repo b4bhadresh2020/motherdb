@@ -25,34 +25,37 @@ class Mdl_expert_sender_unsubscribe extends CI_Model {
             //LIST ID 
             $list_id = $providerData['code'];
             $api_key = $expertSenderAccountData['api_key']; 
-            echo /***need to implement from here.. */
-            die;
-            $subscriberUrl = "https://api.mailmailmail.net/v1.1/Subscribers/GetSubscriberDetails?Apiusername=".$apiUsername."&Apitoken=".$apiToken."&listid=".$list_id."&emailaddress=".$email."";
-            
-            $body = $client->get($subscriberUrl);
-            $response = json_decode($body->getbody(), true);
+
+            $subscriberUrl = EXPERT_SENDER_API_PATH . 'Api/Subscribers?apiKey='.$api_key.'&email='.$email.'&option=Full';
+            $ch = curl_init($subscriberUrl);
+            curl_setopt($ch, CURLOPT_URL,$subscriberUrl);
+            $headers = array(
+                "Content-Type: text/xml",
+                "Accept: text/xml",
+            );
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $getSubscriber = curl_exec($ch);
+            curl_close ($ch);
+
+            $xml = simplexml_load_string($getSubscriber);
+            $subscriber = json_decode(json_encode($xml),true);
+            $subscriberId = $subscriber['Data']['Id'];
+            $subscriberName = $subscriber['Data']['Firstname'] . " ". $subscriber['Data']['Lastname'];
+            $subscriberListId = $subscriber['Data']['StateOnLists']['StateOnList']['ListId'];
             
             // UPDATE SUSBCRIBER STATUS (unsubscribe)
-            if(isset($response['subscriberid']) && $response['emailaddress'] = $email){
-                $unsubscriberUrl = "https://api.mailmailmail.net/v1.1/Subscribers/UnsubscribeSubscriberEmail";
-                $updateDetail = [
-                    'Apiusername' => $apiUsername,
-                    'Apitoken'  => $apiToken,
-                    'listid' => $list_id,
-                    'emailaddress' => $email
-                ];
-                $updateData = json_encode($updateDetail);
-                $updateResponse = $client->post($unsubscriberUrl, [
-                        'body' => $updateData, 
-                        'headers' => [
-                            'Content-Type' => 'application/json'
-                        ]
-                    ]
-                );
+            if(isset($subscriberId) && $subscriber['Data']['Email'] == $email && $subscriberListId == $list_id){
+
+                $unsubscriberUrl = EXPERT_SENDER_API_PATH . 'Api/Subscribers/'.$subscriberId.'?apiKey='.$api_key.'&listId='.$list_id.'&channel=Email';
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_URL, $unsubscriberUrl);
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+                $result = curl_exec($curl);
+                $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+                curl_close($curl);             
                 
-                $updateResponseBody = json_decode($updateResponse->getbody(), true);
-                $name = $response['contact_fields'][2]['fieldvalue'] . " " . $response['contact_fields'][3]['fieldvalue'];
-                return array("result" => "success","data" => array("name" => $name,"updated_at" => date('Y-m-d H:i:s')));
+                return array("result" => "success","data" => array("name" => $subscriberName,"updated_at" => date('Y-m-d H:i:s')));
             }else{
                 return array("result" => "error","msg" => "Subscriber not found");
             }
