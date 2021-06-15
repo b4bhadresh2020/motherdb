@@ -85,6 +85,7 @@
                                                             <option value="11">Marketing Platform</option>  
                                                             <option value="12">Ontraport</option>                                                       
                                                             <option value="13">Active Campaign</option>
+                                                            <option value="14">Expert Sender</option>
                                                         </select>
                                                     </div>
                                             </div>
@@ -190,6 +191,8 @@
                                                             $providerName = "Ontraport";
                                                         }else if($unsubscriber["provider"] == ACTIVE_CAMPAIGN){
                                                             $providerName = "Active Campaign";
+                                                        }else if($unsubscriber["provider"] == EXPERT_SENDER){
+                                                            $providerName = "Expert Sender";
                                                         }
                                             ?>
                                             <tr>
@@ -252,7 +255,8 @@
                                         <option value="10">Convertkit</option>
                                         <option value="11">Marketing Platform</option>
                                         <option value="12">Ontraport</option>     
-                                        <option value="13">Active Campaign</option>                                            
+                                        <option value="13">Active Campaign</option> 
+                                        <option value="14">Expert Sender</option>                                            
                                     </select>
                                 </div>
                             </div>

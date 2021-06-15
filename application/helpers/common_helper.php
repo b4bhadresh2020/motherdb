@@ -661,7 +661,8 @@ function getProviderName($providerId){
         '10' => 'Convertkit',
         '11' => 'MarketingPlatform',
         '12' => 'Ontraport',
-        '13' => 'ActiveCampaign'
+        '13' => 'ActiveCampaign',
+        '14' => 'ExpertSender'
     );
     return $providerNames[$providerId];
 }
@@ -872,6 +873,19 @@ function getActiveCampaignProviderListName($providerListId){
     return $activeCampaignList[$providerListId];
 }
 
+function getExpertSenderProviderListName($providerListId){
+    $expertSenderList = array(
+        "1" => "abbiesmail2.com/CA",        
+        "2" => "ashleysmail1.com/NZ",        
+        "3" => "felinafinans.se/SE",        
+        "4" => "frejasmail2.se/SE",        
+        "5" => "katariinasmail1.com/FI",        
+        "6" => "signesmail1.dk/DK",        
+        "7" => "signesmail2.com/NO"        
+    );
+    return $expertSenderList[$providerListId];
+}
+
 function getLiveRepostAweverProviderID($providerListId){
     $provider = array(
         "1" => "14",  // Velkomstgaven.com (Norway) 
@@ -1077,6 +1091,18 @@ function getLiveRepostActiveCampaignProviderID($providerId){
     return $provider[$providerId];
 }
 
+function getLiveRepostExpertSenderProviderID($providerId){
+    $provider = array(
+        "1" => "149",  // abbiesmail2.com/CA
+        "2" => "150",  // ashleysmail1.com/NZ
+        "3" => "151",  // felinafinans.se/SE
+        "4" => "152",  // frejasmail2.se/SE
+        "5" => "153",  // katariinasmail1.com/FI
+        "6" => "154",  // signesmail1.dk/DK
+        "7" => "155",  // signesmail2.com/NO
+    );
+    return $provider[$providerId];
+}
 /*
   ++++++++++++++++++++++++++++++++++++++++++++++
   Mail send shortcut function.
@@ -1814,6 +1840,21 @@ function addToActiveCampaignSubscriberQueue($liveDeliveryDataId,$mailProvider,$d
     $condition = array();
     $is_insert = true;
     ManageData(ACTIVE_CAMPAIGN_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
+}
+
+function addToExpertSenderSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+    $liveDeliveryDelayData = array(
+        "liveDeliveryDataId" => $liveDeliveryDataId,
+        "providerId" => $mailProvider,
+        "delayDay" => $delayDay,
+        "currentTimestamp" => time(),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "status" => 0
+    );
+    $condition = array();
+    $is_insert = true;
+    ManageData(EXPERT_SENDER_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
 function addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$groupName,$keyword,$emailId = NULL){

@@ -12,6 +12,7 @@ $convertkitList = getProviderList(CONVERTKIT);
 $marketingPlatformList = getProviderList(MARKETING_PLATFORM);
 $ontraportList = getProviderList(ONTRAPORT);
 $activeCampaignList = getProviderList(ACTIVE_CAMPAIGN);
+$expertSenderList = getProviderList(EXPERT_SENDER);
 
 $mailProviders = array(    
     'egoi' => 'E-goi',
@@ -80,6 +81,11 @@ foreach($ontraportList as $list) {
 // Add Active Campaign list in mail provider
 foreach($activeCampaignList as $list) {
     $mailProviders[$list['id']] = $list['listname']. " (Active Campaign)";
+}
+
+// Add Expert Sender list in mail provider
+foreach($expertSenderList as $list) {
+    $mailProviders[$list['id']] = $list['listname']. " (Expert Sender)";
 }
 ?>
 <style>

@@ -142,6 +142,7 @@ define("CONVERTKIT_DELAY_USER_DATA"		,	"convertkit_delay_user_data");
 define("MARKETING_PLATFORM_DELAY_USER_DATA"		,	"marketing_platform_delay_user_data");
 define("ONTRAPORT_DELAY_USER_DATA"		,	"ontraport_delay_user_data");
 define("ACTIVE_CAMPAIGN_DELAY_USER_DATA", "active_campaign_delay_user_data");
+define("EXPERT_SENDER_DELAY_USER_DATA", "expert_sender_delay_user_data");
 define("EMAIL_HISTORY_DATA"				,	"email_history_data");
 define("PROVIDER_UNSUBSCRIBER"			,	"provider_unsubscriber");
 define("REPOST_SCHEDULE"			    ,	"repost_schedule");
@@ -175,6 +176,9 @@ define('ONGAGE_API_CONTACT_PATH'	,'/api/contacts/');
 // sendpulse constant
 define('SENDPULSE_TOKEN_URL', 'https://api.sendpulse.com/oauth/access_token');
 
+// expert sender url constant
+define('EXPERT_SENDER_API_PATH', 'https://api4.esv2.com/v2/');
+
 define('AWEBER'	, '1');
 define('TRANSMITVIA', '2');
 define('CONSTANTCONTACT', '3');
@@ -188,6 +192,7 @@ define('CONVERTKIT', '10');
 define('MARKETING_PLATFORM','11');
 define('ONTRAPORT', '12');
 define('ACTIVE_CAMPAIGN','13');
+define('EXPERT_SENDER','14');
 define('PROVIDERS', 'providers');
 define('AWEBER_ACCOUNTS', 'aweber_accounts');
 define('ONGAGE_ACCOUNTS', 'ongage_accounts');
@@ -198,6 +203,7 @@ define('CONVERTKIT_ACCOUNTS','convertkit_accounts');
 define('MARKETING_PLATFORM_ACCOUNTS','marketing_platform_accounts');
 define('ONTRAPORT_ACCOUNTS','ontraport_accounts');
 define('ACTIVE_CAMPAIGN_ACCOUNTS','active_campaign_accounts');
+define('EXPERT_SENDER_ACCOUNTS', 'expert_sender_accounts');
 
 // MX Block account
 define('TELIA_DOMAIN', 'telia.com');

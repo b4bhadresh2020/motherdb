@@ -42,6 +42,8 @@
                         $providerListName = getOntraportProviderListName($providerInfo['providerList']);
                     }else if($providerInfo['providerName'] == ACTIVE_CAMPAIGN){
                         $providerListName = getActiveCampaignProviderListName($providerInfo['providerList']);
+                    }else if($providerInfo['providerName'] == EXPERT_SENDER){
+                        $providerListName = getExpertSenderProviderListName($providerInfo['providerList']);
                     }
                     ?> 
                     <tr>

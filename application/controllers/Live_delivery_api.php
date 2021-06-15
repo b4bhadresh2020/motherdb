@@ -877,6 +877,35 @@ class Live_delivery_api extends CI_Controller
                                 $response = null;
                                 addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
                             //} 
+                        } else if($providerData['provider'] == EXPERT_SENDER) {
+                            
+                            $lastDeliveryData['birthDate'] = "";
+                            if (@$lastDeliveryData['birthdateDay'] != '0' && @$lastDeliveryData['birthdateMonth'] != '0' && @$lastDeliveryData['birthdateYear'] != '0') {
+                                $birthDate            = $lastDeliveryData['birthdateYear'] . '-' . $lastDeliveryData['birthdateMonth'] . '-' . $lastDeliveryData['birthdateDay'];
+                                $lastDeliveryData['birthDate'] = date('Y-m-d', strtotime($birthDate));
+                            } 
+                            
+                            $this->load->model('mdl_expert_sender');
+                            
+                            // LOGIC FOR SEND DATA TO EXPERT SENDER OR QUEUE                            
+                            $delayDay = 0;
+                            if(isset($delays[$mailProvider])){
+                                $delayDay = $delays[$mailProvider];
+                            }
+                            $provider = EXPERT_SENDER;                            
+                            // if($delayDay == 0){
+                                
+                            //     // NO DELAY INSTANT SEND DATA TO EXPERT SENDER
+                            //     $response = $this->mdl_expert_sender->AddEmailToExpertSenderSubscriberList($lastDeliveryData,$mailProvider);         
+                            //     // ADD RECORD IN HISTORY
+                            //     addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
+                            // }else{                               
+                                // ADD DATA IN QUEUE FOR DELAY SENDING
+                                addToExpertSenderSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
+                                // ADD RECORD IN HISTORY
+                                $response = null;
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
+                            // } 
                         } else{
                             $response = array("result" => "error", "error" => array("msg" => "Wrong provider"));
                         }    

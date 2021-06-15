@@ -21,6 +21,7 @@ class Cron_provider_user_csv extends CI_Controller
         $this->load->model('mdl_marketing_platform');
         $this->load->model('mdl_ontraport');
         $this->load->model('mdl_active_campaign');
+        $this->load->model('mdl_expert_sender');
     }
 
     public function index() {
@@ -210,7 +211,16 @@ class Cron_provider_user_csv extends CI_Controller
                                 $mailProvider = $this->getActiveCampaignProviderId($provider["providerList"]);                                
                                 $response = $this->mdl_active_campaign->AddEmailToActiveCampaignSubscriberList($userData,$mailProvider);
                                 addRecordInHistoryFromCSV($userData, $mailProvider, ACTIVE_CAMPAIGN, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
-                            } 
+                            } else if($provider['providerName'] == EXPERT_SENDER){
+                                if (@$userData['birthdateDay'] != '' && @$userData['birthdateMonth'] != '' && @$userData['birthdateYear'] != '') {
+                                    $birthDate              = $userData['birthdateYear'] . '-' . $userData['birthdateMonth'] . '-' . $userData['birthdateDay'];
+                                    $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
+                                } 
+                                $responseField = "expertSenderResponse";
+                                $mailProvider = $this->getExpertSenderProviderId($provider["providerList"]);                                
+                                $response = $this->mdl_expert_sender->AddEmailToExpertSenderSubscriberList($userData,$mailProvider);
+                                addRecordInHistoryFromCSV($userData, $mailProvider, EXPERT_SENDER, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
+                            }
                             // update status of sended record
                             $is_insert = FALSE;
                             $updateCondition = array('providerUserId' => $userData['providerUserId']);
@@ -475,6 +485,20 @@ class Cron_provider_user_csv extends CI_Controller
         );
         return $provider[$providerId];
     }
+
+    public function getExpertSenderProviderId($providerId){
+        $provider = array(
+            "1" => "149",  // abbiesmail2.com/CA
+            "2" => "150",  // ashleysmail1.com/NZ
+            "3" => "151",  // felinafinans.se/SE
+            "4" => "152",  // frejasmail2.se/SE
+            "5" => "153",  // katariinasmail1.com/FI
+            "6" => "154",  // signesmail1.dk/DK
+            "7" => "155",  // signesmail2.com/NO
+        );
+        return $provider[$providerId];
+    }
+    
     public function convertTimeToMinute($time){
 
         $splitTime = explode(":",$time);

@@ -152,6 +152,7 @@
                         <li class="<?php echo (@$load_page == 'marketingPlatformQueue')?"active":"";?>" title = "Marketing Platform Queue List" ><a href="<?php echo base_url('marketingPlatformQueue/manage'); ?>"><i class="ti-timer"></i> Marketing Platform Queue List </a></li>
                         <li class="<?php echo (@$load_page == 'ontraportQueue')?"active":"";?>" title = "Ontraport Queue List" ><a href="<?php echo base_url('ontraportQueue/manage'); ?>"><i class="ti-timer"></i> Ontraport Queue List </a></li>
                         <li class="<?php echo (@$load_page == 'activeCampaignQueue')?"active":"";?>" title = "Active Campaign Queue List" ><a href="<?php echo base_url('activeCampaignQueue/manage'); ?>"><i class="ti-timer"></i> Active Campaign Queue List </a></li>
+                        <li class="<?php echo (@$load_page == 'expertSenderQueue')?"active":"";?>" title = "Expert Sender Queue List" ><a href="<?php echo base_url('expertSenderQueue/manage'); ?>"><i class="ti-timer"></i> Expert Sender Queue List </a></li>
 
                     <li class="label">Email Provider State </li>
 
@@ -168,6 +169,7 @@
                         <li class="<?php echo (@$load_page == 'marketingPlatform')?"active":"";?>" title = "Marketing Platform State" ><a href="<?php echo base_url('providerState/marketingPlatform'); ?>" ><i class="ti-timer"></i> Marketing Platform Email Stats </a></li>
                         <li class="<?php echo (@$load_page == 'ontraport')?"active":"";?>" title = "Ontraport State" ><a href="<?php echo base_url('providerState/ontraport'); ?>" ><i class="ti-timer"></i> Ontraport Email Stats </a></li>
                         <li class="<?php echo (@$load_page == 'activeCampaign')?"active":"";?>" title = "Active Campaign State" ><a href="<?php echo base_url('providerState/activeCampaign'); ?>" ><i class="ti-timer"></i> Active Campaign Email Stats </a></li>
+                        <li class="<?php echo (@$load_page == 'expertSender')?"active":"";?>" title = "Expert Sender State" ><a href="<?php echo base_url('providerState/expertSender'); ?>" ><i class="ti-timer"></i> Expert Sender Email Stats </a></li>
 
                     <li class="label">Stats </li>
                         
