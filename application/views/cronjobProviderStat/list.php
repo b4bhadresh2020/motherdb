@@ -95,7 +95,7 @@
                                                         <td><?php echo $curEntry['perDayRecord']; ?></td>
                                                         <td><?php echo $cronStatus; ?></td>
                                                         <td>
-                                                        <?php if(@$curEntry['status'] != 2):?>
+                                                        <?php if(@$curEntry['status'] != 2 && @$curEntry['totalInsertedRecords'] > 0):?>
                                                         <button class="btn <?php echo ($curEntry['status'])?"btn-danger":"btn-success"?> updatedata" data-provider="<?php echo @$curEntry['id']?>" data-status="<?php echo @$curEntry['status']?>"><?php echo ($curEntry['status'])?"Deactive":"Active"?></button>
                                                         <?php endif ?>
                                                         <?php if(@$curEntry['totalSentRecords'] > 0):?>
