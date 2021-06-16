@@ -53,13 +53,50 @@ class Mdl_expert_sender extends CI_Model {
 
             $api_key = $expertSenderAccountData['api_key'];       
             $subscribeUrl = EXPERT_SENDER_API_PATH . 'Api/Subscribers/';
-            if(!empty(@$getData['birthDate'])) {
+            
+            if(!empty($getData['phone'])) {
+                $phoneXml = '<Property><Id>1</Id><Value xsi:type="xs:string">'.@$getData['phone'].'</Value></Property>';
+            } else {
+                $phoneXml = NULL;
+            }
+
+            if(!empty($getData['gender'])) {
+                $genderXml = '<Property><Id>2</Id><Value xsi:type="xs:string">'.@$getData['gender'].'</Value></Property>';
+            } else {
+                $genderXml = NULL;
+            }
+
+            if(!empty($getData['address'])) {
+                $addressXml = '<Property><Id>3</Id><Value xsi:type="xs:string">'.@$getData['address'].'</Value></Property>';
+            } else {
+                $addressXml = NULL;
+            }
+
+            if(!empty($getData['postCode'])) {
+                $postcodeXml = '<Property><Id>4</Id><Value xsi:type="xs:string">'.@$getData['postCode'].'</Value></Property>';
+            } else {
+                $postcodeXml = NULL;
+            }
+
+            if(!empty($getData['city'])) {
+                $cityXml = '<Property><Id>5</Id><Value xsi:type="xs:string">'.@$getData['city'].'</Value></Property>';
+            } else {
+                $cityXml = NULL;
+            }
+
+            if(!empty($getData['birthDate'])) {
                 $birthDateXml = '<Property><Id>6</Id><Value xsi:type="xs:date">'.@$getData['birthDate'].'</Value></Property>';
             } else {
                 $birthDateXml = NULL;
             }
+
+            if(!empty($tagValue)) {
+                $tagXml = '<Property><Id>7</Id><Value xsi:type="xs:string">'.@$tagValue.'</Value></Property>';
+            } else {
+                $tagXml = NULL;
+            }
      
-            $details = '<?xml version="1.0" encoding="UTF-8"?><ApiRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema"><ApiKey>'.$api_key.'</ApiKey><ReturnData>true</ReturnData><VerboseErrors>true</VerboseErrors><Data xsi:type="Subscriber"><Mode>AddAndUpdate</Mode><Force>true</Force><ListId>'.$list_id.'</ListId><Email>'.@$getData['emailId'].'</Email><Firstname>'.@$getData['firstName'].'</Firstname><Lastname>'.@$getData['lastName'].'</Lastname><Properties><Property><Id>1</Id><Value xsi:type="xs:string">'.@$getData['phone'].'</Value></Property><Property><Id>2</Id><Value xsi:type="xs:string">'.@$getData['gender'].'</Value></Property><Property><Id>3</Id><Value xsi:type="xs:string">'.@$getData['address'].'</Value></Property><Property><Id>4</Id><Value xsi:type="xs:string">'.@$getData['postCode'].'</Value></Property><Property><Id>5</Id><Value xsi:type="xs:string">'.@$getData['city'].'</Value></Property>'.$birthDateXml.'<Property><Id>7</Id><Value xsi:type="xs:string">'.@$tagValue.'</Value></Property></Properties></Data></ApiRequest>';
+            $details = '<?xml version="1.0" encoding="UTF-8"?><ApiRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema"><ApiKey>'.$api_key.'</ApiKey><ReturnData>true</ReturnData><VerboseErrors>true</VerboseErrors><Data xsi:type="Subscriber"><Mode>AddAndUpdate</Mode><Force>true</Force><ListId>'.$list_id.'</ListId><Email>'.@$getData['emailId'].'</Email><Firstname>'.@$getData['firstName'].'</Firstname><Lastname>'.@$getData['lastName'].'</Lastname><Properties>'.$phoneXml.$genderXml.$addressXml.$postcodeXml.$cityXml.$birthDateXml.$tagXml.'</Properties></Data></ApiRequest>';
 
             $curl = curl_init($subscribeUrl);
             curl_setopt($curl, CURLOPT_URL, $subscribeUrl);
