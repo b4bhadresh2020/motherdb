@@ -384,3 +384,12 @@
   border-radius: 5px;
   font-size: 13px;
 }
+
+.error-count {
+  color: #000000;
+  background-color: #e74c3c;
+  color:#fff;
+  padding: 2px 5px;
+  border-radius: 5px;
+  font-size: 13px;
+}
