@@ -132,7 +132,7 @@
                 success:function(response){
                     $(".page-loader").hide();
                     $("#popupSucErrMsg").html("").hide();
-                    $("#unsubscribeForm").trigger("reset");
+                    // $("#unsubscribeForm").trigger("reset");
                     $("#popupList option").remove();
                     $('#popupList').multiselect('rebuild');
 
@@ -155,5 +155,12 @@
                 }
             });
         }
+    });
+
+    $(document).on("click",".close-responsePopup",function(){
+        $('#responsePopup').modal('hide');
+        $("#addUnsubscriber").modal('show');
+        $(".unsubscribe").prop('disabled', false);
+        $("#email").val('');
     });
 </script>
