@@ -1,19 +1,23 @@
 <?php 
 
 defined('BASEPATH') OR exit('No direct script access allowed');
-require_once(APPPATH.'third_party/mailjet/vendor/autoload.php');
-use \Mailjet\Resources;
+// require_once(APPPATH.'third_party/mailjet/vendor/autoload.php');
+// use \Mailjet\Resources;
 
 class Mdl_mailjet_unsubscribe extends CI_Model {
 
     public function __construct() {
         parent::__construct();
+        require_once(FCPATH.'vendor/autoload.php');
     }
 
     
     function makeUnsubscribe($email,$mailjetListId){
         
         try{
+            // Create a Guzzle client
+            $client = new GuzzleHttp\Client();
+
             // fetch mail provider data from providers table
             $providerCondition   = array('id' => $mailjetListId);
             $is_single           = true;
@@ -36,7 +40,7 @@ class Mdl_mailjet_unsubscribe extends CI_Model {
             $emailresponse = json_decode($getEmailDetail['response'],true);
 
             if(!empty($getEmailDetail) && $emailresponse['result'] == 'success'){
-                $mj = new \Mailjet\Client($api_key, $secret_key);
+                $unsubscriberUrl = "https://api.mailjet.com/v3/REST/contact/managemanycontacts";
                 $body = [
                     'Contacts' => [
                         [
@@ -51,11 +55,30 @@ class Mdl_mailjet_unsubscribe extends CI_Model {
                         ]
                     ]
                 ];
+                $bodyData = json_encode($body);
+
+                $body = $client->post($unsubscriberUrl, [
+                    'body' => $bodyData, 
+                    'headers' => [
+                        'Content-Type' => 'application/json'
+                    ],
+                    'auth' => [
+                        $api_key, $secret_key
+                    ]
+                ]);                   
                 
-                $response = $mj->post(Resources::$ContactManagemanycontacts, ['body' => $body]);
                 // get user contact details
-                $contactResponse = $mj->get(Resources::$Contact, ['id' => $email]);
-                $name = $contactResponse->getData()[0]['Name'];
+                $getContactUrl = "https://api.mailjet.com/v3/REST/contact/". $email;
+                $contactBody = $client->get($getContactUrl, [
+                    'headers' => [
+                        'Content-Type' => 'application/json'
+                    ],
+                    'auth' => [
+                        $api_key, $secret_key
+                    ]
+                ]);
+                $subscriber = json_decode($contactBody->getBody(),true);
+                $name = $subscriber['Data'][0]['Name'];
                 $updated_at = date('Y-m-d H:i:s');
               
                 // UPDATE SUSBCRIBER STATUS
