@@ -265,6 +265,7 @@ foreach($expertSenderList as $list) {
                                                 <th>#</th>
                                                 <th>API Key</th>
                                                 <th>Total Records</th>
+                                                <th>Send Records</th>
                                                 <th>Provider</th>
                                                 <th>Start Date</th>
                                                 <th>End Date</th>
@@ -315,6 +316,10 @@ foreach($expertSenderList as $list) {
                                                         <td><?php echo $i; ?></td>
                                                         <td><?php echo $curEntry["apiKey"]; ?></td>
                                                         <td><?php echo $curEntry["totalRecord"]; ?></td>
+                                                        <td>
+                                                            <span class="send-count"><?php echo $curEntry["totalSendRecords"];?></span>
+                                                            <span class="error-count"><?php echo $curEntry['totalErrorRcords'];?></span>
+                                                        </td>
                                                         <td><?php echo $curEntry["providers"]; ?></td>
                                                         <td><?php echo date('d-m-Y',strtotime($curEntry["deliveryStartDate"])); ?></td>
                                                         <td><?php echo date('d-m-Y',strtotime($curEntry["deliveryEndDate"])); ?></td>

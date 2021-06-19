@@ -33,7 +33,32 @@ class RepostSchedule extends CI_Controller
             foreach($data['listArr'] as $index=>$curEntry){
                 $providerNameArr = $this->mdl_repost_schedule->getProvider(explode(',',$curEntry["providers"]));
                 foreach($providerNameArr as $pi => $provider) {
+                    //get all fail records
+                    $condition = array("providerId" => $provider['id'],'repostScheduleId' => $curEntry['id'],'status' => 0);
+                    $is_single = FALSE;
+                    $getNotSendRecords = GetAllRecordCount(REPOST_SCHEDULE_LIVE_DELIVERY_DATA, $condition, $is_single);
+                    $totalErrorRcords = ($getNotSendRecords) ? $getNotSendRecords : 0;
+
+                    $totalAllSendRecord = 0;
+                    if(!empty($getAllRepostScheduleHistory)){
+                        foreach($getAllRepostScheduleHistory as $getRecords){
+                            $totalAllSendRecord = $totalAllSendRecord+$getRecords['totalSend'];
+                        }
+                    }
+
+                    //get all send records
                     $condition = array("providerId" => $provider['id'],'repostScheduleId' => $curEntry['id']);
+                    $is_single = FALSE;
+                    $getAllRepostScheduleHistory = GetAllRecord(REPOST_SCHEDULE_HISTORY, $condition, $is_single);
+                    $totalAllSendRecord = 0;
+                    if(!empty($getAllRepostScheduleHistory)){
+                        foreach($getAllRepostScheduleHistory as $getRecords){
+                            $totalAllSendRecord = $totalAllSendRecord+$getRecords['totalSend'];
+                        }
+                    }
+                    
+                    //get today send record
+                    $condition = array("providerId" => $provider['id'],'repostScheduleId' => $curEntry['id'],'sendDate' => date('Y-m-d'));
                     $is_single = TRUE;
                     $getRepostScheduleHistoryData = GetAllRecord(REPOST_SCHEDULE_HISTORY, $condition, $is_single);
                     $repostScheduleTotalSend = (!empty($getRepostScheduleHistoryData)) ? $getRepostScheduleHistoryData['totalSend'] : 0;
@@ -41,6 +66,8 @@ class RepostSchedule extends CI_Controller
                     $providerNameArr[$pi]['listname'] = "<div>- " . $provider['listname'] . " (" . getProviderName($provider['provider']) . ")"."&nbsp&nbsp<span class='send-count'>".$repostScheduleTotalSend."</span></div>";
                 }
                 $data['listArr'][$index]['providers'] = implode('',array_column($providerNameArr,'listname'));
+                $data['listArr'][$index]['totalSendRecords'] = $totalAllSendRecord;
+                $data['listArr'][$index]['totalErrorRcords'] = $totalErrorRcords;
             }
         }
         //get all apikey 
@@ -145,16 +172,7 @@ class RepostSchedule extends CI_Controller
             if(!empty($liveDeliveryData)){
                
                 $liveDeliveryDataId = array_column($liveDeliveryData,'liveDeliveryDataId');
-                foreach($providers as $provider) {
-                    // insert record in REPOST_SCHEDULE_HISTORY table
-                   
-                    $historyData = array(
-                        'repostScheduleId' => $repostScheduleId,
-                        'providerId' => $provider,
-                    );
-
-                    $this->mdl_repost_schedule->addRepostScheduleHistory($historyData);
-                    
+                foreach($providers as $provider) {                    
                     // get provider list code from provider id
                     $providerListCode = getProviderListCode($provider);
                     foreach($liveDeliveryDataId as $liveDataId) {
