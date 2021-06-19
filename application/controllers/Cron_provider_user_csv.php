@@ -488,13 +488,13 @@ class Cron_provider_user_csv extends CI_Controller
 
     public function getExpertSenderProviderId($providerId){
         $provider = array(
-            "1" => "149",  // abbiesmail2.com/CA
-            "2" => "150",  // ashleysmail1.com/NZ
-            "3" => "151",  // felinafinans.se/SE
-            "4" => "152",  // frejasmail2.se/SE
-            "5" => "153",  // katariinasmail1.com/FI
-            "6" => "154",  // signesmail1.dk/DK
-            "7" => "155",  // signesmail2.com/NO
+            "1" => "149",  // camilla/abbiesmail2.com/CA
+            "2" => "150",  // camilla/ashleysmail1.com/NZ
+            "3" => "151",  // camilla/felinafinans.se/SE
+            "4" => "152",  // camilla/frejasmail2.se/SE
+            "5" => "153",  // camilla/katariinasmail1.com/FI
+            "6" => "154",  // camilla/signesmail1.dk/DK
+            "7" => "155",  // camilla/signesmail2.com/NO
         );
         return $provider[$providerId];
     }
