@@ -56,6 +56,9 @@
             </div>
             <!-- /# row -->
             <section id="main-content"> 
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addUnsubscriber" style="float: right;margin:5px 0;">
+                    Delete another subscriber
+                </button>
                 <form class="form-horizontal" method="get" action="<?php echo base_url('mailUnsubscribe/getUnsubscriberData/0'); ?>">             
                     <div class="row">
                         <div class="col-lg-12">
@@ -135,9 +138,6 @@
                                             </div>
                                         </div>                                    
                                         <button type="submit" class="btn btn-success" id="btn_insert">Submit</button>
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addUnsubscriber">
-                                            Delete Subscriber
-                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -322,7 +322,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-12 text-center">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary close-responsePopup">Close</button>
                     </div>
                 </div>
             </div>
