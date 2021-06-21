@@ -243,7 +243,7 @@
                                 <div class="form-group">
                                     <label>Provider Name *</label>
                                     <select class="form-control" name="provider" id="popupProvider">
-                                        <option value="0">All Select</option>                                                        
+                                        <option value="0">All</option>                                                        
                                         <!-- <option value="1">Aweber</option>                                                         -->
                                         <!-- <option value="2">Transmitvia</option>                                                        
                                         <option value="4">Ongage</option>                                                        
@@ -264,7 +264,7 @@
                                 <div class="form-group">
                                     <label>Country *</label>
                                     <select id="popupCountry" name="country" class="form-control">
-                                        <option value="">Select Country</option>
+                                        <option value="">All</option>
                                         <option value="DK">DK</option>
                                         <option value="SE">SE</option>
                                         <option value="NOR">NOR</option>
