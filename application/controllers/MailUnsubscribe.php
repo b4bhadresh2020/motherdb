@@ -104,9 +104,11 @@ class MailUnsubscribe extends CI_Controller
                 $list = $this->input->post('list');
                 if(empty($list)){
                     $listCondition  = array(
-                                    'country' =>  $country,
-                                    'provider' => $provider
-                                );
+                        'provider' => $provider
+                    );
+                    if(!empty($country)) {
+                        $listCondition['country'] = $country;
+                    }
                     $is_single             = false;
                     $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
                     $list = array_column($getListIDByCountry,'id');
@@ -156,9 +158,11 @@ class MailUnsubscribe extends CI_Controller
                 $list = $this->input->post('list');
                 if(empty($list)){
                     $listCondition  = array(
-                                    'country' =>  $country,
-                                    'provider' => $provider
-                                );
+                        'provider' => $provider
+                    );
+                    if(!empty($country)) {
+                        $listCondition['country'] = $country;
+                    }
                     $is_single             = false;
                     $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
                     $list = array_column($getListIDByCountry,'id');
@@ -208,14 +212,16 @@ class MailUnsubscribe extends CI_Controller
                 $list = $this->input->post('list');
                 if(empty($list)){
                     $listCondition  = array(
-                                    'country' =>  $country,
-                                    'provider' => $provider
-                                );
+                        'provider' => $provider
+                    );
+                    if(!empty($country)) {
+                        $listCondition['country'] = $country;
+                    }
                     $is_single             = false;
                     $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
                     $list = array_column($getListIDByCountry,'id');
                 }
-
+               
                 foreach ($list as $listID) {   
                     
                     // fetch mail provider data from providers table
@@ -262,9 +268,11 @@ class MailUnsubscribe extends CI_Controller
                 $list = $this->input->post('list');
                 if(empty($list)){
                     $listCondition  = array(
-                                    'country' =>  $country,
-                                    'provider' => $provider
-                                );
+                        'provider' => $provider
+                    );
+                    if(!empty($country)) {
+                        $listCondition['country'] = $country;
+                    }
                     $is_single             = false;
                     $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
                     $list = array_column($getListIDByCountry,'id');
@@ -314,9 +322,11 @@ class MailUnsubscribe extends CI_Controller
                 $list = $this->input->post('list');
                 if(empty($list)){
                     $listCondition  = array(
-                                    'country' =>  $country,
-                                    'provider' => $provider
-                                );
+                        'provider' => $provider
+                    );
+                    if(!empty($country)) {
+                        $listCondition['country'] = $country;
+                    }
                     $is_single             = false;
                     $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
                     $list = array_column($getListIDByCountry,'id');
@@ -367,9 +377,11 @@ class MailUnsubscribe extends CI_Controller
                 $list = $this->input->post('list');
                 if(empty($list)){
                     $listCondition  = array(
-                                    'country' =>  $country,
-                                    'provider' => $provider
-                                );
+                        'provider' => $provider
+                    );
+                    if(!empty($country)) {
+                        $listCondition['country'] = $country;
+                    }
                     $is_single             = false;
                     $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
                     $list = array_column($getListIDByCountry,'id');
@@ -419,9 +431,11 @@ class MailUnsubscribe extends CI_Controller
                 $list = $this->input->post('list');
                 if(empty($list)){
                     $listCondition  = array(
-                                    'country' =>  $country,
-                                    'provider' => $provider
-                                );
+                        'provider' => $provider
+                    );
+                    if(!empty($country)) {
+                        $listCondition['country'] = $country;
+                    }
                     $is_single             = false;
                     $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
                     $list = array_column($getListIDByCountry,'id');
@@ -472,9 +486,11 @@ class MailUnsubscribe extends CI_Controller
                 $list = $this->input->post('list');
                 if(empty($list)){
                     $listCondition  = array(
-                                    'country' =>  $country,
-                                    'provider' => $provider
-                                );
+                        'provider' => $provider
+                    );
+                    if(!empty($country)) {
+                        $listCondition['country'] = $country;
+                    }
                     $is_single             = false;
                     $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
                     $list = array_column($getListIDByCountry,'id');
