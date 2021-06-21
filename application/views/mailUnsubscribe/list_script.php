@@ -73,11 +73,11 @@
         if(country && provider != 0){
             popupListData(provider,country);
         }
-        if(provider != 0) {
-            $('.custom-list-dropdown').show();
-        } else {
-            $('.custom-list-dropdown').hide();
-        }
+        // if(provider != 0) {
+        //     $('.custom-list-dropdown').show();
+        // } else {
+        //     $('.custom-list-dropdown').hide();
+        // }
     }); 
 
     $(document).on("change","#popupCountry",function(){
@@ -85,13 +85,16 @@
         var provider = $("#popupProvider").val();
         if(country && provider != 0){
             popupListData(provider,country);
+            $('.custom-list-dropdown').show();
+        } else {
+            $('.custom-list-dropdown').hide();
         }
         // else if(provider == 0){
         //     $('#popupSucErrMsg').text('Please select provider').addClass('alert alert-danger');
         // }
-        else if(country == ""){
-            $('#popupSucErrMsg').text('Please select country').addClass('alert alert-danger');
-        }
+        // else if(country == ""){
+        //     $('#popupSucErrMsg').text('Please select country').addClass('alert alert-danger');
+        // }
     });    
 
     function popupListData(provider,country){
@@ -118,9 +121,10 @@
         // if($("#popupProvider").val() == 0){
         //     $("#popupSucErrMsg").html("Please select provider").show();
         // }
-        if($("#popupCountry").val() == ""){
-            $("#popupSucErrMsg").html("Please select country").show();
-        }else if($("#email").val() == ""){
+        // else if($("#popupCountry").val() == ""){
+        //     $("#popupSucErrMsg").html("Please select country").show();
+        // }
+        if($("#email").val() == ""){
             $("#popupSucErrMsg").html("Please enter email address").show();
         }else{
             $(".unsubscribe").prop('disabled', true);
