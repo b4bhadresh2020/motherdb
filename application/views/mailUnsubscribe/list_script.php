@@ -152,6 +152,11 @@
                     }else{
                         $(".alert-danger-label,.alert-danger").hide();
                     }
+                    if(data.alreadyUnsubscribeList != ""){
+                        $(".alert-info").html(data.alreadyUnsubscribeList);
+                    } else {
+                        $(".alert-info-label,.alert-info").hide();
+                    }
 
                     $("#addUnsubscriber").modal('hide');
                     $("#responsePopup").modal('show');

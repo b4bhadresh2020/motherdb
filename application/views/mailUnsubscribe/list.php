@@ -127,6 +127,7 @@
                                                         <option value="0">All</option>
                                                         <option value="1" <?php echo isset($status) && ($status == 1) ? "selected":'' ?>>Success</option>
                                                         <option value="2" <?php echo isset($status) && ($status == 2) ? "selected":'' ?>>Failed</option>
+                                                        <option value="3" <?php echo isset($status) && ($status == 3) ? "selected":'' ?>>Already unsubscribed</option>
                                                     </select>    
                                                 </div>  
                                             </div>
@@ -318,6 +319,8 @@
                         <div class="alert alert-success" role="alert"></div>
                         <h5 class="alert-danger-label" style="margin-bottom: 20px;"><strong>Failed Unsubscriber List</strong></h5>
                         <div class="alert alert-danger" role="alert"></div>
+                        <h5 class="alert-info-label" style="margin-bottom: 20px;"><strong>Already Unsubscriber List</strong></h5>
+                        <div class="alert alert-info" role="alert"></div>
                     </div>
                 </div>
                 <div class="row">
