@@ -100,267 +100,278 @@ class Live_delivery_api extends CI_Controller
 
                                     if ($blackListCount == 0) {
 
-                                        //check if data is in user table or not
-                                        $condition        = array($identifier => $_GET[$identifier]);
-                                        $getUserDataCount = GetAllRecordCount(USER, $condition);
+                                        $this->db->where('email',@$_GET['emailId']);
+                                        $this->db->where('status', 1);
+                                        $alreadyUnsubscribeCount = $this->db->count_all_results(PROVIDER_UNSUBSCRIBER);
 
-                                        if ($getUserDataCount == 0) {
+                                        if($alreadyUnsubscribeCount == 0){
+                                            //check if data is in user table or not
+                                            $condition        = array($identifier => $_GET[$identifier]);
+                                            $getUserDataCount = GetAllRecordCount(USER, $condition);
 
-                                            $genArr = array('male', 'female', 'other');
+                                            if ($getUserDataCount == 0) {
 
-                                            $isGenderNotValid = 0;
-                                            if (isset($_GET['gender']) && (!in_array(strtolower($_GET['gender']), $genArr))) {
-                                                $isGenderNotValid = 1;
-                                            }
+                                                $genArr = array('male', 'female', 'other');
 
-                                            if ($isGenderNotValid == 0) {
-
-                                                //add in user database
-                                                $condition          = array();
-                                                $is_insert          = true;
-                                                $dataArr            = array();
-                                                $allDataValInString = '';
-
-                                                foreach ($_GET as $key => $value) {
-
-                                                    if ($key == 'birthdateYear') {
-                                                        if ($value != '') {
-                                                            $dataArr['age'] = date('Y') - date('Y', strtotime(date($value . '-m-d')));
-                                                        }
-                                                    }
-                                                    
-                                                    // store tag value in custom fields
-                                                    if ($key == 'tag') {
-                                                        if ($value != '' || $value != 'tag') {
-                                                            $dataArr['otherLable'] = json_encode(["Tag"]);
-                                                            $dataArr['other'] = json_encode([$value]);
-                                                        }
-                                                    }else{
-                                                        $dataArr[$key] = $value;
-                                                    }
-
-                                                    //make all value in string for global search purpose
-                                                    if ($allDataValInString == '') {
-                                                        $allDataValInString = $value;
-                                                    } else {
-                                                        $allDataValInString .= '+' . $value;
-                                                    }
-
+                                                $isGenderNotValid = 0;
+                                                if (isset($_GET['gender']) && (!in_array(strtolower($_GET['gender']), $genArr))) {
+                                                    $isGenderNotValid = 1;
                                                 }
 
-                                                $dataArr['allDataInString'] = $allDataValInString;
-                                                $dataArr['country']         = $getLiveDeliveryData['country'];
-                                                $dataArr['groupName']       = $getLiveDeliveryData['groupName'];
-                                                $dataArr['keyword']         = $getLiveDeliveryData['keyword'];
-                                                $dataArr['campaignSource']  = $dataArr['optinurl'];
-                                                $dataArr['participated']    = $dataArr['optindate'];
+                                                if ($isGenderNotValid == 0) {
 
-                                                //unset below element we dont want to in $dataArr
-                                                unset($dataArr['apikey']);
-                                                unset($dataArr['financingNeed']);
-                                                unset($dataArr['timestamp']);
-                                                unset($dataArr['tag']);
+                                                    //add in user database
+                                                    $condition          = array();
+                                                    $is_insert          = true;
+                                                    $dataArr            = array();
+                                                    $allDataValInString = '';
 
-                                                $dataArr['r_id'] = rand(1,10000); //make random number between 1 to 10000
+                                                    foreach ($_GET as $key => $value) {
 
-                                                $insertedId = ManageData(USER, $condition, $dataArr, $is_insert);
+                                                        if ($key == 'birthdateYear') {
+                                                            if ($value != '') {
+                                                                $dataArr['age'] = date('Y') - date('Y', strtotime(date($value . '-m-d')));
+                                                            }
+                                                        }
+                                                        
+                                                        // store tag value in custom fields
+                                                        if ($key == 'tag') {
+                                                            if ($value != '' || $value != 'tag') {
+                                                                $dataArr['otherLable'] = json_encode(["Tag"]);
+                                                                $dataArr['other'] = json_encode([$value]);
+                                                            }
+                                                        }else{
+                                                            $dataArr[$key] = $value;
+                                                        }
 
-                                                if ($insertedId > 0) {
-
-                                                    //insert group name and keyword name
-                                                    $this->mdl_csv->insertGroupName($getLiveDeliveryData['groupName']);
-                                                    $this->mdl_csv->insertKeyword($getLiveDeliveryData['keyword']);
-
-                                                    // new edited start
-
-                                                    $con_country   = $getLiveDeliveryData['country'];
-                                                    $con_keyword   = $getLiveDeliveryData['keyword'];
-                                                    $con_groupName = $getLiveDeliveryData['groupName'];
-
-                                                    // manage country wise keyword
-                                                    $keywordCountryCount = GetAllRecordCount(KEYWORD_COUNTRY_COUNT, $condition = array('keyword' => $con_keyword, 'country' => $con_country), $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $selected_rows = 'keywordCountryId');
-
-                                                    if ($keywordCountryCount == 0) {
-
-                                                        $sql_keywordCountryCount = "INSERT INTO " . KEYWORD_COUNTRY_COUNT . " (keyword, country, total)  VALUES ('$con_keyword', '$con_country', 1)";
-
-                                                        $this->db->query($sql_keywordCountryCount);
-                                                    }
-
-                                                    if ($keywordCountryCount > 0) {
-
-                                                        $sql_keywordCountryCount = "UPDATE " . KEYWORD_COUNTRY_COUNT . " SET total = total + 1  WHERE keyword = '$con_keyword' and country = '$con_country'";
-                                                        $this->db->query($sql_keywordCountryCount);
-                                                    }
-
-                                                    // manage country wise group
-                                                    $groupCountryCount = GetAllRecordCount(GROUP_COUNTRY_COUNT, $condition = array('groupName' => $con_groupName, 'country' => $con_country), $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $selected_rows = 'groupCountryId');
-
-                                                    if ($groupCountryCount == 0) {
-
-                                                        $sql_groupCountryCount = "INSERT INTO " . GROUP_COUNTRY_COUNT . " (groupName, country)  VALUES ('$con_groupName', '$con_country')";
-
-                                                        $this->db->query($sql_groupCountryCount);
-                                                    }
-
-                                                    if (@$_GET['gender'] == 'male') {
-
-                                                        $sql_country = "UPDATE " . COUNTRY_MASTER . " SET male = male + 1  WHERE country = '$con_country'";
-                                                        $this->db->query($sql_country);
-
-                                                        $sql_keyword = "UPDATE " . KEYWORD_MASTER . " SET male = male + 1  WHERE keyword = '$con_keyword'";
-                                                        $this->db->query($sql_keyword);
-
-                                                        $sql_groupName = "UPDATE " . GROUP_MASTER . " SET male = male + 1  WHERE groupName = '$con_groupName'";
-                                                        $this->db->query($sql_groupName);
+                                                        //make all value in string for global search purpose
+                                                        if ($allDataValInString == '') {
+                                                            $allDataValInString = $value;
+                                                        } else {
+                                                            $allDataValInString .= '+' . $value;
+                                                        }
 
                                                     }
 
-                                                    if (@$_GET['gender'] == 'female') {
+                                                    $dataArr['allDataInString'] = $allDataValInString;
+                                                    $dataArr['country']         = $getLiveDeliveryData['country'];
+                                                    $dataArr['groupName']       = $getLiveDeliveryData['groupName'];
+                                                    $dataArr['keyword']         = $getLiveDeliveryData['keyword'];
+                                                    $dataArr['campaignSource']  = $dataArr['optinurl'];
+                                                    $dataArr['participated']    = $dataArr['optindate'];
 
-                                                        $sql_country = "UPDATE " . COUNTRY_MASTER . " SET female = female + 1  WHERE country = '$con_country'";
-                                                        $this->db->query($sql_country);
+                                                    //unset below element we dont want to in $dataArr
+                                                    unset($dataArr['apikey']);
+                                                    unset($dataArr['financingNeed']);
+                                                    unset($dataArr['timestamp']);
+                                                    unset($dataArr['tag']);
 
-                                                        $sql_keyword = "UPDATE " . KEYWORD_MASTER . " SET female = female + 1  WHERE keyword = '$con_keyword'";
-                                                        $this->db->query($sql_keyword);
+                                                    $dataArr['r_id'] = rand(1,10000); //make random number between 1 to 10000
 
-                                                        $sql_groupName = "UPDATE " . GROUP_MASTER . " SET female = female + 1  WHERE groupName = '$con_groupName'";
-                                                        $this->db->query($sql_groupName);
+                                                    $insertedId = ManageData(USER, $condition, $dataArr, $is_insert);
+
+                                                    if ($insertedId > 0) {
+
+                                                        //insert group name and keyword name
+                                                        $this->mdl_csv->insertGroupName($getLiveDeliveryData['groupName']);
+                                                        $this->mdl_csv->insertKeyword($getLiveDeliveryData['keyword']);
+
+                                                        // new edited start
+
+                                                        $con_country   = $getLiveDeliveryData['country'];
+                                                        $con_keyword   = $getLiveDeliveryData['keyword'];
+                                                        $con_groupName = $getLiveDeliveryData['groupName'];
+
+                                                        // manage country wise keyword
+                                                        $keywordCountryCount = GetAllRecordCount(KEYWORD_COUNTRY_COUNT, $condition = array('keyword' => $con_keyword, 'country' => $con_country), $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $selected_rows = 'keywordCountryId');
+
+                                                        if ($keywordCountryCount == 0) {
+
+                                                            $sql_keywordCountryCount = "INSERT INTO " . KEYWORD_COUNTRY_COUNT . " (keyword, country, total)  VALUES ('$con_keyword', '$con_country', 1)";
+
+                                                            $this->db->query($sql_keywordCountryCount);
+                                                        }
+
+                                                        if ($keywordCountryCount > 0) {
+
+                                                            $sql_keywordCountryCount = "UPDATE " . KEYWORD_COUNTRY_COUNT . " SET total = total + 1  WHERE keyword = '$con_keyword' and country = '$con_country'";
+                                                            $this->db->query($sql_keywordCountryCount);
+                                                        }
+
+                                                        // manage country wise group
+                                                        $groupCountryCount = GetAllRecordCount(GROUP_COUNTRY_COUNT, $condition = array('groupName' => $con_groupName, 'country' => $con_country), $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $selected_rows = 'groupCountryId');
+
+                                                        if ($groupCountryCount == 0) {
+
+                                                            $sql_groupCountryCount = "INSERT INTO " . GROUP_COUNTRY_COUNT . " (groupName, country)  VALUES ('$con_groupName', '$con_country')";
+
+                                                            $this->db->query($sql_groupCountryCount);
+                                                        }
+
+                                                        if (@$_GET['gender'] == 'male') {
+
+                                                            $sql_country = "UPDATE " . COUNTRY_MASTER . " SET male = male + 1  WHERE country = '$con_country'";
+                                                            $this->db->query($sql_country);
+
+                                                            $sql_keyword = "UPDATE " . KEYWORD_MASTER . " SET male = male + 1  WHERE keyword = '$con_keyword'";
+                                                            $this->db->query($sql_keyword);
+
+                                                            $sql_groupName = "UPDATE " . GROUP_MASTER . " SET male = male + 1  WHERE groupName = '$con_groupName'";
+                                                            $this->db->query($sql_groupName);
+
+                                                        }
+
+                                                        if (@$_GET['gender'] == 'female') {
+
+                                                            $sql_country = "UPDATE " . COUNTRY_MASTER . " SET female = female + 1  WHERE country = '$con_country'";
+                                                            $this->db->query($sql_country);
+
+                                                            $sql_keyword = "UPDATE " . KEYWORD_MASTER . " SET female = female + 1  WHERE keyword = '$con_keyword'";
+                                                            $this->db->query($sql_keyword);
+
+                                                            $sql_groupName = "UPDATE " . GROUP_MASTER . " SET female = female + 1  WHERE groupName = '$con_groupName'";
+                                                            $this->db->query($sql_groupName);
+                                                        }
+
+                                                        if (@$_GET['gender'] != 'male' && @$_GET['gender'] != 'female') {
+
+                                                            $sql_country = "UPDATE " . COUNTRY_MASTER . " SET other = other + 1  WHERE country = '$con_country'";
+                                                            $this->db->query($sql_country);
+
+                                                            $sql_keyword = "UPDATE " . KEYWORD_MASTER . " SET other = other + 1  WHERE keyword = '$con_keyword'";
+                                                            $this->db->query($sql_keyword);
+
+                                                            $sql_groupName = "UPDATE " . GROUP_MASTER . " SET other = other + 1  WHERE groupName = '$con_groupName'";
+                                                            $this->db->query($sql_groupName);
+
+                                                        }
+
+                                                        // new edited end
+
+                                                        //Now get user data and give it to response with success
+                                                        $condition = array('userId' => $insertedId);
+                                                        $is_single = true;
+                                                        $this->db->limit(1);
+                                                        $userData = GetAllRecord(USER, $condition, $is_single, array(), array(), array(), 'firstName,lastName,emailId,phone');
+
+                                                        $response['success'] = 'Data Added Successfully';
+                                                        $response['data']    = $userData;
+                                                        //$response['egoi'] = $egoiResponse;
+
+                                                        //data save to live_delivery_data table
+                                                        $isFail          = 0;
+                                                        $sucFailMsgIndex = 0; //success
+
+                                                    } else {
+                                                        //data save to live_delivery_data table
+                                                        $isFail            = 1;
+                                                        $sucFailMsgIndex   = 3; //server issue
+                                                        $response['error'] = 'Something went wrong. Please try again later.';
                                                     }
-
-                                                    if (@$_GET['gender'] != 'male' && @$_GET['gender'] != 'female') {
-
-                                                        $sql_country = "UPDATE " . COUNTRY_MASTER . " SET other = other + 1  WHERE country = '$con_country'";
-                                                        $this->db->query($sql_country);
-
-                                                        $sql_keyword = "UPDATE " . KEYWORD_MASTER . " SET other = other + 1  WHERE keyword = '$con_keyword'";
-                                                        $this->db->query($sql_keyword);
-
-                                                        $sql_groupName = "UPDATE " . GROUP_MASTER . " SET other = other + 1  WHERE groupName = '$con_groupName'";
-                                                        $this->db->query($sql_groupName);
-
-                                                    }
-
-                                                    // new edited end
-
-                                                    //Now get user data and give it to response with success
-                                                    $condition = array('userId' => $insertedId);
-                                                    $is_single = true;
-                                                    $this->db->limit(1);
-                                                    $userData = GetAllRecord(USER, $condition, $is_single, array(), array(), array(), 'firstName,lastName,emailId,phone');
-
-                                                    $response['success'] = 'Data Added Successfully';
-                                                    $response['data']    = $userData;
-                                                    //$response['egoi'] = $egoiResponse;
-
-                                                    //data save to live_delivery_data table
-                                                    $isFail          = 0;
-                                                    $sucFailMsgIndex = 0; //success
 
                                                 } else {
+
                                                     //data save to live_delivery_data table
                                                     $isFail            = 1;
-                                                    $sucFailMsgIndex   = 3; //server issue
-                                                    $response['error'] = 'Something went wrong. Please try again later.';
+                                                    $sucFailMsgIndex   = 11; //invalid gender
+                                                    $response['error'] = 'Gender should be "male" or "female" or other';
+
                                                 }
 
                                             } else {
 
+                                                //Update user data in user table . 
+
+                                                $genArr = array('male', 'female', 'other');
+                                                $isGenderNotValid = 0;
+
+                                                if (isset($_GET['gender']) && (!in_array(strtolower($_GET['gender']), $genArr))) {
+                                                    $isGenderNotValid = 1;
+                                                }
+
+                                                if ($isGenderNotValid == 0) {
+
+                                                    //add in user database
+                                                    $condition        = array($identifier => $_GET[$identifier]);
+                                                    $is_insert          = false;
+                                                    $dataArr            = array();
+                                                    $allDataValInString = '';
+
+                                                    foreach ($_GET as $key => $value) {
+
+                                                        if ($key == 'birthdateYear') {
+                                                            if ($value != '') {
+                                                                $dataArr['age'] = date('Y') - date('Y', strtotime(date($value . '-m-d')));
+                                                            }
+                                                        }
+
+                                                        $dataArr[$key] = $value;
+
+                                                        //make all value in string for global search purpose
+                                                        if ($allDataValInString == '') {
+                                                            $allDataValInString = $value;
+                                                        } else {
+                                                            $allDataValInString .= '+' . $value;
+                                                        }
+
+                                                    }
+
+                                                    $dataArr['allDataInString'] = $allDataValInString;
+                                                    $dataArr['country']         = $getLiveDeliveryData['country'];
+                                                    $dataArr['campaignSource']  = $dataArr['optinurl'];
+                                                    $dataArr['participated']    = $dataArr['optindate'];
+                                                    
+                                                    //$dataArr['groupName']       = $getLiveDeliveryData['groupName'];
+                                                    //$dataArr['keyword']         = $getLiveDeliveryData['keyword'];
+                                                    
+                                                    //unset below element we dont want to in $dataArr
+                                                    unset($dataArr['apikey']);
+                                                    unset($dataArr['financingNeed']);
+                                                    unset($dataArr['timestamp']);
+                                                    unset($dataArr['tag']);
+
+                                                    ManageData(USER, $condition, $dataArr, $is_insert);
+
+                                                    // Get userdata 
+                                                    $this->db->limit(1);
+                                                    $is_single   = true;
+                                                    $getUserData = GetAllRecord(USER, $condition, $is_single); 
+                                                
+                                                    $this->updateUserGroupName($getUserData,$getLiveDeliveryData);
+                                                    $this->updateUserKeyword($getUserData,$getLiveDeliveryData);
+
+                                                }    
+
                                                 //data save to live_delivery_data table
                                                 $isFail            = 1;
-                                                $sucFailMsgIndex   = 11; //invalid gender
-                                                $response['error'] = 'Gender should be "male" or "female" or other';
+                                                $sucFailMsgIndex   = 1; //duplicate
+                                                $response['error'] = 'Duplicate record found.';
 
-                                            }
+                                                /* $duplicateCondition    = array($identifier => $_GET[$identifier]);
+                                                $userDuplicatedData    = GetAllRecord(USER, $duplicateCondition, $is_single, array(), array(), array(), 'firstName,lastName,emailId,phone');
+                                                $response['success']   = 'Data Added Successfully';
+                                                $response['data']      = $userDuplicatedData; */
 
-                                        } else {
+                                                //do things of add group feature ("if user in these groups" then "add the user in this group")
+                                                //get user data
 
-                                            //Update user data in user table . 
+                                                if ($getLiveDeliveryData['ifUserInThisGroups'] != '' && $getLiveDeliveryData['addTheUserInThisGroup'] != '') {
 
-                                            $genArr = array('male', 'female', 'other');
-                                            $isGenderNotValid = 0;
+                                                    $condition = array($identifier => $_GET[$identifier]);
+                                                    $this->db->limit(1);
+                                                    $is_single   = true;
+                                                    $getUserData = GetAllRecord(USER, $condition, $is_single);
 
-                                            if (isset($_GET['gender']) && (!in_array(strtolower($_GET['gender']), $genArr))) {
-                                                $isGenderNotValid = 1;
-                                            }
-
-                                            if ($isGenderNotValid == 0) {
-
-                                                //add in user database
-                                                $condition        = array($identifier => $_GET[$identifier]);
-                                                $is_insert          = false;
-                                                $dataArr            = array();
-                                                $allDataValInString = '';
-
-                                                foreach ($_GET as $key => $value) {
-
-                                                    if ($key == 'birthdateYear') {
-                                                        if ($value != '') {
-                                                            $dataArr['age'] = date('Y') - date('Y', strtotime(date($value . '-m-d')));
-                                                        }
-                                                    }
-
-                                                    $dataArr[$key] = $value;
-
-                                                    //make all value in string for global search purpose
-                                                    if ($allDataValInString == '') {
-                                                        $allDataValInString = $value;
-                                                    } else {
-                                                        $allDataValInString .= '+' . $value;
-                                                    }
+                                                    $this->ifUserInThisGroupsThenAddUserInThisGroup($getUserData, $getLiveDeliveryData);
 
                                                 }
 
-                                                $dataArr['allDataInString'] = $allDataValInString;
-                                                $dataArr['country']         = $getLiveDeliveryData['country'];
-                                                $dataArr['campaignSource']  = $dataArr['optinurl'];
-                                                $dataArr['participated']    = $dataArr['optindate'];
-                                                
-                                                //$dataArr['groupName']       = $getLiveDeliveryData['groupName'];
-                                                //$dataArr['keyword']         = $getLiveDeliveryData['keyword'];
-                                                
-                                                //unset below element we dont want to in $dataArr
-                                                unset($dataArr['apikey']);
-                                                unset($dataArr['financingNeed']);
-                                                unset($dataArr['timestamp']);
-                                                unset($dataArr['tag']);
-
-                                                ManageData(USER, $condition, $dataArr, $is_insert);
-
-                                                // Get userdata 
-                                                $this->db->limit(1);
-                                                $is_single   = true;
-                                                $getUserData = GetAllRecord(USER, $condition, $is_single); 
-                                               
-                                                $this->updateUserGroupName($getUserData,$getLiveDeliveryData);
-                                                $this->updateUserKeyword($getUserData,$getLiveDeliveryData);
-
-                                            }    
-
+                                            }
+                                        } else {
                                             //data save to live_delivery_data table
                                             $isFail            = 1;
-                                            $sucFailMsgIndex   = 1; //duplicate
+                                            $sucFailMsgIndex   = 15; //user already unsubscribed before
                                             $response['error'] = 'Duplicate record found.';
-
-                                            /* $duplicateCondition    = array($identifier => $_GET[$identifier]);
-                                            $userDuplicatedData    = GetAllRecord(USER, $duplicateCondition, $is_single, array(), array(), array(), 'firstName,lastName,emailId,phone');
-                                            $response['success']   = 'Data Added Successfully';
-                                            $response['data']      = $userDuplicatedData; */
-
-                                            //do things of add group feature ("if user in these groups" then "add the user in this group")
-                                            //get user data
-
-                                            if ($getLiveDeliveryData['ifUserInThisGroups'] != '' && $getLiveDeliveryData['addTheUserInThisGroup'] != '') {
-
-                                                $condition = array($identifier => $_GET[$identifier]);
-                                                $this->db->limit(1);
-                                                $is_single   = true;
-                                                $getUserData = GetAllRecord(USER, $condition, $is_single);
-
-                                                $this->ifUserInThisGroupsThenAddUserInThisGroup($getUserData, $getLiveDeliveryData);
-
-                                            }
-
                                         }
 
                                     } else {
