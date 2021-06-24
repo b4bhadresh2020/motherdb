@@ -67,16 +67,16 @@
                                                         <tr>
                                                             <td><?php echo $mainProvider[$setting['main_provider']];?></td>
                                                             <td>
-                                                                <input type="checkbox" name="<?=$setting['main_provider']?>[9]" value="1" <?=(!empty($setting['mailjet']) && $setting['mailjet'] == 1) ? 'checked' : ''?><?=($setting['main_provider'] == 9)?' disabled checked':''?>>
+                                                                <input type="checkbox" name="<?=$setting['main_provider']?>[9]" value="1" <?=(!empty($setting['mailjet']) && $setting['mailjet'] == 1) ? 'checked' : ''?>>
                                                             </td>
                                                             <td>
-                                                                <input type="checkbox" name="<?=$setting['main_provider']?>[11]" value="1" <?=(!empty($setting['marketing_platform']) && $setting['marketing_platform'] == 1) ? 'checked' : ''?><?=($setting['main_provider'] == 11)?' disabled checked':''?>>
+                                                                <input type="checkbox" name="<?=$setting['main_provider']?>[11]" value="1" <?=(!empty($setting['marketing_platform']) && $setting['marketing_platform'] == 1) ? 'checked' : ''?>>
                                                             </td>
                                                             <td>
-                                                                <input type="checkbox" name="<?=$setting['main_provider']?>[12]" value="1" <?=(!empty($setting['ontraport']) && $setting['ontraport'] == 1) ? 'checked' : ''?><?=($setting['main_provider'] == 12)?' disabled checked':''?>>
+                                                                <input type="checkbox" name="<?=$setting['main_provider']?>[12]" value="1" <?=(!empty($setting['ontraport']) && $setting['ontraport'] == 1) ? 'checked' : ''?>>
                                                             </td>
                                                             <td>
-                                                                <input type="checkbox" name="<?=$setting['main_provider']?>[13]" value="1" <?=(!empty($setting['active_campaign']) && $setting['active_campaign'] == 1) ? 'checked' : ''?><?=($setting['main_provider'] == 13)?' disabled checked':''?>>
+                                                                <input type="checkbox" name="<?=$setting['main_provider']?>[13]" value="1" <?=(!empty($setting['active_campaign']) && $setting['active_campaign'] == 1) ? 'checked' : ''?>>
                                                             </td>
                                                         </tr>  
                                                         <?php
