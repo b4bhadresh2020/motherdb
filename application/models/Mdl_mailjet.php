@@ -111,7 +111,12 @@ class Mdl_mailjet extends CI_Model {
                 }
 
             } catch(Exception $e) {
-                return array("result" => "error","error" => array("msg" => $e->getMessage()));
+                $errorMsg = $e->getMessage();
+                if(strpos($errorMsg, "OpenSSL SSL_connect") !== false){
+                    return array("result" => "error","error" => array("msg" => "Account is temporary closed by ESP"));
+                } else{
+                    return array("result" => "error","error" => array("msg" => $errorMsg));
+                }
             }
 
             // catch any exceptions thrown during the process and print the errors to screen

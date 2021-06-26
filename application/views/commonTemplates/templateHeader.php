@@ -128,6 +128,7 @@
                     <li class="label">Email Unsubscribe</li>
                     
                         <li class="<?php echo (@$load_page == 'mailUnsubscribe')?"active":"";?>" title = "Email Unsubscribe" ><a href="<?php echo base_url('mailUnsubscribe'); ?>" ><i class="ti-timer"></i> Email Unsubscribe </a></li>
+                        <li class="<?php echo (@$load_page == 'webhookUnsubscribe')?"active":"";?>" title = "Webhook Unsubscribe Settings" ><a href="<?php echo base_url('Webhook_unsubscribe'); ?>" ><i class="ti-timer"></i>Webhook Unsubscribe Settings </a></li>
                     
                     <?php if(is_admin()) { ?>
                     <li class="label">Cronjob Status </li>

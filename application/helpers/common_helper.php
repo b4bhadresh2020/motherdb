@@ -1955,3 +1955,15 @@ function getProviderListCode($providerId) {
     $getProviderListCode = GetAllRecord(PROVIDERS, $condition, $is_single, array(), array(), array(),'code');
     return $getProviderListCode['code'];
 }
+
+function getProviderID($account, $listId, $provider) {
+    $CI = & get_instance();
+    $condition = array(
+        'aweber_account' => $account,
+        'code' => $listId,
+        'provider' => $provider
+    );
+    $is_single = TRUE;
+    $getProviderID = GetAllRecord(PROVIDERS, $condition, $is_single, array(), array(), array(), 'id');
+    return $getProviderID['id'];
+}

@@ -145,6 +145,7 @@ define("ACTIVE_CAMPAIGN_DELAY_USER_DATA", "active_campaign_delay_user_data");
 define("EXPERT_SENDER_DELAY_USER_DATA", "expert_sender_delay_user_data");
 define("EMAIL_HISTORY_DATA"				,	"email_history_data");
 define("PROVIDER_UNSUBSCRIBER"			,	"provider_unsubscriber");
+define("WEBHOOK_UNSUBSCRIBE_SETTINGS"	,	"webhook_unsubscribe_settings");
 define("REPOST_SCHEDULE"			    ,	"repost_schedule");
 define("REPOST_SCHEDULE_LIVE_DELIVERY_DATA" ,	"repost_schedule_live_delivery_data");
 define("REPOST_SCHEDULE_HISTORY", "repost_schedule_history");
