@@ -1956,9 +1956,10 @@ function getProviderListCode($providerId) {
     return $getProviderListCode['code'];
 }
 
-function getProviderID($listId, $provider) {
+function getProviderID($account, $listId, $provider) {
     $CI = & get_instance();
     $condition = array(
+        'aweber_account' => $account,
         'code' => $listId,
         'provider' => $provider
     );

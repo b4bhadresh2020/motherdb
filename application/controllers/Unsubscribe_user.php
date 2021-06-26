@@ -11,7 +11,7 @@ class Unsubscribe_user extends CI_Controller
         parent::__construct();        
     }
 
-    public function mailjet(){
+    public function mailjet($account){
         $subscribeDetail = [
             [
               "event"=> "unsub",
@@ -30,13 +30,14 @@ class Unsubscribe_user extends CI_Controller
               "Payload"=> ""
             ]
         ];
+        
         $subscribeDetailJson = json_encode($subscribeDetail);
         $subscribeDetail = \json_decode($subscribeDetailJson,true);
         $email = $subscribeDetail[0]['email'];
         
         // FIND PROVIDER ID FROM LIST ID
         $listId =  $subscribeDetail[0]['mj_list_id'];
-        $providerId = getProviderID($listId, MAILJET);
+        $providerId = getProviderID($account, $listId, MAILJET);
         
         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
         $unsubscribeData = [
@@ -48,11 +49,11 @@ class Unsubscribe_user extends CI_Controller
             "unsub_method"=> 1, // 1 - webhook(by main ESP)
             "response"    => date('Y-m-d H:i:s')
         ];
-        // ManageData(PROVIDER_UNSUBSCRIBER,[],$unsubscribeData,true);
-        $this->unsubFromOtherEsp($email, MAILJET);        
+        ManageData(PROVIDER_UNSUBSCRIBER,[],$unsubscribeData,true);
+        $this->unsubFromOtherEsp($email, MAILJET, $providerId);        
     }
     
-    public function marketingPlatform(){
+    public function marketingPlatform($account){
         $subscribeDetail = [
             "listid"=> "80010",
             "event"=> "Unsubscribe",
@@ -63,11 +64,10 @@ class Unsubscribe_user extends CI_Controller
         $subscribeDetailJson = json_encode($subscribeDetail);
         $subscribeDetail = \json_decode($subscribeDetailJson,true);
         $email = $subscribeDetail['emailaddress'];
-        // $email = "tishu.codexive@gmail.com";
         
         // FIND PROVIDER ID FROM LIST ID
         $listId =  $subscribeDetail['listid'];
-        $providerId = getProviderID($listId, MARKETING_PLATFORM);
+        $providerId = getProviderID($account, $listId, MARKETING_PLATFORM);
 
         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
         $unsubscribeData = [
@@ -79,16 +79,16 @@ class Unsubscribe_user extends CI_Controller
             "unsub_method"=> 1, // 1 - webhook(by main ESP)
             "response"    => date('Y-m-d H:i:s')
         ];
-        // ManageData(PROVIDER_UNSUBSCRIBER,[],$unsubscribeData,true);
-        $this->unsubFromOtherEsp($email, MARKETING_PLATFORM);
+        ManageData(PROVIDER_UNSUBSCRIBER,[],$unsubscribeData,true);
+        $this->unsubFromOtherEsp($email, MARKETING_PLATFORM, $providerId);
     }  
     
-    public function activeCampaign(){
+    public function activeCampaign($account){
         $email = $_POST['contact']['email'];
 
         // FIND PROVIDER ID FROM LIST ID
         $listId =  $_POST['list'][0]['id'];
-        $providerId = getProviderID($listId, ACTIVE_CAMPAIGN);
+        $providerId = getProviderID($account, $listId, ACTIVE_CAMPAIGN);
 
         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
         $unsubscribeData = [
@@ -100,17 +100,20 @@ class Unsubscribe_user extends CI_Controller
             "unsub_method"=> 1, // 1 - webhook(by main ESP)
             "response"    => date('Y-m-d H:i:s')
         ];
-        // ManageData(PROVIDER_UNSUBSCRIBER,[],$unsubscribeData,true);
-        $this->unsubFromOtherEsp($email, ACTIVE_CAMPAIGN);
+        ManageData(PROVIDER_UNSUBSCRIBER,[],$unsubscribeData,true);
+        $this->unsubFromOtherEsp($email, ACTIVE_CAMPAIGN, $providerId);
         
     }
     
-    public function ontraport(){
+    public function ontraport($account,$listId){
         $email = $this->input->post('email');
 
+        // FIND PROVIDER ID FROM LIST ID
+        $providerId = getProviderID($account, $listId, ONTRAPORT);
+        
         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
         $unsubscribeData = [
-            "provider_id" => NULL,
+            "provider_id" => $providerId,
             "esp"         => ONTRAPORT,
             "email"       => $email,
             "name"        => NULL,
@@ -118,12 +121,12 @@ class Unsubscribe_user extends CI_Controller
             "unsub_method"=> 1, // 1 - webhook(by main ESP)
             "response"    => date('Y-m-d H:i:s')
         ];
-        // ManageData(PROVIDER_UNSUBSCRIBER,[],$unsubscribeData,true);
-        $this->unsubFromOtherEsp($email, ONTRAPORT);
+        ManageData(PROVIDER_UNSUBSCRIBER,[],$unsubscribeData,true);
+        $this->unsubFromOtherEsp($email, ONTRAPORT, $providerId);
     
     }
 
-    public function unsubFromOtherEsp($email, $mainProvider) {
+    public function unsubFromOtherEsp($email, $mainProvider, $mainProviderId) {
         $providerCondition   = array('main_provider' => $mainProvider);
         $is_single           = true;
         $settingsData        = GetAllRecord(WEBHOOK_UNSUBSCRIBE_SETTINGS, $providerCondition, $is_single);
@@ -135,6 +138,17 @@ class Unsubscribe_user extends CI_Controller
                 '12' => 'ontraport',
                 '13' => 'active_campaign',
             ];
+            // GET UNSUBSCRIBER LIST USING EMAIL ID THAT ALREADY HANDLE WHEN EMPLOYEE UNSUB USER (+ WEBHOOK (TO HANDLE DUPLICATE ENTRY WHEN EMPLOYEE UNSUB USER AND AT THAT MOMENT WEBHOOK EVENT IS ALSO CALLED))
+            $condition       = array('email' => $email);
+            $is_single       = false;
+            $empExistUnsubscribeData    = GetAllRecord(PROVIDER_UNSUBSCRIBER, $condition, $is_single,[],[],[],'provider_id');
+          
+            $empProviderID = array();
+            foreach ($empExistUnsubscribeData as $unsubscriber) {
+                if(!in_array($unsubscriber['provider_id'],$empProviderID)){
+                    $empProviderID[] = $unsubscriber['provider_id'];
+                }
+            }
 
             // GET UNSUBSCRIBER LIST USING EMAIL ID
             $condition       = array('email' => $email,'status' => 1);
@@ -148,233 +162,256 @@ class Unsubscribe_user extends CI_Controller
                 }
             }
 
-            // foreach($otherProviders as $provider => $other){
-            //     if($settingsData[$other] == 1 ) { 
-            //         if($provider == MAILJET) {
-            //             $this->load->model('mdl_mailjet_unsubscribe');
-            //             //LIST ID EMPTY GET COUNTRY WISE LIST  
-            //             $listCondition  = array(
-            //                 'provider' => $provider
-            //             );
-            //             $is_single             = false;
-            //             $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
+            foreach($otherProviders as $provider => $other){
+                if($settingsData[$other] == 1 ) { 
+                    if($provider == MAILJET) {
+                        $this->load->model('mdl_mailjet_unsubscribe');
+                        //LIST ID EMPTY GET COUNTRY WISE LIST  
+                        $listCondition  = array(
+                            'provider' => $provider,
+                        );                        
+                        if($mainProvider == MAILJET) {
+                            $listCondition['id !='] = $mainProviderId;
+                        }
 
-            //             $list = array_column($getListIDByCountry,'id');
-                    
-            //             foreach ($list as $listID) {   
-            //                 // CHECK EMAIL ALREADY UNSUBSCRIBE
-            //                 if(!in_array($listID,$providerID)){
-            //                     // SEND DATA FOR UNSUBSCRIBE
-            //                     $response = $this->mdl_mailjet_unsubscribe->makeUnsubscribe($email,$listID);
+                        $is_single             = false;
+                        $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
 
-            //                     // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
-            //                     if($response["result"] == "success"){
-            //                         $data = [
-            //                             "provider_id" => $listID,
-            //                             "esp"         => MAILJET,
-            //                             "email"       => $email,
-            //                             "name"        => $response["data"]["name"],
-            //                             "status"      => 1, // success
-            //                             "unsub_method"=> 2, // webhook (by other ESP)	
-            //                             "response"    => $response["data"]["updated_at"]
-            //                         ];
-            //                     }else{
-            //                         $data = [
-            //                             "provider_id" => $listID,
-            //                             "esp"         => MAILJET,
-            //                             "email"       => $email,
-            //                             "name"        => NULL,
-            //                             "status"      => 2, // error
-            //                             "unsub_method"=> 2, // webhook (by other ESP)	
-            //                             "response"    => $response["msg"]
-            //                         ];
-            //                     }
-            //                     // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-            //                     ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
-            //                 }else{
-            //                     $data = [
-            //                         "provider_id" => $listID,
-            //                         "esp"         => MAILJET,
-            //                         "email"       => $email,
-            //                         "name"        => NULL,
-            //                         "status"      => 3, // already unsubscribed
-            //                         "unsub_method"=> 2, // webhook (by other ESP)	
-            //                         "response"    => "Already unsubscribed"
-            //                     ];
-            //                     // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-            //                     ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
-            //                 }
-                                            
-            //             } 
-            //         } else if($provider == MARKETING_PLATFORM) { 
-            //             $this->load->model('mdl_marketing_platform_unsubscribe');
-            //             //LIST ID EMPTY GET COUNTRY WISE LIST  
-            //             $listCondition  = array(
-            //                 'provider' => $provider
-            //             );
-            //             $is_single             = false;
-            //             $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
+                        $list = array_column($getListIDByCountry,'id');
+                        foreach ($list as $listID) {   
+                            // CHECK EMAIL ALREADY UNSUBSCRIBE USING EMPLOYEE 
+                            if(!in_array($listID,$empProviderID)){
+                                // CHECK EMAIL ALREADY UNSUBSCRIBE
+                                if(!in_array($listID,$providerID)){
+                                    // SEND DATA FOR UNSUBSCRIBE
+                                    $response = $this->mdl_mailjet_unsubscribe->makeUnsubscribe($email,$listID);
 
-            //             $list = array_column($getListIDByCountry,'id');
+                                    // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
+                                    if($response["result"] == "success"){
+                                        $data = [
+                                            "provider_id" => $listID,
+                                            "esp"         => MAILJET,
+                                            "email"       => $email,
+                                            "name"        => $response["data"]["name"],
+                                            "status"      => 1, // success
+                                            "unsub_method"=> 2, // webhook (by other ESP)	
+                                            "response"    => $response["data"]["updated_at"]
+                                        ];
+                                    }else{
+                                        $data = [
+                                            "provider_id" => $listID,
+                                            "esp"         => MAILJET,
+                                            "email"       => $email,
+                                            "name"        => NULL,
+                                            "status"      => 2, // error
+                                            "unsub_method"=> 2, // webhook (by other ESP)	
+                                            "response"    => $response["msg"]
+                                        ];
+                                    }
+                                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                                }else{
+                                    $data = [
+                                        "provider_id" => $listID,
+                                        "esp"         => MAILJET,
+                                        "email"       => $email,
+                                        "name"        => NULL,
+                                        "status"      => 3, // already unsubscribed
+                                        "unsub_method"=> 2, // webhook (by other ESP)	
+                                        "response"    => "Already unsubscribed"
+                                    ];
+                                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                                }
+                            }              
+                        } 
+                    } else if($provider == MARKETING_PLATFORM) { 
+                        $this->load->model('mdl_marketing_platform_unsubscribe');
+                        //LIST ID EMPTY GET COUNTRY WISE LIST  
+                        $listCondition  = array(
+                            'provider' => $provider
+                        );
+                        if($mainProvider == MARKETING_PLATFORM) {
+                            $listCondition['id !='] = $mainProviderId;
+                        }
+                        $is_single             = false;
+                        $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
+
+                        $list = array_column($getListIDByCountry,'id');
         
-            //             foreach ($list as $listID) {   
-            //                 // CHECK EMAIL ALREADY UNSUBSCRIBE
-            //                 if(!in_array($listID,$providerID)){
+                        foreach ($list as $listID) {
+                            // CHECK EMAIL ALREADY UNSUBSCRIBE USING EMPLOYEE 
+                            if(!in_array($listID,$empProviderID)){   
+                                // CHECK EMAIL ALREADY UNSUBSCRIBE
+                                if(!in_array($listID,$providerID)){
+                                    
+                                    // SEND DATA FOR UNSUBSCRIBE
+                                    $response = $this->mdl_marketing_platform_unsubscribe->makeUnsubscribe($email,$listID);
                                 
-            //                     // SEND DATA FOR UNSUBSCRIBE
-            //                     $response = $this->mdl_marketing_platform_unsubscribe->makeUnsubscribe($email,$listID);
-                            
-            //                     // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
-            //                     if($response["result"] == "success"){
-            //                         $data = [
-            //                             "provider_id" => $listID,
-            //                             "esp"         => MARKETING_PLATFORM,
-            //                             "email"       => $email,
-            //                             "name"        => $response["data"]["name"],
-            //                             "status"      => 1, // success
-            //                             "unsub_method"=> 2, // webhook (by other ESP)
-            //                             "response"    => $response["data"]["updated_at"]
-            //                         ];
-            //                     }else{
-            //                         $data = [
-            //                             "provider_id" => $listID,
-            //                             "esp"         => MARKETING_PLATFORM,
-            //                             "email"       => $email,
-            //                             "name"        => NULL,
-            //                             "status"      => 2, // error
-            //                             "unsub_method"=> 2, // webhook (by other ESP)
-            //                             "response"    => $response["msg"]
-            //                         ];
-            //                     }
-            //                     // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-            //                     ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
-            //                 }else{
-            //                     $data = [
-            //                         "provider_id" => $listID,
-            //                         "esp"         => MARKETING_PLATFORM,
-            //                         "email"       => $email,
-            //                         "name"        => NULL,
-            //                         "status"      => 3, // already unsubscribed
-            //                         "unsub_method"=> 2, // webhook (by other ESP)
-            //                         "response"    => "Already unsubscribed"
-            //                     ];
-            //                     // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-            //                     ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
-            //                 }
-            //             }                
-            //         } else if($provider == ONTRAPORT) {
-            //             $this->load->model('mdl_ontraport_unsubscribe');
-            //             //LIST ID EMPTY GET COUNTRY WISE LIST  
-            //             $listCondition  = array(
-            //                 'provider' => $provider
-            //             );
-            //             $is_single             = false;
-            //             $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
+                                    // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
+                                    if($response["result"] == "success"){
+                                        $data = [
+                                            "provider_id" => $listID,
+                                            "esp"         => MARKETING_PLATFORM,
+                                            "email"       => $email,
+                                            "name"        => $response["data"]["name"],
+                                            "status"      => 1, // success
+                                            "unsub_method"=> 2, // webhook (by other ESP)
+                                            "response"    => $response["data"]["updated_at"]
+                                        ];
+                                    }else{
+                                        $data = [
+                                            "provider_id" => $listID,
+                                            "esp"         => MARKETING_PLATFORM,
+                                            "email"       => $email,
+                                            "name"        => NULL,
+                                            "status"      => 2, // error
+                                            "unsub_method"=> 2, // webhook (by other ESP)
+                                            "response"    => $response["msg"]
+                                        ];
+                                    }
+                                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                                }else{
+                                    $data = [
+                                        "provider_id" => $listID,
+                                        "esp"         => MARKETING_PLATFORM,
+                                        "email"       => $email,
+                                        "name"        => NULL,
+                                        "status"      => 3, // already unsubscribed
+                                        "unsub_method"=> 2, // webhook (by other ESP)
+                                        "response"    => "Already unsubscribed"
+                                    ];
+                                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                                }
+                            }
+                        }                
+                    } else if($provider == ONTRAPORT) {
+                        $this->load->model('mdl_ontraport_unsubscribe');
+                        //LIST ID EMPTY GET COUNTRY WISE LIST  
+                        $listCondition  = array(
+                            'provider' => $provider
+                        );
+                        if($mainProvider == ONTRAPORT) {
+                            $listCondition['id !='] = $mainProviderId;
+                        }
+                        $is_single             = false;
+                        $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
 
-            //             $list = array_column($getListIDByCountry,'id');
-            //             foreach ($list as $listID) {           
-            //                 // CHECK EMAIL ALREADY UNSUBSCRIBE
-            //                 if(!in_array($listID,$providerID)){
-                               
-            //                     // SEND DATA FOR UNSUBSCRIBE
-            //                     $response = $this->mdl_ontraport_unsubscribe->makeUnsubscribe($email,$listID);
-            //                     // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
-            //                     if($response["result"] == "success"){
-            //                         $data = [
-            //                             "provider_id" => $listID,
-            //                             "esp"         => ONTRAPORT,
-            //                             "email"       => $email,
-            //                             "name"        => $response["data"]["name"],
-            //                             "status"      => 1, // success
-            //                             "unsub_method"=> 2, // webhook (by other ESP)	
-            //                             "response"    => $response["data"]["updated_at"]
-            //                         ];
-            //                     }else{
-            //                         $data = [
-            //                             "provider_id" => $listID,
-            //                             "esp"         => ONTRAPORT,
-            //                             "email"       => $email,
-            //                             "name"        => NULL,
-            //                             "status"      => 2, // error
-            //                             "unsub_method"=> 2, // webhook (by other ESP)	
-            //                             "response"    => $response["msg"]
-            //                         ];
-            //                     }
-            //                     // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-            //                     ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
-            //                 }else{
-            //                     $data = [
-            //                         "provider_id" => $listID,
-            //                         "esp"         => ONTRAPORT,
-            //                         "email"       => $email,
-            //                         "name"        => NULL,
-            //                         "status"      => 3, // already unsubscribed
-            //                         "unsub_method"=> 2, // webhook (by other ESP)	
-            //                         "response"    => "Already unsubscribed"
-            //                     ];
-            //                     // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-            //                     ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
-            //                 }
-            //             }               
-            //         } else if($provider == ACTIVE_CAMPAIGN) {
-            //             $this->load->model('mdl_active_campaign_unsubscribe');
-            //             //LIST ID EMPTY GET COUNTRY WISE LIST  
-            //             $listCondition  = array(
-            //                 'provider' => $provider
-            //             );
-            //             $is_single             = false;
-            //             $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
+                        $list = array_column($getListIDByCountry,'id');
+                        foreach ($list as $listID) {       
+                            // CHECK EMAIL ALREADY UNSUBSCRIBE USING EMPLOYEE 
+                            if(!in_array($listID,$empProviderID)){    
+                                // CHECK EMAIL ALREADY UNSUBSCRIBE
+                                if(!in_array($listID,$providerID)){
+                                
+                                    // SEND DATA FOR UNSUBSCRIBE
+                                    $response = $this->mdl_ontraport_unsubscribe->makeUnsubscribe($email,$listID);
+                                    // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
+                                    if($response["result"] == "success"){
+                                        $data = [
+                                            "provider_id" => $listID,
+                                            "esp"         => ONTRAPORT,
+                                            "email"       => $email,
+                                            "name"        => $response["data"]["name"],
+                                            "status"      => 1, // success
+                                            "unsub_method"=> 2, // webhook (by other ESP)	
+                                            "response"    => $response["data"]["updated_at"]
+                                        ];
+                                    }else{
+                                        $data = [
+                                            "provider_id" => $listID,
+                                            "esp"         => ONTRAPORT,
+                                            "email"       => $email,
+                                            "name"        => NULL,
+                                            "status"      => 2, // error
+                                            "unsub_method"=> 2, // webhook (by other ESP)	
+                                            "response"    => $response["msg"]
+                                        ];
+                                    }
+                                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                                }else{
+                                    $data = [
+                                        "provider_id" => $listID,
+                                        "esp"         => ONTRAPORT,
+                                        "email"       => $email,
+                                        "name"        => NULL,
+                                        "status"      => 3, // already unsubscribed
+                                        "unsub_method"=> 2, // webhook (by other ESP)	
+                                        "response"    => "Already unsubscribed"
+                                    ];
+                                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                                }
+                            }
+                        }               
+                    } else if($provider == ACTIVE_CAMPAIGN) {
+                        $this->load->model('mdl_active_campaign_unsubscribe');
+                        //LIST ID EMPTY GET COUNTRY WISE LIST  
+                        $listCondition  = array(
+                            'provider' => $provider
+                        );
+                        if($mainProvider == ACTIVE_CAMPAIGN) {
+                            $listCondition['id !='] = $mainProviderId;
+                        }
+                        $is_single             = false;
+                        $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
 
-            //             $list = array_column($getListIDByCountry,'id');
+                        $list = array_column($getListIDByCountry,'id');
         
-            //             foreach ($list as $listID) {   
-            //                 // CHECK EMAIL ALREADY UNSUBSCRIBE
-            //                 if(!in_array($listID,$providerID)){
+                        foreach ($list as $listID) {   
+                            // CHECK EMAIL ALREADY UNSUBSCRIBE USING EMPLOYEE 
+                            if(!in_array($listID,$empProviderID)){
+                                // CHECK EMAIL ALREADY UNSUBSCRIBE
+                                if(!in_array($listID,$providerID)){
+                                    
+                                    // SEND DATA FOR UNSUBSCRIBE
+                                    $response = $this->mdl_active_campaign_unsubscribe->makeUnsubscribe($email,$listID);
                                 
-            //                     // SEND DATA FOR UNSUBSCRIBE
-            //                     $response = $this->mdl_active_campaign_unsubscribe->makeUnsubscribe($email,$listID);
-                            
-            //                     // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
-            //                     if($response["result"] == "success"){
-            //                         $data = [
-            //                             "provider_id" => $listID,
-            //                             "esp"         => ACTIVE_CAMPAIGN,
-            //                             "email"       => $email,
-            //                             "name"        => $response["data"]["name"],
-            //                             "status"      => 1, // success
-            //                             "unsub_method"=> 2, // webhook (by other ESP)
-            //                             "response"    => $response["data"]["updated_at"]
-            //                         ];
-            //                     }else{
-            //                         $data = [
-            //                             "provider_id" => $listID,
-            //                             "esp"         => ACTIVE_CAMPAIGN,
-            //                             "email"       => $email,
-            //                             "name"        => NULL,
-            //                             "status"      => 2, // error
-            //                             "unsub_method"=> 2, // webhook (by other ESP)
-            //                             "response"    => $response["msg"]
-            //                         ];
-            //                     }
-            //                     // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-            //                     ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
-            //                 }else{
-            //                     $data = [
-            //                         "provider_id" => $listID,
-            //                         "esp"         => ACTIVE_CAMPAIGN,
-            //                         "email"       => $email,
-            //                         "name"        => NULL,
-            //                         "status"      => 3, // already unsubscribed
-            //                         "unsub_method"=> 2, // webhook (by other ESP)
-            //                         "response"    => "Already unsubscribed"
-            //                     ];
-            //                     // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-            //                     ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
-            //                 }
-            //             }               
-            //         }
-            //     }   
-            // }
+                                    // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
+                                    if($response["result"] == "success"){
+                                        $data = [
+                                            "provider_id" => $listID,
+                                            "esp"         => ACTIVE_CAMPAIGN,
+                                            "email"       => $email,
+                                            "name"        => $response["data"]["name"],
+                                            "status"      => 1, // success
+                                            "unsub_method"=> 2, // webhook (by other ESP)
+                                            "response"    => $response["data"]["updated_at"]
+                                        ];
+                                    }else{
+                                        $data = [
+                                            "provider_id" => $listID,
+                                            "esp"         => ACTIVE_CAMPAIGN,
+                                            "email"       => $email,
+                                            "name"        => NULL,
+                                            "status"      => 2, // error
+                                            "unsub_method"=> 2, // webhook (by other ESP)
+                                            "response"    => $response["msg"]
+                                        ];
+                                    }
+                                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                                }else{
+                                    $data = [
+                                        "provider_id" => $listID,
+                                        "esp"         => ACTIVE_CAMPAIGN,
+                                        "email"       => $email,
+                                        "name"        => NULL,
+                                        "status"      => 3, // already unsubscribed
+                                        "unsub_method"=> 2, // webhook (by other ESP)
+                                        "response"    => "Already unsubscribed"
+                                    ];
+                                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                                }
+                            }
+                        }               
+                    }
+                }   
+            }
         }
     }
 }
