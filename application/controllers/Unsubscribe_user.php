@@ -12,26 +12,8 @@ class Unsubscribe_user extends CI_Controller
     }
 
     public function mailjet($account){
-        $subscribeDetail = [
-            [
-              "event"=> "unsub",
-              "time"=> 1624012541,
-              "MessageID"=> 57983847985302380,
-              "Message_GUID"=> "30f7b5e5-72ad-4f36-99d5-8e995392ec59",
-              "email"=> "solhoi@live.dk",
-              "mj_campaign_id"=> 102954,
-              "mj_contact_id"=> 92285981,
-              "customcampaign"=> "mj.nl=40170",
-              "mj_list_id"=> 29610,
-              "ip"=> "109.58.188.200",
-              "geo"=> "DK",
-              "agent"=> "Mozilla/5.0 (iPad; CPU OS 12_5_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.2 Mobile/15E148 Safari/604.1",
-              "CustomID"=> "",
-              "Payload"=> ""
-            ]
-        ];
-        
-        $subscribeDetailJson = json_encode($subscribeDetail);
+
+        $subscribeDetailJson = file_get_contents('php://input');
         $subscribeDetail = \json_decode($subscribeDetailJson,true);
         $email = $subscribeDetail[0]['email'];
         
@@ -54,14 +36,8 @@ class Unsubscribe_user extends CI_Controller
     }
     
     public function marketingPlatform($account){
-        $subscribeDetail = [
-            "listid"=> "80010",
-            "event"=> "Unsubscribe",
-            "profileid"=> 84259084,
-            "emailaddress"=> "karnavi@gmail.com",
-            "event_source"=> ""
-        ];
-        $subscribeDetailJson = json_encode($subscribeDetail);
+        
+        $subscribeDetailJson = file_get_contents('php://input');
         $subscribeDetail = \json_decode($subscribeDetailJson,true);
         $email = $subscribeDetail['emailaddress'];
         
