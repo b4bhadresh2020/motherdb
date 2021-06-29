@@ -63,17 +63,7 @@ class Mdl_mailjet extends CI_Model {
                         'Email' => @$getData['emailId'],
                         'IsExcludedFromCampaigns' => 'false',
                         'Name' => @$getData['firstName'] . ' ' . @$getData['lastName'],
-                        'Properties' => [
-                            'name' => @$getData['firstName'] . ' ' . @$getData['lastName'],
-                            'firstname' => @$getData['firstName'],
-                            'lastname' => @$getData['lastName'],
-                            'phone' => @$getData['phone'],
-                            'gender' => @$getData['gender'],
-                            'address' => @$getData['address'],
-                            'postcode' => @$getData['postCode'],
-                            'city' => @$getData['city'],
-                            'birthdate' => @$getData['birthDate']. ' 00:00:00',
-                            'tag' => $tagValue
+                        'Properties' => [                            
                         ]	
                     ]
                 ],
@@ -84,6 +74,35 @@ class Mdl_mailjet extends CI_Model {
                     ]
                 ]
             ];
+
+            if(!empty($getData['firstName'])) {
+                $body['Contacts'][0]['Properties']['name'] = @$getData['firstName'] . ' ' . @$getData['lastName'];
+                $body['Contacts'][0]['Properties']['firstname'] = @$getData['firstName'];
+            }
+            if(!empty($getData['lastName'])) {
+                $body['Contacts'][0]['Properties']['lastname'] = @$getData['lastName'];
+            }
+            if(!empty($getData['phone'])) {
+                $body['Contacts'][0]['Properties']['phone'] = @$getData['phone'];
+            }
+            if(!empty($getData['gender'])) {
+                $body['Contacts'][0]['Properties']['gender'] = @$getData['gender'];
+            }
+            if(!empty($getData['address'])) {
+                $body['Contacts'][0]['Properties']['address'] = @$getData['address'];
+            }
+            if(!empty($getData['postCode'])) {
+                $body['Contacts'][0]['Properties']['postcode'] = @$getData['postCode'];
+            }
+            if(!empty($getData['city'])) {
+                $body['Contacts'][0]['Properties']['city'] = @$getData['city'];
+            }
+            if(!empty($getData['birthDate'])) {
+                $body['Contacts'][0]['Properties']['birthdate'] = @$getData['birthDate']. ' 00:00:00';
+            }
+            if(!empty($tagValue)) {
+                $body['Contacts'][0]['Properties']['tag'] = $tagValue;
+            }
             $bodyData = json_encode($body); 
             
             try {

@@ -36,12 +36,20 @@ class Mdl_ontraport extends CI_Model {
             $apiKey = $ontraportAccountData['api_key'];
             $list_id = $providerData['code'];
             $details = [
-                'firstname' => $getData['firstName'],
-                'lastname' => $getData['lastName'],
-                'email' => $getData['emailId'],
-                'office_phone' => $getData['phone'],
                 'contact_cat' => $list_id
             ];
+            if(isset($getData['firstName']) && !empty($getData['firstName'])) {
+                $details['firstname'] = $getData['firstName'];
+            }
+            if(isset($getData['lastName']) && !empty($getData['lastName'])) {
+                $details['lastname'] = $getData['lastName'];
+            }
+            if(isset($getData['emailId']) && !empty($getData['emailId'])) {
+                $details['email'] = $getData['emailId'];
+            }
+            if(isset($getData['phone']) && !empty($getData['phone'])) {
+                $details['office_phone'] = $getData['phone'];
+            }
             if(isset($getData['gender']) && !empty($getData['gender'])) {
                 $details['fb_gender'] = $getData['gender'];
             }
@@ -50,7 +58,7 @@ class Mdl_ontraport extends CI_Model {
             }
             if(isset($getData['postCode']) && !empty($getData['postCode'])) {
                 $details['zip'] = $getData['postCode'];
-            }
+            }            
             $data = json_encode($details);
             
             //LIST ID 
