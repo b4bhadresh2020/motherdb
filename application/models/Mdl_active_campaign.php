@@ -59,39 +59,53 @@ class Mdl_active_campaign extends CI_Model {
 
             $details = [
                 'contact' => [
-                    'email' => @$getData['emailId'],
-                    'firstName' => @$getData['firstName'],
-                    'lastName' => @$getData['lastName'],
-                    'phone' => @$getData['phone'],
                     'status' => 1,
-                    'fieldValues' => [
-                        [
-                            'field' => '1',
-                            'value' => @$getData['gender']
-                        ],
-                        [
-                            'field' => '2',
-                            'value' => @$getData['address']
-                        ],
-                        [
-                            'field' => '3',
-                            'value' => @$getData['postCode']
-                        ],
-                        [
-                            'field' => '4',
-                            'value' => @$getData['city']
-                        ],                  
-                        [
-                            'field' => '5',
-                            'value' => @$getData['birthDate']
-                        ],
-                        [
-                            'field' => '6',
-                            'value' => @$tagValue
-                        ]
+                    'fieldValues' => [                        
                     ]
                 ]
             ];
+            if(!empty($getData['firstName'])) {
+                $details['contact']['firstName'] = @$getData['firstName'];
+            }
+            if(!empty($getData['lastName'])) {
+                $details['contact']['lastName'] = @$getData['lastName'];
+            }
+            if(!empty($getData['phone'])) {
+                $details['contact']['phone'] = @$getData['phone'];
+            }
+            if(!empty($getData['emailId'])) {
+                $details['contact']['email'] = @$getData['emailId'];
+            }
+            if(!empty($getData['gender'])) {
+                $contactFields['field'] = '1';
+                $contactFields['value'] = @$getData['gender'];
+                array_push($details['contact']['fieldValues'], $contactFields);
+            }
+            if(!empty($getData['address'])) {
+                $contactFields['field'] = '2';
+                $contactFields['value'] = @$getData['address'];
+                array_push($details['contact']['fieldValues'], $contactFields);
+            }
+            if(!empty($getData['postCode'])) {
+                $contactFields['field'] = '3';
+                $contactFields['value'] = @$getData['postCode'];
+                array_push($details['contact']['fieldValues'], $contactFields);
+            }
+            if(!empty($getData['city'])) {
+                $contactFields['field'] = '4';
+                $contactFields['value'] = @$getData['city'];
+                array_push($details['contact']['fieldValues'], $contactFields);
+            }
+            if(!empty($getData['birthDate'])) {
+                $contactFields['field'] = '5';
+                $contactFields['value'] = @$getData['birthDate'];
+                array_push($details['contact']['fieldValues'], $contactFields);
+            }
+            if(!empty($tagValue)) {
+                $contactFields['field'] = '6';
+                $contactFields['value'] = @$tagValue;
+                array_push($details['contact']['fieldValues'], $contactFields);
+            }            
             $data = json_encode($details);
                  
             $newsubscriberUrl = $apiUrl . "/api/3/contacts";

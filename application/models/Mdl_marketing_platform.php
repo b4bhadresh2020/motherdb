@@ -66,44 +66,55 @@ class Mdl_marketing_platform extends CI_Model {
                 'mobile' => @$getData['phone'],
                 'confirmed' => 'true',
                 'contactFields' => [
-                    [
-                        'fieldid' => '2',
-                        'value' => @$getData['firstName']
-                    ],
-                    [
-                        'fieldid' => '3',
-                        'value' => @$getData['lastName']
-                    ],
-                    [
-                        'fieldid' => '4',
-                        'value' => @$getData['phone']
-                    ],
-                    [
-                        'fieldid' => '12',
-                        'value' => @$getData['gender']
-                    ],
-                    [
-                        'fieldid' => '167662',
-                        'value' => @$getData['address']
-                    ],
-                    [
-                        'fieldid' => '10',
-                        'value' => @$getData['postCode']
-                    ],
-                    [
-                        'fieldid' => '8',
-                        'value' => @$getData['city']
-                    ],                  
-                    [
-                        'fieldid' => '7',
-                        'value' => @$getData['birthDate']
-                    ],
-                    [
-                        'fieldid' => '167663',
-                        'value' => @$tagValue
-                    ]
                 ]
             ];
+
+            if(!empty($getData['firstName'])) {                
+                $contactFields['fieldid'] = '2';
+                $contactFields['value'] = @$getData['firstName'];
+                array_push($details['contactFields'], $contactFields);
+            }
+            if(!empty($getData['lastName'])) {                
+                $contactFields['fieldid'] = '3';
+                $contactFields['value'] = @$getData['lastName'];
+                array_push($details['contactFields'], $contactFields);
+            }
+            if(!empty($getData['phone'])) {                
+                $contactFields['fieldid'] = '4';
+                $contactFields['value'] = @$getData['phone'];
+                array_push($details['contactFields'], $contactFields);
+            }
+            if(!empty($getData['gender'])) {                
+                $contactFields['fieldid'] = '12';
+                $contactFields['value'] = @$getData['gender'];
+                array_push($details['contactFields'], $contactFields);
+            }
+            if(!empty($getData['address'])) {                
+                $contactFields['fieldid'] = '167662';
+                $contactFields['value'] = @$getData['address'];
+                array_push($details['contactFields'], $contactFields);
+            }
+            if(!empty($getData['postCode'])) {                
+                $contactFields['fieldid'] = '10';
+                $contactFields['value'] = @$getData['postCode'];
+                array_push($details['contactFields'], $contactFields);
+            }
+            if(!empty($getData['city'])) {                
+                $contactFields['fieldid'] = '8';
+                $contactFields['value'] = @$getData['city'];
+                array_push($details['contactFields'], $contactFields);
+            }
+            if(!empty($getData['birthDate'])) {                
+                $contactFields['fieldid'] = '7';
+                $contactFields['value'] = @$getData['birthDate'];
+                array_push($details['contactFields'], $contactFields);
+            }
+            if(!empty($tagValue)) {                
+                $contactFields['fieldid'] = '167663';
+                $contactFields['value'] = @$tagValue;
+                array_push($details['contactFields'], $contactFields);
+            }
+            
             $data = json_encode($details);
                  
             $newsubscriberUrl = "https://api.mailmailmail.net/v1.1/Subscribers/AddSubscriberToList";
