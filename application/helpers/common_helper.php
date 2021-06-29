@@ -662,7 +662,8 @@ function getProviderName($providerId){
         '11' => 'MarketingPlatform',
         '12' => 'Ontraport',
         '13' => 'ActiveCampaign',
-        '14' => 'ExpertSender'
+        '14' => 'ExpertSender',
+        '15' => 'CleverReach'
     );
     return $providerNames[$providerId];
 }
@@ -886,6 +887,13 @@ function getExpertSenderProviderListName($providerListId){
     return $expertSenderList[$providerListId];
 }
 
+function getExpertCleverReachListName($providerListId){
+    $cleverReachList = array(
+        "1" => "Velkomstgaven/DK"     
+    );
+    return $cleverReachList[$providerListId];
+}
+
 function getLiveRepostAweverProviderID($providerListId){
     $provider = array(
         "1" => "14",  // Velkomstgaven.com (Norway) 
@@ -1100,6 +1108,13 @@ function getLiveRepostExpertSenderProviderID($providerId){
         "5" => "153",  // camilla/katariinasmail1.com/FI
         "6" => "154",  // camilla/signesmail1.dk/DK
         "7" => "155",  // camilla/signesmail2.com/NO
+    );
+    return $provider[$providerId];
+}
+
+function getLiveRepostCleverReachProviderID($providerId){
+    $provider = array(
+        "1" => "156"  // Velkomstgaven/DK
     );
     return $provider[$providerId];
 }
@@ -1855,6 +1870,21 @@ function addToExpertSenderSubscriberQueue($liveDeliveryDataId,$mailProvider,$del
     $condition = array();
     $is_insert = true;
     ManageData(EXPERT_SENDER_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
+}
+
+function addToCleverReachSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+    $liveDeliveryDelayData = array(
+        "liveDeliveryDataId" => $liveDeliveryDataId,
+        "providerId" => $mailProvider,
+        "delayDay" => $delayDay,
+        "currentTimestamp" => time(),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "status" => 0
+    );
+    $condition = array();
+    $is_insert = true;
+    ManageData(CLEVER_REACH_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
 function addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$groupName,$keyword,$emailId = NULL){

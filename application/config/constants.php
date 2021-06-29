@@ -143,6 +143,7 @@ define("MARKETING_PLATFORM_DELAY_USER_DATA"		,	"marketing_platform_delay_user_da
 define("ONTRAPORT_DELAY_USER_DATA"		,	"ontraport_delay_user_data");
 define("ACTIVE_CAMPAIGN_DELAY_USER_DATA", "active_campaign_delay_user_data");
 define("EXPERT_SENDER_DELAY_USER_DATA", "expert_sender_delay_user_data");
+define("CLEVER_REACH_DELAY_USER_DATA" ,	"clever_reach_delay_user_data");
 define("EMAIL_HISTORY_DATA"				,	"email_history_data");
 define("PROVIDER_UNSUBSCRIBER"			,	"provider_unsubscriber");
 define("WEBHOOK_UNSUBSCRIBE_SETTINGS"	,	"webhook_unsubscribe_settings");
@@ -194,6 +195,7 @@ define('MARKETING_PLATFORM','11');
 define('ONTRAPORT', '12');
 define('ACTIVE_CAMPAIGN','13');
 define('EXPERT_SENDER','14');
+define('CLEVER_REACH','15');
 define('PROVIDERS', 'providers');
 define('AWEBER_ACCOUNTS', 'aweber_accounts');
 define('ONGAGE_ACCOUNTS', 'ongage_accounts');
@@ -205,6 +207,7 @@ define('MARKETING_PLATFORM_ACCOUNTS','marketing_platform_accounts');
 define('ONTRAPORT_ACCOUNTS','ontraport_accounts');
 define('ACTIVE_CAMPAIGN_ACCOUNTS','active_campaign_accounts');
 define('EXPERT_SENDER_ACCOUNTS', 'expert_sender_accounts');
+define('CLEVER_REACH_ACCOUNTS', 'clever_reach_accounts');
 
 // MX Block account
 define('TELIA_DOMAIN', 'telia.com');

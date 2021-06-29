@@ -505,7 +505,7 @@ class Live_delivery_api extends CI_Controller
         $lastDeliveryData        = GetAllRecord(LIVE_DELIVERY_DATA, $liveDeliveryCondition, $is_single); 
 
         //we will not send from local
-        if ($_SERVER['HTTP_HOST'] != 'localhost') {
+        if ($_SERVER['HTTP_HOST'] == 'localhost') {
 
             $mailProviders = json_decode($getLiveDeliveryData['mailProvider']);
 
@@ -917,7 +917,37 @@ class Live_delivery_api extends CI_Controller
                                 $response = null;
                                 addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
                             // } 
-                        } else{
+                        
+                        } else if($providerData['provider'] == CLEVER_REACH) {
+                            
+                            $lastDeliveryData['birthDate'] = "";
+                            if (@$lastDeliveryData['birthdateDay'] != '0' && @$lastDeliveryData['birthdateMonth'] != '0' && @$lastDeliveryData['birthdateYear'] != '0') {
+                                $birthDate            = $lastDeliveryData['birthdateYear'] . '-' . $lastDeliveryData['birthdateMonth'] . '-' . $lastDeliveryData['birthdateDay'];
+                                $lastDeliveryData['birthDate'] = date('Y-m-d', strtotime($birthDate));
+                            } 
+                            
+                            $this->load->model('mdl_clever_reach');
+                            
+                            // LOGIC FOR SEND DATA TO EXPERT SENDER OR QUEUE                            
+                            $delayDay = 0;
+                            if(isset($delays[$mailProvider])){
+                                $delayDay = $delays[$mailProvider];
+                            }
+                            $provider = CLEVER_REACH;                            
+                            // if($delayDay == 0){
+                                
+                            //     // NO DELAY INSTANT SEND DATA TO EXPERT SENDER
+                            //     $response = $this->mdl_clever_reach->AddEmailToCleverReachSubscriberList($lastDeliveryData,$mailProvider);         
+                            //     // ADD RECORD IN HISTORY
+                            //     addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
+                            // }else{                               
+                                // ADD DATA IN QUEUE FOR DELAY SENDING
+                                addToCleverReachSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
+                                // ADD RECORD IN HISTORY
+                                $response = null;
+                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
+                            //} 
+                        }else{
                             $response = array("result" => "error", "error" => array("msg" => "Wrong provider"));
                         }    
                         // if(isset($delayDay) && $delayDay == 0){

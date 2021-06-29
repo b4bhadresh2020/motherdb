@@ -15,6 +15,7 @@
     $ontraportList = getProviderList(ONTRAPORT);
     $activeCampaignList = getProviderList(ACTIVE_CAMPAIGN);
     $expertSenderList = getProviderList(EXPERT_SENDER);
+    $cleverReachList = getProviderList(CLEVER_REACH);
 
 
     $mailProviders = array(
@@ -89,6 +90,11 @@
     // Add Expert Sender list in mail provider
     foreach($expertSenderList as $list){
         $mailProviders[$list['id']] = $list['listname']. " (Expert Sender)";
+    }
+
+     // Add Clever Reach list in mail provider
+     foreach($cleverReachList as $list){
+        $mailProviders[$list['id']] = $list['listname']. " (Clever Reach)";
     }
 
     $identifiers = array(
