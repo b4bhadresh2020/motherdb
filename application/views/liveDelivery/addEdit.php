@@ -92,8 +92,8 @@
         $mailProviders[$list['id']] = $list['listname']. " (Expert Sender)";
     }
 
-     // Add Clever Reach list in mail provider
-     foreach($cleverReachList as $list){
+    // Add Clever Reach list in mail provider
+    foreach($cleverReachList as $list){
         $mailProviders[$list['id']] = $list['listname']. " (Clever Reach)";
     }
 
