@@ -33,14 +33,30 @@ class Mdl_mailjet_unsubscribe extends CI_Model {
             //LIST ID 
             $list_id = $providerData['code'];
 
+            // check user is exist by list & email
+            $responseField	= $providerData['response_field'];
+            $liveDeliveryData = getLivedeliveryDetail($email, $responseField);
+            $emailresponse = json_decode($liveDeliveryData[$responseField],true); 
             // check user is exist
             // $condition = array('providerId' => $mailjetListId ,'emailId' => $email, 'status'=> '1');
             // $is_single = TRUE;
             // $getEmailDetail = GetAllRecord(EMAIL_HISTORY_DATA,$condition,$is_single,array(),array(),array(),'emailId,response');
-            // $emailresponse = json_decode($getEmailDetail['response'],true);
-            // echo "dsd";
-            // pre($emailresponse);die;
-            // if(!empty($getEmailDetail) && $emailresponse['result'] == 'success'){
+            // $emailresponse = json_decode($getEmailDetail['response'],true);            
+
+            // // get user contact details
+            // $checkContactUrl = "https://api.mailjet.com/v3/REST/contact/". $email;
+            // $getContactBody = $client->get($checkContactUrl, [
+            //     'headers' => [
+            //         'Content-Type' => 'application/json'
+            //     ],
+            //     'auth' => [
+            //         $api_key, $secret_key
+            //     ]
+            // ]);
+            // $getSubscriber = json_decode($getContactBody->getBody(),true);
+            // $getStatusCode = $getContactBody->getStatusCode();
+            // if(!empty($getSubscriber) && $getStatusCode == 200){
+            if(!empty($liveDeliveryData) && $emailresponse['result'] == 'success'){
                 $unsubscriberUrl = "https://api.mailjet.com/v3/REST/contact/managemanycontacts";
                 $body = [
                     'Contacts' => [
@@ -98,9 +114,9 @@ class Mdl_mailjet_unsubscribe extends CI_Model {
                         }
                     }
                 }
-            // } else {
-            //     return array("result" => "error","msg" => "Subscriber not found");
-            // }     
+            } else {
+                return array("result" => "error","msg" => "Subscriber not found");
+            }     
         }catch (\GuzzleHttp\Exception\ClientException $e) {
             return array("result" => "error","msg" => "Bad request");
         }

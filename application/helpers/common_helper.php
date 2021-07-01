@@ -1967,3 +1967,24 @@ function getProviderID($account, $listId, $provider) {
     $getProviderID = GetAllRecord(PROVIDERS, $condition, $is_single, array(), array(), array(), 'id');
     return $getProviderID['id'];
 }
+
+function getLivedeliveryDetail($email,$responseField) {
+    $CI = & get_instance();
+    $getDetail = $CI->db->select('emailId,country,'.$responseField)
+            ->from(LIVE_DELIVERY_DATA)
+            ->where('emailId', $email)
+            ->like($responseField, 'success')
+            ->get()->row_array();
+    
+        return $getDetail;
+}
+
+function getProviderDetail($mainProviderId) {
+    $CI = & get_instance();
+    $condition = array(
+        'id' => $mainProviderId       
+    );
+    $is_single = TRUE;
+    $getProvider = GetAllRecord(PROVIDERS, $condition, $is_single, array(), array(), array());
+    return $getProvider;
+}

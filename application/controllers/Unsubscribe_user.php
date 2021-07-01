@@ -172,6 +172,12 @@ class Unsubscribe_user extends CI_Controller
                 }
             }
 
+            // GET COUNTRY OF USER
+            $getProviderDetail = getProviderDetail($mainProviderId);
+            $responseField = $getProviderDetail['response_field'];
+            $liveDeliveryData = getLivedeliveryDetail($email, $responseField);
+            $userCountry = $liveDeliveryData['country'];
+
             foreach($otherProviders as $provider => $other){
                 if($settingsData[$other] == 1 ) { 
                     if($provider == MAILJET) {
@@ -179,6 +185,7 @@ class Unsubscribe_user extends CI_Controller
                         //LIST ID EMPTY GET COUNTRY WISE LIST  
                         $listCondition  = array(
                             'provider' => $provider,
+                            'country' => $userCountry
                         );                        
                         if($mainProvider == MAILJET) {
                             $listCondition['id !='] = $mainProviderId;
@@ -242,7 +249,8 @@ class Unsubscribe_user extends CI_Controller
                         $this->load->model('mdl_marketing_platform_unsubscribe');
                         //LIST ID EMPTY GET COUNTRY WISE LIST  
                         $listCondition  = array(
-                            'provider' => $provider
+                            'provider' => $provider,
+                            'country' => $userCountry
                         );
                         if($mainProvider == MARKETING_PLATFORM) {
                             $listCondition['id !='] = $mainProviderId;
@@ -307,7 +315,8 @@ class Unsubscribe_user extends CI_Controller
                         $this->load->model('mdl_ontraport_unsubscribe');
                         //LIST ID EMPTY GET COUNTRY WISE LIST  
                         $listCondition  = array(
-                            'provider' => $provider
+                            'provider' => $provider,
+                            'country' => $userCountry
                         );
                         if($mainProvider == ONTRAPORT) {
                             $listCondition['id !='] = $mainProviderId;
@@ -370,7 +379,8 @@ class Unsubscribe_user extends CI_Controller
                         $this->load->model('mdl_active_campaign_unsubscribe');
                         //LIST ID EMPTY GET COUNTRY WISE LIST  
                         $listCondition  = array(
-                            'provider' => $provider
+                            'provider' => $provider,
+                            'country' => $userCountry
                         );
                         if($mainProvider == ACTIVE_CAMPAIGN) {
                             $listCondition['id !='] = $mainProviderId;

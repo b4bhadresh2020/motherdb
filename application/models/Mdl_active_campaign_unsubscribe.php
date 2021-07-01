@@ -30,11 +30,16 @@ class Mdl_active_campaign_unsubscribe extends CI_Model {
             //LIST ID 
             $list_id = $providerData['code'];         
                     
-            //Get subscriber(exist or not) from email history table
-            $emailResponse = getSubscribeDetails($activeCampaignListId,$email);
-            $subscriptionId = $emailResponse['data']['id'];
+            // //Get subscriber(exist or not) from email history table
+            // $emailResponse = getSubscribeDetails($activeCampaignListId,$email);
+            // $subscriptionId = $emailResponse['data']['id'];
+            // check user is exist by list & email
+            $responseField	= $providerData['response_field'];
+            $liveDeliveryData = getLivedeliveryDetail($email, $responseField);
+            $emailresponse = json_decode($liveDeliveryData[$responseField],true);
+            $subscriptionId = $emailresponse['data']['id'];
             
-            if(!empty($subscriptionId)){
+            if(!empty($liveDeliveryData) && $emailresponse['result'] == 'success'){
                 $subscriberUrl = $apiUrl . "/api/3/contacts/" . $subscriptionId;
                 $body = $client->get($subscriberUrl,[
                     'headers' => [
