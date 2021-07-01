@@ -26,42 +26,51 @@ class Mdl_expert_sender_unsubscribe extends CI_Model {
             $list_id = $providerData['code'];
             $api_key = $expertSenderAccountData['api_key']; 
 
-            $subscriberUrl = EXPERT_SENDER_API_PATH . 'Api/Subscribers?apiKey='.$api_key.'&email='.$email.'&option=Full';
-            $ch = curl_init($subscriberUrl);
-            curl_setopt($ch, CURLOPT_URL,$subscriberUrl);
-            $headers = array(
-                "Content-Type: text/xml",
-                "Accept: text/xml",
-            );
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $getSubscriber = curl_exec($ch);
-            $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close ($ch);
+            // check user is exist by list & email
+            $responseField	= $providerData['response_field'];
+            $liveDeliveryData = getLivedeliveryDetail($email, $responseField);
+            $emailresponse = json_decode($liveDeliveryData[$responseField],true);
+            
+            if(!empty($liveDeliveryData) && $emailresponse['result'] == 'success'){
+                $subscriberUrl = EXPERT_SENDER_API_PATH . 'Api/Subscribers?apiKey='.$api_key.'&email='.$email.'&option=Full';
+                $ch = curl_init($subscriberUrl);
+                curl_setopt($ch, CURLOPT_URL,$subscriberUrl);
+                $headers = array(
+                    "Content-Type: text/xml",
+                    "Accept: text/xml",
+                );
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $getSubscriber = curl_exec($ch);
+                $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close ($ch);
 
-            $xml = simplexml_load_string($getSubscriber);
-            $subscriber = json_decode(json_encode($xml),true);
-            if($statusCode == 200) {
-                $subscriberId = $subscriber['Data']['Id'];
-                $subscriberName = $subscriber['Data']['Firstname'] . " ". $subscriber['Data']['Lastname'];
-                $subscriberListId = $subscriber['Data']['StateOnLists']['StateOnList']['ListId'];
-                
-                // UPDATE SUSBCRIBER STATUS (unsubscribe)
-                if(isset($subscriberId) && $subscriber['Data']['Email'] == $email && $subscriberListId == $list_id){
-
-                    $unsubscriberUrl = EXPERT_SENDER_API_PATH . 'Api/Subscribers/'.$subscriberId.'?apiKey='.$api_key.'&listId='.$list_id.'&channel=Email';
-                    $curl = curl_init();
-                    curl_setopt($curl, CURLOPT_URL, $unsubscriberUrl);
-                    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
-                    $result = curl_exec($curl);
-                    $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-                    curl_close($curl);             
+                $xml = simplexml_load_string($getSubscriber);
+                $subscriber = json_decode(json_encode($xml),true);
+                if($statusCode == 200) {
+                    $subscriberId = $subscriber['Data']['Id'];
+                    $subscriberName = $subscriber['Data']['Firstname'] . " ". $subscriber['Data']['Lastname'];
+                    $subscriberListId = $subscriber['Data']['StateOnLists']['StateOnList']['ListId'];
                     
-                    return array("result" => "success","data" => array("name" => $subscriberName,"updated_at" => date('Y-m-d H:i:s')));
-                }else{
+                    // UPDATE SUSBCRIBER STATUS (unsubscribe)
+                    if(isset($subscriberId) && $subscriber['Data']['Email'] == $email && $subscriberListId == $list_id){
+
+                        $unsubscriberUrl = EXPERT_SENDER_API_PATH . 'Api/Subscribers/'.$subscriberId.'?apiKey='.$api_key.'&listId='.$list_id.'&channel=Email';
+                        $curl = curl_init();
+                        curl_setopt($curl, CURLOPT_URL, $unsubscriberUrl);
+                        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+                        $result = curl_exec($curl);
+                        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+                        curl_close($curl);             
+                        
+                        return array("result" => "success","data" => array("name" => $subscriberName,"updated_at" => date('Y-m-d H:i:s')));
+                    }else{
+                        return array("result" => "error","msg" => "Subscriber not found");
+                    }
+                } else{
                     return array("result" => "error","msg" => "Subscriber not found");
                 }
-            } else{
+            } else {
                 return array("result" => "error","msg" => "Subscriber not found");
             }
         }catch (\GuzzleHttp\Exception\ClientException $e) {

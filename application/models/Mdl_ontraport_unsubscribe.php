@@ -31,13 +31,19 @@ class Mdl_ontraport_unsubscribe extends CI_Model {
             //LIST ID 
             $list_id = $providerData['code'];
                 
-            //FIND subscriber
-            $userData=array('emailId'=>$email,'providerId'=>$providerData['id'],'status'=>1);
-            $getSingleUser = GetAllRecord(EMAIL_HISTORY_DATA,$userData,$is_single);
-            if(!empty($getSingleUser)){
+            // //FIND subscriber
+            // $userData=array('emailId'=>$email,'providerId'=>$providerData['id'],'status'=>1);
+            // $getSingleUser = GetAllRecord(EMAIL_HISTORY_DATA,$userData,$is_single);
+            // check user is exist by list & email
+            $responseField	= $providerData['response_field'];
+            $liveDeliveryData = getLivedeliveryDetail($email, $responseField);
+            $emailresponse = json_decode($liveDeliveryData[$responseField],true); 
+
+            if(!empty($liveDeliveryData) && $emailresponse['result'] == 'success'){
                 // FIND SUBSCRIBER
-                $responseData = json_decode($getSingleUser['response']);
-                $subsciber_id = $responseData->data->id;
+                // $responseData = json_decode($getSingleUser['response']);
+                // $subsciber_id = $responseData->data->id;
+                $subsciber_id = $emailresponse['data']['id'];
                 $details = [
                     'objectID' => 0,
                     'remove_list' => [$list_id],
