@@ -887,7 +887,7 @@ function getExpertSenderProviderListName($providerListId){
     return $expertSenderList[$providerListId];
 }
 
-function getExpertCleverReachListName($providerListId){
+function getCleverReachListName($providerListId){
     $cleverReachList = array(
         "1" => "Velkomstgaven/DK"     
     );

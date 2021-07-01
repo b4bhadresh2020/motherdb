@@ -566,7 +566,9 @@
             providerList +="<option value='5'>camilla/katariinasmail1.com/FI</option>";       
             providerList +="<option value='6'>camilla/signesmail1.dk/DK</option>";       
             providerList +="<option value='7'>camilla/signesmail2.com/NO</option>";       
-        }  else{
+        } else if(providerId == 15){
+            providerList +="<option value='1'>Velkomstgaven/DK</option>";      
+        } else{
             providerList +="<option value='0'>Select Provider List</option>";
         }
 

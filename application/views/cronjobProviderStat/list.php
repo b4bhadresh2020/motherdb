@@ -88,7 +88,7 @@
                                                          }else if($curEntry['providerName'] ==  EXPERT_SENDER ){
                                                             echo getExpertSenderProviderListName($curEntry['providerList']);
                                                          }else if($curEntry['providerName'] ==  CLEVER_REACH ){
-                                                            echo getExpertCleverReachListName($curEntry['providerList']);
+                                                            echo getCleverReachListName($curEntry['providerList']);
                                                          }
                                                          ?></td>
                                                         <td><?php echo date("d-m-Y",strtotime($curEntry['fromDate'])); ?></td>

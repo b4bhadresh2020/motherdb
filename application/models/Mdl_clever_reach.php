@@ -51,104 +51,120 @@ class Mdl_clever_reach extends CI_Model {
                 $tagValue = "";
             }
 
-            //LIST ID 
-            $list_id = $providerData['code'];      
-            $newsubscriberUrl = "https://rest.cleverreach.com/v3/groups/".$list_id."/receivers";
+           //Check token expire or not
             $clientId = $accountData['client_id'];
             $clientSecret = $accountData['client_secret'];
-            
-            try{
-                // Get Token
-                $token_url = "https://rest.cleverreach.com/oauth/token.php";
-                //$data = array("grant_type" => "client_credentials");
-                $headers['grant_type'] = 'client_credentials';
-                $headers['client_id'] = $clientId;
-                $headers['client_secret'] = $clientSecret;
+            $token = $accountData['token'];
 
-                //send token generate request
-                $getTokenBody = $client->post($token_url, ['form_params' => $headers]); 
-                if($getTokenBody->getStatusCode() == 200){
-                    $getTokenResponse = json_decode($getTokenBody->getBody(),true); 
-                    $token = $getTokenResponse['access_token'];
-                    $tokenType = $getTokenResponse['token_type'];
-    
-                    try{
-                        // Clever Retch data send api called
-                        $receiver = array(
-                            "email"         => $getData['emailId'],
-                            "registered"    => time(),
-                            "activated"     =>  time(),
-                            "deactivated"   => "0", 
-                            "global_attributes" => array()
-                        );  
-    
-                        if(!empty($getData['firstName'])){
-                            $receiver['global_attributes']["firstname"] = $getData['firstName'];
+            if($accountData['token'] == null || ($accountData['expires_in'] != null && time() > $accountData['expires_in']) ){
+                try{
+                        // Get Token
+                        $token_url = "https://rest.cleverreach.com/oauth/token.php";
+                        //$data = array("grant_type" => "client_credentials");
+                        $headers['grant_type'] = 'client_credentials';
+                        $headers['client_id'] = $clientId;
+                        $headers['client_secret'] = $clientSecret;
+        
+                        //send token generate request
+                        $getTokenBody = $client->post($token_url, ['form_params' => $headers]); 
+                        if($getTokenBody->getStatusCode() == 200){
+                            $getTokenResponse = json_decode($getTokenBody->getBody(),true); 
+                            $token = $getTokenResponse['access_token'];
+                            $expiryTime = $getTokenResponse['expires_in'] + time();
+
+                            $is_insert = FALSE;   
+                            $condition = array(
+                                'id' => $accountData['id']
+                            );
+                            $updateRecord = array(
+                                'token' => $token,                
+                                'expires_in' => $expiryTime                         
+                            );
+                            ManageData(CLEVER_REACH_ACCOUNTS,$condition,$updateRecord,$is_insert);
                         }
-    
-                        if(!empty($getData['lastName'])){
-                            $receiver['global_attributes']["lastname"]  = $getData['lastName'];
-                        }
-    
-                        if(!empty($getData['phone'])){
-                            $receiver['global_attributes']["phone"]     =   @$getData['phone'];
-                        }
-    
-                        if(!empty($getData['gender'])){
-                            $receiver['global_attributes']["gender"]    = $getData['gender'];
-                        }
-    
-                        if(!empty($getData['address'])){
-                            $receiver['global_attributes']["address"]   = $getData['address'];
-                        }
-    
-                        if(!empty($getData['postCode'])){
-                            $receiver['global_attributes']["postcode"]  = $getData['postCode'];
-                        }
-    
-                        if(!empty($getData['city'])){
-                            $receiver['global_attributes']["city"]      = $getData['city'];
-                        }
-    
-                        if(!empty($getData['birthDate'])){
-                            $receiver['global_attributes']["birthdate"]  = @$getData['birthDate'];
-                        }
-    
-                        if(!empty($tagValue)){
-                            $receiver['tags'][]  = $tagValue;
-                        }
-    
-                        $data = json_encode($receiver);
-                        $body = $client->post($newsubscriberUrl, [
-                            'body' => $data, 
-                            'headers' => 
-                                [
-                                    'Authorization' => 'Bearer ' . $token,    
-                                ]
-                        ]);
-                        $responseCode = $body->getStatusCode();
-                        $subscriber = json_decode($body->getBody(),true);
-                        if ($responseCode == 200) {                
-                            $subscriber_id = $subscriber['id'];    
-                            return array("result" => "success","data" => array("id" => $subscriber_id));
-                        }else{
-                            return array("result" => "error","error" => array("msg" => "Invalid Parameters"));
-                        }
-                    }catch(\GuzzleHttp\Exception\ClientException $e){
-                        $response = json_decode($e->getResponse()->getBody()->getContents(),true);
-                        return array("result" => "error","error" => array("msg" => isset($response['error'])? $response['error']['message']:"Invalid Parameters"));            
-                    }
+
+                }catch(\GuzzleHttp\Exception\ClientException $e){
+                    $response = json_decode($e->getResponse()->getBody()->getContents(),true);
+                    return array("result" => "error","error" => array("msg" => isset($response['error'])? $response['error_description']:"Invalid Token"));            
+                }
+            }else{
+                $token = $accountData['token'];
+            }
+
+            try{
+                 //LIST ID 
+                $list_id = $providerData['code'];      
+                $newsubscriberUrl = "https://rest.cleverreach.com/v3/groups/".$list_id."/receivers";
+
+                // Clever Retch data send api called
+                $receiver = array(
+                    "email"         => $getData['emailId'],
+                    "registered"    => time(),
+                    "activated"     =>  time(),
+                    "deactivated"   => "0", 
+                    "global_attributes" => array()
+                );  
+
+                if(!empty($getData['firstName'])){
+                    $receiver['global_attributes']["firstname"] = $getData['firstName'];
+                }
+
+                if(!empty($getData['lastName'])){
+                    $receiver['global_attributes']["lastname"]  = $getData['lastName'];
+                }
+
+                if(!empty($getData['phone'])){
+                    $receiver['global_attributes']["phone"]     =   @$getData['phone'];
+                }
+
+                if(!empty($getData['gender'])){
+                    $receiver['global_attributes']["gender"]    = $getData['gender'];
+                }
+
+                if(!empty($getData['address'])){
+                    $receiver['global_attributes']["address"]   = $getData['address'];
+                }
+
+                if(!empty($getData['postCode'])){
+                    $receiver['global_attributes']["postcode"]  = $getData['postCode'];
+                }
+
+                if(!empty($getData['city'])){
+                    $receiver['global_attributes']["city"]      = $getData['city'];
+                }
+
+                if(!empty($getData['birthDate'])){
+                    $receiver['global_attributes']["birthdate"]  = @$getData['birthDate'];
+                }
+
+                if(!empty($tagValue)){
+                    $receiver['tags'][]  = $tagValue;
+                }
+
+                $data = json_encode($receiver);
+                $body = $client->post($newsubscriberUrl, [
+                    'body' => $data, 
+                    'headers' => 
+                        [
+                            'Authorization' => 'Bearer ' . $token,    
+                        ]
+                ]);
+                $responseCode = $body->getStatusCode();
+                $subscriber = json_decode($body->getBody(),true);
+                if ($responseCode == 200) {                
+                    $subscriber_id = $subscriber['id'];    
+                    return array("result" => "success","data" => array("id" => $subscriber_id));
                 }else{
-                    return array("result" => "error","error" => array("msg" => "Invalid Token"));            
+                    return array("result" => "error","error" => array("msg" => "Invalid Parameters"));
                 }
             }catch(\GuzzleHttp\Exception\ClientException $e){
                 $response = json_decode($e->getResponse()->getBody()->getContents(),true);
-                return array("result" => "error","error" => array("msg" => isset($response['error'])? $response['error_description']:"Invalid Token"));            
+                return array("result" => "error","error" => array("msg" => isset($response['error'])? $response['error']['message']:"Invalid Parameters"));            
             }
-            
         }catch (\GuzzleHttp\Exception\ClientException $e) { 
-                $response = json_decode($e->getResponse()->getBody()->getContents(),true);
-                return array("result" => "error","error" => array("msg" => isset($response['message'])?$response['message']:"Invalid Parameters"));            
+            $response = json_decode($e->getResponse()->getBody()->getContents(),true);
+            return array("result" => "error","error" => array("msg" => isset($response['message'])?$response['message']:"Invalid Parameters"));            
         }
     } 
+
 }
