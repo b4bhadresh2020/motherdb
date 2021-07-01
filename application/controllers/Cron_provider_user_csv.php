@@ -22,6 +22,7 @@ class Cron_provider_user_csv extends CI_Controller
         $this->load->model('mdl_ontraport');
         $this->load->model('mdl_active_campaign');
         $this->load->model('mdl_expert_sender');
+        $this->load->model('mdl_clever_reach');
     }
 
     public function index() {
@@ -220,6 +221,15 @@ class Cron_provider_user_csv extends CI_Controller
                                 $mailProvider = $this->getExpertSenderProviderId($provider["providerList"]);                                
                                 $response = $this->mdl_expert_sender->AddEmailToExpertSenderSubscriberList($userData,$mailProvider);
                                 addRecordInHistoryFromCSV($userData, $mailProvider, EXPERT_SENDER, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
+                            } else if($provider['providerName'] == CLEVER_REACH){
+                                if (@$userData['birthdateDay'] != '' && @$userData['birthdateMonth'] != '' && @$userData['birthdateYear'] != '') {
+                                    $birthDate              = $userData['birthdateYear'] . '-' . $userData['birthdateMonth'] . '-' . $userData['birthdateDay'];
+                                    $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
+                                } 
+                                $responseField = "cleverReachResponse";
+                                $mailProvider = $this->getCleverReachProviderId($provider["providerList"]);                                
+                                $response = $this->mdl_clever_reach->AddEmailToCleverReachSubscriberList($userData,$mailProvider);
+                                addRecordInHistoryFromCSV($userData, $mailProvider, CLEVER_REACH, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
                             }
                             // update status of sended record
                             $is_insert = FALSE;
@@ -495,6 +505,13 @@ class Cron_provider_user_csv extends CI_Controller
             "5" => "153",  // camilla/katariinasmail1.com/FI
             "6" => "154",  // camilla/signesmail1.dk/DK
             "7" => "155",  // camilla/signesmail2.com/NO
+        );
+        return $provider[$providerId];
+    }
+
+    public function getCleverReachProviderId($providerId){
+        $provider = array(
+            "1" => "156",  // Velkomstgaven/DK         
         );
         return $provider[$providerId];
     }

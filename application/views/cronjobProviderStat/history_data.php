@@ -139,6 +139,10 @@
                                                             case 14:                                                                
                                                                 $providerName = 'Expert Sender';
                                                                 $response = $curEntry['expertSenderResponse'];
+                                                                break; 
+                                                            case 15:                                                                
+                                                                $providerName = 'Clever Reach';
+                                                                $response = $curEntry['cleverReachResponse'];
                                                                 break;    
                                                         }
                                                         if($curEntry['status'] == 0){
