@@ -60,7 +60,7 @@ class Mdl_clever_reach extends CI_Model {
                 try{
                         // Get Token
                         $token_url = "https://rest.cleverreach.com/oauth/token.php";
-                        //$data = array("grant_type" => "client_credentials");
+                        
                         $headers['grant_type'] = 'client_credentials';
                         $headers['client_id'] = $clientId;
                         $headers['client_secret'] = $clientSecret;
