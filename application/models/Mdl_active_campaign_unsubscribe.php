@@ -33,13 +33,27 @@ class Mdl_active_campaign_unsubscribe extends CI_Model {
             // //Get subscriber(exist or not) from email history table
             // $emailResponse = getSubscribeDetails($activeCampaignListId,$email);
             // $subscriptionId = $emailResponse['data']['id'];
-            // check user is exist by list & email
+            // check user is exist by list & email (live delivery)
             $responseField	= $providerData['response_field'];
             $liveDeliveryData = getLivedeliveryDetail($email, $responseField);
             $emailresponse = json_decode($liveDeliveryData[$responseField],true);
             $subscriptionId = $emailresponse['data']['id'];
+
+            // check user is exist by list & email (user csv)
+            $condition = array(
+                'emailId' => $email
+            );
+            $is_single = FALSE;
+            $getUserIds = GetAllRecord(USER, $condition, $is_single, array(), array(), array(), 'userId');
+            $getUserIdsStr = implode(',',array_column($getUserIds, 'userId'));
+            if(!empty($getUserIdsStr)) {
+                $emailServiceProvider = $providerData['provider']; 
+                $csvResponseField = getCsvUserResponseField($emailServiceProvider);
+                $csvCronUserData = getCsvUserDetail($getUserIdsStr, $activeCampaignListId, $csvResponseField);
+                $csvEmailresponse = json_decode($csvCronUserData[$csvResponseField],true);
+            }
             
-            if(!empty($liveDeliveryData) && $emailresponse['result'] == 'success'){
+            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success')){
                 $subscriberUrl = $apiUrl . "/api/3/contacts/" . $subscriptionId;
                 $body = $client->get($subscriberUrl,[
                     'headers' => [

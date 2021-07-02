@@ -34,12 +34,26 @@ class Mdl_ontraport_unsubscribe extends CI_Model {
             // //FIND subscriber
             // $userData=array('emailId'=>$email,'providerId'=>$providerData['id'],'status'=>1);
             // $getSingleUser = GetAllRecord(EMAIL_HISTORY_DATA,$userData,$is_single);
-            // check user is exist by list & email
+            // check user is exist by list & email (live delivery)
             $responseField	= $providerData['response_field'];
             $liveDeliveryData = getLivedeliveryDetail($email, $responseField);
             $emailresponse = json_decode($liveDeliveryData[$responseField],true); 
 
-            if(!empty($liveDeliveryData) && $emailresponse['result'] == 'success'){
+            // check user is exist by list & email (user csv)
+            $condition = array(
+                'emailId' => $email
+            );
+            $is_single = FALSE;
+            $getUserIds = GetAllRecord(USER, $condition, $is_single, array(), array(), array(), 'userId');
+            $getUserIdsStr = implode(',',array_column($getUserIds, 'userId'));
+            if(!empty($getUserIdsStr)) {
+                $emailServiceProvider = $providerData['provider']; 
+                $csvResponseField = getCsvUserResponseField($emailServiceProvider);
+                $csvCronUserData = getCsvUserDetail($getUserIdsStr, $ontraportListId, $csvResponseField);
+                $csvEmailresponse = json_decode($csvCronUserData[$csvResponseField],true);
+            }
+
+            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success')){
                 // FIND SUBSCRIBER
                 // $responseData = json_decode($getSingleUser['response']);
                 // $subsciber_id = $responseData->data->id;

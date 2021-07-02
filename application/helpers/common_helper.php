@@ -1988,3 +1988,39 @@ function getProviderDetail($mainProviderId) {
     $getProvider = GetAllRecord(PROVIDERS, $condition, $is_single, array(), array(), array());
     return $getProvider;
 }
+
+function getCsvUserResponseField($emailServiceProvider){
+    $responseField = array(
+        '1' => 'aweberResponse',
+        '2' => 'transmitviaResponse',
+        '4' => 'ongageResponse',
+        '5' => 'sendgridResponse',
+        '6' => 'sendinblueResponse',
+        '7' => 'sendpulseResponse',
+        '8' => 'mailerliteResponse',
+        '9' => 'mailjetResponse',
+        '10' => 'convertkitResponse',
+        '11' => 'marketingPlatformResponse',
+        '12' => 'ontraportResponse',
+        '13' => 'activeCampaignResponse',
+        '14' => 'expertSenderResponse'
+    );
+    return $responseField[$emailServiceProvider];
+}
+
+function getCsvUserDetail($userIds, $listId, $responseField) {
+    $CI = & get_instance();
+    $getDetail = [];
+    if(!empty($userIds)) {
+        $getDetail =  $CI->db->select('csv_cron_user_data.*,csv_file_provider_data.providerName,csv_file_provider_data.providerList,csv_providers_detail.originalProvider')
+            ->from(CSV_CRON_USER_DATA)
+            ->join(CSV_FILE_PROVIDER_DATA,'csv_cron_user_data.providerId = csv_file_provider_data.id', 'left')
+            ->join(CSV_PROVIDERS_DETAIL,'csv_file_provider_data.providerName = csv_providers_detail.providerName AND csv_file_provider_data.providerList = csv_providers_detail.providerList', 'left')
+            ->where('csv_cron_user_data.userId IN ('.$userIds.')')
+            ->where('csv_cron_user_data.status', 1)
+            ->where('csv_providers_detail.originalProvider', $listId)
+            ->like($responseField, 'success')
+            ->get()->row_array();
+    }
+    return $getDetail;
+}

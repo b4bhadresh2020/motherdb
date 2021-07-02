@@ -26,12 +26,26 @@ class Mdl_expert_sender_unsubscribe extends CI_Model {
             $list_id = $providerData['code'];
             $api_key = $expertSenderAccountData['api_key']; 
 
-            // check user is exist by list & email
+            // check user is exist by list & email (live delivery)
             $responseField	= $providerData['response_field'];
             $liveDeliveryData = getLivedeliveryDetail($email, $responseField);
             $emailresponse = json_decode($liveDeliveryData[$responseField],true);
+
+            // check user is exist by list & email (user csv)
+            $condition = array(
+                'emailId' => $email
+            );
+            $is_single = FALSE;
+            $getUserIds = GetAllRecord(USER, $condition, $is_single, array(), array(), array(), 'userId');
+            $getUserIdsStr = implode(',',array_column($getUserIds, 'userId'));
+            if(!empty($getUserIdsStr)) {
+                $emailServiceProvider = $providerData['provider']; 
+                $csvResponseField = getCsvUserResponseField($emailServiceProvider);
+                $csvCronUserData = getCsvUserDetail($getUserIdsStr, $expertSenderListId, $csvResponseField);
+                $csvEmailresponse = json_decode($csvCronUserData[$csvResponseField],true);
+            }
             
-            if(!empty($liveDeliveryData) && $emailresponse['result'] == 'success'){
+            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success')){
                 $subscriberUrl = EXPERT_SENDER_API_PATH . 'Api/Subscribers?apiKey='.$api_key.'&email='.$email.'&option=Full';
                 $ch = curl_init($subscriberUrl);
                 curl_setopt($ch, CURLOPT_URL,$subscriberUrl);
