@@ -889,7 +889,13 @@ function getExpertSenderProviderListName($providerListId){
 
 function getCleverReachListName($providerListId){
     $cleverReachList = array(
-        "1" => "Velkomstgaven/DK"     
+        "1" => "Velkomstgaven/DK",
+        "2" => "Cathrinesmail/CA",
+        "3" => "Cathrinesmail/DK",
+        "4" => "Cathrinesmail/FI",        
+        "5" => "Cathrinesmail/NO",
+        "6" => "Cathrinesmail/NZ",
+        "7" => "Cathrinesmail/SE",     
     );
     return $cleverReachList[$providerListId];
 }
@@ -1114,7 +1120,13 @@ function getLiveRepostExpertSenderProviderID($providerId){
 
 function getLiveRepostCleverReachProviderID($providerId){
     $provider = array(
-        "1" => "156"  // Velkomstgaven/DK
+        "1" => "156",  // Velkomstgaven/DK
+        "2" => "157",  // Cathrinesmail/CA
+        "3" => "158",  // Cathrinesmail/DK
+        "4" => "159",  // Cathrinesmail/FI        
+        "5" => "160",  // Cathrinesmail/NO
+        "6" => "161",  // Cathrinesmail/NZ
+        "7" => "162",  // Cathrinesmail/SE
     );
     return $provider[$providerId];
 }
