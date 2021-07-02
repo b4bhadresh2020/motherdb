@@ -39,23 +39,12 @@ class RepostSchedule extends CI_Controller
                     $getNotSendRecords = GetAllRecordCount(REPOST_SCHEDULE_LIVE_DELIVERY_DATA, $condition, $is_single);
                     $totalErrorRcords = ($getNotSendRecords) ? $getNotSendRecords : 0;
 
-                    $totalAllSendRecord = 0;
-                    if(!empty($getAllRepostScheduleHistory)){
-                        foreach($getAllRepostScheduleHistory as $getRecords){
-                            $totalAllSendRecord = $totalAllSendRecord+$getRecords['totalSend'];
-                        }
-                    }
-
-                    //get all send records
-                    $condition = array("providerId" => $provider['id'],'repostScheduleId' => $curEntry['id']);
+                    //get all exists records
+                    $condition = array("providerId" => $provider['id'],'repostScheduleId' => $curEntry['id'],'status' => 1);
                     $is_single = FALSE;
-                    $getAllRepostScheduleHistory = GetAllRecord(REPOST_SCHEDULE_HISTORY, $condition, $is_single);
-                    $totalAllSendRecord = 0;
-                    if(!empty($getAllRepostScheduleHistory)){
-                        foreach($getAllRepostScheduleHistory as $getRecords){
-                            $totalAllSendRecord = $totalAllSendRecord+$getRecords['totalSend'];
-                        }
-                    }
+                    $getExistRecords = GetAllRecordCount(REPOST_SCHEDULE_LIVE_DELIVERY_DATA, $condition, $is_single);
+                    $totalExistRcords = ($getExistRecords) ? $getExistRecords : 0;
+                    $totalAllSendRecord = ($curEntry['totalRecord']-$totalExistRcords) - $totalErrorRcords;
                     
                     //get today send record
                     $condition = array("providerId" => $provider['id'],'repostScheduleId' => $curEntry['id'],'sendDate' => date('Y-m-d'));
