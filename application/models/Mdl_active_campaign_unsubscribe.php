@@ -37,8 +37,9 @@ class Mdl_active_campaign_unsubscribe extends CI_Model {
             $responseField	= $providerData['response_field'];
             $liveDeliveryData = getLivedeliveryDetail($email, $responseField);
             $emailresponse = json_decode($liveDeliveryData[$responseField],true);
-            $subscriptionId = $emailresponse['data']['id'];
-
+            if(!empty($liveDeliveryData)) {
+                $subscriptionId = $emailresponse['data']['id'];
+            }
             // check user is exist by list & email (user csv)
             $condition = array(
                 'emailId' => $email
@@ -51,6 +52,9 @@ class Mdl_active_campaign_unsubscribe extends CI_Model {
                 $csvResponseField = getCsvUserResponseField($emailServiceProvider);
                 $csvCronUserData = getCsvUserDetail($getUserIdsStr, $activeCampaignListId, $csvResponseField);
                 $csvEmailresponse = json_decode($csvCronUserData[$csvResponseField],true);
+            }
+            if(!empty($csvCronUserData)) {
+                $subscriptionId = $csvEmailresponse['data']['id'];
             }
             
             if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success')){
