@@ -57,7 +57,12 @@ class Mdl_ontraport_unsubscribe extends CI_Model {
                 // FIND SUBSCRIBER
                 // $responseData = json_decode($getSingleUser['response']);
                 // $subsciber_id = $responseData->data->id;
-                $subsciber_id = $emailresponse['data']['id'];
+                if(!empty($liveDeliveryData)) {
+                    $subsciber_id = $emailresponse['data']['id'];
+                }
+                if(!empty($csvCronUserData)) {
+                    $subsciber_id = $csvEmailresponse['data']['id'];
+                }
                 $details = [
                     'objectID' => 0,
                     'remove_list' => [$list_id],
