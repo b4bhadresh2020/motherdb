@@ -44,6 +44,8 @@
                         $providerListName = getActiveCampaignProviderListName($providerInfo['providerList']);
                     }else if($providerInfo['providerName'] == EXPERT_SENDER){
                         $providerListName = getExpertSenderProviderListName($providerInfo['providerList']);
+                    }else if($providerInfo['providerName'] == CLEVER_REACH){
+                        $providerListName = getExpertCleverReachListName($providerInfo['providerList']);
                     }
                     ?> 
                     <tr>
