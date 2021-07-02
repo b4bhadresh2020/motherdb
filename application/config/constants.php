@@ -105,6 +105,7 @@ define("CSV_FILE_DATA"					,		"csv_file_data");
 define("CSV_CRON_USER_DATA"				,		"csv_cron_user_data");
 define("CSV_FILE_PROVIDER_DATA"			,		"csv_file_provider_data");
 define("CSV_FILE_PROVIDER_HISTORY"		,		"csv_file_provider_history");
+define("CSV_PROVIDERS_DETAIL"			,		"csv_providers_detail");
 define("CRON_STATUS"					,		"cron_status");
 define("LOAN_MASTER"					,		"loan_master");
 define("GROUP_MASTER"					,		"group_master");

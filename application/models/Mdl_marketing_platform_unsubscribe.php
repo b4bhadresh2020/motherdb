@@ -30,12 +30,26 @@ class Mdl_marketing_platform_unsubscribe extends CI_Model {
             //LIST ID 
             $list_id = $providerData['code'];
 
-            // check user is exist by list & email
+            // check user is exist by list & email (live delivery)
             $responseField	= $providerData['response_field'];
             $liveDeliveryData = getLivedeliveryDetail($email, $responseField);
             $emailresponse = json_decode($liveDeliveryData[$responseField],true); 
 
-            if(!empty($liveDeliveryData) && $emailresponse['result'] == 'success'){
+            // check user is exist by list & email (user csv)
+            $condition = array(
+                'emailId' => $email
+            );
+            $is_single = FALSE;
+            $getUserIds = GetAllRecord(USER, $condition, $is_single, array(), array(), array(), 'userId');
+            $getUserIdsStr = implode(',',array_column($getUserIds, 'userId'));
+            if(!empty($getUserIdsStr)) {
+                $emailServiceProvider = $providerData['provider']; 
+                $csvResponseField = getCsvUserResponseField($emailServiceProvider);
+                $csvCronUserData = getCsvUserDetail($getUserIdsStr, $marketingPlatformListId, $csvResponseField);
+                $csvEmailresponse = json_decode($csvCronUserData[$csvResponseField],true);
+            }
+
+            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success')){
                 //LIST ID 
                 $subscriberUrl = "https://api.mailmailmail.net/v1.1/Subscribers/GetSubscriberDetails?Apiusername=".$apiUsername."&Apitoken=".$apiToken."&listid=".$list_id."&emailaddress=".$email."";
                 

@@ -33,10 +33,25 @@ class Mdl_mailjet_unsubscribe extends CI_Model {
             //LIST ID 
             $list_id = $providerData['code'];
 
-            // check user is exist by list & email
+            // check user is exist by list & email (live delivery)
             $responseField	= $providerData['response_field'];
             $liveDeliveryData = getLivedeliveryDetail($email, $responseField);
             $emailresponse = json_decode($liveDeliveryData[$responseField],true); 
+
+            // check user is exist by list & email (user csv)
+            $condition = array(
+                'emailId' => $email
+            );
+            $is_single = FALSE;
+            $getUserIds = GetAllRecord(USER, $condition, $is_single, array(), array(), array(), 'userId');
+            $getUserIdsStr = implode(',',array_column($getUserIds, 'userId'));
+            if(!empty($getUserIdsStr)) {
+                $emailServiceProvider = $providerData['provider']; 
+                $csvResponseField = getCsvUserResponseField($emailServiceProvider);
+                $csvCronUserData = getCsvUserDetail($getUserIdsStr, $mailjetListId, $csvResponseField);
+                $csvEmailresponse = json_decode($csvCronUserData[$csvResponseField],true);
+            }
+
             // check user is exist
             // $condition = array('providerId' => $mailjetListId ,'emailId' => $email, 'status'=> '1');
             // $is_single = TRUE;
@@ -56,7 +71,7 @@ class Mdl_mailjet_unsubscribe extends CI_Model {
             // $getSubscriber = json_decode($getContactBody->getBody(),true);
             // $getStatusCode = $getContactBody->getStatusCode();
             // if(!empty($getSubscriber) && $getStatusCode == 200){
-            if(!empty($liveDeliveryData) && $emailresponse['result'] == 'success'){
+            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success')){
                 $unsubscriberUrl = "https://api.mailjet.com/v3/REST/contact/managemanycontacts";
                 $body = [
                     'Contacts' => [
