@@ -120,6 +120,8 @@ class Mdl_mailjet_unsubscribe extends CI_Model {
                     $statusCode = $e->getCode();
                     if($statusCode == 404) {
                         return array("result" => "error","msg" => "Subscriber not found");
+                    } else if($statusCode == 401) {
+                        return array("result" => "error","msg" => "Unauthorized");
                     } else {
                         $errorMsg = $e->getMessage();
                         if(strpos($errorMsg, "OpenSSL SSL_connect") !== false){
