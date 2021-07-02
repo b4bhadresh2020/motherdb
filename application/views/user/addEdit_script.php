@@ -567,7 +567,13 @@
             providerList +="<option value='6'>camilla/signesmail1.dk/DK</option>";       
             providerList +="<option value='7'>camilla/signesmail2.com/NO</option>";       
         } else if(providerId == 15){
-            providerList +="<option value='1'>Velkomstgaven/DK</option>";      
+            providerList +="<option value='1'>Velkomstgaven/DK</option>";
+            providerList +="<option value='2'>Cathrinesmail/CA</option>";
+            providerList +="<option value='3'>Cathrinesmail/DK</option>";
+            providerList +="<option value='4'>Cathrinesmail/FI</option>";
+            providerList +="<option value='5'>Cathrinesmail/NO</option>";
+            providerList +="<option value='6'>Cathrinesmail/NZ</option>";
+            providerList +="<option value='7'>Cathrinesmail/SE</option>";       
         } else{
             providerList +="<option value='0'>Select Provider List</option>";
         }

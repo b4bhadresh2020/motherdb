@@ -511,7 +511,13 @@ class Cron_provider_user_csv extends CI_Controller
 
     public function getCleverReachProviderId($providerId){
         $provider = array(
-            "1" => "156",  // Velkomstgaven/DK         
+            "1" => "156",  // Velkomstgaven/DK 
+            "2" => "157",  // Cathrinesmail/CA
+            "3" => "158",  // Cathrinesmail/DK
+            "4" => "159",  // Cathrinesmail/FI        
+            "5" => "160",  // Cathrinesmail/NO
+            "6" => "161",  // Cathrinesmail/NZ
+            "7" => "162",  // Cathrinesmail/SE
         );
         return $provider[$providerId];
     }
