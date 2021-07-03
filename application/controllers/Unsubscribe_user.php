@@ -172,11 +172,28 @@ class Unsubscribe_user extends CI_Controller
                 }
             }
 
-            // GET COUNTRY OF USER
-            $getProviderDetail = getProviderDetail($mainProviderId);
-            $responseField = $getProviderDetail['response_field'];
-            $liveDeliveryData = getLivedeliveryDetail($email, $responseField);
-            $userCountry = $liveDeliveryData['country'];
+            // // GET COUNTRY OF USER (LIVE DELIVERY)
+            // $getProviderDetail = getProviderDetail($mainProviderId);
+            // $responseField = $getProviderDetail['response_field'];
+            // $liveDeliveryData = getLivedeliveryDetail($email, $responseField);
+            // $userCountry = $liveDeliveryData['country'];
+
+            // GET COUNTRY OF USER (LIVE DELIVERY)
+            $country = '';
+            $condition       = array('emailId' => $email);
+            $is_single       = true;
+            $liveDeliveryData    = GetAllRecord(LIVE_DELIVERY_DATA, $condition, $is_single,[],[],[],'country');
+            if(!empty($liveDeliveryData)) {
+                $country = $liveDeliveryData['country'];
+            }
+
+            // GET COUNTRY OF USER (USER(CSV))
+            $condition       = array('emailId' => $email);
+            $is_single       = true;
+            $csvUserData    = GetAllRecord(USER, $condition, $is_single,[],[],[],'country');
+            if(!empty($csvUserData)) {
+                $country = $csvUserData['country'];
+            }
 
             foreach($otherProviders as $provider => $other){
                 if($settingsData[$other] == 1 ) { 
@@ -185,8 +202,10 @@ class Unsubscribe_user extends CI_Controller
                         //LIST ID EMPTY GET COUNTRY WISE LIST  
                         $listCondition  = array(
                             'provider' => $provider,
-                            'country' => $userCountry
-                        );                        
+                        );  
+                        if(!empty($country)) {
+                            $listCondition['country'] = $country;
+                        }                      
                         if($mainProvider == MAILJET) {
                             $listCondition['id !='] = $mainProviderId;
                         }
@@ -250,8 +269,10 @@ class Unsubscribe_user extends CI_Controller
                         //LIST ID EMPTY GET COUNTRY WISE LIST  
                         $listCondition  = array(
                             'provider' => $provider,
-                            'country' => $userCountry
-                        );
+                        );  
+                        if(!empty($country)) {
+                            $listCondition['country'] = $country;
+                        } 
                         if($mainProvider == MARKETING_PLATFORM) {
                             $listCondition['id !='] = $mainProviderId;
                         }
@@ -316,8 +337,10 @@ class Unsubscribe_user extends CI_Controller
                         //LIST ID EMPTY GET COUNTRY WISE LIST  
                         $listCondition  = array(
                             'provider' => $provider,
-                            'country' => $userCountry
-                        );
+                        );  
+                        if(!empty($country)) {
+                            $listCondition['country'] = $country;
+                        }
                         if($mainProvider == ONTRAPORT) {
                             $listCondition['id !='] = $mainProviderId;
                         }
@@ -380,8 +403,10 @@ class Unsubscribe_user extends CI_Controller
                         //LIST ID EMPTY GET COUNTRY WISE LIST  
                         $listCondition  = array(
                             'provider' => $provider,
-                            'country' => $userCountry
-                        );
+                        );  
+                        if(!empty($country)) {
+                            $listCondition['country'] = $country;
+                        }
                         if($mainProvider == ACTIVE_CAMPAIGN) {
                             $listCondition['id !='] = $mainProviderId;
                         }
