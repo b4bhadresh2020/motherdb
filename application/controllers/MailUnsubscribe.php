@@ -97,6 +97,23 @@ class MailUnsubscribe extends CI_Controller
                 $providerID[] = $unsubscriber['provider_id'];
             }
         }
+
+        // GET COUNTRY OF USER (LIVE DELIVERY)
+        $condition       = array('emailId' => $email);
+        $is_single       = true;
+        $liveDeliveryData    = GetAllRecord(LIVE_DELIVERY_DATA, $condition, $is_single,[],[],[],'country');
+        if(empty($country) && !empty($liveDeliveryData)) {
+            $country = $liveDeliveryData['country'];
+        }
+
+        // GET COUNTRY OF USER (USER(CSV))
+        $condition       = array('emailId' => $email);
+        $is_single       = true;
+        $csvUserData    = GetAllRecord(USER, $condition, $is_single,[],[],[],'country');
+        if(empty($country) && !empty($csvUserData)) {
+            $country = $csvUserData['country'];
+        }
+       
         foreach($providers as $provider){
             $list = '';
             if($provider == AWEBER){
@@ -135,7 +152,7 @@ class MailUnsubscribe extends CI_Controller
                                 "status"      => 1, // success
                                 "response"    => $response["data"]["updated_at"]
                             ];
-                            $successUnsubscribe[] = $providerData['listname'];
+                            $successUnsubscribe[] = $providerData['listname'].'(Aweber)';
                         }else{
                             $data = [
                                 "provider_id" => $listID,
@@ -144,7 +161,7 @@ class MailUnsubscribe extends CI_Controller
                                 "status"      => 2, // error
                                 "response"    => $response["msg"]
                             ];
-                            $failUnsubscribe[] = $providerData['listname'];
+                            $failUnsubscribe[] = $providerData['listname'].'(Aweber)';
                         }
                         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
@@ -156,7 +173,7 @@ class MailUnsubscribe extends CI_Controller
                             "status"      => 3, // already unsubscribed
                             "response"    => "Already unsubscribed"
                         ];
-                        $alreadyUnsubscribe[] = $providerData['listname'];
+                        $alreadyUnsubscribe[] = $providerData['listname'].'(Aweber)';
                         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }
@@ -199,7 +216,7 @@ class MailUnsubscribe extends CI_Controller
                                 "status"      => 1, // success
                                 "response"    => $response["data"]["updated_at"]
                             ];
-                            $successUnsubscribe[] = $providerData['listname'];
+                            $successUnsubscribe[] = $providerData['listname'].'(Mailerlite)';
                         }else{
                             $data = [
                                 "provider_id" => $listID,
@@ -208,7 +225,7 @@ class MailUnsubscribe extends CI_Controller
                                 "status"      => 2, // error
                                 "response"    => $response["msg"]
                             ];
-                            $failUnsubscribe[] = $providerData['listname'];
+                            $failUnsubscribe[] = $providerData['listname'].'(Mailerlite)';
                         }
                         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
@@ -220,7 +237,7 @@ class MailUnsubscribe extends CI_Controller
                             "status"      => 3, // already unsubscribed
                             "response"    => "Already unsubscribed"
                         ];
-                        $alreadyUnsubscribe[] = $providerData['listname'];
+                        $alreadyUnsubscribe[] = $providerData['listname'].'(Mailerlite)';
                         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }
@@ -262,7 +279,7 @@ class MailUnsubscribe extends CI_Controller
                                 "status"      => 1, // success
                                 "response"    => $response["data"]["updated_at"]
                             ];
-                            $successUnsubscribe[] = $providerData['listname'];
+                            $successUnsubscribe[] = $providerData['listname'].'(Mailjet)';
                         }else{
                             $data = [
                                 "provider_id" => $listID,
@@ -271,7 +288,7 @@ class MailUnsubscribe extends CI_Controller
                                 "status"      => 2, // error
                                 "response"    => $response["msg"]
                             ];
-                            $failUnsubscribe[] = $providerData['listname'];
+                            $failUnsubscribe[] = $providerData['listname'].'(Mailjet)';
                         }
                         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
@@ -283,7 +300,7 @@ class MailUnsubscribe extends CI_Controller
                             "status"      => 3, // already unsubscribed
                             "response"    => "Already unsubscribed"
                         ];
-                        $alreadyUnsubscribe[] = $providerData['listname'];
+                        $alreadyUnsubscribe[] = $providerData['listname'].'(Mailjet)';
                         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }
@@ -326,7 +343,7 @@ class MailUnsubscribe extends CI_Controller
                                 "status"      => 1, // success
                                 "response"    => $response["data"]["updated_at"]
                             ];
-                            $successUnsubscribe[] = $providerData['listname'];
+                            $successUnsubscribe[] = $providerData['listname'].'(Convertkit)';
                         }else{
                             $data = [
                                 "provider_id" => $listID,
@@ -335,7 +352,7 @@ class MailUnsubscribe extends CI_Controller
                                 "status"      => 2, // error
                                 "response"    => $response["msg"]
                             ];
-                            $failUnsubscribe[] = $providerData['listname'];
+                            $failUnsubscribe[] = $providerData['listname'].'(Convertkit)';
                         }
                         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
@@ -347,7 +364,7 @@ class MailUnsubscribe extends CI_Controller
                             "status"      => 3, // already unsubscribed
                             "response"    => "Already unsubscribed"
                         ];
-                        $alreadyUnsubscribe[] = $providerData['listname'];
+                        $alreadyUnsubscribe[] = $providerData['listname'].'(Convertkit)';
                         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }
@@ -391,7 +408,7 @@ class MailUnsubscribe extends CI_Controller
                                 "status"      => 1, // success
                                 "response"    => $response["data"]["updated_at"]
                             ];
-                            $successUnsubscribe[] = $providerData['listname'];
+                            $successUnsubscribe[] = $providerData['listname'].'(Marketing Platform)';
                         }else{
                             $data = [
                                 "provider_id" => $listID,
@@ -400,7 +417,7 @@ class MailUnsubscribe extends CI_Controller
                                 "status"      => 2, // error
                                 "response"    => $response["msg"]
                             ];
-                            $failUnsubscribe[] = $providerData['listname'];
+                            $failUnsubscribe[] = $providerData['listname'].'(Marketing Platform)';
                         }
                         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
@@ -412,7 +429,7 @@ class MailUnsubscribe extends CI_Controller
                             "status"      => 3, // already unsubscribed
                             "response"    => "Already unsubscribed"
                         ];
-                        $alreadyUnsubscribe[] = $providerData['listname'];
+                        $alreadyUnsubscribe[] = $providerData['listname'].'(Marketing Platform)';
                         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }
@@ -454,7 +471,7 @@ class MailUnsubscribe extends CI_Controller
                                 "status"      => 1, // success
                                 "response"    => $response["data"]["updated_at"]
                             ];
-                            $successUnsubscribe[] = $providerData['listname'];
+                            $successUnsubscribe[] = $providerData['listname'].'(Ontraport)';
                         }else{
                             $data = [
                                 "provider_id" => $listID,
@@ -463,7 +480,7 @@ class MailUnsubscribe extends CI_Controller
                                 "status"      => 2, // error
                                 "response"    => $response["msg"]
                             ];
-                            $failUnsubscribe[] = $providerData['listname'];
+                            $failUnsubscribe[] = $providerData['listname'].'(Ontraport)';
                         }
                         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
@@ -475,7 +492,7 @@ class MailUnsubscribe extends CI_Controller
                             "status"      => 3, // already unsubscribed
                             "response"    => "Already unsubscribed"
                         ];
-                        $alreadyUnsubscribe[] = $providerData['listname'];
+                        $alreadyUnsubscribe[] = $providerData['listname'].'(Ontraport)';
                         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }
@@ -518,7 +535,7 @@ class MailUnsubscribe extends CI_Controller
                                 "status"      => 1, // success
                                 "response"    => $response["data"]["updated_at"]
                             ];
-                            $successUnsubscribe[] = $providerData['listname'];
+                            $successUnsubscribe[] = $providerData['listname'].'(Active Campaign)';
                         }else{
                             $data = [
                                 "provider_id" => $listID,
@@ -527,7 +544,7 @@ class MailUnsubscribe extends CI_Controller
                                 "status"      => 2, // error
                                 "response"    => $response["msg"]
                             ];
-                            $failUnsubscribe[] = $providerData['listname'];
+                            $failUnsubscribe[] = $providerData['listname'].'(Active Campaign)';
                         }
                         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
@@ -539,7 +556,7 @@ class MailUnsubscribe extends CI_Controller
                             "status"      => 3, // already unsubscribed
                             "response"    => "Already unsubscribed"
                         ];
-                        $alreadyUnsubscribe[] = $providerData['listname'];
+                        $alreadyUnsubscribe[] = $providerData['listname'].'(Active Campaign)';
                         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }
@@ -582,7 +599,7 @@ class MailUnsubscribe extends CI_Controller
                                 "status"      => 1, // success
                                 "response"    => $response["data"]["updated_at"]
                             ];
-                            $successUnsubscribe[] = $providerData['listname'];
+                            $successUnsubscribe[] = $providerData['listname'].'(Expert Sender)';
                         }else{
                             $data = [
                                 "provider_id" => $listID,
@@ -591,7 +608,7 @@ class MailUnsubscribe extends CI_Controller
                                 "status"      => 2, // error
                                 "response"    => $response["msg"]
                             ];
-                            $failUnsubscribe[] = $providerData['listname'];
+                            $failUnsubscribe[] = $providerData['listname'].'(Expert Sender)';
                         }
                         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
@@ -603,7 +620,7 @@ class MailUnsubscribe extends CI_Controller
                             "status"      => 3, // already unsubscribed
                             "response"    => "Already unsubscribed"
                         ];
-                        $alreadyUnsubscribe[] = $providerData['listname'];
+                        $alreadyUnsubscribe[] = $providerData['listname'].'(Expert Sender)';
                         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }
