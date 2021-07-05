@@ -557,7 +557,14 @@
                 providerList +="<option value='5'>Freecasinodeal1/ca</option>";
                 providerList +="<option value='6'>Freecasinodeal1/nz</option>";               
         } else if(providerId == 13){
-                providerList +="<option value='1'>Velkomstgaven/NOR</option>";                             
+                providerList +="<option value='1'>Velkomstgaven/NOR</option>";   
+                providerList +="<option value='2'>GratisPresent/SE</option>";       
+                providerList +="<option value='3'>Frejasmail/SE</option>";
+                providerList +="<option value='4'>Unelmalaina/FI</option>";
+                providerList +="<option value='5'>Signesmail/NOR</option>";
+                providerList +="<option value='6'>Katariinasmail/FI</option>";
+                providerList +="<option value='7'>Velkomstgaven/DK</option>";
+                providerList +="<option value='8'>Signesmail/DK</option>";                          
         } else if(providerId == 14){
             providerList +="<option value='1'>camilla/abbiesmail2.com/CA</option>";       
             providerList +="<option value='2'>camilla/ashleysmail1.com/NZ</option>";       
