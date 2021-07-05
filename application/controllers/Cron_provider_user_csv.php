@@ -492,6 +492,13 @@ class Cron_provider_user_csv extends CI_Controller
     public function getActiveCampaignProviderId($providerId){
         $provider = array(
             "1" => "147",  // Velkomstgaven/NOR
+            "2" => "163",  // GratisPresent/SE
+            "3" => "164",  // Frejasmail/SE
+            "4" => "165",  // Unelmalaina/FI
+            "5" => "166",  // Signesmail/NOR
+            "6" => "167",  // Katariinasmail/FI
+            "7" => "168",  // Velkomstgaven/DK
+            "8" => "169"   // Signesmail/DK
         );
         return $provider[$providerId];
     }

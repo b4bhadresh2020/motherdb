@@ -869,7 +869,14 @@ function getOntraportProviderListName($providerListId){
 
 function getActiveCampaignProviderListName($providerListId){
     $activeCampaignList = array(
-        "1" => "Velkomstgaven/NOR"        
+        "1" => "Velkomstgaven/NOR",
+        "2" => "GratisPresent/SE",
+        "3" => "Frejasmail/SE",
+        "4" => "Unelmalaina/FI",
+        "5" => "Signesmail/NOR",
+        "6" => "Katariinasmail/FI",
+        "7" => "Velkomstgaven/DK",
+        "8" => "Signesmail/DK"       
     );
     return $activeCampaignList[$providerListId];
 }
@@ -1101,6 +1108,13 @@ function getLiveRepostOntraportProviderID($providerId){
 function getLiveRepostActiveCampaignProviderID($providerId){
     $provider = array(
         "1" => "147",  // Velkomstgaven/NOR
+        "2" => "163",  // GratisPresent/SE
+        "3" => "164",  // Frejasmail/SE
+        "4" => "165",  // Unelmalaina/FI
+        "5" => "166",  // Signesmail/NOR
+        "6" => "167",  // Katariinasmail/FI
+        "7" => "168",  // Velkomstgaven/DK
+        "8" => "169"   // Signesmail/DK
     );
     return $provider[$providerId];
 }
