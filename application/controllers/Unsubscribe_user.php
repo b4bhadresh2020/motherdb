@@ -202,6 +202,7 @@ class Unsubscribe_user extends CI_Controller
                         //LIST ID EMPTY GET COUNTRY WISE LIST  
                         $listCondition  = array(
                             'provider' => $provider,
+                            'mailjet_accounts.status' => 1
                         );  
                         if(!empty($country)) {
                             $listCondition['country'] = $country;
@@ -211,7 +212,8 @@ class Unsubscribe_user extends CI_Controller
                         }
 
                         $is_single             = false;
-                        $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
+                        // $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
+                        $getListIDByCountry = JoinData(PROVIDERS,$listCondition,MAILJET_ACCOUNTS,"aweber_account","id","left",$is_single,array(),"providers.id","");
 
                         $list = array_column($getListIDByCountry,'id');
                         foreach ($list as $listID) {   

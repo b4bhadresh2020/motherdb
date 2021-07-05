@@ -64,11 +64,26 @@ class MailUnsubscribe extends CI_Controller
 
     function getProviderList(){
         $provider = $this->input->post("provider");
+        $espAccountTable = getAccountTableName($provider);
         $country  = $this->input->post("country");
-        $condition = array("provider" => $provider);
-        $is_in = array("country" => $country);
-        $is_single = FALSE;
-        $liveDeliveries = GetAllRecordIn(PROVIDERS, $condition, $is_single, array(), array(), array(),$is_in,'id,listname,displayname');
+
+        // $condition = array("provider" => $provider);
+        // $is_in = array("country" => $country);
+        // $is_single = FALSE;
+        // $liveDeliveries = GetAllRecordIn(PROVIDERS, $condition, $is_single, array(), array(), array(),$is_in,'id,listname,displayname');
+
+        $this->db->select('providers.id,providers.listname,providers.displayname');
+        $this->db->from(PROVIDERS);
+        if(!empty($espAccountTable)) {
+            $this->db->join($espAccountTable,'providers.aweber_account='.$espAccountTable.'.id','left');
+            $this->db->where($espAccountTable.'.status', 1);
+        }
+        $this->db->where('providers.provider', $provider);
+        if(!empty($country)) {
+            $this->db->where_in('providers.country', $country);
+        }
+        $liveDeliveries = $this->db->get()->result_array();
+
         echo json_encode($liveDeliveries);
     }
 
@@ -248,16 +263,18 @@ class MailUnsubscribe extends CI_Controller
                 $list = $this->input->post('list');
                 if(empty($list)){
                     $listCondition  = array(
-                        'provider' => $provider
+                        'provider' => $provider,
+                        'mailjet_accounts.status' => 1
                     );
                     if(!empty($country)) {
                         $listCondition['country'] = $country;
                     }
                     $is_single             = false;
-                    $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
+                    // $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
+                    $getListIDByCountry = JoinData(PROVIDERS,$listCondition,MAILJET_ACCOUNTS,"aweber_account","id","left",$is_single,array(),"providers.id","");
                     $list = array_column($getListIDByCountry,'id');
                 }
-               
+                
                 foreach ($list as $listID) {   
                     
                     // fetch mail provider data from providers table
