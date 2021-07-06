@@ -1085,7 +1085,7 @@ function getLiveRepostMailjetProviderID($providerId){
     $provider = array(
         "1" => "119",  // Velkomstgaven/DK
         "2" => "120",  // Gratispresent/SE
-        // "3" => "127"  // Velkomstgaven/NOR
+        "3" => "127"  // Velkomstgaven/NOR
     );
     return $provider[$providerId];
 }
@@ -2064,6 +2064,17 @@ function getLivedeliveryDetail($email,$responseField) {
         return $getDetail;
 }
 
+function getAlreadySubscribeLivedeliveryDetail($email,$responseField) {
+    $CI = & get_instance();
+    $getDetail = $CI->db->select('emailId,country,'.$responseField)
+            ->from(LIVE_DELIVERY_DATA)
+            ->where('emailId', $email)
+            ->like($responseField, 'Subscriber already subscribed')
+            ->get()->row_array();
+    
+        return $getDetail;
+}
+
 function getProviderDetail($mainProviderId) {
     $CI = & get_instance();
     $condition = array(
@@ -2106,6 +2117,23 @@ function getCsvUserDetail($userIds, $listId, $responseField) {
             ->where('csv_cron_user_data.status', 1)
             ->where('csv_providers_detail.originalProvider', $listId)
             ->like($responseField, 'success')
+            ->get()->row_array();
+    }
+    return $getDetail;
+}
+
+function getAlreadySubscribeCsvUserDetail($userIds, $listId, $responseField) {
+    $CI = & get_instance();
+    $getDetail = [];
+    if(!empty($userIds)) {
+        $getDetail =  $CI->db->select('csv_cron_user_data.*,csv_file_provider_data.providerName,csv_file_provider_data.providerList,csv_providers_detail.originalProvider')
+            ->from(CSV_CRON_USER_DATA)
+            ->join(CSV_FILE_PROVIDER_DATA,'csv_cron_user_data.providerId = csv_file_provider_data.id', 'left')
+            ->join(CSV_PROVIDERS_DETAIL,'csv_file_provider_data.providerName = csv_providers_detail.providerName AND csv_file_provider_data.providerList = csv_providers_detail.providerList', 'left')
+            ->where('csv_cron_user_data.userId IN ('.$userIds.')')
+            ->where('csv_cron_user_data.status', 1)
+            ->where('csv_providers_detail.originalProvider', $listId)
+            ->like($responseField, 'Subscriber already subscribed')
             ->get()->row_array();
     }
     return $getDetail;

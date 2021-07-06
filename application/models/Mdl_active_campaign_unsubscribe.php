@@ -33,6 +33,7 @@ class Mdl_active_campaign_unsubscribe extends CI_Model {
             // //Get subscriber(exist or not) from email history table
             // $emailResponse = getSubscribeDetails($activeCampaignListId,$email);
             // $subscriptionId = $emailResponse['data']['id'];
+            
             // check user is exist by list & email (live delivery)
             $responseField	= $providerData['response_field'];
             $liveDeliveryData = getLivedeliveryDetail($email, $responseField);
@@ -56,8 +57,32 @@ class Mdl_active_campaign_unsubscribe extends CI_Model {
             if(!empty($csvCronUserData)) {
                 $subscriptionId = $csvEmailresponse['data']['id'];
             }
+
+            // already unsubscribe user unsub using email
+            if(empty($emailresponse) && empty($csvCronUserData)) {
+                // check user is exist by list & email (live delivery)
+                $alreadyLiveDeliveryData = getAlreadySubscribeLivedeliveryDetail($email, $responseField);
+                $alreadyEmailresponse = json_decode($alreadyLiveDeliveryData[$responseField],true);
+                
+                // check user is exist by list & email (user csv)
+                if(!empty($getUserIdsStr)) {                   
+                    $csvCronUserData = getAlreadySubscribeCsvUserDetail($getUserIdsStr, $activeCampaignListId, $csvResponseField);
+                    $alreadyCsvEmailresponse = json_decode($csvCronUserData[$csvResponseField],true);
+                }               
+            }
+
+            if(!empty($alreadyEmailresponse) || (!empty($alreadyCsvEmailresponse))) {
+                $getsubscriberUrl = $apiUrl . "/api/3/contacts/?email=" . $email;
+                $body = $client->get($getsubscriberUrl,[
+                    'headers' => [
+                        'Api-Token' => $apiKey
+                    ]
+                ]);
+                $getsubscriber = json_decode($body->getBody(),true);
+                $subscriptionId = $getsubscriber['contacts'][0]['id'];
+            }
             
-            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success')){
+            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success') || ((!empty($alreadyEmailresponse)) || (!empty($alreadyCsvEmailresponse)))){
                 $subscriberUrl = $apiUrl . "/api/3/contacts/" . $subscriptionId;
                 $body = $client->get($subscriberUrl,[
                     'headers' => [
