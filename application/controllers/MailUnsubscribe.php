@@ -64,11 +64,26 @@ class MailUnsubscribe extends CI_Controller
 
     function getProviderList(){
         $provider = $this->input->post("provider");
+        $espAccountTable = getAccountTableName($provider);
         $country  = $this->input->post("country");
-        $condition = array("provider" => $provider);
-        $is_in = array("country" => $country);
-        $is_single = FALSE;
-        $liveDeliveries = GetAllRecordIn(PROVIDERS, $condition, $is_single, array(), array(), array(),$is_in,'id,listname,displayname');
+
+        // $condition = array("provider" => $provider);
+        // $is_in = array("country" => $country);
+        // $is_single = FALSE;
+        // $liveDeliveries = GetAllRecordIn(PROVIDERS, $condition, $is_single, array(), array(), array(),$is_in,'id,listname,displayname');
+
+        $this->db->select('providers.id,providers.listname,providers.displayname');
+        $this->db->from(PROVIDERS);
+        if(!empty($espAccountTable)) {
+            $this->db->join($espAccountTable,'providers.aweber_account='.$espAccountTable.'.id','left');
+            $this->db->where($espAccountTable.'.status', 1);
+        }
+        $this->db->where('providers.provider', $provider);
+        if(!empty($country)) {
+            $this->db->where_in('providers.country', $country);
+        }
+        $liveDeliveries = $this->db->get()->result_array();
+
         echo json_encode($liveDeliveries);
     }
 
@@ -248,16 +263,18 @@ class MailUnsubscribe extends CI_Controller
                 $list = $this->input->post('list');
                 if(empty($list)){
                     $listCondition  = array(
-                        'provider' => $provider
+                        'provider' => $provider,
+                        'mailjet_accounts.status' => 1
                     );
                     if(!empty($country)) {
                         $listCondition['country'] = $country;
                     }
                     $is_single             = false;
-                    $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
+                    // $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
+                    $getListIDByCountry = JoinData(PROVIDERS,$listCondition,MAILJET_ACCOUNTS,"aweber_account","id","left",$is_single,array(),"providers.id","");
                     $list = array_column($getListIDByCountry,'id');
                 }
-               
+                
                 foreach ($list as $listID) {   
                     
                     // fetch mail provider data from providers table
@@ -624,6 +641,72 @@ class MailUnsubscribe extends CI_Controller
                         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }
+                }               
+            } else if($provider == CLEVER_REACH){
+                $this->load->model('mdl_clever_reach_unsubscribe');
+                //LIST ID EMPTY GET COUNTRY WISE LIST
+                $list = $this->input->post('list');
+                if(empty($list)){
+                    $listCondition  = array(
+                        'provider' => $provider,
+                        'clever_reach_accounts.status' => 1
+                    );
+                    if(!empty($country)) {
+                        $listCondition['country'] = $country;
+                    }
+                    $is_single             = false;
+                    // $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
+                    $getListIDByCountry = JoinData(PROVIDERS,$listCondition,CLEVER_REACH_ACCOUNTS,"aweber_account","id","left",$is_single,array(),"providers.id","");
+                    $list = array_column($getListIDByCountry,'id');
+                }
+                
+                foreach ($list as $listID) {   
+                    
+                    // fetch mail provider data from providers table
+                    $providerCondition   = array('id' => $listID);
+                    $is_single           = true;
+                    $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
+
+                    // CHECK EMAIL ALREADY UNSUBSCRIBE
+                    if(!in_array($listID,$providerID)){
+                        // SEND DATA FOR UNSUBSCRIBE
+                        $response = $this->mdl_clever_reach_unsubscribe->makeUnsubscribe($email,$listID);
+
+                        // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
+                        if($response["result"] == "success"){
+                            $data = [
+                                "provider_id" => $listID,
+                                "email"       => $email,
+                                "name"        => $response["data"]["name"],
+                                "status"      => 1, // success
+                                "response"    => $response["data"]["updated_at"]
+                            ];
+                            $successUnsubscribe[] = $providerData['listname'].'(Clever Reach)';
+                        }else{
+                            $data = [
+                                "provider_id" => $listID,
+                                "email"       => $email,
+                                "name"        => NULL,
+                                "status"      => 2, // error
+                                "response"    => $response["msg"]
+                            ];
+                            $failUnsubscribe[] = $providerData['listname'].'(Clever Reach)';
+                        }
+                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                    }else{
+                        $data = [
+                            "provider_id" => $listID,
+                            "email"       => $email,
+                            "name"        => NULL,
+                            "status"      => 3, // already unsubscribed
+                            "response"    => "Already unsubscribed"
+                        ];
+                        $alreadyUnsubscribe[] = $providerData['listname'].'(Clever Reach)';
+                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                    }
+                                    
                 }               
             }
         }

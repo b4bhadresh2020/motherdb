@@ -24,10 +24,21 @@ class Mdl_provider_state extends CI_Model
         }        
 
         
-        $condition = array(
-            "provider" => $providerID
-        );
-        $providers = GetAllRecord(PROVIDERS,$condition,false,array(),array(),array(array("provider" => "asc")));
+        // $condition = array(
+        //     "provider" => $providerID
+        // );
+        // $providers = GetAllRecord(PROVIDERS,$condition,false,array(),array(),array(array("provider" => "asc")));
+        $espAccountTable = getAccountTableName($providerID);
+        $this->db->select('providers.*');
+        $this->db->from(PROVIDERS);
+        if(!empty($espAccountTable)) {
+            $this->db->join($espAccountTable,'providers.aweber_account='.$espAccountTable.'.id','left');
+            $this->db->where($espAccountTable.'.status', 1);
+        }
+        $this->db->where('providers.provider', $providerID);
+        $this->db->order_by('providers.provider', 'asc');
+        $providers = $this->db->get()->result_array();
+
         $statusInfo = array();
         
         foreach($providers as $provider){

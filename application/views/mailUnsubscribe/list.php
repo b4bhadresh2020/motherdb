@@ -89,6 +89,7 @@
                                                             <option value="12">Ontraport</option>                                                       
                                                             <option value="13">Active Campaign</option>
                                                             <option value="14">Expert Sender</option>
+                                                            <option value="15">Clever Reach</option>
                                                         </select>
                                                     </div>
                                             </div>
@@ -194,6 +195,8 @@
                                                             $providerName = "Active Campaign";
                                                         }else if($unsubscriber["provider"] == EXPERT_SENDER){
                                                             $providerName = "Expert Sender";
+                                                        }else if($unsubscriber["provider"] == CLEVER_REACH){
+                                                            $providerName = "Clever Reach";
                                                         }
                                             ?>
                                             <tr>
@@ -258,6 +261,7 @@
                                         <option value="12">Ontraport</option>     
                                         <option value="13">Active Campaign</option> 
                                         <option value="14">Expert Sender</option>                                            
+                                        <option value="15">Clever Reach</option>                                            
                                     </select>
                                 </div>
                             </div>

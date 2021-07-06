@@ -375,25 +375,32 @@ class Repost extends CI_Controller
         $providerCondition   = array('id' => $mailProvider);
         $is_single           = true;
         $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
+        $mailjetAccountId     = $providerData['aweber_account']; 
 
-        if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
+        $mailjetCondition   = array('id' => $mailjetAccountId);
+        $is_single           = true;
+        $mailjetAccountData   = GetAllRecord(MAILJET_ACCOUNTS, $mailjetCondition, $is_single);
 
-            $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
+        if($mailjetAccountData['status'] == 1) {
+            if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
 
-            $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
+                $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
+
+                $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
+            }
+
+            $this->load->model('mdl_mailjet');
+            $response = $this->mdl_mailjet->AddEmailToMailjetSubscriberList($apiDataDetail, $mailProvider);
+            // ADD RECORD IN HISTORY
+            addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
+
+            //update to live delivery data
+            $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
+            $is_insert = FALSE;
+            $responseField = $providerData['response_field'];
+            $updateArr = array($responseField => json_encode($response));
+            ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
         }
-
-        $this->load->model('mdl_mailjet');
-        $response = $this->mdl_mailjet->AddEmailToMailjetSubscriberList($apiDataDetail, $mailProvider);
-        // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
-
-        //update to live delivery data
-        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
-        $is_insert = FALSE;
-        $responseField = $providerData['response_field'];
-        $updateArr = array($responseField => json_encode($response));
-        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
     }
 
     function addDataToConvertkit()

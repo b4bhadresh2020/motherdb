@@ -173,9 +173,24 @@ class Cron_provider_user_csv extends CI_Controller
                                     $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
                                 } 
                                 $responseField = "mailjetResponse";
-                                $mailProvider = $this->getMailjetProviderId($provider["providerList"]);                                
-                                $response = $this->mdl_mailjet->AddEmailToMailjetSubscriberList($userData,$mailProvider);
-                                addRecordInHistoryFromCSV($userData, $mailProvider, MAILJET, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
+                                $mailProvider = $this->getMailjetProviderId($provider["providerList"]);    
+                                
+                                // fetch mail provider data from providers table
+                                $providerCondition   = array('id' => $mailProvider);
+                                $is_single           = true;
+                                $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);   
+                                $mailjetAccountId     = $providerData['aweber_account']; 
+                                
+                                $mailjetCondition   = array('id' => $mailjetAccountId);
+                                $is_single           = true;
+                                $mailjetAccountData   = GetAllRecord(MAILJET_ACCOUNTS, $mailjetCondition, $is_single);
+                                if($mailjetAccountData['status'] == 1) { 
+                                    $response = $this->mdl_mailjet->AddEmailToMailjetSubscriberList($userData,$mailProvider);
+                                    addRecordInHistoryFromCSV($userData, $mailProvider, MAILJET, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
+                                } else {
+                                    $response = array("result" => "error","error" => array("msg" => "Account is closed"));
+                                }
+                                
                             } else if($provider['providerName'] == CONVERTKIT){
                                 if (@$userData['birthdateDay'] != '' && @$userData['birthdateMonth'] != '' && @$userData['birthdateYear'] != '') {
                                     $birthDate              = $userData['birthdateYear'] . '-' . $userData['birthdateMonth'] . '-' . $userData['birthdateDay'];
@@ -440,7 +455,7 @@ class Cron_provider_user_csv extends CI_Controller
         $provider = array(
             "1" => "119",  // Velkomstgaven/DK
             "2" => "120",  // Gratispresent/SE
-            "3" => "127"   // Velkomstgaven/NOR
+            // "3" => "127"   // Velkomstgaven/NOR
         );
         return $provider[$providerId];
     }

@@ -634,13 +634,42 @@ function loginRegSectionMsg($msgId = "") {
         return $msgArr;
 }
 
-function getProviderList($provider) {
-    $condition = array(
-        'provider' => $provider
+function getAccountTableName($provider) {
+    $tableNames = array(
+        '1' => 'aweber_accounts',
+        '4' => 'ongage_accounts',
+        '7' => 'sendpulse_accounts',
+        '8' => 'mailerlite_accounts',
+        '9' => 'mailjet_accounts',
+        '10' => 'convertkit_accounts',
+        '11' => 'marketing_platform_accounts',
+        '12' => 'ontraport_accounts',
+        '13' => 'active_campaign_accounts',
+        '14' => 'expert_sender_accounts',
+        '15' => 'clever_reach_accounts'
     );
-    $is_single = FALSE;
-    $providerList = GetAllRecord(PROVIDERS,$condition,$is_single);
+    if (array_key_exists($provider, $tableNames)) {
+        return $tableNames[$provider];
+    }
+}
 
+function getProviderList($provider) {
+    $CI = & get_instance();
+    // $condition = array(
+    //     'provider' => $provider
+    // );
+    // $is_single = FALSE;
+    // $providerList = GetAllRecord(PROVIDERS,$condition,$is_single);
+    $espAccountTable = getAccountTableName($provider);
+    $CI->db->select('providers.*');
+    $CI->db->from(PROVIDERS);
+    if(!empty($espAccountTable)) {
+        $CI->db->join($espAccountTable,'providers.aweber_account='.$espAccountTable.'.id','left');
+        $CI->db->where($espAccountTable.'.status', 1);
+    }
+    $CI->db->where('providers.provider', $provider);
+    $providerList = $CI->db->get()->result_array();
+   
     if (count($providerList) > 0) {
         return $providerList;
     }else{
@@ -818,7 +847,7 @@ function getMailjetProviderListName($providerListId){
     $mailjetList = array(
         "1" => "Velkomstgaven/DK",
         "2" => "Gratispresent/SE",
-        "3" => "Velkomstgaven/NOR"
+        // "3" => "Velkomstgaven/NOR"
     );
     return $mailjetList[$providerListId];
 }
@@ -1056,7 +1085,7 @@ function getLiveRepostMailjetProviderID($providerId){
     $provider = array(
         "1" => "119",  // Velkomstgaven/DK
         "2" => "120",  // Gratispresent/SE
-        "3" => "127"  // Velkomstgaven/NOR
+        // "3" => "127"  // Velkomstgaven/NOR
     );
     return $provider[$providerId];
 }
