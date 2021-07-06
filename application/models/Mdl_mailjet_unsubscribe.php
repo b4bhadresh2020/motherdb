@@ -52,26 +52,30 @@ class Mdl_mailjet_unsubscribe extends CI_Model {
                 $csvEmailresponse = json_decode($csvCronUserData[$csvResponseField],true);
             }
 
+            if(empty($emailresponse) && empty($csvCronUserData)) {
+                 // get user contact details
+                $checkContactUrl = "https://api.mailjet.com/v3/REST/contact/". $email;
+                $getContactBody = $client->get($checkContactUrl, [
+                    'headers' => [
+                        'Content-Type' => 'application/json'
+                    ],
+                    'auth' => [
+                        $api_key, $secret_key
+                    ]
+                ]);
+                $getSubscriber = json_decode($getContactBody->getBody(),true);
+                $getStatusCode = $getContactBody->getStatusCode();
+            }
+
             // check user is exist
             // $condition = array('providerId' => $mailjetListId ,'emailId' => $email, 'status'=> '1');
             // $is_single = TRUE;
             // $getEmailDetail = GetAllRecord(EMAIL_HISTORY_DATA,$condition,$is_single,array(),array(),array(),'emailId,response');
             // $emailresponse = json_decode($getEmailDetail['response'],true);            
 
-            // // get user contact details
-            // $checkContactUrl = "https://api.mailjet.com/v3/REST/contact/". $email;
-            // $getContactBody = $client->get($checkContactUrl, [
-            //     'headers' => [
-            //         'Content-Type' => 'application/json'
-            //     ],
-            //     'auth' => [
-            //         $api_key, $secret_key
-            //     ]
-            // ]);
-            // $getSubscriber = json_decode($getContactBody->getBody(),true);
-            // $getStatusCode = $getContactBody->getStatusCode();
+           
             // if(!empty($getSubscriber) && $getStatusCode == 200){
-            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success')){
+            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success') || ($getStatusCode == 200)){
                 $unsubscriberUrl = "https://api.mailjet.com/v3/REST/contact/managemanycontacts";
                 $body = [
                     'Contacts' => [
