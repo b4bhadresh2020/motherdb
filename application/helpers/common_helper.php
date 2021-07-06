@@ -2088,7 +2088,8 @@ function getCsvUserResponseField($emailServiceProvider){
         '11' => 'marketingPlatformResponse',
         '12' => 'ontraportResponse',
         '13' => 'activeCampaignResponse',
-        '14' => 'expertSenderResponse'
+        '14' => 'expertSenderResponse',
+        '15' => 'cleverReachResponse'
     );
     return $responseField[$emailServiceProvider];
 }

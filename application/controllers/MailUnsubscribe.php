@@ -96,7 +96,7 @@ class MailUnsubscribe extends CI_Controller
         $alreadyUnsubscribe = [];
 
         if($provider == 0) {
-            $providers = array("9","11","12","13","14");  
+            $providers = array("9","11","12","13","14","15");  
         } else {
             $providers = array($provider);
         }        

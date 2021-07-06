@@ -74,8 +74,8 @@ class Cron_mailjet_delay_user extends CI_Controller
                 // fetch mail provider data from providers table
                 $providerCondition   = array('id' => $mailProvider);
                 $is_single           = true;
-                $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);   
-                $mailjetAccountId     = $providerData['aweber_account']; 
+                $getProviderData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);   
+                $mailjetAccountId     = $getProviderData['aweber_account']; 
                 
                 $mailjetCondition   = array('id' => $mailjetAccountId);
                 $is_single           = true;
