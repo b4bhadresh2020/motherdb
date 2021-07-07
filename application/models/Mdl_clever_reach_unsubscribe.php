@@ -96,7 +96,7 @@ class Mdl_clever_reach_unsubscribe extends CI_Model {
                 $getStatusCode = $checkSubscriber['getStatusCode'];
             }
 
-            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success') || ($getStatusCode == 200)){
+            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success') || ($getStatusCode == 200 && !empty($response))){
                 // $subscriberUrl = "https://rest.cleverreach.com/v3/groups.json/".$list_id."/receivers/".$email;
                 // $body = $client->get($subscriberUrl, [
                 //             'headers' => [

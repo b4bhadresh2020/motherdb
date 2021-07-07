@@ -78,10 +78,12 @@ class Mdl_active_campaign_unsubscribe extends CI_Model {
                 ]);
                 $getsubscriber = json_decode($body->getBody(),true);
                 $getResponseCode = $body->getStatusCode();
-                $subscriptionId = $getsubscriber['contacts'][0]['id'];
+                if($getResponseCode == 200 && !empty($getsubscriber['contacts'])) {
+                    $subscriptionId = $getsubscriber['contacts'][0]['id'];
+                }
             }
             
-            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success') || ((!empty($alreadyLiveDeliveryData)) || (!empty($alreadyCsvCronUserData))) || ($getResponseCode == 200)){
+            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success') || ((!empty($alreadyLiveDeliveryData)) || (!empty($alreadyCsvCronUserData))) || ($getResponseCode == 200 && !empty($getsubscriber['contacts']))){
                 $subscriberUrl = $apiUrl . "/api/3/contacts/" . $subscriptionId;
                 $body = $client->get($subscriberUrl,[
                     'headers' => [

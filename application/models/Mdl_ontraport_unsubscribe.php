@@ -73,12 +73,12 @@ class Mdl_ontraport_unsubscribe extends CI_Model {
                 ]);
                 $getResponse = (json_decode($contactResponse->getBody(),true));  
                 $getResponseCode = $contactResponse->getStatusCode();
-                if($getResponseCode == 200) {
+                if($getResponseCode == 200 && !empty($getResponse['data'])) {
                     $subsciber_id = $getResponse['data'][0]['id'];
                 } 
             }
 
-            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success') || ($getResponseCode == 200)){
+            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success') || ($getResponseCode == 200 && !empty($getResponse['data']))){
                 // FIND SUBSCRIBER
                 // $responseData = json_decode($getSingleUser['response']);
                 // $subsciber_id = $responseData->data->id;

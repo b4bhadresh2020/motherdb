@@ -75,7 +75,7 @@ class Mdl_mailjet_unsubscribe extends CI_Model {
 
            
             // if(!empty($getSubscriber) && $getStatusCode == 200){
-            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success') || ($getStatusCode == 200)){
+            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success') || ($getStatusCode == 200 && !empty($getSubscriber['Data']))){
                 $unsubscriberUrl = "https://api.mailjet.com/v3/REST/contact/managemanycontacts";
                 $body = [
                     'Contacts' => [

@@ -53,7 +53,7 @@ class Mdl_expert_sender_unsubscribe extends CI_Model {
                 $subscriber = $checkSubscriber['subscriber'];
             }
             
-            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success') || ($statusCode == 200)){
+            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success') || ($statusCode == 200 && !empty($subscriber['Data']))){
                 // $subscriberUrl = EXPERT_SENDER_API_PATH . 'Api/Subscribers?apiKey='.$api_key.'&email='.$email.'&option=Full';
                 // $ch = curl_init($subscriberUrl);
                 // curl_setopt($ch, CURLOPT_URL,$subscriberUrl);
@@ -75,7 +75,7 @@ class Mdl_expert_sender_unsubscribe extends CI_Model {
                     $statusCode = $checkSubscriber['statusCode'];
                     $subscriber = $checkSubscriber['subscriber'];
                 }
-                if($statusCode == 200) {
+                if($statusCode == 200 && !empty($subscriber['Data'])) {
                     $subscriberId = $subscriber['Data']['Id'];
                     $subscriberName = $subscriber['Data']['Firstname'] . " ". $subscriber['Data']['Lastname'];
                     $subscriberListId = $subscriber['Data']['StateOnLists']['StateOnList']['ListId'];
