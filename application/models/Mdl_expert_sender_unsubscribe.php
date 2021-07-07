@@ -44,23 +44,37 @@ class Mdl_expert_sender_unsubscribe extends CI_Model {
                 $csvCronUserData = getCsvUserDetail($getUserIdsStr, $expertSenderListId, $csvResponseField);
                 $csvEmailresponse = json_decode($csvCronUserData[$csvResponseField],true);
             }
-            
-            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success')){
-                $subscriberUrl = EXPERT_SENDER_API_PATH . 'Api/Subscribers?apiKey='.$api_key.'&email='.$email.'&option=Full';
-                $ch = curl_init($subscriberUrl);
-                curl_setopt($ch, CURLOPT_URL,$subscriberUrl);
-                $headers = array(
-                    "Content-Type: text/xml",
-                    "Accept: text/xml",
-                );
-                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $getSubscriber = curl_exec($ch);
-                $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                curl_close ($ch);
 
-                $xml = simplexml_load_string($getSubscriber);
-                $subscriber = json_decode(json_encode($xml),true);
+            // when user not found in our daatbse but exist on esp
+            if(empty($liveDeliveryData) && empty($csvCronUserData)) {
+                //GET CONTACT USER
+                $checkSubscriber = $this->checkSubscriber($api_key, $email);
+                $statusCode = $checkSubscriber['statusCode'];
+                $subscriber = $checkSubscriber['subscriber'];
+            }
+            
+            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success') || ($statusCode == 200)){
+                // $subscriberUrl = EXPERT_SENDER_API_PATH . 'Api/Subscribers?apiKey='.$api_key.'&email='.$email.'&option=Full';
+                // $ch = curl_init($subscriberUrl);
+                // curl_setopt($ch, CURLOPT_URL,$subscriberUrl);
+                // $headers = array(
+                //     "Content-Type: text/xml",
+                //     "Accept: text/xml",
+                // );
+                // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                // $getSubscriber = curl_exec($ch);
+                // $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                // curl_close ($ch);
+
+                // $xml = simplexml_load_string($getSubscriber);
+                // $subscriber = json_decode(json_encode($xml),true);
+                    
+                if(!isset($statusCode)) {
+                    $checkSubscriber = $this->checkSubscriber($api_key, $email);
+                    $statusCode = $checkSubscriber['statusCode'];
+                    $subscriber = $checkSubscriber['subscriber'];
+                }
                 if($statusCode == 200) {
                     $subscriberId = $subscriber['Data']['Id'];
                     $subscriberName = $subscriber['Data']['Firstname'] . " ". $subscriber['Data']['Lastname'];
@@ -91,4 +105,23 @@ class Mdl_expert_sender_unsubscribe extends CI_Model {
             return array("result" => "error","msg" => "Bad request");
         }
     } 
+
+    public function checkSubscriber($api_key, $email) {
+        $subscriberUrl = EXPERT_SENDER_API_PATH . 'Api/Subscribers?apiKey='.$api_key.'&email='.$email.'&option=Full';
+        $ch = curl_init($subscriberUrl);
+        curl_setopt($ch, CURLOPT_URL,$subscriberUrl);
+        $headers = array(
+            "Content-Type: text/xml",
+            "Accept: text/xml",
+        );
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $getSubscriber = curl_exec($ch);
+        $data['statusCode'] = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close ($ch);
+
+        $xml = simplexml_load_string($getSubscriber);
+        $data['subscriber'] = json_decode(json_encode($xml),true);
+        return $data;
+    }
 }

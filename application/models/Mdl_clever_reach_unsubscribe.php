@@ -87,16 +87,29 @@ class Mdl_clever_reach_unsubscribe extends CI_Model {
                 $csvCronUserData = getCsvUserDetail($getUserIdsStr, $cleverReachListId, $csvResponseField);
                 $csvEmailresponse = json_decode($csvCronUserData[$csvResponseField],true);
             }
-            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success')){
-                $subscriberUrl = "https://rest.cleverreach.com/v3/groups.json/".$list_id."/receivers/".$email;
-                $body = $client->get($subscriberUrl, [
-                            'headers' => [
-                                    'Authorization' => 'Bearer ' . $token,    
-                                ]
-                        ]);
-                $response = json_decode($body->getbody(), true);
-                $getStatusCode = $body->getStatusCode();
-                
+
+            // when user not found in our daatbse but exist on esp
+            if(empty($liveDeliveryData) && empty($csvCronUserData)) {
+                //GET CONTACT USER
+                $checkSubscriber = $this->checkSubscriber($token, $list_id, $email);
+                $response = $checkSubscriber['response'];
+                $getStatusCode = $checkSubscriber['getStatusCode'];
+            }
+
+            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success') || ($getStatusCode == 200)){
+                // $subscriberUrl = "https://rest.cleverreach.com/v3/groups.json/".$list_id."/receivers/".$email;
+                // $body = $client->get($subscriberUrl, [
+                //             'headers' => [
+                //                     'Authorization' => 'Bearer ' . $token,    
+                //                 ]
+                //         ]);
+                // $response = json_decode($body->getbody(), true);
+                // $getStatusCode = $body->getStatusCode();
+                if(!isset($getStatusCode)) {
+                    $checkSubscriber = $this->checkSubscriber($token, $list_id, $email);
+                    $response = $checkSubscriber['response'];
+                    $getStatusCode = $checkSubscriber['getStatusCode'];
+                }
                 // UPDATE SUSBCRIBER STATUS (unsubscribe)
                 if(!empty($response) && $getStatusCode == 200){
                     $unsubscriberUrl = "https://rest.cleverreach.com/v3/groups.json/".$list_id."/receivers/".$email."/deactivate";
@@ -119,4 +132,19 @@ class Mdl_clever_reach_unsubscribe extends CI_Model {
             return array("result" => "error","msg" => "Bad request");
         }
     } 
+
+    public function checkSubscriber($token, $list_id, $email) {
+        // Create a Guzzle client
+        $client = new GuzzleHttp\Client();
+
+        $subscriberUrl = "https://rest.cleverreach.com/v3/groups.json/".$list_id."/receivers/".$email;
+        $body = $client->get($subscriberUrl, [
+                'headers' => [
+                        'Authorization' => 'Bearer ' . $token,    
+                    ]
+                ]);
+        $data['response'] = json_decode($body->getbody(), true);
+        $data['getStatusCode'] = $body->getStatusCode();
+        return $data;
+    }
 }

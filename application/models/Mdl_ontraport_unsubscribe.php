@@ -38,6 +38,9 @@ class Mdl_ontraport_unsubscribe extends CI_Model {
             $responseField	= $providerData['response_field'];
             $liveDeliveryData = getLivedeliveryDetail($email, $responseField);
             $emailresponse = json_decode($liveDeliveryData[$responseField],true); 
+            if(!empty($liveDeliveryData)) {
+                $subsciber_id = $emailresponse['data']['id'];
+            }
 
             // check user is exist by list & email (user csv)
             $condition = array(
@@ -52,17 +55,33 @@ class Mdl_ontraport_unsubscribe extends CI_Model {
                 $csvCronUserData = getCsvUserDetail($getUserIdsStr, $ontraportListId, $csvResponseField);
                 $csvEmailresponse = json_decode($csvCronUserData[$csvResponseField],true);
             }
+            if(!empty($csvCronUserData)) {
+                $subsciber_id = $csvEmailresponse['data']['id'];
+            }
 
-            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success')){
+            // when user not found in our daatbse but exist on esp
+            if(empty($liveDeliveryData) && empty($csvCronUserData)) {
+                //GET CONTACT USER
+                $checkContactUrl = "https://api.ontraport.com/1/Contacts?search=".$email;
+                $headers = [
+                            'Api-Key' => $apiKey,
+                            'Api-Appid' => $appApiKey,
+                            'Content-Type' => 'application/x-www-form-urlencoded',
+                        ]; 
+                $contactResponse = $client->get($checkContactUrl,[
+                    'headers' => $headers
+                ]);
+                $getResponse = (json_decode($contactResponse->getBody(),true));  
+                $getResponseCode = $contactResponse->getStatusCode();
+                if($getResponseCode == 200) {
+                    $subsciber_id = $getResponse['data'][0]['id'];
+                } 
+            }
+
+            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success') || ($getResponseCode == 200)){
                 // FIND SUBSCRIBER
                 // $responseData = json_decode($getSingleUser['response']);
                 // $subsciber_id = $responseData->data->id;
-                if(!empty($liveDeliveryData)) {
-                    $subsciber_id = $emailresponse['data']['id'];
-                }
-                if(!empty($csvCronUserData)) {
-                    $subsciber_id = $csvEmailresponse['data']['id'];
-                }
                 $details = [
                     'objectID' => 0,
                     'remove_list' => [$list_id],
