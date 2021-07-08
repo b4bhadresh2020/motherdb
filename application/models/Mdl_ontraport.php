@@ -11,7 +11,7 @@ class Mdl_ontraport extends CI_Model {
 
     
     function AddEmailToOntraportSubscriberList($getData,$ontraportListId){
-          // LOG ENTRY
+          //LOG ENTRY
           $logPath    = FCPATH."log/ontraport/";
           $fileName   = date("Ymd")."_log.txt"; 
           $logFile    = fopen($logPath.$fileName,"a");
@@ -62,7 +62,7 @@ class Mdl_ontraport extends CI_Model {
             $data = json_encode($details);
             
             //LIST ID 
-            $subscriberUrl = "https://api.ontraport.com/1/Contacts";
+            $subscriberUrl = "https://api.ontraport.com/1/Contacts/saveorupdate";
             $headers = [
                 'Api-Key' => $apiKey,
                 'Api-Appid' => $appApiKey,
@@ -75,11 +75,14 @@ class Mdl_ontraport extends CI_Model {
               
             $responseCode = $body->getStatusCode();
             $subscriber = json_decode($body->getBody(),true);
-            
-            if ($responseCode == 200) {           
-                $subscriber_id = $subscriber['data']['id']; 
-                 // LOG ENTRY
-                return array("result" => "success","data" => array("id" => $subscriber_id));    
+            if ($responseCode == 200) {    
+                if(isset($subscriber['data']['id'])){
+                    $subscriber_id = $subscriber['data']['id']; 
+                    // LOG ENTRY
+                    return array("result" => "success","data" => array("id" => $subscriber_id));    
+                }else{
+                    return array("result" => "error","error" => array("msg" => $responseCode." - Subscriber already subscribed"));
+                }       
             } else{
                 return array("result" => "error","error" => array("msg" => "Unknown Error Response"));
             }
