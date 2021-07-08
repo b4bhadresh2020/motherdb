@@ -31,7 +31,7 @@ class Mdl_ontraport_unsubscribe extends CI_Model {
             //LIST ID 
             $list_id = $providerData['code'];
                 
-            // //FIND subscriber
+            // //FIND subscriber (old)
             // $userData=array('emailId'=>$email,'providerId'=>$providerData['id'],'status'=>1);
             // $getSingleUser = GetAllRecord(EMAIL_HISTORY_DATA,$userData,$is_single);
             // check user is exist by list & email (live delivery)
@@ -60,7 +60,7 @@ class Mdl_ontraport_unsubscribe extends CI_Model {
             }
 
             // when user not found in our daatbse but exist on esp
-            if(empty($liveDeliveryData) && empty($csvCronUserData)) {
+            // if(empty($liveDeliveryData) && empty($csvCronUserData)) {
                 //GET CONTACT USER
                 $checkContactUrl = "https://api.ontraport.com/1/Contacts?search=".$email;
                 $headers = [
@@ -74,9 +74,12 @@ class Mdl_ontraport_unsubscribe extends CI_Model {
                 $getResponse = (json_decode($contactResponse->getBody(),true));  
                 $getResponseCode = $contactResponse->getStatusCode();
                 if($getResponseCode == 200 && !empty($getResponse['data'])) {
-                    $subsciber_id = $getResponse['data'][0]['id'];
+                    $subsciber_id_arr = implode(',',array_column($getResponse['data'],'id'));
+                    if(empty($subsciber_id)) {
+                        $subsciber_id = $getResponse['data'][0]['id'];
+                    }
                 } 
-            }
+            // }
 
             if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success') || ($getResponseCode == 200 && !empty($getResponse['data']))){
                 // FIND SUBSCRIBER
@@ -85,7 +88,7 @@ class Mdl_ontraport_unsubscribe extends CI_Model {
                 $details = [
                     'objectID' => 0,
                     'remove_list' => [$list_id],
-                    'ids'       => [$subsciber_id]
+                    'ids'       => [$subsciber_id_arr]
                 ];
                 $data = json_encode($details);
                 $subscriberUrl = "https://api.ontraport.com/1/objects/tag";
