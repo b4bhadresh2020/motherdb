@@ -206,9 +206,23 @@ class Cron_provider_user_csv extends CI_Controller
                                     $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
                                 } 
                                 $responseField = "marketingPlatformResponse";
-                                $mailProvider = $this->getMarketingPlatformProviderId($provider["providerList"]);                                
-                                $response = $this->mdl_marketing_platform->AddEmailToMarketingPlatformSubscriberList($userData,$mailProvider);
-                                addRecordInHistoryFromCSV($userData, $mailProvider, MARKETING_PLATFORM, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
+                                $mailProvider = $this->getMarketingPlatformProviderId($provider["providerList"]); 
+                                
+                                // fetch mail provider data from providers table
+                                $providerCondition   = array('id' => $mailProvider);
+                                $is_single           = true;
+                                $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);   
+                                $marketingPlatformAccountId     = $providerData['aweber_account']; 
+                                
+                                $marketingPlatformCondition   = array('id' => $marketingPlatformAccountId);
+                                $is_single           = true;
+                                $marketingPlatformAccountData   = GetAllRecord(MARKETING_PLATFORM_ACCOUNTS, $marketingPlatformCondition, $is_single);
+                                if($marketingPlatformAccountData['status'] == 1) {
+                                    $response = $this->mdl_marketing_platform->AddEmailToMarketingPlatformSubscriberList($userData,$mailProvider);
+                                    addRecordInHistoryFromCSV($userData, $mailProvider, MARKETING_PLATFORM, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
+                                } else {
+                                    $response = array("result" => "error","error" => array("msg" => "Account is closed"));
+                                }
                             }  else if($provider['providerName'] == ONTRAPORT){
                                 if (@$userData['birthdateDay'] != '' && @$userData['birthdateMonth'] != '' && @$userData['birthdateYear'] != '') {
                                     $birthDate              = $userData['birthdateYear'] . '-' . $userData['birthdateMonth'] . '-' . $userData['birthdateDay'];
@@ -479,15 +493,15 @@ class Cron_provider_user_csv extends CI_Controller
 
     public function getMarketingPlatformProviderId($providerId){
         $provider = array(
-            "1" => "133",  // SE-Gratispresent
-            "2" => "134",  // NO-Velkomstgaven
-            "3" => "135",  // DK-Velkomstgaven
-            "4" => "136",  // FI-Unelmalaina
-            "5" => "137",  // FreeCasinoDeal-CA
-            "6" => "138",  // FreeCasinoDeal-FI
-            "7" => "139",  // FreeCasinoDeal-NO
-            "8" => "140",  // FreeCasinoDeal-NZ  
-            "9" => "148",  // NO-Velkomstgaven1
+            // "1" => "133",  // SE-Gratispresent
+            // "2" => "134",  // NO-Velkomstgaven
+            // "3" => "135",  // DK-Velkomstgaven
+            // "4" => "136",  // FI-Unelmalaina
+            // "5" => "137",  // FreeCasinoDeal-CA
+            // "6" => "138",  // FreeCasinoDeal-FI
+            // "7" => "139",  // FreeCasinoDeal-NO
+            // "8" => "140",  // FreeCasinoDeal-NZ  
+            // "9" => "148",  // NO-Velkomstgaven1
         ); 
         return $provider[$providerId];
     }

@@ -824,31 +824,43 @@ class Live_delivery_api extends CI_Controller
                                 addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
                             //} 
                         } else if($providerData['provider'] == MARKETING_PLATFORM) {
-                            $lastDeliveryData['birthDate'] = "";
-                            if (@$lastDeliveryData['birthdateDay'] != '0' && @$lastDeliveryData['birthdateMonth'] != '0' && @$lastDeliveryData['birthdateYear'] != '0') {
-                                $birthDate            = $lastDeliveryData['birthdateYear'] . '-' . $lastDeliveryData['birthdateMonth'] . '-' . $lastDeliveryData['birthdateDay'];
-                                $lastDeliveryData['birthDate'] = date('Y-m-d', strtotime($birthDate));
-                            } 
+                            // fetch mail provider data from providers table
+                            $providerCondition   = array('id' => $mailProvider);
+                            $is_single           = true;
+                            $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);   
+                            $marketingPlatformAccountId     = $providerData['aweber_account']; 
+                            
+                            $marketingPlatformCondition   = array('id' => $marketingPlatformAccountId);
+                            $is_single           = true;
+                            $marketingPlatformAccountData   = GetAllRecord(MARKETING_PLATFORM_ACCOUNTS, $marketingPlatformCondition, $is_single);        
+                            
+                            if($marketingPlatformAccountData['status'] == 1) {
+                                $lastDeliveryData['birthDate'] = "";
+                                if (@$lastDeliveryData['birthdateDay'] != '0' && @$lastDeliveryData['birthdateMonth'] != '0' && @$lastDeliveryData['birthdateYear'] != '0') {
+                                    $birthDate            = $lastDeliveryData['birthdateYear'] . '-' . $lastDeliveryData['birthdateMonth'] . '-' . $lastDeliveryData['birthdateDay'];
+                                    $lastDeliveryData['birthDate'] = date('Y-m-d', strtotime($birthDate));
+                                } 
 
-                            $this->load->model('mdl_marketing_platform');
-                            // LOGIC FOR SEND DATA TO MARKETING PLATFORM OR QUEUE                            
-                            $delayDay = 0;
-                            if(isset($delays[$mailProvider])){
-                                $delayDay = $delays[$mailProvider];
+                                $this->load->model('mdl_marketing_platform');
+                                // LOGIC FOR SEND DATA TO MARKETING PLATFORM OR QUEUE                            
+                                $delayDay = 0;
+                                if(isset($delays[$mailProvider])){
+                                    $delayDay = $delays[$mailProvider];
+                                }
+                                $provider = MARKETING_PLATFORM;
+                                // if($delayDay == 0){
+                                //     // NO DELAY INSTANT SEND DATA TO MARKETING PLATFORM
+                                //     $response = $this->mdl_marketing_platform->AddEmailToMarketingPlatformSubscriberList($lastDeliveryData,$mailProvider);                                
+                                //     // ADD RECORD IN HISTORY
+                                //     addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
+                                // }else{                               
+                                    // ADD DATA IN QUEUE FOR DELAY SENDING
+                                    addToMarketingPlatformSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
+                                    // ADD RECORD IN HISTORY
+                                    $response = null;
+                                    addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
+                                //} 
                             }
-                            $provider = MARKETING_PLATFORM;
-                            // if($delayDay == 0){
-                            //     // NO DELAY INSTANT SEND DATA TO MARKETING PLATFORM
-                            //     $response = $this->mdl_marketing_platform->AddEmailToMarketingPlatformSubscriberList($lastDeliveryData,$mailProvider);                                
-                            //     // ADD RECORD IN HISTORY
-                            //     addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
-                            // }else{                               
-                                // ADD DATA IN QUEUE FOR DELAY SENDING
-                                addToMarketingPlatformSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay);
-                                // ADD RECORD IN HISTORY
-                                $response = null;
-                                addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$getLiveDeliveryData['groupName'],$getLiveDeliveryData['keyword'],$lastDeliveryData['emailId']);
-                            //} 
                         } else if($providerData['provider'] == ONTRAPORT) {
                             $lastDeliveryData['birthDate'] = "";
                             if (@$lastDeliveryData['birthdateDay'] != '0' && @$lastDeliveryData['birthdateMonth'] != '0' && @$lastDeliveryData['birthdateYear'] != '0') {

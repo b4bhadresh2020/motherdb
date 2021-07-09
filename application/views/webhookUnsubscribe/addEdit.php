@@ -49,7 +49,7 @@
                                                         <tr>
                                                             <th class="text-center" style="width:20% !important">Main Provider</th>
                                                             <th class="text-center" style="width:10% !important">Mailjet</th>
-                                                            <th class="text-center" style="width:10% !important">Marketing Platform</th>
+                                                            <!-- <th class="text-center" style="width:10% !important">Marketing Platform</th> -->
                                                             <th class="text-center" style="width:10% !important">Ontraport</th>
                                                             <th class="text-center" style="width:10% !important">Active Campaign</th>
                                                         </tr>
@@ -69,9 +69,9 @@
                                                             <td>
                                                                 <input type="checkbox" name="<?=$setting['main_provider']?>[9]" value="1" <?=(!empty($setting['mailjet']) && $setting['mailjet'] == 1) ? 'checked' : ''?>>
                                                             </td>
-                                                            <td>
+                                                            <!-- <td>
                                                                 <input type="checkbox" name="<?=$setting['main_provider']?>[11]" value="1" <?=(!empty($setting['marketing_platform']) && $setting['marketing_platform'] == 1) ? 'checked' : ''?>>
-                                                            </td>
+                                                            </td> -->
                                                             <td>
                                                                 <input type="checkbox" name="<?=$setting['main_provider']?>[12]" value="1" <?=(!empty($setting['ontraport']) && $setting['ontraport'] == 1) ? 'checked' : ''?>>
                                                             </td>

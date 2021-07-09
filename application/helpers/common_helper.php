@@ -847,7 +847,7 @@ function getMailjetProviderListName($providerListId){
     $mailjetList = array(
         "1" => "Velkomstgaven/DK",
         "2" => "Gratispresent/SE",
-        // "3" => "Velkomstgaven/NOR"
+        "3" => "Velkomstgaven/NOR"
     );
     return $mailjetList[$providerListId];
 }

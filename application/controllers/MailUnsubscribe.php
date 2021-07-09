@@ -96,7 +96,8 @@ class MailUnsubscribe extends CI_Controller
         $alreadyUnsubscribe = [];
 
         if($provider == 0) {
-            $providers = array("9","11","12","13","14","15");  
+            // $providers = array("9","11","12","13","14","15");  
+            $providers = array("9","12","13","14","15");  
         } else {
             $providers = array($provider);
         }        
@@ -388,69 +389,71 @@ class MailUnsubscribe extends CI_Controller
                                     
                 }                
             } else if($provider == MARKETING_PLATFORM) {
-                $this->load->model('mdl_marketing_platform_unsubscribe');
-                //LIST ID EMPTY GET COUNTRY WISE LIST
-                $list = $this->input->post('list');
-                if(empty($list)){
-                    $listCondition  = array(
-                        'provider' => $provider
-                    );
-                    if(!empty($country)) {
-                        $listCondition['country'] = $country;
-                    }
-                    $is_single             = false;
-                    $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
-                    $list = array_column($getListIDByCountry,'id');
-                }
+                // $this->load->model('mdl_marketing_platform_unsubscribe');
+                // //LIST ID EMPTY GET COUNTRY WISE LIST
+                // $list = $this->input->post('list');
+                // if(empty($list)){
+                //     $listCondition  = array(
+                //         'provider' => $provider,
+                //         'marketing_platform_accounts.status' => 1
+                //     );
+                //     if(!empty($country)) {
+                //         $listCondition['country'] = $country;
+                //     }
+                //     $is_single             = false;
+                //     // $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
+                //     $getListIDByCountry = JoinData(PROVIDERS,$listCondition,MARKETING_PLATFORM_ACCOUNTS,"aweber_account","id","left",$is_single,array(),"providers.id","");
+                //     $list = array_column($getListIDByCountry,'id');
+                // }
 
-                foreach ($list as $listID) {   
+                // foreach ($list as $listID) {   
                     
-                    // fetch mail provider data from providers table
-                    $providerCondition   = array('id' => $listID);
-                    $is_single           = true;
-                    $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
+                //     // fetch mail provider data from providers table
+                //     $providerCondition   = array('id' => $listID);
+                //     $is_single           = true;
+                //     $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
 
-                    // CHECK EMAIL ALREADY UNSUBSCRIBE
-                    if(!in_array($listID,$providerID)){
+                //     // CHECK EMAIL ALREADY UNSUBSCRIBE
+                //     if(!in_array($listID,$providerID)){
                         
-                        // SEND DATA FOR UNSUBSCRIBE
-                        $response = $this->mdl_marketing_platform_unsubscribe->makeUnsubscribe($email,$listID);
+                //         // SEND DATA FOR UNSUBSCRIBE
+                //         $response = $this->mdl_marketing_platform_unsubscribe->makeUnsubscribe($email,$listID);
                     
-                        // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
-                        if($response["result"] == "success"){
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => $response["data"]["name"],
-                                "status"      => 1, // success
-                                "response"    => $response["data"]["updated_at"]
-                            ];
-                            $successUnsubscribe[] = $providerData['listname'].'(Marketing Platform)';
-                        }else{
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => NULL,
-                                "status"      => 2, // error
-                                "response"    => $response["msg"]
-                            ];
-                            $failUnsubscribe[] = $providerData['listname'].'(Marketing Platform)';
-                        }
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
-                    }else{
-                        $data = [
-                            "provider_id" => $listID,
-                            "email"       => $email,
-                            "name"        => NULL,
-                            "status"      => 3, // already unsubscribed
-                            "response"    => "Already unsubscribed"
-                        ];
-                        $alreadyUnsubscribe[] = $providerData['listname'].'(Marketing Platform)';
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
-                    }
-                }                
+                //         // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
+                //         if($response["result"] == "success"){
+                //             $data = [
+                //                 "provider_id" => $listID,
+                //                 "email"       => $email,
+                //                 "name"        => $response["data"]["name"],
+                //                 "status"      => 1, // success
+                //                 "response"    => $response["data"]["updated_at"]
+                //             ];
+                //             $successUnsubscribe[] = $providerData['listname'].'(Marketing Platform)';
+                //         }else{
+                //             $data = [
+                //                 "provider_id" => $listID,
+                //                 "email"       => $email,
+                //                 "name"        => NULL,
+                //                 "status"      => 2, // error
+                //                 "response"    => $response["msg"]
+                //             ];
+                //             $failUnsubscribe[] = $providerData['listname'].'(Marketing Platform)';
+                //         }
+                //         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                //         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                //     }else{
+                //         $data = [
+                //             "provider_id" => $listID,
+                //             "email"       => $email,
+                //             "name"        => NULL,
+                //             "status"      => 3, // already unsubscribed
+                //             "response"    => "Already unsubscribed"
+                //         ];
+                //         $alreadyUnsubscribe[] = $providerData['listname'].'(Marketing Platform)';
+                //         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                //         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                //     }
+                // }                
             } else if($provider == ONTRAPORT) {
                 $this->load->model('mdl_ontraport_unsubscribe');
                 //LIST ID EMPTY GET COUNTRY WISE LIST

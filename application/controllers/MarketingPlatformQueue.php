@@ -21,7 +21,16 @@ class MarketingPlatformQueue extends CI_Controller {
 
     function manage($start = 0) {
         $data = array();
-        $providers = GetAllRecord(PROVIDERS,array("provider" => MARKETING_PLATFORM),false,array(),array(),array());
+        // $providers = GetAllRecord(PROVIDERS,array("provider" => MARKETING_PLATFORM),false,array(),array(),array());
+
+        //get file data
+        $condition = array(
+            'providers.provider' => MARKETING_PLATFORM,
+            'marketing_platform_accounts.status' => 1
+        );
+        $is_single = FALSE;
+        $providers = JoinData(PROVIDERS,$condition,MARKETING_PLATFORM_ACCOUNTS,"aweber_account","id","left",$is_single,array(),"","");
+
         if (@$this->input->get('reset')) {
             $_GET = array();
         }
