@@ -205,7 +205,18 @@
                 providerList +="<option value='4'>camilla/frejasmail2.se/SE</option>";       
                 providerList +="<option value='5'>camilla/katariinasmail1.com/FI</option>";       
                 providerList +="<option value='6'>camilla/signesmail1.dk/DK</option>";       
-                providerList +="<option value='7'>camilla/signesmail2.com/NO</option>";       
+                providerList +="<option value='7'>camilla/signesmail2.com/NO</option>"; 
+                providerList +="<option value='8'>Kaare/NO-FreeCasinodeal</option>";       
+                providerList +="<option value='9'>Kaare/FI-FreeCasinodeal</option>";       
+                providerList +="<option value='10'>Kaare/CA-FreeCasinodeal</option>";       
+                providerList +="<option value='11'>Kaare/NZ-FreeCasinodeal</option>";       
+                providerList +="<option value='12'>Kaare/CA-GetSpinn</option>";       
+                providerList +="<option value='13'>Kaare/NZ-GetSpinn</option>";       
+                providerList +="<option value='14'>Kaare/NO-GetSpinn</option>";       
+                providerList +="<option value='15'>Kaare/gratispresentmail.se/SE</option>";       
+                providerList +="<option value='16'>Kaare/unelmalainamail.fi/Unelmalaina</option>";       
+                providerList +="<option value='17'>Kaare/Velkomstgaven-NO</option>";       
+                providerList +="<option value='18'>Kaare/DK-Velkomstgaven</option>";       
             } else if(providerId == 15){
                 providerList +="<option value='1'>Velkomstgaven/DK</option>";
                 providerList +="<option value='2'>Cathrinesmail/CA</option>";
