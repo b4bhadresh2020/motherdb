@@ -393,3 +393,8 @@
   border-radius: 5px;
   font-size: 13px;
 }
+.custom-alert-success {
+  background-color: #99FF00;
+  border-color: #99FF00;
+  color: #222222;
+}

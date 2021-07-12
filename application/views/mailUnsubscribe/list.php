@@ -320,7 +320,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h5 class="alert-success-label" style="margin-bottom: 20px;"><strong>Successfully Unsubscriber List</strong></h5>
-                        <div class="alert alert-success" role="alert"></div>
+                        <div class="alert alert-success custom-alert-success" role="alert"></div>
                         <h5 class="alert-danger-label" style="margin-bottom: 20px;"><strong>Failed Unsubscriber List</strong></h5>
                         <div class="alert alert-danger" role="alert"></div>
                         <h5 class="alert-info-label" style="margin-bottom: 20px;"><strong>Already Unsubscriber List</strong></h5>

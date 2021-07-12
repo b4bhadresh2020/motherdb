@@ -918,7 +918,18 @@ function getExpertSenderProviderListName($providerListId){
         "4" => "camilla/frejasmail2.se/SE",        
         "5" => "camilla/katariinasmail1.com/FI",        
         "6" => "camilla/signesmail1.dk/DK",        
-        "7" => "camilla/signesmail2.com/NO"        
+        "7" => "camilla/signesmail2.com/NO",
+        "8" => "Kaare/NO-FreeCasinodeal",        
+        "9" => "Kaare/FI-FreeCasinodeal",        
+        "10" => "Kaare/CA-FreeCasinodeal",        
+        "11" => "Kaare/NZ-FreeCasinodeal",        
+        "12" => "Kaare/CA-GetSpinn",        
+        "13" => "Kaare/NZ-GetSpinn",        
+        "14" => "Kaare/NO-GetSpinn",        
+        "15" => "Kaare/gratispresentmail.se/SE",        
+        "16" => "Kaare/unelmalainamail.fi/Unelmalaina",        
+        "17" => "Kaare/Velkomstgaven-NO",        
+        "18" => "Kaare/DK-Velkomstgaven",        
     );
     return $expertSenderList[$providerListId];
 }
@@ -1157,6 +1168,17 @@ function getLiveRepostExpertSenderProviderID($providerId){
         "5" => "153",  // camilla/katariinasmail1.com/FI
         "6" => "154",  // camilla/signesmail1.dk/DK
         "7" => "155",  // camilla/signesmail2.com/NO
+        "8" => "170",  // Kaare/NO-FreeCasinodeal
+        "9" => "171",  // Kaare/FI-FreeCasinodeal
+        "10" => "172", // Kaare/CA-FreeCasinodeal
+        "11" => "173", // Kaare/NZ-FreeCasinodeal
+        "12" => "174", // Kaare/CA-GetSpinn
+        "13" => "175", // Kaare/NZ-GetSpinn
+        "14" => "176", // Kaare/NO-GetSpinn
+        "15" => "177", // Kaare/gratispresentmail.se/SE
+        "16" => "178", // Kaare/unelmalainamail.fi/Unelmalaina
+        "17" => "179", // Kaare/Velkomstgaven-NO
+        "18" => "180", // Kaare/DK-Velkomstgaven
     );
     return $provider[$providerId];
 }
