@@ -950,7 +950,10 @@ function getCleverReachListName($providerListId){
 
 function getOmnisendListName($providerListId){
     $omnisendList = array(
-        "1" => "SE-Gratispresent"
+        "1" => "SE-Gratispresent",
+        "2" => "NO-Velkomstgaven",
+        "3" => "FI-Unelmalaina",
+        "4" => "DK-Velkomstgaven"
     );
     return $omnisendList[$providerListId];
 }
@@ -1207,6 +1210,9 @@ function getLiveRepostCleverReachProviderID($providerId){
 function getLiveRepostOmnisendProviderID($providerId){
     $provider = array(
         "1" => "181",  // SE-Gratispresent 
+        "2" => "182",  // NO-Velkomstgaven
+        "3" => "183",  // FI-Unelmalaina
+        "4" => "184",  // DK-Velkomstgaven
     );
     return $provider[$providerId];
 }

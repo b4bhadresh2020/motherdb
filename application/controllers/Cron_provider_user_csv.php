@@ -596,6 +596,9 @@ class Cron_provider_user_csv extends CI_Controller
     public function getOmnisendProviderId($providerId){
         $provider = array(
             "1" => "181",  // SE-Gratispresent 
+            "2" => "182",  // NO-Velkomstgaven
+            "3" => "183",  // FI-Unelmalaina
+            "4" => "184",  // DK-Velkomstgaven
         );
         return $provider[$providerId];
     }
