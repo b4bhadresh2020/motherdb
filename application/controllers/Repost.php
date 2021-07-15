@@ -454,7 +454,7 @@ class Repost extends CI_Controller
 
         $marketingPlatformCondition   = array('id' => $marketingPlatformAccountId);
         $is_single           = true;
-        $marketingPlatformAccountData   = GetAllRecord(MAILJET_ACCOUNTS, $marketingPlatformCondition, $is_single);
+        $marketingPlatformAccountData   = GetAllRecord(MARKETING_PLATFORM_ACCOUNTS, $marketingPlatformCondition, $is_single);
 
         if($marketingPlatformAccountData['status'] == 1) {
             if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
@@ -617,5 +617,46 @@ class Repost extends CI_Controller
         $responseField = $providerData['response_field'];
         $updateArr = array($responseField => json_encode($response));
         ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
+    }
+
+    function addDataToOmnisend()
+    {
+
+        $apiDataDetail = $this->input->post('apiDataDetail');
+        $mailProvider = $this->input->post('provider');
+        $groupName = $this->input->post('groupName');
+        $keyword = $this->input->post('keyword');
+        $provider = OMNISEND;
+
+        // fetch mail provider data from providers table
+        $providerCondition   = array('id' => $mailProvider);
+        $is_single           = true;
+        $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
+        $omnisendAccountId     = $providerData['aweber_account']; 
+
+        $omnisendCondition   = array('id' => $omnisendAccountId);
+        $is_single           = true;
+        $omnisendAccountData   = GetAllRecord(OMNISEND_ACCOUNTS, $omnisendCondition, $is_single);
+
+        if($omnisendAccountData['status'] == 1) {
+            if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
+
+                $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
+
+                $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
+            }
+
+            $this->load->model('mdl_omnisend');
+            $response = $this->mdl_omnisend->AddEmailToOmnisendSubscriberList($apiDataDetail, $mailProvider);
+            // ADD RECORD IN HISTORY
+            addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
+
+            //update to live delivery data
+            $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
+            $is_insert = FALSE;
+            $responseField = $providerData['response_field'];
+            $updateArr = array($responseField => json_encode($response));
+            ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
+        }
     }
 }

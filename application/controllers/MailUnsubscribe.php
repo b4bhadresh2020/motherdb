@@ -97,7 +97,7 @@ class MailUnsubscribe extends CI_Controller
 
         if($provider == 0) {
             // $providers = array("9","11","12","13","14","15");  
-            $providers = array("9","12","13","14","15");  
+            $providers = array("9","12","13","14","15","16");  
         } else {
             $providers = array($provider);
         }        
@@ -706,6 +706,72 @@ class MailUnsubscribe extends CI_Controller
                             "response"    => "Already unsubscribed"
                         ];
                         $alreadyUnsubscribe[] = $providerData['listname'].'(Clever Reach)';
+                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                    }
+                                    
+                }               
+            } else if($provider == OMNISEND){
+                $this->load->model('mdl_omnisend_unsubscribe');
+                //LIST ID EMPTY GET COUNTRY WISE LIST
+                $list = $this->input->post('list');
+                if(empty($list)){
+                    $listCondition  = array(
+                        'provider' => $provider,
+                        'omnisend_accounts.status' => 1
+                    );
+                    if(!empty($country)) {
+                        $listCondition['country'] = $country;
+                    }
+                    $is_single             = false;
+                    // $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
+                    $getListIDByCountry = JoinData(PROVIDERS,$listCondition,OMNISEND_ACCOUNTS,"aweber_account","id","left",$is_single,array(),"providers.id","");
+                    $list = array_column($getListIDByCountry,'id');
+                }
+                
+                foreach ($list as $listID) {   
+                    
+                    // fetch mail provider data from providers table
+                    $providerCondition   = array('id' => $listID);
+                    $is_single           = true;
+                    $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
+
+                    // CHECK EMAIL ALREADY UNSUBSCRIBE
+                    if(!in_array($listID,$providerID)){
+                        // SEND DATA FOR UNSUBSCRIBE
+                        $response = $this->mdl_omnisend_unsubscribe->makeUnsubscribe($email,$listID);
+
+                        // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
+                        if($response["result"] == "success"){
+                            $data = [
+                                "provider_id" => $listID,
+                                "email"       => $email,
+                                "name"        => $response["data"]["name"],
+                                "status"      => 1, // success
+                                "response"    => $response["data"]["updated_at"]
+                            ];
+                            $successUnsubscribe[] = $providerData['listname'].'(Omnisend)';
+                        }else{
+                            $data = [
+                                "provider_id" => $listID,
+                                "email"       => $email,
+                                "name"        => NULL,
+                                "status"      => 2, // error
+                                "response"    => $response["msg"]
+                            ];
+                            $failUnsubscribe[] = $providerData['listname'].'(Omnisend)';
+                        }
+                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                    }else{
+                        $data = [
+                            "provider_id" => $listID,
+                            "email"       => $email,
+                            "name"        => NULL,
+                            "status"      => 3, // already unsubscribed
+                            "response"    => "Already unsubscribed"
+                        ];
+                        $alreadyUnsubscribe[] = $providerData['listname'].'(Omnisend)';
                         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }

@@ -155,6 +155,7 @@
                         <li class="<?php echo (@$load_page == 'activeCampaignQueue')?"active":"";?>" title = "Active Campaign Queue List" ><a href="<?php echo base_url('activeCampaignQueue/manage'); ?>"><i class="ti-timer"></i> Active Campaign Queue List </a></li>
                         <li class="<?php echo (@$load_page == 'expertSenderQueue')?"active":"";?>" title = "Expert Sender Queue List" ><a href="<?php echo base_url('expertSenderQueue/manage'); ?>"><i class="ti-timer"></i> Expert Sender Queue List </a></li>
                         <li class="<?php echo (@$load_page == 'cleverReachQueue')?"active":"";?>" title = "Clever Reach Queue List" ><a href="<?php echo base_url('cleverReachQueue/manage'); ?>"><i class="ti-timer"></i> Clever Reach Queue List </a></li>
+                        <li class="<?php echo (@$load_page == 'omnisendQueue')?"active":"";?>" title = "Omnisend Queue List" ><a href="<?php echo base_url('omnisendQueue/manage'); ?>"><i class="ti-timer"></i> Omnisend Queue List </a></li>
 
                     <li class="label">Email Provider State </li>
 
@@ -173,6 +174,7 @@
                         <li class="<?php echo (@$load_page == 'activeCampaign')?"active":"";?>" title = "Active Campaign State" ><a href="<?php echo base_url('providerState/activeCampaign'); ?>" ><i class="ti-timer"></i> Active Campaign Email Stats </a></li>
                         <li class="<?php echo (@$load_page == 'expertSender')?"active":"";?>" title = "Expert Sender State" ><a href="<?php echo base_url('providerState/expertSender'); ?>" ><i class="ti-timer"></i> Expert Sender Email Stats </a></li>
                         <li class="<?php echo (@$load_page == 'cleverReach')?"active":"";?>" title = "Clever Reach State" ><a href="<?php echo base_url('providerState/cleverReach'); ?>" ><i class="ti-timer"></i> Clever Reach Email Stats </a></li>
+                        <li class="<?php echo (@$load_page == 'omnisend')?"active":"";?>" title = "Omnisend State" ><a href="<?php echo base_url('providerState/omnisend'); ?>" ><i class="ti-timer"></i> Omnisend Email Stats </a></li>
 
                     <li class="label">Stats </li>
                         

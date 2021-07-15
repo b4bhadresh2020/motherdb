@@ -45,7 +45,9 @@
                     }else if($providerInfo['providerName'] == EXPERT_SENDER){
                         $providerListName = getExpertSenderProviderListName($providerInfo['providerList']);
                     }else if($providerInfo['providerName'] == CLEVER_REACH){
-                        $providerListName = getExpertCleverReachListName($providerInfo['providerList']);
+                        $providerListName = getCleverReachListName($providerInfo['providerList']);
+                    }else if($providerInfo['providerName'] == OMNISEND){
+                        $providerListName = getOmnisendListName($providerInfo['providerList']);
                     }
                     ?> 
                     <tr>

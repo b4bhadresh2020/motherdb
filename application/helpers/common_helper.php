@@ -1203,6 +1203,13 @@ function getLiveRepostCleverReachProviderID($providerId){
     );
     return $provider[$providerId];
 }
+
+function getLiveRepostOmnisendProviderID($providerId){
+    $provider = array(
+        "1" => "181",  // SE-Gratispresent 
+    );
+    return $provider[$providerId];
+}
 /*
   ++++++++++++++++++++++++++++++++++++++++++++++
   Mail send shortcut function.
@@ -2145,7 +2152,8 @@ function getCsvUserResponseField($emailServiceProvider){
         '12' => 'ontraportResponse',
         '13' => 'activeCampaignResponse',
         '14' => 'expertSenderResponse',
-        '15' => 'cleverReachResponse'
+        '15' => 'cleverReachResponse',
+        '16' => 'omniSendResponse'
     );
     return $responseField[$emailServiceProvider];
 }

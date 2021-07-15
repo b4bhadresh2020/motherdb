@@ -78,7 +78,7 @@ class Mdl_expert_sender_unsubscribe extends CI_Model {
                 if($statusCode == 200 && !empty($subscriber['Data'])) {
                     $subscriberId = $subscriber['Data']['Id'];
                     $subscriberName = $subscriber['Data']['Firstname'] . " ". $subscriber['Data']['Lastname'];
-                    $subscriberListId = $subscriber['Data']['StateOnLists']['StateOnList']['ListId'];
+                    $subscriberListId = @$subscriber['Data']['StateOnLists']['StateOnList']['ListId'];
                     
                     // UPDATE SUSBCRIBER STATUS (unsubscribe)
                     if(isset($subscriberId) && $subscriber['Data']['Email'] == $email && $subscriberListId == $list_id){

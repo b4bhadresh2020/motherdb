@@ -89,6 +89,8 @@
                                                             echo getExpertSenderProviderListName($curEntry['providerList']);
                                                          }else if($curEntry['providerName'] ==  CLEVER_REACH ){
                                                             echo getCleverReachListName($curEntry['providerList']);
+                                                         }else if($curEntry['providerName'] ==  OMNISEND ){
+                                                            echo getOmnisendListName($curEntry['providerList']);
                                                          }
                                                          ?></td>
                                                         <td><?php echo date("d-m-Y",strtotime($curEntry['fromDate'])); ?></td>
@@ -184,6 +186,7 @@
                                         <option value="13">Active Campaign</option>                                                   
                                         <option value="14">Expert Sender</option> 
                                         <option value="15">Clever Reach</option>                                                   
+                                        <option value="16">Omnisend</option>                                                   
                                     </select>
                                 </div>
                             </div>
