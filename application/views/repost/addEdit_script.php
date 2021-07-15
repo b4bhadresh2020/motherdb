@@ -106,8 +106,10 @@
 					sendEmailToActiveCampaign(apiData, provider, groupName, keyword);
 				} else if (providerId == 14) {
 					sendEmailToExpertSender(apiData, provider, groupName, keyword);
-				}else if (providerId == 15) {
+				} else if (providerId == 15) {
 					sendEmailToCleverReach(apiData, provider, groupName, keyword);
+				} else if (providerId == 16) {
+					sendEmailToOmnisend(apiData, provider, groupName, keyword);
 				}
 			}
 		});
@@ -129,6 +131,7 @@
 	var sendEmailToActiveCampaignCount = 0;
 	var sendEmailToExpertSenderCount = 0;
 	var sendEmailToCleverReachCount = 0;
+	var sendEmailToOmnisendCount = 0;
 
 	function sendEmailToEgoi(apiData) {
 		var apiDataDetail = apiData[sendEmailToEgoiCount];
@@ -706,6 +709,43 @@
 				sendEmailToCleverReachCount++;
 				if (sendEmailToCleverReachCount < apiData.length) {
 					sendEmailToCleverReach(apiData, provider, groupName, keyword);
+				}
+
+			}
+		});
+	}
+
+	function sendEmailToOmnisend(apiData, provider, groupName, keyword) {
+		var apiDataDetail = apiData[sendEmailToOmnisendCount];
+		
+		$.ajax({
+			url: BASEPATH + 'repost/addDataToOmnisend',
+			type: 'post',
+			data: {
+				apiDataDetail: apiDataDetail,
+				provider: provider,
+				groupName: groupName,
+				keyword: keyword
+			},
+			success: function(response) {
+
+				userApiDataLength--;
+				if (userApiDataLength == 0) {
+
+					$('#sucErrMsg').text("Contacts has been added successfully !!!").addClass('alert alert-success');
+
+					var timeoutVar = setTimeout(function() {
+						clearTimeout(timeoutVar);
+						location.reload();
+					}, 2000);
+
+				} else {
+					$('#sucErrMsg').text('Approx ' + userApiDataLength + ' Records Left').addClass('alert alert-info');
+				}
+
+				sendEmailToOmnisendCount++;
+				if (sendEmailToOmnisendCount < apiData.length) {
+					sendEmailToOmnisend(apiData, provider, groupName, keyword);
 				}
 
 			}

@@ -143,6 +143,10 @@
                                                             case 15:                                                                
                                                                 $providerName = 'Clever Reach';
                                                                 $response = $curEntry['cleverReachResponse'];
+                                                                break;
+                                                            case 16:                                                                
+                                                                $providerName = 'Omnisend';
+                                                                $response = $curEntry['omniSendResponse'];
                                                                 break;    
                                                         }
                                                         if($curEntry['status'] == 0){

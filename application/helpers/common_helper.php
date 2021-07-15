@@ -692,7 +692,8 @@ function getProviderName($providerId){
         '12' => 'Ontraport',
         '13' => 'ActiveCampaign',
         '14' => 'ExpertSender',
-        '15' => 'CleverReach'
+        '15' => 'CleverReach',
+        '16' => 'Omnisend'
     );
     return $providerNames[$providerId];
 }
@@ -947,6 +948,16 @@ function getCleverReachListName($providerListId){
     return $cleverReachList[$providerListId];
 }
 
+function getOmnisendListName($providerListId){
+    $omnisendList = array(
+        "1" => "SE-Gratispresent",
+        "2" => "NO-Velkomstgaven",
+        "3" => "FI-Unelmalaina",
+        "4" => "DK-Velkomstgaven"
+    );
+    return $omnisendList[$providerListId];
+}
+
 function getLiveRepostAweverProviderID($providerListId){
     $provider = array(
         "1" => "14",  // Velkomstgaven.com (Norway) 
@@ -1192,6 +1203,16 @@ function getLiveRepostCleverReachProviderID($providerId){
         "5" => "160",  // Cathrinesmail/NO
         "6" => "161",  // Cathrinesmail/NZ
         "7" => "162",  // Cathrinesmail/SE
+    );
+    return $provider[$providerId];
+}
+
+function getLiveRepostOmnisendProviderID($providerId){
+    $provider = array(
+        "1" => "181",  // SE-Gratispresent 
+        "2" => "182",  // NO-Velkomstgaven
+        "3" => "183",  // FI-Unelmalaina
+        "4" => "184",  // DK-Velkomstgaven
     );
     return $provider[$providerId];
 }
@@ -1964,6 +1985,21 @@ function addToCleverReachSubscriberQueue($liveDeliveryDataId,$mailProvider,$dela
     ManageData(CLEVER_REACH_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
+function addToOmnisendSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+    $liveDeliveryDelayData = array(
+        "liveDeliveryDataId" => $liveDeliveryDataId,
+        "providerId" => $mailProvider,
+        "delayDay" => $delayDay,
+        "currentTimestamp" => time(),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "status" => 0
+    );
+    $condition = array();
+    $is_insert = true;
+    ManageData(OMNISEND_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
+}
+
 function addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$groupName,$keyword,$emailId = NULL){
     $historyData = array(
         'liveDeliveryDataId' => $lastDeliveryData['liveDeliveryDataId'],
@@ -2122,7 +2158,8 @@ function getCsvUserResponseField($emailServiceProvider){
         '12' => 'ontraportResponse',
         '13' => 'activeCampaignResponse',
         '14' => 'expertSenderResponse',
-        '15' => 'cleverReachResponse'
+        '15' => 'cleverReachResponse',
+        '16' => 'omniSendResponse'
     );
     return $responseField[$emailServiceProvider];
 }

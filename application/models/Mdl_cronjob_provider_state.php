@@ -76,7 +76,7 @@ class Mdl_cronjob_provider_state extends CI_Model
         $this->db->where($condition);
         $totalUserData = $this->db->count_all_results();
 
-        $this->db->select('firstName,lastName,emailId,aweberResponse,transmitviaResponse,ongageResponse,sendgridResponse,sendinblueResponse,sendpulseResponse,mailerliteResponse,mailjetResponse,convertkitResponse,marketingPlatformResponse,ontraportResponse,activeCampaignResponse,expertSenderResponse,cleverReachResponse,sendDate,providerName,providerList,csv_cron_user_data.status');
+        $this->db->select('firstName,lastName,emailId,aweberResponse,transmitviaResponse,ongageResponse,sendgridResponse,sendinblueResponse,sendpulseResponse,mailerliteResponse,mailjetResponse,convertkitResponse,marketingPlatformResponse,ontraportResponse,activeCampaignResponse,expertSenderResponse,cleverReachResponse,omniSendResponse,sendDate,providerName,providerList,csv_cron_user_data.status');
         $this->db->from(CSV_CRON_USER_DATA);
         $this->db->join(USER,'user.userId = csv_cron_user_data.userId');
         $this->db->join(CSV_FILE_PROVIDER_DATA,'csv_file_provider_data.id = csv_cron_user_data.providerId');

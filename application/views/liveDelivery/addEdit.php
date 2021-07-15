@@ -16,7 +16,7 @@
     $activeCampaignList = getProviderList(ACTIVE_CAMPAIGN);
     $expertSenderList = getProviderList(EXPERT_SENDER);
     $cleverReachList = getProviderList(CLEVER_REACH);
-
+    $omnisendList = getProviderList(OMNISEND);
 
     $mailProviders = array(
         'egoi' => 'E-goi'
@@ -95,6 +95,11 @@
     // Add Clever Reach list in mail provider
     foreach($cleverReachList as $list){
         $mailProviders[$list['id']] = $list['listname']. " (Clever Reach)";
+    }
+
+    // Add Omnisend list in mail provider
+    foreach($omnisendList as $list){
+        $mailProviders[$list['id']] = $list['listname']. " (Omnisend)";
     }
 
     $identifiers = array(

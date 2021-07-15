@@ -592,6 +592,11 @@
             providerList +="<option value='5'>Cathrinesmail/NO</option>";
             providerList +="<option value='6'>Cathrinesmail/NZ</option>";
             providerList +="<option value='7'>Cathrinesmail/SE</option>";       
+        } else if(providerId == 16){
+            providerList +="<option value='1'>SE-Gratispresent</option>";
+            providerList +="<option value='2'>NO-Velkomstgaven</option>";
+            providerList +="<option value='3'>FI-Unelmalaina</option>";
+            providerList +="<option value='4'>DK-Velkomstgaven</option>";                
         } else{
             providerList +="<option value='0'>Select Provider List</option>";
         }

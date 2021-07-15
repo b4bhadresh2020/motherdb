@@ -23,6 +23,7 @@ class Cron_provider_user_csv extends CI_Controller
         $this->load->model('mdl_active_campaign');
         $this->load->model('mdl_expert_sender');
         $this->load->model('mdl_clever_reach');
+        $this->load->model('mdl_omnisend');
     }
 
     public function index() {
@@ -223,7 +224,7 @@ class Cron_provider_user_csv extends CI_Controller
                                 } else {
                                     $response = array("result" => "error","error" => array("msg" => "Account is closed"));
                                 }
-                            }  else if($provider['providerName'] == ONTRAPORT){
+                            } else if($provider['providerName'] == ONTRAPORT){
                                 if (@$userData['birthdateDay'] != '' && @$userData['birthdateMonth'] != '' && @$userData['birthdateYear'] != '') {
                                     $birthDate              = $userData['birthdateYear'] . '-' . $userData['birthdateMonth'] . '-' . $userData['birthdateDay'];
                                     $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
@@ -232,7 +233,7 @@ class Cron_provider_user_csv extends CI_Controller
                                 $mailProvider = $this->getOntraportProviderId($provider["providerList"]);                                
                                 $response = $this->mdl_ontraport->AddEmailToOntraportSubscriberList($userData,$mailProvider);
                                 addRecordInHistoryFromCSV($userData, $mailProvider, ONTRAPORT, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
-                            }  else if($provider['providerName'] == ACTIVE_CAMPAIGN){
+                            } else if($provider['providerName'] == ACTIVE_CAMPAIGN){
                                 if (@$userData['birthdateDay'] != '' && @$userData['birthdateMonth'] != '' && @$userData['birthdateYear'] != '') {
                                     $birthDate              = $userData['birthdateYear'] . '-' . $userData['birthdateMonth'] . '-' . $userData['birthdateDay'];
                                     $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
@@ -259,6 +260,29 @@ class Cron_provider_user_csv extends CI_Controller
                                 $mailProvider = $this->getCleverReachProviderId($provider["providerList"]);                                
                                 $response = $this->mdl_clever_reach->AddEmailToCleverReachSubscriberList($userData,$mailProvider);
                                 addRecordInHistoryFromCSV($userData, $mailProvider, CLEVER_REACH, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
+                            } else if($provider['providerName'] == OMNISEND){
+                                if (@$userData['birthdateDay'] != '' && @$userData['birthdateMonth'] != '' && @$userData['birthdateYear'] != '') {
+                                    $birthDate              = $userData['birthdateYear'] . '-' . $userData['birthdateMonth'] . '-' . $userData['birthdateDay'];
+                                    $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
+                                } 
+                                $responseField = "omniSendResponse";
+                                $mailProvider = $this->getOmnisendProviderId($provider["providerList"]); 
+                                
+                                // fetch mail provider data from providers table
+                                $providerCondition   = array('id' => $mailProvider);
+                                $is_single           = true;
+                                $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);   
+                                $omnisendAccountId     = $providerData['aweber_account']; 
+                                
+                                $omnisendCondition   = array('id' => $omnisendAccountId);
+                                $is_single           = true;
+                                $omnisendAccountData   = GetAllRecord(OMNISEND_ACCOUNTS, $omnisendCondition, $is_single);
+                                if($omnisendAccountData['status'] == 1) {
+                                    $response = $this->mdl_omnisend->AddEmailToOmnisendSubscriberList($userData,$mailProvider);
+                                    addRecordInHistoryFromCSV($userData, $mailProvider, OMNISEND, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
+                                } else {
+                                    $response = array("result" => "error","error" => array("msg" => "Account is closed"));
+                                }
                             }
                             // update status of sended record
                             $is_insert = FALSE;
@@ -565,6 +589,16 @@ class Cron_provider_user_csv extends CI_Controller
             "5" => "160",  // Cathrinesmail/NO
             "6" => "161",  // Cathrinesmail/NZ
             "7" => "162",  // Cathrinesmail/SE
+        );
+        return $provider[$providerId];
+    }
+
+    public function getOmnisendProviderId($providerId){
+        $provider = array(
+            "1" => "181",  // SE-Gratispresent 
+            "2" => "182",  // NO-Velkomstgaven
+            "3" => "183",  // FI-Unelmalaina
+            "4" => "184",  // DK-Velkomstgaven
         );
         return $provider[$providerId];
     }
