@@ -31,10 +31,14 @@ class Mdl_omnisend extends CI_Model {
                 $otherLabel = json_decode($getData["otherLable"]);
                 $otherData = json_decode($getData["other"]);
 
-                $searchIndex = array_search("Tag",$otherLabel,true);
-                if($searchIndex !== FALSE){
-                    $tagValue = $otherData[$searchIndex];
-                }else{
+                if(!empty($otherLabel)) {
+                    $searchIndex = array_search("Tag",$otherLabel,true);
+                    if($searchIndex !== FALSE){
+                        $tagValue = $otherData[$searchIndex];
+                    }else{
+                        $tagValue = "";
+                    }
+                } else {
                     $tagValue = "";
                 }  
             }else if(isset($getData["tag"])){
