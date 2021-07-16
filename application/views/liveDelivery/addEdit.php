@@ -310,7 +310,10 @@
                                         </div>  
                                         <div class="providerBlock">    
                                             <?php if(counts($delays) > 0) {
-                                                foreach($delays as $delayProvider => $delayDay){?>
+                                                foreach($delays as $delayProvider => $delayDay){
+                                                    $getAccountdetails = checkAccountStatus($delayProvider);
+                                                    if($getAccountdetails['status'] == 1){
+                                                    ?>
                                                     <div id="<?php echo $delayProvider;?>" class="row provider_<?php echo $delayProvider; ?>" style="margin-top:5px;">
                                                         <div class="col-md-3">
                                                             <label class="pname"><?php echo $mailProviders[$delayProvider];?></label>
@@ -326,7 +329,7 @@
                                                             </div>    
                                                         </div>                                                   
                                                     </div>
-                                            <?php } } ?>    
+                                            <?php } } } ?>    
                                         </div>
                                         
                                         <button type="submit" class="btn btn-success">Submit</button>
