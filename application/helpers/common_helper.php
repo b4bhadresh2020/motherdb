@@ -2197,3 +2197,17 @@ function getAlreadySubscribeCsvUserDetail($userIds, $listId, $responseField) {
     }
     return $getDetail;
 }
+
+function checkAccountStatus($mailProvider) {
+    $providerCondition   = array('id' => $mailProvider);
+    $is_single           = true;
+    $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);   
+    $provider     = $providerData['provider']; 
+    $accountId    = $providerData['aweber_account']; 
+    $accountTable = getAccountTableName($provider);
+
+    $condition   = array('id' => $accountId);
+    $is_single   = true;
+    $accountData = GetAllRecord($accountTable, $condition, $is_single);
+    return $accountData;
+}
