@@ -52,6 +52,7 @@
                                                             <!-- <th class="text-center" style="width:10% !important">Marketing Platform</th> -->
                                                             <th class="text-center" style="width:10% !important">Ontraport</th>
                                                             <th class="text-center" style="width:10% !important">Active Campaign</th>
+                                                            <th class="text-center" style="width:10% !important">Clever Reach</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -61,6 +62,7 @@
                                                         '11' => 'Marketing Platform',
                                                         '12' => 'Ontraport',
                                                         '13' => 'Active Campaign',
+                                                        '15' => 'Clever Reach'
                                                     ];
                                                     foreach($unsubscribeSettings as $key => $setting){
                                                         ?>
@@ -77,6 +79,9 @@
                                                             </td>
                                                             <td>
                                                                 <input type="checkbox" name="<?=$setting['main_provider']?>[13]" value="1" <?=(!empty($setting['active_campaign']) && $setting['active_campaign'] == 1) ? 'checked' : ''?>>
+                                                            </td>
+                                                            <td>
+                                                                <input type="checkbox" name="<?=$setting['main_provider']?>[15]" value="1" <?=(!empty($setting['clever_reach']) && $setting['clever_reach'] == 1) ? 'checked' : ''?>>
                                                             </td>
                                                         </tr>  
                                                         <?php

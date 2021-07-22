@@ -135,6 +135,38 @@ class Unsubscribe_user extends CI_Controller
         }
     }
 
+    public function cleverReach($account) {
+        $subscribeDetailJson = file_get_contents('php://input');
+        $subscribeDetail = \json_decode($subscribeDetailJson,true);
+        $email = $subscribeDetail['email'];
+
+        // FIND PROVIDER ID FROM LIST ID
+        $listId =  $subscribeDetail['listId'];
+        $providerId = getProviderID($account, $listId, CLEVER_REACH);
+
+        if($this->is_main_webhook_called == 0) {
+            // GET ALREDY UNSUBSCRIBER LIST
+            $condition       = array('email' => $email,'esp' => CLEVER_REACH,'provider_id' => $providerId,'status' => 1);
+            $is_single       = false;
+            $getUnsubscribeData    = GetAllRecord(PROVIDER_UNSUBSCRIBER, $condition, $is_single,[],[],[],'id');
+
+            if(empty($getUnsubscribeData)) {
+                // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                $unsubscribeData = [
+                    "provider_id" => $providerId,
+                    "esp"         => CLEVER_REACH,
+                    "email"       => $email,
+                    "name"        => NULL,
+                    "status"      => 1, // success
+                    "unsub_method"=> 1, // 1 - webhook(by main ESP)
+                    "response"    => date('Y-m-d H:i:s')
+                ];
+                ManageData(PROVIDER_UNSUBSCRIBER,[],$unsubscribeData,true);
+                $this->unsubFromOtherEsp($email, CLEVER_REACH, $providerId);
+            }
+        }
+    }
+
     public function unsubFromOtherEsp($email, $mainProvider, $mainProviderId) {
         $this->is_main_webhook_called = 1;
         $providerCondition   = array('main_provider' => $mainProvider);
@@ -147,6 +179,7 @@ class Unsubscribe_user extends CI_Controller
                 '11' => 'marketing_platform',
                 '12' => 'ontraport',
                 '13' => 'active_campaign',
+                '15' => 'clever_reach'
             ];
             // GET UNSUBSCRIBER LIST USING EMAIL ID THAT ALREADY HANDLE WHEN EMPLOYEE UNSUB USER (+ WEBHOOK (TO HANDLE DUPLICATE ENTRY WHEN EMPLOYEE UNSUB USER AND AT THAT MOMENT WEBHOOK EVENT IS ALSO CALLED))
             $condition       = array('email' => $email);
@@ -470,6 +503,76 @@ class Unsubscribe_user extends CI_Controller
                                 }                                
                             }
                         }               
+                    } else if($provider == CLEVER_REACH) { 
+                        $this->load->model('mdl_clever_reach_unsubscribe');
+                        //LIST ID EMPTY GET COUNTRY WISE LIST  
+                        $listCondition  = array(
+                            'provider' => $provider,
+                            'clever_reach_accounts.status' => 1
+                        );  
+                        if(!empty($country)) {
+                            $listCondition['country'] = $country;
+                        } 
+                        if($mainProvider == CLEVER_REACH) {
+                            $listCondition['id !='] = $mainProviderId;
+                        }
+                        $is_single             = false;
+                        // $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
+                        $getListIDByCountry = JoinData(PROVIDERS,$listCondition,CLEVER_REACH_ACCOUNTS,"aweber_account","id","left",$is_single,array(),"providers.id","");
+
+                        $list = array_column($getListIDByCountry,'id');
+        
+                        foreach ($list as $listID) {
+                            // CHECK EMAIL ALREADY UNSUBSCRIBE USING EMPLOYEE 
+                            if(!in_array($listID,$empProviderID)){   
+                                // CHECK EMAIL ALREADY UNSUBSCRIBE
+                                if(!in_array($listID,$providerID)){
+                                    
+                                    // SEND DATA FOR UNSUBSCRIBE
+                                    $response = $this->mdl_clever_reach_unsubscribe->makeUnsubscribe($email,$listID);
+                                
+                                    // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
+                                    if($response["result"] == "success"){
+                                        $data = [
+                                            "provider_id" => $listID,
+                                            "esp"         => CLEVER_REACH,
+                                            "email"       => $email,
+                                            "name"        => $response["data"]["name"],
+                                            "status"      => 1, // success
+                                            "unsub_method"=> 2, // webhook (by other ESP)
+                                            "response"    => $response["data"]["updated_at"]                                            
+                                        ];
+                                        $fn = 'CLEVER_REACH IF IF';
+                                    }else{
+                                        $data = [
+                                            "provider_id" => $listID,
+                                            "esp"         => CLEVER_REACH,
+                                            "email"       => $email,
+                                            "name"        => NULL,
+                                            "status"      => 2, // error
+                                            "unsub_method"=> 2, // webhook (by other ESP)
+                                            "response"    => $response["msg"]                                           
+                                        ];
+                                        $fn = 'CLEVER_REACH IF ELSE';
+                                    }
+                                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                                }else{
+                                    $data = [
+                                        "provider_id" => $listID,
+                                        "esp"         => CLEVER_REACH,
+                                        "email"       => $email,
+                                        "name"        => NULL,
+                                        "status"      => 3, // already unsubscribed
+                                        "unsub_method"=> 2, // webhook (by other ESP)
+                                        "response"    => "Already unsubscribed"                                        
+                                    ];
+                                    $fn = 'CLEVER_REACH ELSE';
+                                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                                }                                
+                            }
+                        }                
                     }
                 }   
             }           
