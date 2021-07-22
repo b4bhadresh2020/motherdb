@@ -124,6 +124,11 @@
         // else if($("#popupCountry").val() == ""){
         //     $("#popupSucErrMsg").html("Please select country").show();
         // }
+        $(".alert-success,.alert-danger,.alert-info").html('');   
+        $(".alert-success-label,.alert-success").show();  
+        $(".alert-danger-label,.alert-danger").show();
+        $(".alert-info-label,.alert-info").show();
+
         if($("#email").val() == ""){
             $("#popupSucErrMsg").html("Please enter email address").show();
         }else{
@@ -141,7 +146,6 @@
                     $('#popupList').multiselect('rebuild');
 
                     var data = JSON.parse(response);
-                    
                     if(data.successList != ""){
                         $(".alert-success").html(data.successList);
                     }else{
