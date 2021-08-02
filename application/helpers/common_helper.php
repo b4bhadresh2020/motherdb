@@ -646,7 +646,8 @@ function getAccountTableName($provider) {
         '12' => 'ontraport_accounts',
         '13' => 'active_campaign_accounts',
         '14' => 'expert_sender_accounts',
-        '15' => 'clever_reach_accounts'
+        '15' => 'clever_reach_accounts',
+        '16' => 'omnisend_accounts'
     );
     if (array_key_exists($provider, $tableNames)) {
         return $tableNames[$provider];
