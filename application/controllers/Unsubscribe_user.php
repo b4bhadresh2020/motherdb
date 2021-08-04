@@ -135,68 +135,82 @@ class Unsubscribe_user extends CI_Controller
         }
     }
 
-    public function cleverReach($account) {
-        $subscribeDetailJson = file_get_contents('php://input');
-        parse_str($subscribeDetailJson, $data);
-        $subscribeDetail = (Array)$data;
-        $email = $subscribeDetail['email'];
+    public function cleverReach() {
+        //  Get all list of cleverreach account
+        $condition  = array(
+            'provider' => CLEVER_REACH,
+            'clever_reach_accounts.status' => 1,
+            // 'providers.id' => 160
+        );
+        $is_single = false;
+        $getCleverReachLists = JoinData(PROVIDERS,$condition,CLEVER_REACH_ACCOUNTS,"aweber_account","id","left",$is_single,array(),'providers.*,clever_reach_accounts.*,providers.id AS providers_id');       
 
-        // FIND PROVIDER ID FROM LIST ID
-        $listId =  $subscribeDetail['listId'];
-        $providerId = getProviderID($account, $listId, CLEVER_REACH);
-
-        if($this->is_main_webhook_called == 0) {
-            // GET ALREDY UNSUBSCRIBER LIST
-            $condition       = array('email' => $email,'esp' => CLEVER_REACH,'provider_id' => $providerId,'status' => 1);
-            $is_single       = false;
-            $getUnsubscribeData    = GetAllRecord(PROVIDER_UNSUBSCRIBER, $condition, $is_single,[],[],[],'id');
-
-            if(empty($getUnsubscribeData)) {
-                // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                $unsubscribeData = [
-                    "provider_id" => $providerId,
-                    "esp"         => CLEVER_REACH,
-                    "email"       => $email,
-                    "name"        => NULL,
-                    "status"      => 1, // success
-                    "unsub_method"=> 1, // 1 - webhook(by main ESP)
-                    "response"    => date('Y-m-d H:i:s')
-                ];
-                ManageData(PROVIDER_UNSUBSCRIBER,[],$unsubscribeData,true);
-                $this->unsubFromOtherEsp($email, CLEVER_REACH, $providerId);
+        $currentTimestamp = time();
+        $this->load->model('mdl_clever_reach_esp');
+        foreach($getCleverReachLists as $getCleverReachList) {
+            
+            $getUnsubscriberData = $this->mdl_clever_reach_esp->GetCleverReachUnsubscriberList($getCleverReachList, $currentTimestamp);           
+            if($getUnsubscriberData['result'] == 'error' && $getUnsubscriberData['msg'] == 'false') {
+                break;
+            }
+            if($getUnsubscriberData['result'] == 'success') {
+                $unsubscribers = $getUnsubscriberData['msg'];
+                foreach($unsubscribers as $unsubscriber) {
+                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                    $unsubscribeData = [
+                        "provider_id" => $getCleverReachList['providers_id'],
+                        "esp"         => CLEVER_REACH,
+                        "email"       => $unsubscriber['email'],
+                        "name"        => $unsubscriber['global_attributes']['firstname'] . " " . $unsubscriber['global_attributes']['lastname'],
+                        "status"      => 1, // success
+                        "unsub_method"=> 1, // 1 - webhook(by main ESP)
+                        "response"    => date('Y-m-d H:i:s', $unsubscriber['deactivated'])
+                    ];
+                    // pre($unsubscribeData);die;
+                    ManageData(PROVIDER_UNSUBSCRIBER,[],$unsubscribeData,true);
+                    $this->unsubFromOtherEsp($unsubscriber['email'], CLEVER_REACH, $getCleverReachList['providers_id']);
+                }
             }
         }
     }
 
-    public function omnisend($account) {
-        $subscribeDetailJson = file_get_contents('php://input');
-        parse_str($subscribeDetailJson, $data);
-        $subscribeDetail = (Array)$data;
-        $email = $subscribeDetail['email'];
+    public function omnisend() {
+        //  Get all list of omnisend account
+        $condition  = array(
+            'provider' => OMNISEND,
+            'omnisend_accounts.status' => 1,
+        );
+        $is_single = false;
+        $getOmnisendLists = JoinData(PROVIDERS,$condition,OMNISEND_ACCOUNTS,"aweber_account","id","left",$is_single,array(),'providers.*,omnisend_accounts.*,providers.id AS providers_id');
+        
+        $currentTimestamp = time();
+        $timestampHourAgo = $currentTimestamp - (60*60) - 1;
+       
+        $this->load->model('mdl_omnisend_esp');
+        foreach($getOmnisendLists as $getOmnisendList) {
+            $getUnsubscriberData = $this->mdl_omnisend_esp->GetOmnisendUnsubscriberList($getOmnisendList, $currentTimestamp);                 
+            if($getUnsubscriberData['result'] == 'success' && !empty($getUnsubscriberData['msg']['contacts'])) {
+                $unsubscribers = $getUnsubscriberData['msg']['contacts'];
+                foreach($unsubscribers as $unsubscriber) {
+                    // pre($unsubscriber);
+                    $key = array_search('unsubscribed', array_column($unsubscriber['statuses'], 'status'));
+                    $unsubscribeTimestamp = strtotime($unsubscriber['statuses'][$key]['date']);
 
-        // FIND PROVIDER ID FROM LIST ID
-        $listId =  $subscribeDetail['listId'];
-        $providerId = getProviderID($account, $listId, OMNISEND);
-
-        if($this->is_main_webhook_called == 0) {
-            // GET ALREDY UNSUBSCRIBER LIST
-            $condition       = array('email' => $email,'esp' => OMNISEND,'provider_id' => $providerId,'status' => 1);
-            $is_single       = false;
-            $getUnsubscribeData    = GetAllRecord(PROVIDER_UNSUBSCRIBER, $condition, $is_single,[],[],[],'id');
-
-            if(empty($getUnsubscribeData)) {
-                // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                $unsubscribeData = [
-                    "provider_id" => $providerId,
-                    "esp"         => OMNISEND,
-                    "email"       => $email,
-                    "name"        => NULL,
-                    "status"      => 1, // success
-                    "unsub_method"=> 1, // 1 - webhook(by main ESP)
-                    "response"    => date('Y-m-d H:i:s')
-                ];
-                ManageData(PROVIDER_UNSUBSCRIBER,[],$unsubscribeData,true);
-                $this->unsubFromOtherEsp($email, OMNISEND, $providerId);
+                    if($unsubscribeTimestamp < $currentTimestamp && $unsubscribeTimestamp > $timestampHourAgo) {
+                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                        $unsubscribeData = [
+                            "provider_id" => $getOmnisendList['providers_id'],
+                            "esp"         => OMNISEND,
+                            "email"       => $unsubscriber['email'],
+                            "name"        => $unsubscriber['firstName'] . " " . $unsubscriber['lastName'],
+                            "status"      => 1, // success
+                            "unsub_method"=> 1, // 1 - webhook(by main ESP)
+                            "response"    => date('Y-m-d H:i:s', $unsubscribeTimestamp)
+                        ];
+                        ManageData(PROVIDER_UNSUBSCRIBER,[],$unsubscribeData,true);
+                        $this->unsubFromOtherEsp($unsubscriber['email'], OMNISEND, $getOmnisendList['providers_id']);
+                    }
+                }
             }
         }
     }
@@ -276,7 +290,7 @@ class Unsubscribe_user extends CI_Controller
                             $listCondition['country'] = $country;
                         }                      
                         if($mainProvider == MAILJET) {
-                            $listCondition['id !='] = $mainProviderId;
+                            $listCondition['providers.id !='] = $mainProviderId;
                         }
 
                         $is_single             = false;
@@ -352,7 +366,7 @@ class Unsubscribe_user extends CI_Controller
                         //     $listCondition['country'] = $country;
                         // } 
                         // if($mainProvider == MARKETING_PLATFORM) {
-                        //     $listCondition['id !='] = $mainProviderId;
+                        //     $listCondition['providers.id !='] = $mainProviderId;
                         // }
                         // $is_single             = false;
                         // // $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
@@ -428,7 +442,7 @@ class Unsubscribe_user extends CI_Controller
                             $listCondition['country'] = $country;
                         }
                         if($mainProvider == ONTRAPORT) {
-                            $listCondition['id !='] = $mainProviderId;
+                            $listCondition['providers.id !='] = $mainProviderId;
                         }
                         $is_single             = false;
                         $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
@@ -501,7 +515,7 @@ class Unsubscribe_user extends CI_Controller
                             $listCondition['country'] = $country;
                         }
                         if($mainProvider == ACTIVE_CAMPAIGN) {
-                            $listCondition['id !='] = $mainProviderId;
+                            $listCondition['providers.id !='] = $mainProviderId;
                         }
                         $is_single             = false;
                         $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
@@ -576,7 +590,7 @@ class Unsubscribe_user extends CI_Controller
                             $listCondition['country'] = $country;
                         } 
                         if($mainProvider == CLEVER_REACH) {
-                            $listCondition['id !='] = $mainProviderId;
+                            $listCondition['providers.id !='] = $mainProviderId;
                         }
                         $is_single             = false;
                         // $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
@@ -652,7 +666,7 @@ class Unsubscribe_user extends CI_Controller
                             $listCondition['country'] = $country;
                         } 
                         if($mainProvider == OMNISEND) {
-                            $listCondition['id !='] = $mainProviderId;
+                            $listCondition['providers.id !='] = $mainProviderId;
                         }
                         $is_single             = false;
                         // $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');

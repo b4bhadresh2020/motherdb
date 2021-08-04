@@ -28,10 +28,13 @@ class Cron_active_campaign_delay_user extends CI_Controller
         $this->db->join(LIVE_DELIVERY_DATA,'active_campaign_delay_user_data.liveDeliveryDataId=live_delivery_data.liveDeliveryDataId');
         $this->db->join(LIVE_DELIVERY,'live_delivery_data.apikey=live_delivery.apikey');
         $this->db->where($condition);
+        // $this->db->where('active_campaign_delay_user_data.liveDeliveryDataId', 719);
         $this->db->order_by('deliveryTimestamp');
         $this->db->limit(500);
         $query=$this->db->get();
         $userData= $query->result_array();
+        // pre($userData);
+        // die;
         
         foreach($userData as $user){   
             $emailAddressChunk = explode("@",$user['emailId']);
