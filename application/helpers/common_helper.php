@@ -943,7 +943,10 @@ function getCleverReachListName($providerListId){
         "4" => "Cathrinesmail/FI",        
         "5" => "Cathrinesmail/NO",
         "6" => "Cathrinesmail/NZ",
-        "7" => "Cathrinesmail/SE",     
+        "7" => "Cathrinesmail/SE",
+        "8" => "Velkomstgaven/NO",
+        "9" => "Gratispresent/SE",
+        "10" => "Unelmalaina/FI"     
     );
     return $cleverReachList[$providerListId];
 }
@@ -1203,6 +1206,9 @@ function getLiveRepostCleverReachProviderID($providerId){
         "5" => "160",  // Cathrinesmail/NO
         "6" => "161",  // Cathrinesmail/NZ
         "7" => "162",  // Cathrinesmail/SE
+        "8" => "185",  // Velkomstgaven/NO
+        "9" => "186",  // Gratispresent/SE
+        "10" => "187", // Unelmalaina/FI
     );
     return $provider[$providerId];
 }
