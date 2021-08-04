@@ -589,6 +589,9 @@ class Cron_provider_user_csv extends CI_Controller
             "5" => "160",  // Cathrinesmail/NO
             "6" => "161",  // Cathrinesmail/NZ
             "7" => "162",  // Cathrinesmail/SE
+            "8" => "185",  // Velkomstgaven/NO
+            "9" => "186",  // Gratispresent/SE
+            "10" => "187", // Unelmalaina/FI
         );
         return $provider[$providerId];
     }
