@@ -25,8 +25,23 @@ class Mdl_omnisend_esp extends CI_Model {
                     'x-api-key' => $api_key
                 ]
             ]);
+            $responseCode = $body->getStatusCode();
             $results = json_decode($body->getBody(),true);
-            return array("result" => "success","msg" => $results);
+            if ($responseCode == 200) { 
+                return array("result" => "success","msg" => $results);
+            } else {
+                $errorLog = array("responseCode" => $responseCode, "currentTimestamp" => $currentTimestamp, "segmentID" => $getData['code'], "response" => json_encode($results));
+
+                //LOG ENTRY
+                $logPath    = FCPATH."log/omnisend_esp/";
+                $fileName   = date("Ymd")."_log.txt"; 
+                $logFile    = fopen($logPath.$fileName,"a");
+                $logData    = json_encode($errorLog)." "."\n";
+                fwrite($logFile,$logData);
+                fclose($logFile);
+
+                return array("result" => "error","msg" => json_encode($results));
+            }
         }catch(\GuzzleHttp\Exception\ClientException $e){
             $response = json_decode($e->getResponse()->getBody()->getContents(),true);
             $errorLog = array("currentTimestamp" => $currentTimestamp, "segmentID" => $getData['code'], "response" => json_encode($response));
