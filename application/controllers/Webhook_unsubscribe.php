@@ -35,7 +35,8 @@ class Webhook_unsubscribe extends CI_Controller
             '12' => 'ontraport',
             '13' => 'active_campaign',
             '15' => 'clever_reach',
-            '16' => 'omnisend'
+            '16' => 'omnisend',
+            '14' => 'expert_sender'
         ];
         // set all column value as 0
         foreach($otherProvidersDBColumnName as $id => $providerCol) {

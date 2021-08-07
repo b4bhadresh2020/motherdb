@@ -25,7 +25,6 @@ class Mdl_clever_reach_esp extends CI_Model {
                     
                     $headers['grant_type'] = 'client_credentials';
                     $headers['client_id'] = $clientId;
-                    // $headers['client_id'] = '165451415';
                     $headers['client_secret'] = $clientSecret;
     
                     //send token generate request
@@ -60,7 +59,7 @@ class Mdl_clever_reach_esp extends CI_Model {
         }else{
             $token = $getData['token'];
         }
-        
+
         $results = [];
         try{                      
             $getUnsubscriberUrl = "https://rest.cleverreach.com/v3/receivers/filter.json";
@@ -90,8 +89,23 @@ class Mdl_clever_reach_esp extends CI_Model {
                         'Authorization' => 'Bearer ' . $token,    
                     ]
             ]);
+            $responseCode = $body->getStatusCode();
             $results = json_decode($body->getBody(),true);
-            return array("result" => "success","msg" => $results);
+            if ($responseCode == 200) { 
+                return array("result" => "success","msg" => $results);
+            } else {
+                $errorLog = array("responseCode" => $responseCode, "currentTimestamp" => $currentTimestamp, "timestampHourAgo" => $timestampHourAgo, "groupCode" => $getData['code'], "response" => json_encode($results));
+
+                //LOG ENTRY
+                $logPath    = FCPATH."log/clever_reach_esp/";
+                $fileName   = date("Ymd")."_log.txt"; 
+                $logFile    = fopen($logPath.$fileName,"a");
+                $logData    = json_encode($errorLog)." "."\n";
+                fwrite($logFile,$logData);
+                fclose($logFile);
+
+                return array("result" => "error","msg" => json_encode($results));
+            }
         }catch(\GuzzleHttp\Exception\ClientException $e){
             $response = json_decode($e->getResponse()->getBody()->getContents(),true);
             $errorLog = array("currentTimestamp" => $currentTimestamp, "timestampHourAgo" => $timestampHourAgo, "groupCode" => $getData['code'], "response" => json_encode($response));
