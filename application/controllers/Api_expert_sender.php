@@ -2,7 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Api_ontraport extends CI_Controller
+class Api_expert_sender extends CI_Controller
 {
 
     public function __construct()
@@ -12,7 +12,7 @@ class Api_ontraport extends CI_Controller
         header('Accept: */*');
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Headers: *');
-        $this->load->model('mdl_ontraport');
+        $this->load->model('mdl_expert_sender');
 
     }
 
@@ -24,14 +24,14 @@ class Api_ontraport extends CI_Controller
         $providerCondition   = array('id' => $mailProvider);
         $is_single           = true;
         $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);   
-        $ontraportAccountId     = $providerData['aweber_account']; 
+        $expertSenderAccountId     = $providerData['aweber_account']; 
         
-        $ontraportCondition   = array('id' => $ontraportAccountId);
+        $expertSenderCondition   = array('id' => $expertSenderAccountId);
         $is_single           = true;
-        $ontraportAccountData   = GetAllRecord(ONTRAPORT_ACCOUNTS, $ontraportCondition, $is_single);
+        $expertSenderAccountData   = GetAllRecord(EXPERT_SENDER_ACCOUNTS, $expertSenderCondition, $is_single);
 
         $response = null;
-        if($ontraportAccountData['status'] == 1) {
+        if($expertSenderAccountData['status'] == 1) {
             $emailId = $this->input->post('emailId');
             $phone = $this->input->post('phone');
             $firstName = $this->input->post('firstName');
@@ -46,7 +46,7 @@ class Api_ontraport extends CI_Controller
                 'birthDate' => $birthDate
             );
             
-            $response = $this->mdl_ontraport->AddEmailToOntraportSubscriberList($data,$mailProvider);
+            $response = $this->mdl_expert_sender->AddEmailToExpertSenderSubscriberList($data,$mailProvider);
         } else {
             $response = array("result" => "error","error" => array("msg" => "Account closed"));
         }
