@@ -47,6 +47,8 @@ class Api_marketing_platform extends CI_Controller
             );
             
             $response = $this->mdl_marketing_platform->AddEmailToMarketingPlatformSubscriberList($data,$mailProvider);
+        } else {
+            $response = array("result" => "error","error" => array("msg" => "Account closed"));
         }
         echo json_encode($response);
     }
