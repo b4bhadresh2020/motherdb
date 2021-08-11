@@ -42,6 +42,7 @@ foreach ($listArr as $curEntry) {
         <td><?php echo $curEntry['optinurl']; ?></td>
         <td><?php echo $curEntry['optindate']; ?></td>
         <td><?php echo $curEntry['source']; ?></td>
+        <td><?php echo $curEntry['tag']; ?></td>
         <td><?php echo date('Y-m-d H:i:s',strtotime($curEntry['createdDate'])); ?></td>
         <!-- <td><?php echo $curEntry['groupName']; ?></td>
         <td><?php echo $curEntry['keyword']; ?></td> -->

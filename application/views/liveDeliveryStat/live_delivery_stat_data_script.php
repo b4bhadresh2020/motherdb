@@ -126,10 +126,10 @@
                 }else{
                     
                     hasNoMoreData = true;
-                    $('#live_delivery_stat_data').append('<tr><td colspan = "17" style="text-align:center;">No More Data</td></tr>'); 
+                    $('#live_delivery_stat_data').append('<tr><td colspan = "19" style="text-align:center;">No More Data</td></tr>'); 
 
                     if (start == 0) {
-                        $('#live_delivery_stat_data').html('<tr><td colspan = "17">No Data Found</td></tr>');   
+                        $('#live_delivery_stat_data').html('<tr><td colspan = "19">No Data Found</td></tr>');   
                     }
                 }
                 
