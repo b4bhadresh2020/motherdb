@@ -536,6 +536,7 @@
                                                 <th>optin url</th>
                                                 <th>optin date</th>
                                                 <th>Source</th>
+                                                <th>Tag</th>
                                                 <th>Created Date</th>
                                                 <!-- <th>Group Name</th>
                                                 <th>Keyword</th> -->
