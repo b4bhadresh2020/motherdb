@@ -60,9 +60,9 @@ class Mdl_omnisend extends CI_Model {
             $apiKey = $omnisendAccountData['api_key'];
 
             $gender = '';
-            if(strtolower($getData['gender'] == 'male')) {
+            if(!empty($getData['gender']) && strtolower($getData['gender'] == 'male')) {
                 $gender = 'm';
-            } else if (strtolower($getData['gender'] == 'female')) {
+            } else if (!empty($getData['gender']) && strtolower($getData['gender'] == 'female')) {
                 $gender = 'f';
             }
             $todayDateTime = date("Y-m-d\TH:i:s\Z", strtotime(date('Y-m-d h:i:s')));
