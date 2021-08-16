@@ -57,6 +57,14 @@ class Mdl_active_campaign extends CI_Model {
             $apiUrl = $activeCampaignAccountData['api_url'];
             $apiKey = $activeCampaignAccountData['api_key'];
 
+            $birthDateId = "5";
+            $tagId = "6";
+
+            if($activeCampaignAccountData['email_id'] == 'gratis@gratispresent.se'){
+                $birthDateId = "6";
+                $tagId = "7";
+            }
+
             $details = [
                 'contact' => [
                     'status' => 1,
@@ -97,12 +105,12 @@ class Mdl_active_campaign extends CI_Model {
                 array_push($details['contact']['fieldValues'], $contactFields);
             }
             if(!empty($getData['birthDate'])) {
-                $contactFields['field'] = '5';
+                $contactFields['field'] = $birthDateId;
                 $contactFields['value'] = @$getData['birthDate'];
                 array_push($details['contact']['fieldValues'], $contactFields);
             }
             if(!empty($tagValue)) {
-                $contactFields['field'] = '6';
+                $contactFields['field'] = $tagId;
                 $contactFields['value'] = @$tagValue;
                 array_push($details['contact']['fieldValues'], $contactFields);
             }            
