@@ -118,7 +118,7 @@
                                                     </div>    
                                                 </div>
                                             </div>
-                                            <?php $sucFailTypeArr =  array('0' => 'Success', '1' => 'Duplicate', '2' => 'Blacklisted', '3' => 'Server Issue','4' => 'Api Key Is Not Active', '5' => 'Email Is Required', '6' => 'Phone Is Required', '7' => 'Email Is Blank', '8' => 'Phone Is Blank', '9' => 'Invalid Email Format', '10' => 'Invalid Phone', '11' => 'Invalid Gender', '12' => 'Telia MX Block','13' => 'Luukku Mx Block', '14' => 'PP MX Block'); ?>
+                                            <?php $sucFailTypeArr =  array('0' => 'Success', '1' => 'Duplicate', '2' => 'Blacklisted', '3' => 'Server Issue','4' => 'Api Key Is Not Active', '5' => 'Email Is Required', '6' => 'Phone Is Required', '7' => 'Email Is Blank', '8' => 'Phone Is Blank', '9' => 'Invalid Email Format', '10' => 'Invalid Phone', '11' => 'Invalid Gender', '12' => 'Telia MX Block','13' => 'Luukku Mx Block', '14' => 'PP MX Block', '15' => 'User Already Unsubscribed', '16' => 'Yahoo MX Block', '17' => 'Icloud MX Block'); ?>
                                             
                                             <div class="row" >
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -333,6 +333,9 @@
                                             $teliaMxBlockCount = $rejectDetailCountsArr['teliaMxBlock'];
                                             $luukkuMxBlockCount = $rejectDetailCountsArr['luukkuMxBlock'];
                                             $ppMxBlockCount = $rejectDetailCountsArr['ppMxBlock'];
+                                            $alreadyUnsubscribedCount = $rejectDetailCountsArr['alreadyUnsubscribed'];
+                                            $yahooMxBlockCount = $rejectDetailCountsArr['yahooMxBlock'];
+                                            $icloudMxBlockCount = $rejectDetailCountsArr['icloudMxBlock'];
 
                                             if ($totalRejectCount > 0) {
                                                 
@@ -378,6 +381,15 @@
                                                 $ppMxBlockPer = ($ppMxBlockCount / $totalRejectCount) * 100;
                                                 $ppMxBlockPer = reformat_number_format($ppMxBlockPer);
 
+                                                $alreadyUnsubscribedPer = ($alreadyUnsubscribedCount / $totalRejectCount) * 100;
+                                                $alreadyUnsubscribedPer = reformat_number_format($alreadyUnsubscribedPer);
+
+                                                $yahooMxBlockPer = ($yahooMxBlockCount / $totalRejectCount) * 100;
+                                                $yahooMxBlockPer = reformat_number_format($yahooMxBlockPer);
+
+                                                $icloudMxBlockPer = ($icloudMxBlockCount / $totalRejectCount) * 100;
+                                                $icloudMxBlockPer = reformat_number_format($icloudMxBlockPer);
+
                                             }else{
 
                                                 $duplicatePer = 0;
@@ -394,6 +406,9 @@
                                                 $teliaMxBlockPer = 0;
                                                 $luukkuMxBlockPer = 0;
                                                 $ppMxBlockPer = 0;
+                                                $alreadyUnsubscribedPer = 0;
+                                                $yahooMxBlockPer = 0;
+                                                $icloudMxBlockPer = 0;
                                             }
                                             
 
@@ -481,6 +496,24 @@
                                                 <td>PP MX Block</td>
                                                 <td><?php echo $ppMxBlockCount; ?></td>
                                                 <td><?php echo $ppMxBlockPer.' %'; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td>15</td>
+                                                <td>User Already Unsubscribed Before</td>
+                                                <td><?php echo $alreadyUnsubscribedCount; ?></td>
+                                                <td><?php echo $alreadyUnsubscribedPer.' %'; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td>16</td>
+                                                <td>Yahoo MX Block</td>
+                                                <td><?php echo $yahooMxBlockCount; ?></td>
+                                                <td><?php echo $yahooMxBlockPer.' %'; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td>17</td>
+                                                <td>Icloud MX Block</td>
+                                                <td><?php echo $icloudMxBlockCount; ?></td>
+                                                <td><?php echo $icloudMxBlockPer.' %'; ?></td>
                                             </tr>
                                         </tbody>
                                     </table>

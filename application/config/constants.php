@@ -219,6 +219,8 @@ define('LUUKKU_DOMAIN', 'luukku.com');
 
 define('PP_DOMAIN_START', 'pp');
 define('PP_DOMAIN_END', '.inet.fi');
+define('YAHOO_DOMAIN', 'yahoo');
+define('ICLOUD_DOMAIN', 'icloud');
 
 
 /*
