@@ -21,7 +21,7 @@ foreach ($listArr as $curEntry) {
             $status = 'Success';
         }
 
-        $sucFailMsgIndexArr = array(0 => 'Success', 1 => 'Duplicate', 2 => 'Blacklisted', 3 => 'Server Issue',4 => 'Api Key Is Not Active', 5 => 'Email Is Required', 6 => 'Phone Is Required', 7 => 'Email Is Blank', 8 => 'Phone Is Blank', 9 => 'Invalid Email Format', 10 => 'Invalid Phone', 11 => 'Invalid Gender', 12 => 'Telia MX Block', 13 => 'Luukku MX Block', 14 => 'PP MX Block', 15 => 'User Already Unsubscribed Before');
+        $sucFailMsgIndexArr = array(0 => 'Success', 1 => 'Duplicate', 2 => 'Blacklisted', 3 => 'Server Issue',4 => 'Api Key Is Not Active', 5 => 'Email Is Required', 6 => 'Phone Is Required', 7 => 'Email Is Blank', 8 => 'Phone Is Blank', 9 => 'Invalid Email Format', 10 => 'Invalid Phone', 11 => 'Invalid Gender', 12 => 'Telia MX Block', 13 => 'Luukku MX Block', 14 => 'PP MX Block', 15 => 'User Already Unsubscribed Before', 16 => 'Yahoo MX Block', 17 => 'Icloud MX Block');
     ?>
     <tr>
         

@@ -54,13 +54,19 @@ class Live_delivery_api extends CI_Controller
                                 if($notToCheckFuther == 0){
                                     // check email id host in blocklist array.
                                     $emailAddressChunk = explode("@",$_GET['emailId']);
+                                    $country = $getLiveDeliveryData['country'];
+                                    
                                     if($emailAddressChunk[1] == TELIA_DOMAIN){
                                         $notToCheckFuther = 4; // Telia MX Block	
                                     } else if($emailAddressChunk[1] == LUUKKU_DOMAIN) {
                                         $notToCheckFuther = 5; // Luukku MX Block	
                                     } else if(startsWith($emailAddressChunk[1],PP_DOMAIN_START) && endsWith($emailAddressChunk[1],PP_DOMAIN_END)) {
                                         $notToCheckFuther = 6; // PP MX Block	
-                                    } 
+                                    } else if (strpos($emailAddressChunk[1], YAHOO_DOMAIN) !== false && $country == 'SE') {
+                                        $notToCheckFuther = 7; // Yahoo MX Block (SE only)
+                                    } else if (strpos($emailAddressChunk[1], ICLOUD_DOMAIN) !== false) {
+                                        $notToCheckFuther = 8; // Icloud MX Block
+                                    }
                                     
                                     // check live email check flag is on
                                     if ($notToCheckFuther == 0 && $getLiveDeliveryData['checkEmail'] == 1) {
@@ -75,7 +81,6 @@ class Live_delivery_api extends CI_Controller
                                         }
                                     }
                                 }
-                                
                                 // check phone number if check phone status enable from live delivery
                                 if ($getLiveDeliveryData['checkPhone'] == 1) {
                                     if (@$_GET['phone'] != '' && !is_numeric($_GET['phone'])) {
@@ -409,6 +414,16 @@ class Live_delivery_api extends CI_Controller
                                     //data save to live_delivery_data table
                                     $isFail            = 1;
                                     $sucFailMsgIndex   = 14; //PP MX Block
+                                    $response['error'] = 'Duplicate record found.';
+                                } else if ($notToCheckFuther == 7) {
+                                    //data save to live_delivery_data table
+                                    $isFail            = 1;
+                                    $sucFailMsgIndex   = 16; //Yahoo MX Block (SE only)
+                                    $response['error'] = 'Duplicate record found.';
+                                }  else if ($notToCheckFuther == 8) {
+                                    //data save to live_delivery_data table
+                                    $isFail            = 1;
+                                    $sucFailMsgIndex   = 17; //Icloud MX Block
                                     $response['error'] = 'Duplicate record found.';
                                 }
                             } else {
