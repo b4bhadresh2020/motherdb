@@ -369,7 +369,10 @@ class Mdl_live_delivery extends CI_Model
             11 => 'invalidGender',
             12 => 'teliaMxBlock',
             13 => 'luukkuMxBlock',
-            14 => 'ppMxBlock'
+            14 => 'ppMxBlock',
+            15 => 'alreadyUnsubscribed',
+            16 => 'yahooMxBlock',
+            17 => 'icloudMxBlock'
         );
 
         if ($this->isDateWithoutTime($startDate) == 'true') {
