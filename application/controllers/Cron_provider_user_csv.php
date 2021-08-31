@@ -493,7 +493,8 @@ class Cron_provider_user_csv extends CI_Controller
         $provider = array(
             "1" => "119",  // Velkomstgaven/DK
             "2" => "120",  // Gratispresent/SE
-            // "3" => "127"   // Velkomstgaven/NOR
+            // "3" => "127",   // Velkomstgaven/NOR
+            "4" => "185"      //Freja/SE
         );
         return $provider[$providerId];
     }
