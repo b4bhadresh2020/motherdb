@@ -1113,7 +1113,7 @@ function getLiveRepostMailjetProviderID($providerId){
         "1" => "119",  // Velkomstgaven/DK
         "2" => "120",  // Gratispresent/SE
         "3" => "127",  // Velkomstgaven/NOR
-        "4" => "185"   // Freja/SE
+        "4" => "188"   // Freja/SE
     );
     return $provider[$providerId];
 }
