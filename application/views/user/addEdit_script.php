@@ -527,6 +527,7 @@
             providerList +="<option value='1'>Velkomstgaven/DK</option>";
             providerList +="<option value='2'>Gratispresent/SE</option>";
             // providerList +="<option value='3'>Velkomstgaven/NOR</option>";
+            providerList +="<option value='4'>Freja/SE</option>";
         } else if(providerId == 10){
             providerList +="<option value='1'>Camilla/DK</option>";
             providerList +="<option value='2'>Camilla/SE</option>";
