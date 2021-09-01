@@ -37,13 +37,15 @@ class Api_active_campaign extends CI_Controller
             $firstName = $this->input->post('firstName');
             $lastName = $this->input->post('lastName');
             $birthDate = $this->input->post('birthDate');
+            $tag = $this->input->post('tag');
                     
             $data = array(
                 'emailId' => $emailId,
                 'phone' => $phone,
                 'firstName' => $firstName,
                 'lastName' => $lastName,
-                'birthDate' => $birthDate
+                'birthDate' => $birthDate,
+                'tag'       => $tag
             );
             
             $response = $this->mdl_active_campaign->AddEmailToActiveCampaignSubscriberList($data,$mailProvider);

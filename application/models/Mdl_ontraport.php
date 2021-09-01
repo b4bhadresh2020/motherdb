@@ -58,6 +58,12 @@ class Mdl_ontraport extends CI_Model {
             }
             if(isset($getData['postCode']) && !empty($getData['postCode'])) {
                 $details['zip'] = $getData['postCode'];
+            }  
+            if(isset($getData['address']) && !empty($getData['address'])) {
+                $details['address'] = $getData['address'];
+            }   
+            if(isset($getData['birthDate']) && !empty($getData['birthDate'])) {
+                $details['birthday'] = ($getData['birthDate'] != '') ? strtotime($getData['birthDate']) : '';
             }            
             $data = json_encode($details);
             
