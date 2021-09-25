@@ -599,18 +599,22 @@ class Live_delivery_api extends CI_Controller
                         if($providerData['provider'] == AWEBER){
                             $lastDeliveryData['birthDate'] = "";
                             if (in_array(strtoupper($country), $validCountryForAweber)) {
-                                if (@$lastDeliveryData['birthdateDay'] != '0' && @$lastDeliveryData['birthdateMonth'] != '0' && @$lastDeliveryData['birthdateYear'] != '0') {
+                                // if (@$lastDeliveryData['birthdateDay'] != '0' && @$lastDeliveryData['birthdateMonth'] != '0' && @$lastDeliveryData['birthdateYear'] != '0') {
 
-                                    $birthDate            = $lastDeliveryData['birthdateYear'] . '-' . $lastDeliveryData['birthdateMonth'] . '-' . $lastDeliveryData['birthdateDay'];
-                                    $lastDeliveryData['birthDate'] = date('Y-m-d', strtotime($birthDate));
-                                } 
-                                $this->load->model('mdl_aweber');
+                                //     $birthDate            = $lastDeliveryData['birthdateYear'] . '-' . $lastDeliveryData['birthdateMonth'] . '-' . $lastDeliveryData['birthdateDay'];
+                                //     $lastDeliveryData['birthDate'] = date('Y-m-d', strtotime($birthDate));
+                                // } 
+                                // $res = $this->load->model('mdl_aweber');
+                                
                                 // LOGIC FOR SEND DATA TO AWEBER OR QUEUE
                                 $delayDay = 0;
                                 if(isset($delays[$mailProvider])){
                                     $delayDay = $delays[$mailProvider];
                                 }
                                 $provider = AWEBER;
+                                //$res = $this->mdl_aweber->AddEmailToAweberSubscriberList($lastDeliveryData,$country,$mailProvider);
+                                // pre($res);
+                                // die;
                                 // if($delayDay == 0){
                                 //     // NO DELAY INSTANT SEND DATA TO AWEBER
                                 //     $response = $this->mdl_aweber->AddEmailToAweberSubscriberList($lastDeliveryData,$country,$mailProvider);

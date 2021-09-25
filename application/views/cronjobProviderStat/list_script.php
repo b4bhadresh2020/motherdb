@@ -101,6 +101,7 @@
                 providerList +="<option value='52'>Getspinn1/CA</option>";
                 providerList +="<option value='53'>Getspinnmail/CA</option>";
                 providerList +="<option value='54'>Freecamail/CA</option>";
+                providerList +="<option value='55'>Gratisprodukttest/SE</option>";
             }else if(providerId == 2){
                 providerList +="<option value='1'>NO - deveroper</option>";
                 providerList +="<option value='2'>SE - deveroper - Loan</option>";

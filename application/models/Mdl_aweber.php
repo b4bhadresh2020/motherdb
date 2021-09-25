@@ -13,6 +13,7 @@ class Mdl_aweber extends CI_Model {
     function AddEmailToAweberSubscriberList($getData,$language,$aweberListId){
 
         try{
+
             // Create a Guzzle client
             $client = new GuzzleHttp\Client();
 
@@ -49,32 +50,61 @@ class Mdl_aweber extends CI_Model {
                 $tagValue = "";
             }
 
-            // LOG ENTRY
-            // $logPath    = FCPATH."log/aweber/";
-            // $fileName   = date("Ymd")."_log.txt"; 
-            // $logFile    = fopen($logPath.$fileName,"a");
-            // $logData    = $providerData['aweber_account']." ".$providerData['listname']." ".$getData['emailId']." ".$getData['firstName']." ".$getData['lastName']." ".time()."\n";
-            // fwrite($logFile,$logData);
-            // fclose($logFile);
+            //LOG ENTRY
+            $logPath    = FCPATH."log/aweber/";
+            $fileName   = date("Ymd")."_log.txt"; 
+            $logFile    = fopen($logPath.$fileName,"a");
+            $logData    = $providerData['aweber_account']." ".$providerData['listname']." ".$getData['emailId']." ".$getData['firstName']." ".$getData['lastName']." ".time()."\n";
+            fwrite($logFile,$logData);
+            fclose($logFile);
             
             $data = array(
-                'ad_tracking' => generateRandomString(10),
-                'email' => $getData['emailId'],
-                'name' => $getData['firstName'].' '.$getData['lastName'],
-                'ip_address' => '',
-                'custom_fields' => array('Fname' => $getData['firstName'],'Lname' => $getData['lastName'],'phone no' => $getData['phone'],'gender' => strtolower($getData['gender']), 'birthdate' =>  $getData['birthDate'])
+            'ad_tracking' => generateRandomString(10),
+            'email' => $getData['emailId'],
+            'name' => $getData['firstName'].' '.$getData['lastName'],
+            'ip_address' => '',
+            'custom_fields' => array(
+                )
             );
-
-            if(!empty($tagValue)){
-                $data['tags'] = array($tagValue);
+            
+            if(!empty($getData['firstName'])) {
+                $data['custom_fields']['Fname'] = @$getData['firstName'];
+            }
+            if(!empty($getData['lastName'])) {
+                $data['custom_fields']['Lname'] = @$getData['lastName'];
+            }
+            if(!empty($getData['phone'])) {
+                $data['custom_fields']['phone'] = @$getData['phone'];
+            }
+            if(!empty($getData['gender'])) {
+                $data['custom_fields']['gender'] = strtolower(@$getData['gender']);
+            }
+            if(!empty($getData['address'])) {
+                $data['custom_fields']['address'] = @$getData['address'];
+            }
+            if(!empty($getData['postCode'])) {
+                $data['custom_fields']['postcode'] = @$getData['postCode'];
+            }
+            if(!empty($getData['city'])) {
+                $data['custom_fields']['city'] = @$getData['city'];
+            }
+            if(!empty($getData['birthDate'])) {
+                $data['custom_fields']['birthdate'] = @$getData['birthDate'];
             }
 
+            if(!empty($tagValue)){
+                $data['tags'] = [$tagValue];
+            }
+  
             $body = $client->post($newsubscriberUrl, [
                     'json' => $data, 
-                    'headers' => ['Authorization' => 'Bearer ' . $accessToken]
-            ]);
-            
-            $responseCode = $body->getStatusCode();                
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $accessToken,
+                        'Content-Type' => 'application/json',
+                        'Accept' => 'application/json'
+                    ]
+            ]);      
+            $responseCode = $body->getStatusCode();   
             if ($responseCode == 201) {
                 $subscriberUrl = $body->getHeader('Location')[0];
                 $subscriberResponse = $client->get($subscriberUrl,
@@ -90,7 +120,7 @@ class Mdl_aweber extends CI_Model {
             if($statusCode == "400"){
                 return array("result" => "error","error" => array("msg" => $statusCode." - Subscriber already subscribed"));
             }else{
-                return array("result" => "error","error" => array("msg" => $statusCode." - Bad Request"));
+                return array("result" => "error","error" => array("msg" => $statusCode." - Bad Request-".$e->getMessage()));
             }
         }
     } 
