@@ -755,6 +755,7 @@ function getAweverProviderListName($providerListId){
         '52' => 'Getspinn1/CA',
         '53' => 'Getspinnmail/CA',
         '54' => 'Freecamail/CA',
+        '55' => 'Gratisprodukttest/SE'
     );
     return $aweberList[$providerListId];
 }
@@ -1019,6 +1020,7 @@ function getLiveRepostAweverProviderID($providerListId){
         "52" => "112", // Getspinn1/CA
         "53" => "113", // Getspinnmail/CA
         "54" => "114", // Freecamail/CA
+        "55" => "189", // Gratisprodukttest/SE
     );
     return $provider[$providerListId];
 }
