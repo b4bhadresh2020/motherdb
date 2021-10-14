@@ -13,7 +13,6 @@ class Mdl_mailjet_unsubscribe extends CI_Model {
 
     
     function makeUnsubscribe($email,$mailjetListId){
-        
         try{
             // Create a Guzzle client
             $client = new GuzzleHttp\Client();
@@ -32,12 +31,16 @@ class Mdl_mailjet_unsubscribe extends CI_Model {
                     
             //LIST ID 
             $list_id = $providerData['code'];
+            $emailresponse = null;
+            $csvEmailresponse = null;
 
             // check user is exist by list & email (live delivery)
             $responseField	= $providerData['response_field'];
             $liveDeliveryData = getLivedeliveryDetail($email, $responseField);
-            $emailresponse = json_decode($liveDeliveryData[$responseField],true); 
-
+            if(!empty($liveDeliveryData)){
+                $emailresponse = json_decode($liveDeliveryData[$responseField],true); 
+            }
+            
             // check user is exist by list & email (user csv)
             $condition = array(
                 'emailId' => $email
@@ -49,10 +52,12 @@ class Mdl_mailjet_unsubscribe extends CI_Model {
                 $emailServiceProvider = $providerData['provider']; 
                 $csvResponseField = getCsvUserResponseField($emailServiceProvider);
                 $csvCronUserData = getCsvUserDetail($getUserIdsStr, $mailjetListId, $csvResponseField);
-                $csvEmailresponse = json_decode($csvCronUserData[$csvResponseField],true);
+                if(!empty($csvCronUserData)){
+                    $csvEmailresponse = json_decode($csvCronUserData[$csvResponseField],true);
+                }
             }
 
-            if(empty($emailresponse) && empty($csvCronUserData)) {
+            //if(empty($emailresponse) && empty($csvCronUserData)) {
                  // get user contact details
                 $checkContactUrl = "https://api.mailjet.com/v3/REST/contact/". $email;
                 $getContactBody = $client->get($checkContactUrl, [
@@ -65,7 +70,7 @@ class Mdl_mailjet_unsubscribe extends CI_Model {
                 ]);
                 $getSubscriber = json_decode($getContactBody->getBody(),true);
                 $getStatusCode = $getContactBody->getStatusCode();
-            }
+            //}
 
             // check user is exist
             // $condition = array('providerId' => $mailjetListId ,'emailId' => $email, 'status'=> '1');
@@ -75,7 +80,7 @@ class Mdl_mailjet_unsubscribe extends CI_Model {
 
            
             // if(!empty($getSubscriber) && $getStatusCode == 200){
-            if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success') || ($getStatusCode == 200 && !empty($getSubscriber['Data']))){
+            if((!empty($liveDeliveryData) && ($emailresponse != null && $emailresponse['result'] == 'success') && $getStatusCode == 200 && !empty($getSubscriber['Data'])) || (!empty($csvCronUserData) && ($csvEmailresponse != null && $csvEmailresponse['result'] == 'success') && $getStatusCode == 200 && !empty($getSubscriber['Data']))){
                 $unsubscriberUrl = "https://api.mailjet.com/v3/REST/contact/managemanycontacts";
                 $body = [
                     'Contacts' => [
@@ -139,7 +144,7 @@ class Mdl_mailjet_unsubscribe extends CI_Model {
                 return array("result" => "error","msg" => "Subscriber not found");
             }     
         }catch (\GuzzleHttp\Exception\ClientException $e) {
-            return array("result" => "error","msg" => "Bad request");
+            return array("result" => "error","msg" => "Bad request ".$e->getMessage());
         }
     } 
 }
