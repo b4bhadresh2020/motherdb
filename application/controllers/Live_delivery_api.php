@@ -66,6 +66,8 @@ class Live_delivery_api extends CI_Controller
                                         $notToCheckFuther = 7; // Yahoo MX Block (SE only)
                                     } else if (strpos($emailAddressChunk[1], ICLOUD_DOMAIN) !== false) {
                                         $notToCheckFuther = 8; // Icloud MX Block
+                                    } else if (strpos($emailAddressChunk[1], GMX_DOMAIN) !== false) {
+                                        $notToCheckFuther = 9; // GMX MX Block
                                     }
                                     
                                     // check live email check flag is on
@@ -425,7 +427,13 @@ class Live_delivery_api extends CI_Controller
                                     $isFail            = 1;
                                     $sucFailMsgIndex   = 17; //Icloud MX Block
                                     $response['error'] = 'Duplicate record found.';
+                                } else if ($notToCheckFuther == 9) {
+                                    //data save to live_delivery_data table
+                                    $isFail            = 1;
+                                    $sucFailMsgIndex   = 18; //GMX MX Block
+                                    $response['error'] = 'Duplicate record found.';
                                 }
+                                
                             } else {
 
                                 //identifier will be emailId or phone
