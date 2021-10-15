@@ -39,7 +39,7 @@ class Cron_clever_reach_delay_user extends CI_Controller
         foreach($userData as $user){   
             $emailAddressChunk = explode("@",$user['emailId']);
             $country = $user['country'];
-            if($emailAddressChunk[1] == TELIA_DOMAIN || $emailAddressChunk[1] == LUUKKU_DOMAIN || (startsWith($emailAddressChunk[1],PP_DOMAIN_START) && endsWith($emailAddressChunk[1],PP_DOMAIN_END)) || (strpos($emailAddressChunk[1], YAHOO_DOMAIN) !== false && $country == 'SE') || (strpos($emailAddressChunk[1], ICLOUD_DOMAIN) !== false)){
+            if($emailAddressChunk[1] == TELIA_DOMAIN || $emailAddressChunk[1] == LUUKKU_DOMAIN || (startsWith($emailAddressChunk[1],PP_DOMAIN_START) && endsWith($emailAddressChunk[1],PP_DOMAIN_END)) || (strpos($emailAddressChunk[1], YAHOO_DOMAIN) !== false && $country == 'SE') || (strpos($emailAddressChunk[1], ICLOUD_DOMAIN) !== false) || (strpos($emailAddressChunk[1], GMX_DOMAIN) !== false)){
                 $responseField = $providerData[$user['providerId']]['response_field'];
                 $response = array("result" => "error","error" => array("msg" => "MX Block"));
                 // Update response in live delivery user data table

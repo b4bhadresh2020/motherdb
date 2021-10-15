@@ -118,7 +118,7 @@
                                                     </div>    
                                                 </div>
                                             </div>
-                                            <?php $sucFailTypeArr =  array('0' => 'Success', '1' => 'Duplicate', '2' => 'Blacklisted', '3' => 'Server Issue','4' => 'Api Key Is Not Active', '5' => 'Email Is Required', '6' => 'Phone Is Required', '7' => 'Email Is Blank', '8' => 'Phone Is Blank', '9' => 'Invalid Email Format', '10' => 'Invalid Phone', '11' => 'Invalid Gender', '12' => 'Telia MX Block','13' => 'Luukku Mx Block', '14' => 'PP MX Block', '15' => 'User Already Unsubscribed', '16' => 'Yahoo MX Block', '17' => 'Icloud MX Block'); ?>
+                                            <?php $sucFailTypeArr =  array('0' => 'Success', '1' => 'Duplicate', '2' => 'Blacklisted', '3' => 'Server Issue','4' => 'Api Key Is Not Active', '5' => 'Email Is Required', '6' => 'Phone Is Required', '7' => 'Email Is Blank', '8' => 'Phone Is Blank', '9' => 'Invalid Email Format', '10' => 'Invalid Phone', '11' => 'Invalid Gender', '12' => 'Telia MX Block','13' => 'Luukku Mx Block', '14' => 'PP MX Block', '15' => 'User Already Unsubscribed', '16' => 'Yahoo MX Block', '17' => 'Icloud MX Block','18' => 'GMX MX Block'); ?>
                                             
                                             <div class="row" >
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -336,6 +336,7 @@
                                             $alreadyUnsubscribedCount = $rejectDetailCountsArr['alreadyUnsubscribed'];
                                             $yahooMxBlockCount = $rejectDetailCountsArr['yahooMxBlock'];
                                             $icloudMxBlockCount = $rejectDetailCountsArr['icloudMxBlock'];
+                                            $gmxMxBlockCount = $rejectDetailCountsArr['gmxMxBlock'];
 
                                             if ($totalRejectCount > 0) {
                                                 
@@ -390,6 +391,9 @@
                                                 $icloudMxBlockPer = ($icloudMxBlockCount / $totalRejectCount) * 100;
                                                 $icloudMxBlockPer = reformat_number_format($icloudMxBlockPer);
 
+                                                $gmxMxBlockPer = ($gmxMxBlockCount / $totalRejectCount) * 100;
+                                                $gmxMxBlockPer = reformat_number_format($gmxMxBlockPer);
+
                                             }else{
 
                                                 $duplicatePer = 0;
@@ -409,6 +413,7 @@
                                                 $alreadyUnsubscribedPer = 0;
                                                 $yahooMxBlockPer = 0;
                                                 $icloudMxBlockPer = 0;
+                                                $gmxMxBlockPer = 0;
                                             }
                                             
 
@@ -514,6 +519,12 @@
                                                 <td>Icloud MX Block</td>
                                                 <td><?php echo $icloudMxBlockCount; ?></td>
                                                 <td><?php echo $icloudMxBlockPer.' %'; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td>18</td>
+                                                <td>GMX MX Block</td>
+                                                <td><?php echo $gmxMxBlockCount; ?></td>
+                                                <td><?php echo $gmxMxBlockPer.' %'; ?></td>
                                             </tr>
                                         </tbody>
                                     </table>

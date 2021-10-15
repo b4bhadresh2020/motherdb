@@ -6,10 +6,11 @@ class Cron_mailjet_delay_user extends CI_Controller
     public function __construct() {
         parent::__construct();
         $this->load->model('mdl_mailjet');
+        $this->load->model('mdl_mailjet_unsubscribe');
     }
 
-    public function index() {       
-        
+    public function index() {     
+       $res =  $this->mdl_mailjet_unsubscribe->makeUnsubscribe("savan.codexive@gmail.com","120");  
         $providers = GetAllRecord(PROVIDERS,array("provider" => MAILJET),false,array(),array(),array());
         foreach($providers as $provider){
             $providerData[$provider['id']] = $provider;
@@ -36,7 +37,7 @@ class Cron_mailjet_delay_user extends CI_Controller
         foreach($userData as $user){   
             $emailAddressChunk = explode("@",$user['emailId']);
             $country = $user['country'];
-            if($emailAddressChunk[1] == TELIA_DOMAIN || $emailAddressChunk[1] == LUUKKU_DOMAIN || (startsWith($emailAddressChunk[1],PP_DOMAIN_START) && endsWith($emailAddressChunk[1],PP_DOMAIN_END)) || (strpos($emailAddressChunk[1], YAHOO_DOMAIN) !== false && $country == 'SE') || (strpos($emailAddressChunk[1], ICLOUD_DOMAIN) !== false)){
+            if($emailAddressChunk[1] == TELIA_DOMAIN || $emailAddressChunk[1] == LUUKKU_DOMAIN || (startsWith($emailAddressChunk[1],PP_DOMAIN_START) && endsWith($emailAddressChunk[1],PP_DOMAIN_END)) || (strpos($emailAddressChunk[1], YAHOO_DOMAIN) !== false && $country == 'SE') || (strpos($emailAddressChunk[1], ICLOUD_DOMAIN) !== false) || (strpos($emailAddressChunk[1], GMX_DOMAIN) !== false)){
                 $responseField = $providerData[$user['providerId']]['response_field'];
                 $response = array("result" => "error","error" => array("msg" => "MX Block"));
                 // Update response in live delivery user data table
