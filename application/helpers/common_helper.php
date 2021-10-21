@@ -851,7 +851,9 @@ function getMailjetProviderListName($providerListId){
         "1" => "Velkomstgaven/DK",
         "2" => "Gratispresent/SE",
         "3" => "Velkomstgaven/NOR",
-        "4" => "Freja/SE"
+        "4" => "Freja/SE",
+        "5" => "Signesmail/DK",
+        "6" => "Signesmail2/NO"
     );
     return $mailjetList[$providerListId];
 }
@@ -1115,7 +1117,9 @@ function getLiveRepostMailjetProviderID($providerId){
         "1" => "119",  // Velkomstgaven/DK
         "2" => "120",  // Gratispresent/SE
         "3" => "127",  // Velkomstgaven/NOR
-        "4" => "188"   // Freja/SE
+        "4" => "188",  // Freja/SE
+        "5" => "190",  //Signesmail/DK
+        "6" => "191"   //Signesmail2/NO
     );
     return $provider[$providerId];
 }
