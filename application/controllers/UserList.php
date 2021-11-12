@@ -61,14 +61,14 @@ class UserList extends CI_Controller
             'endDate'   => $endDate,
         );
         $userDataResponse = $this->user_list_model->getUserData($getData, $start, $perpage);
-
+        
         $userdataCount = $userDataResponse['totalCount'];
         $userdata      = $userDataResponse['userdata'];
 
         if (count($userdata) > 0) {
 
             $reArrangeArray = array();
-            $keyArr         = array('firstName', 'lastName', 'emailId', 'address', 'postCode', 'city', 'phone', 'gender', 'birthdateDay', 'birthdateMonth', 'birthdateYear', 'ip', 'participated', 'campaignSource');
+            $keyArr         = array('firstName', 'lastName', 'emailId', 'address', 'postCode', 'city', 'phone', 'gender', 'birthdateDay', 'birthdateMonth', 'birthdateYear', 'ip', 'participated', 'campaignSource','groupName','keyword');
 
             for ($i = 0; $i < count($userdata); $i++) {
 
@@ -81,7 +81,7 @@ class UserList extends CI_Controller
             // file creation
             if ($start == 0) {
 
-                $header   = array('Full Name', 'Last Name', 'Email Id', 'Address', 'Postcode', 'City', 'Phone', 'Gender', 'Birthdate Day', 'Birthdate Month', 'Birthdate Year', 'Ip', 'Participated', 'Campaign Source');
+                $header   = array('Full Name', 'Last Name', 'Email Id', 'Address', 'Postcode', 'City', 'Phone', 'Gender', 'Birthdate Day', 'Birthdate Month', 'Birthdate Year', 'Ip', 'Participated', 'Campaign Source','Group Name','Keyword');
                 $count    = $userdataCount;
                 $filename = 'userdata_' . date('Y-m-d H:i:s') . '_Total_' . $count . '_Entries.csv';
 
