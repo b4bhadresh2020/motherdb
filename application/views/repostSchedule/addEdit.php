@@ -296,7 +296,9 @@ foreach($omnisendList as $list){
                                                     $i++;
                                                     $repostScheduleId = $curEntry['id'];
                                                     $status = '';
+                                                    $action = '';
                                                     $class = '';
+                                                    $url = '';
                                                    
 
                                                     if ($curEntry['status'] == '0') {
