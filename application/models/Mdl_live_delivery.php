@@ -32,8 +32,9 @@ class Mdl_live_delivery extends CI_Model
             if ($wantToDataRecords) {
                 $filteredData = $this->getFilteredData($today,$today,$apikey,$start,$perPage,$getData);
             }else{
-                $countsArr  = $this->getCounts($today,$today,$apikey);
-                $rejectDetailCountsArr = $this->getRejectDetailCount($today,$today,$apikey);    
+                $getCounterArr = $this->getStatCounter($apikey,$today,$today);
+                $countsArr = $getCounterArr['countsArr'];   
+                $rejectDetailCountsArr = $getCounterArr['rejectDetailCountsArr'];
             }
                 
         }elseif ($chooseFilter == 'yd') {
@@ -44,8 +45,9 @@ class Mdl_live_delivery extends CI_Model
             if ($wantToDataRecords) {
                 $filteredData = $this->getFilteredData($yesterday,$yesterday,$apikey,$start,$perPage,$getData);    
             }else{
-                $countsArr  = $this->getCounts($yesterday,$yesterday,$apikey);
-                $rejectDetailCountsArr = $this->getRejectDetailCount($yesterday,$yesterday,$apikey);    
+                $getCounterArr = $this->getStatCounter($apikey,$yesterday,$yesterday);
+                $countsArr = $getCounterArr['countsArr'];   
+                $rejectDetailCountsArr = $getCounterArr['rejectDetailCountsArr'];    
             }
                 
             
@@ -59,8 +61,9 @@ class Mdl_live_delivery extends CI_Model
             if($wantToDataRecords){
                 $filteredData = $this->getFilteredData($lastSevenDay,$today,$apikey,$start,$perPage,$getData);
             }else{
-                $countsArr  = $this->getCounts($lastSevenDay,$today,$apikey);
-                $rejectDetailCountsArr = $this->getRejectDetailCount($lastSevenDay,$today,$apikey);    
+                $getCounterArr = $this->getStatCounter($apikey,$lastSevenDay,$today);
+                $countsArr = $getCounterArr['countsArr'];   
+                $rejectDetailCountsArr = $getCounterArr['rejectDetailCountsArr'];  
             }
 
 
@@ -73,8 +76,9 @@ class Mdl_live_delivery extends CI_Model
             if($wantToDataRecords){
                 $filteredData = $this->getFilteredData($lastThirtyDay,$today,$apikey,$start,$perPage,$getData);
             }else{
-                $countsArr  = $this->getCounts($lastThirtyDay,$today,$apikey);
-                $rejectDetailCountsArr = $this->getRejectDetailCount($lastThirtyDay,$today,$apikey);    
+                $getCounterArr = $this->getStatCounter($apikey,$lastThirtyDay,$today);
+                $countsArr = $getCounterArr['countsArr'];   
+                $rejectDetailCountsArr = $getCounterArr['rejectDetailCountsArr'];    
             }
 
         }elseif ($chooseFilter == 'wTd') {
@@ -88,8 +92,9 @@ class Mdl_live_delivery extends CI_Model
             if($wantToDataRecords){
                 $filteredData = $this->getFilteredData($weekToDate,$today,$apikey,$start,$perPage,$getData);
             }else{
-                $countsArr  = $this->getCounts($weekToDate,$today,$apikey);
-                $rejectDetailCountsArr = $this->getRejectDetailCount($weekToDate,$today,$apikey);    
+                $getCounterArr = $this->getStatCounter($apikey,$weekToDate,$today);
+                $countsArr = $getCounterArr['countsArr'];   
+                $rejectDetailCountsArr = $getCounterArr['rejectDetailCountsArr'];
             }
             
         }elseif ($chooseFilter == 'mTd') {
@@ -101,9 +106,10 @@ class Mdl_live_delivery extends CI_Model
 
             if($wantToDataRecords){
                 $filteredData = $this->getFilteredData($monthToDate,$today,$apikey,$start,$perPage,$getData);
-            }else{
-                $countsArr  = $this->getCounts($monthToDate,$today,$apikey);
-                $rejectDetailCountsArr = $this->getRejectDetailCount($monthToDate,$today,$apikey);    
+            }else{ 
+                $getCounterArr = $this->getStatCounter($apikey,$monthToDate,$today);
+                $countsArr = $getCounterArr['countsArr'];   
+                $rejectDetailCountsArr = $getCounterArr['rejectDetailCountsArr']; 
             }
 
         }elseif ($chooseFilter == 'qTd') {
@@ -117,8 +123,9 @@ class Mdl_live_delivery extends CI_Model
             if($wantToDataRecords){
                 $filteredData = $this->getFilteredData($quarterToDate,$today,$apikey,$start,$perPage,$getData);
             }else{
-                $countsArr  = $this->getCounts($quarterToDate,$today,$apikey);
-                $rejectDetailCountsArr = $this->getRejectDetailCount($quarterToDate,$today,$apikey);    
+                $getCounterArr = $this->getStatCounter($apikey,$quarterToDate,$today);
+                $countsArr = $getCounterArr['countsArr'];   
+                $rejectDetailCountsArr = $getCounterArr['rejectDetailCountsArr']; 
             }
 
         }elseif ($chooseFilter == 'yTd') {
@@ -130,9 +137,10 @@ class Mdl_live_delivery extends CI_Model
 
             if($wantToDataRecords){
                 $filteredData = $this->getFilteredData($yearToDate,$today,$apikey,$start,$perPage,$getData);
-            }else{
-                $countsArr  = $this->getCounts($yearToDate,$today,$apikey);
-                $rejectDetailCountsArr = $this->getRejectDetailCount($yearToDate,$today,$apikey);    
+            }else{   
+                $getCounterArr = $this->getStatCounter($apikey,$yearToDate,$today);
+                $countsArr = $getCounterArr['countsArr'];   
+                $rejectDetailCountsArr = $getCounterArr['rejectDetailCountsArr']; 
             }
 
         }elseif ($chooseFilter == 'pw') {
@@ -143,9 +151,10 @@ class Mdl_live_delivery extends CI_Model
 
             if($wantToDataRecords){
                 $filteredData = $this->getFilteredData($previousWeek,$lastSevenDay,$apikey,$start,$perPage,$getData);
-            }else{
-                $countsArr  = $this->getCounts($previousWeek,$lastSevenDay,$apikey);
-                $rejectDetailCountsArr = $this->getRejectDetailCount($previousWeek,$lastSevenDay,$apikey);      
+            }else{ 
+                $getCounterArr = $this->getStatCounter($apikey,$previousWeek,$lastSevenDay);
+                $countsArr = $getCounterArr['countsArr'];   
+                $rejectDetailCountsArr = $getCounterArr['rejectDetailCountsArr'];  
             }
 
         }elseif ($chooseFilter == 'pm') {
@@ -157,8 +166,9 @@ class Mdl_live_delivery extends CI_Model
             if($wantToDataRecords){
                 $filteredData = $this->getFilteredData($previousMonth,$lastMonthDay,$apikey,$start,$perPage,$getData);
             }else{
-                $countsArr  = $this->getCounts($previousMonth,$lastMonthDay,$apikey);
-                $rejectDetailCountsArr = $this->getRejectDetailCount($previousMonth,$lastMonthDay,$apikey);    
+                $getCounterArr = $this->getStatCounter($apikey,$previousMonth,$lastMonthDay);
+                $countsArr = $getCounterArr['countsArr'];   
+                $rejectDetailCountsArr = $getCounterArr['rejectDetailCountsArr'];   
             }
 
         }elseif ($chooseFilter == 'pq') {
@@ -181,8 +191,9 @@ class Mdl_live_delivery extends CI_Model
             if($wantToDataRecords){
                 $filteredData = $this->getFilteredData($previousQuarter,$currentQuarter,$apikey,$start,$perPage,$getData);
             }else{
-                $countsArr  = $this->getCounts($previousQuarter,$currentQuarter,$apikey);
-                $rejectDetailCountsArr = $this->getRejectDetailCount($previousQuarter,$currentQuarter,$apikey);    
+                $getCounterArr = $this->getStatCounter($apikey,$previousQuarter,$currentQuarter);
+                $countsArr = $getCounterArr['countsArr'];
+                $rejectDetailCountsArr = $getCounterArr['rejectDetailCountsArr'];
             }
 
         }elseif ($chooseFilter == 'py') {
@@ -194,8 +205,9 @@ class Mdl_live_delivery extends CI_Model
             if($wantToDataRecords){
                 $filteredData = $this->getFilteredData($previousYear,$lastYearDay,$apikey,$start,$perPage,$getData);
             }else{
-                $countsArr  = $this->getCounts($previousYear,$lastYearDay,$apikey);
-                $rejectDetailCountsArr = $this->getRejectDetailCount($previousYear,$lastYearDay,$apikey);    
+                $getCounterArr = $this->getStatCounter($apikey,$previousYear,$lastYearDay);
+                $countsArr = $getCounterArr['countsArr'];
+                $rejectDetailCountsArr = $getCounterArr['rejectDetailCountsArr'];   
             }
 
         }elseif ($chooseFilter == 'cd') {
@@ -207,8 +219,9 @@ class Mdl_live_delivery extends CI_Model
             if($wantToDataRecords){
                 $filteredData = $this->getFilteredData($startDate,$endDate,$apikey,$start,$perPage,$getData);  
             }else{
-                $countsArr  = $this->getCounts($startDate,$endDate,$apikey);
-                $rejectDetailCountsArr = $this->getRejectDetailCount($startDate,$endDate,$apikey);    
+                $getCounterArr = $this->getStatCounter($apikey,$startDate,$endDate);
+                $countsArr = $getCounterArr['countsArr'];
+                $rejectDetailCountsArr = $getCounterArr['rejectDetailCountsArr'];   
             }
 
         }else{
@@ -229,7 +242,6 @@ class Mdl_live_delivery extends CI_Model
                     return array('countsArr' => $countsArr,'rejectDetailCountsArr' => $rejectDetailCountsArr,'filteredData' => array());
                 }
             }
-
 
             if($wantToDataRecords){
 
@@ -255,47 +267,11 @@ class Mdl_live_delivery extends CI_Model
                 //---------------------------------------------------------------------------------------------------
 
             }else{
-
-
                 //---------------------------------------------------------------------------------------------------
                 //get all successCount and failureCount
-                $condition = array(
-                    'apikey' => $apikey,
-                    'isFail' => 0
-                );
-                $successCount = GetAllRecordCount(LIVE_DELIVERY_DATA,$condition);
-
-                $condition = array(
-                    'apikey' => $apikey,
-                    'isFail' => 1
-                );
-                $failureCount = GetAllRecordCount(LIVE_DELIVERY_DATA,$condition);
-
-                $condition = array(
-                    'apikey' => $apikey,
-                    'isEmailChecked' => 1
-                );
-                $checkEmailCount = GetAllRecordCount(LIVE_DELIVERY_DATA,$condition);
-
-                $countsArr =  array('successCount' => $successCount,'failureCount' => $failureCount, 'checkEmailCount' => $checkEmailCount);
-                //---------------------------------------------------------------------------------------------------
-
-                //get reject count in detail
-
-                $reasonArr = array(1 => 'duplicateCount', 2 => 'blacklistCount', 3 => 'serverIssue', 4 => 'apiKeyIsNotActive', 5 => 'emailIsRequired', 6 => 'phoneIsRequired', 7 => 'emailIsBlank', 8 => 'phoneIsBlank', 9 => 'invalidEmailFormat', 10 => 'invalidPhone', 11 => 'invalidGender', 12 => 'teliaMxBlock', 13 => 'luukkuMxBlock', 14 => 'ppMxBlock', 15 => 'alreadyUnsubscribed', 16 => 'yahooMxBlock', 17 => 'icloudMxBlock', 18 => 'gmxMxBlock' );
-
-                $rejectDetailCountsArr = array();
-                for ($i=1; $i <= count($reasonArr); $i++) { 
-
-                     $condition = array(
-                        'apikey' => $apikey,
-                        'sucFailMsgIndex' => $i
-                    );
-
-                    $rejectCount = GetAllRecordCount(LIVE_DELIVERY_DATA,$condition);
-                    $rejectDetailCountsArr[$reasonArr[$i]] = $rejectCount;
-                }
-
+                $getCounterArr = $this->getStatCounter($apikey);
+                $rejectDetailCountsArr = $getCounterArr['rejectDetailCountsArr'];
+                $countsArr = $getCounterArr['countsArr'];
                 //---------------------------------------------------------------------------------------------------
             }
             
@@ -455,5 +431,128 @@ class Mdl_live_delivery extends CI_Model
         }
     }
 
+    //count for all stat
+    function getStatCounter($apikey,$startDate=null,$endDate=null){
+
+        $getCounterSql ="SELECT
+            SUM(CASE isFail
+                    WHEN '0' THEN 1
+                    ELSE 0
+                END) AS successCount
+            , SUM(CASE isFail
+                        WHEN '1' THEN 1
+                        ELSE 0
+                    END) AS failureCount
+            , SUM(CASE isEmailChecked
+                    WHEN '1' THEN 1
+                    ELSE 0
+                END) AS checkEmailCount
+            , SUM(CASE sucFailMsgIndex
+                    WHEN '1' THEN 1
+                    ELSE 0
+                END) AS duplicateCount
+            , SUM(CASE sucFailMsgIndex
+                WHEN '2' THEN 1
+                ELSE 0
+                END) AS blacklistCount
+            , SUM(CASE sucFailMsgIndex
+                WHEN '3' THEN 1
+                ELSE 0
+                END) AS serverIssue
+            , SUM(CASE sucFailMsgIndex
+                WHEN '4' THEN 1
+                ELSE 0
+                END) AS apiKeyIsNotActive
+            , SUM(CASE sucFailMsgIndex
+                WHEN '5' THEN 1
+                ELSE 0
+                END) AS emailIsRequired
+            , SUM(CASE sucFailMsgIndex
+                WHEN '6' THEN 1
+                ELSE 0
+                END) AS phoneIsRequired
+            , SUM(CASE sucFailMsgIndex
+                WHEN '7' THEN 1
+                ELSE 0
+                END) AS emailIsBlank
+            , SUM(CASE sucFailMsgIndex
+                WHEN '8' THEN 1
+                ELSE 0
+                END) AS phoneIsBlank
+            , SUM(CASE sucFailMsgIndex
+                WHEN '9' THEN 1
+                ELSE 0
+                END) AS invalidEmailFormat
+            , SUM(CASE sucFailMsgIndex
+                WHEN '10' THEN 1
+                ELSE 0
+                END) AS invalidPhone
+            , SUM(CASE sucFailMsgIndex
+                WHEN '11' THEN 1
+                ELSE 0
+                END) AS invalidGender
+            , SUM(CASE sucFailMsgIndex
+                WHEN '12' THEN 1
+                ELSE 0
+                END) AS teliaMxBlock
+            , SUM(CASE sucFailMsgIndex
+                WHEN '13' THEN 1
+                ELSE 0
+                END) AS luukkuMxBlock
+            , SUM(CASE sucFailMsgIndex
+                WHEN '14' THEN 1
+                ELSE 0
+                END) AS ppMxBlock
+            , SUM(CASE sucFailMsgIndex
+                WHEN '15' THEN 1
+                ELSE 0
+                END) AS alreadyUnsubscribed
+            , SUM(CASE sucFailMsgIndex
+                WHEN '16' THEN 1
+                ELSE 0
+                END) AS yahooMxBlock
+            , SUM(CASE sucFailMsgIndex
+                WHEN '17' THEN 1
+                ELSE 0
+                END) AS icloudMxBlock
+            , SUM(CASE sucFailMsgIndex
+                WHEN '18' THEN 1
+                ELSE 0
+                END) AS gmxMxBlock
+        FROM live_delivery_data
+        WHERE `apikey` ='".$apikey."'";
+
+        if($startDate != null || $endDate != null){
+            if ($this->isDateWithoutTime($startDate) == 'true') {
+                $startDate = $startDate.' 00:00:00';
+            }
+    
+            if ($this->isDateWithoutTime($endDate) == 'true') {
+                $endDate = $endDate.' 23:59:59';   
+            }
+
+            $getCounterSql .= " AND  `createdDate` >= '".$startDate."' AND `createdDate` <= '".$endDate."'";
+        }
+        $getCounter = $this->db->query($getCounterSql)->result_array()[0];
+        $successCount = $getCounter['successCount'];
+        $failureCount = $getCounter['failureCount'];
+        $checkEmailCount = $getCounter['checkEmailCount'];
+
+
+        $countsArr =  array('successCount' => $successCount,'failureCount' => $failureCount, 'checkEmailCount' => $checkEmailCount);
+
+        $reasonArr = array(1 => 'duplicateCount', 2 => 'blacklistCount', 3 => 'serverIssue', 4 => 'apiKeyIsNotActive', 5 => 'emailIsRequired', 6 => 'phoneIsRequired', 7 => 'emailIsBlank', 8 => 'phoneIsBlank', 9 => 'invalidEmailFormat', 10 => 'invalidPhone', 11 => 'invalidGender', 12 => 'teliaMxBlock', 13 => 'luukkuMxBlock', 14 => 'ppMxBlock', 15 => 'alreadyUnsubscribed', 16 => 'yahooMxBlock', 17 => 'icloudMxBlock', 18 => 'gmxMxBlock' );
+
+        //get reject count in detail
+        $rejectDetailCountsArr = array();
+        for ($i=1; $i <= count($reasonArr); $i++) { 
+            $rejectDetailCountsArr[$reasonArr[$i]] = $getCounter[$reasonArr[$i]];
+        }
+
+        return array(
+            'countsArr'             => $countsArr,
+            'rejectDetailCountsArr' => $rejectDetailCountsArr
+        );
+    }
 
 }
