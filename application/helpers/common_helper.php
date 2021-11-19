@@ -912,7 +912,8 @@ function getActiveCampaignProviderListName($providerListId){
         "5" => "Signesmail/NOR",
         "6" => "Katariinasmail/FI",
         "7" => "Velkomstgaven/DK",
-        "8" => "Signesmail/DK"       
+        "8" => "Signesmail/DK",
+        "9" => "Velkomstgaven1/NO"       
     );
     return $activeCampaignList[$providerListId];
 }
@@ -1179,7 +1180,8 @@ function getLiveRepostActiveCampaignProviderID($providerId){
         "5" => "166",  // Signesmail/NOR
         "6" => "167",  // Katariinasmail/FI
         "7" => "168",  // Velkomstgaven/DK
-        "8" => "169"   // Signesmail/DK
+        "8" => "169",  // Signesmail/DK
+        "9" => "193"   // Velkomstgaven/NO
     );
     return $provider[$providerId];
 }
