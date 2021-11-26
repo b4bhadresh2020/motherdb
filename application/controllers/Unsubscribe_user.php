@@ -267,7 +267,7 @@ class Unsubscribe_user extends CI_Controller
                 '13' => 'active_campaign',
                 '15' => 'clever_reach',
                 '16' => 'omnisend',
-                '15' => 'expert_sender'
+                '14' => 'expert_sender'
             ];
             // GET UNSUBSCRIBER LIST USING EMAIL ID THAT ALREADY HANDLE WHEN EMPLOYEE UNSUB USER (+ WEBHOOK (TO HANDLE DUPLICATE ENTRY WHEN EMPLOYEE UNSUB USER AND AT THAT MOMENT WEBHOOK EVENT IS ALSO CALLED))
             $condition       = array('email' => $email);
