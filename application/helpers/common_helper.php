@@ -2230,3 +2230,24 @@ function checkAccountStatus($mailProvider) {
     $accountData = GetAllRecord($accountTable, $condition, $is_single);
     return $accountData;
 }
+
+//delay account table name
+function getDelayAccountTableName($provider) {
+    $tableNames = array(
+        '1' => 'aweber_delay_user_data',
+        '4' => 'ongage_delay_user_data',
+        '7' => 'sendpulse_delay_user_data',
+        '8' => 'mailerlite_delay_user_data',
+        '9' => 'mailjet_delay_user_data',
+        '10' => 'convertkit_delay_user_data',
+        '11' => 'marketing_platform_delay_user_data',
+        '12' => 'ontraport_delay_user_data',
+        '13' => 'active_campaign_delay_user_data',
+        '14' => 'expert_sender_delay_user_data',
+        '15' => 'clever_reach_delay_user_data',
+        '16' => 'omnisend_delay_user_data'
+    );
+    if (array_key_exists($provider, $tableNames)) {
+        return $tableNames[$provider];
+    }
+}

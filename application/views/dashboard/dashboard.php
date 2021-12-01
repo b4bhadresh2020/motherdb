@@ -25,7 +25,87 @@
             <!-- /# row -->
             <section id="main-content">
                 <div class="row" >
-                    
+                    <div class="col-lg-12">
+                        <div class="card alert">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <?php foreach($countriesStat as $country => $stat) { ?>
+                                        <table class="table table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Total Leads Sweden : <?= $country ?></th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Stat</th>
+                                                    <th>All</th>
+                                                    <th>Today</th>
+                                                    <th>Yesterday</th>
+                                                    <th>Last 7 days</th>
+                                                    <th>This month</th>
+                                                    <th>October</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td><b>Total</b></td>
+                                                    <td><?= $stat['total']; ?></td>
+                                                    <td>2,456</td>
+                                                    <td>99</td>
+                                                    <td>6.59%</td>
+                                                    <td>2,456</td>
+                                                    <td>99</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Avg per day</b></td>
+                                                    <td><?= $stat['totalAvgPerDay']; ?></td>
+                                                    <td>2,456</td>
+                                                    <td>99</td>
+                                                    <td>6.59%</td>
+                                                    <td>2,456</td>
+                                                    <td>99</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Succes</b></td>
+                                                    <td><?= $stat['success']; ?></td>
+                                                    <td>2,456</td>
+                                                    <td>99</td>
+                                                    <td>6.59%</td>
+                                                    <td>2,456</td>
+                                                    <td>99</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Avg per day</b></td>
+                                                    <td><?= $stat['successAvgPerDay']; ?></td>
+                                                    <td>2,456</td>
+                                                    <td>99</td>
+                                                    <td>6.59%</td>
+                                                    <td>2,456</td>
+                                                    <td>99</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Failure in %</b></td>
+                                                    <td><?= $stat['failure']; ?></td>
+                                                    <td>2,456</td>
+                                                    <td>99</td>
+                                                    <td>6.59%</td>
+                                                    <td>2,456</td>
+                                                    <td>99</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><b>Total Leads Accepted by ESP</b></td>
+                                                    <td><?= $stat['duplicate']; ?></td>
+                                                    <td>99</td>
+                                                    <td>6.59%</td>
+                                                    <td>2,456</td>
+                                                    <td>99</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- <div class="col-lg-3">
                         <div class="card">
                             <div class="stat-widget-eight">
