@@ -194,6 +194,10 @@
                 providerList +="<option value='4'>Velkomstgavenmail.dk</option>";
                 providerList +="<option value='5'>Freecasinodeal1/ca</option>";
                 providerList +="<option value='6'>Freecasinodeal1/nz</option>";            
+                providerList +="<option value='7'>Velkomstgaven/DK</option>";            
+                providerList +="<option value='8'>Velkomstgaven/com</option>";            
+                providerList +="<option value='9'>Gratispresent/SE</option>";            
+                providerList +="<option value='10'>Unelmalaina/FI</option>";            
             } else if(providerId == 13){
                 providerList +="<option value='1'>Velkomstgaven/NOR</option>";
                 providerList +="<option value='2'>GratisPresent/SE</option>";       
