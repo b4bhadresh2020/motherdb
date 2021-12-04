@@ -542,7 +542,11 @@ class Cron_provider_user_csv extends CI_Controller
             "3" => "143",  // Freecasinodeal1/fi
             "4" => "144",  // Velkomstgavenmail.dk
             "5" => "145",  // Freecasinodeal1/ca
-            "6" => "146",  // Freecasinodeal1/nz      
+            "6" => "146",  // Freecasinodeal1/nz
+            "7" => "194",  // Velkomstgaven/DK
+            "8" => "195",  // Velkomstgaven/com
+            "9" => "196",  // Gratispresent/SE
+            "10" => "197",  // Unelmalaina/FI      
         );
         return $provider[$providerId];
     }
