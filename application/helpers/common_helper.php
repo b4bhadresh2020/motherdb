@@ -1171,10 +1171,10 @@ function getLiveRepostOntraportProviderID($providerId){
         "4" => "144",  // Velkomstgavenmail.dk
         "5" => "145",  // Freecasinodeal1/ca
         "6" => "146",  // Freecasinodeal1/nz
-        "7" => "185",  // Velkomstgaven/DK
-        "8" => "186",  // Velkomstgaven/com
-        "9" => "187",  // Gratispresent/SE
-        "10" => "188",  // Unelmalaina/FI
+        "7" => "194",  // Velkomstgaven/DK
+        "8" => "195",  // Velkomstgaven/com
+        "9" => "196",  // Gratispresent/SE
+        "10" => "197",  // Unelmalaina/FI
     );
     return $provider[$providerId];
 }

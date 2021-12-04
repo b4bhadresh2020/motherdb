@@ -32,7 +32,7 @@ class Cron_ontraport_delay_user extends CI_Controller
         $this->db->limit(500);
         $query=$this->db->get();
         $userData= $query->result_array();
-        
+
         foreach($userData as $user){   
             $emailAddressChunk = explode("@",$user['emailId']);
             $country = $user['country'];
