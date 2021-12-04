@@ -60,11 +60,14 @@ class Mdl_omnisend extends CI_Model {
             $apiKey = $omnisendAccountData['api_key'];
 
             $gender = '';
-            if(!empty($getData['gender']) && strtolower($getData['gender'] == 'male') || strtolower($getData['gender'] == 'm')) {
-                $gender = 'm';
-            } else if (!empty($getData['gender']) && strtolower($getData['gender'] == 'female') || strtolower($getData['gender'] == 'f')) {
-                $gender = 'f';
+            if(isset($getData['gender'])) {
+                if(!empty($getData['gender']) && strtolower($getData['gender'] == 'male') || strtolower($getData['gender'] == 'm')) {
+                    $gender = 'm';
+                } else if (!empty($getData['gender']) && strtolower($getData['gender'] == 'female') || strtolower($getData['gender'] == 'f')) {
+                    $gender = 'f';
+                }
             }
+            
             $todayDateTime = date("Y-m-d\TH:i:s\Z", strtotime(date('Y-m-d h:i:s')));
             $details = [
                 'segmentID' => $list_id,
