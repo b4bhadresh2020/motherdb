@@ -208,6 +208,8 @@
                 providerList +="<option value='7'>Velkomstgaven/DK</option>";
                 providerList +="<option value='8'>Signesmail/DK</option>";
                 providerList +="<option value='9'>Velkomstgaven1/NO</option>";
+                providerList +="<option value='10'>gratisprodukttester.com/NO</option>";
+                providerList +="<option value='11'>dagenspresent.se/SE</option>";
             } else if(providerId == 14){
                 providerList +="<option value='1'>camilla/abbiesmail2.com/CA</option>";       
                 providerList +="<option value='2'>camilla/ashleysmail1.com/NZ</option>";       

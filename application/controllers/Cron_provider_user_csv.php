@@ -561,7 +561,9 @@ class Cron_provider_user_csv extends CI_Controller
             "6" => "167",  // Katariinasmail/FI
             "7" => "168",  // Velkomstgaven/DK
             "8" => "169",  // Signesmail/DK
-            "9" => "193"   // Velkomstgaven/NO
+            "9" => "193",   // Velkomstgaven/NO
+            "10" => "198",   // gratisprodukttester.com/NO
+            "11" => "199"   // dagenspresent.se/SE
         );
         return $provider[$providerId];
     }
