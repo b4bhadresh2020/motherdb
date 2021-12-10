@@ -84,7 +84,7 @@
                                                     <td><b>Avg per day</b></td>
                                                     <?php foreach($statFileds as $filed => $day){ ?>
                                                         
-                                                        <td><?= ($day != 0) ? ceil(($stat['success'][$filed]/$day)*100) : 0; ?>%</td>
+                                                        <td><?= ($day != 0) ? ceil(($stat['success'][$filed]/$day)) : 0; ?>%</td>
                                                         
                                                     <?php }  ?>
                                                 </tr>
