@@ -21,61 +21,7 @@ class AdminHome extends CI_Controller
 
     public function index($start = 0)
     {   
-        // const MAILJET = 9;
-        // const MARKETING_PLATFORM = 11;
-        // const ACTIVE_CAMPAIGN = 13;
-        // const ONTRAPORT = 12;
-        // const EXPERT_SENDER = 14;
-        // const CLEVER_REACH = 15;
-        // const OMNISEND = 16;
-
-        $response = [];
-        $allCountries = getCountry();
-        foreach($allCountries as $countries){
-
-            $condition   = array('country' => $countries['country']);
-            $activeAccountCondition = array('provider' => [9,13,12,14,15,16]);
-            $is_single   = false;
-            $providers   = GetAllRecordIn(PROVIDERS, $condition, $is_single,array(),array(),array(),$activeAccountCondition,"id,provider");
-
-            $accountProviders = array();
-            foreach($providers as $provider){
-                $tableName = getDelayAccountTableName($provider['provider']);
-                $accountProviders[$tableName][] = $provider['id'];
-            }
-            
-            if(count($accountProviders) > 0){
-                $response[$countries['country']]['total'] = $this->getCounterByCustomFilter($accountProviders,'total');
-                $response[$countries['country']]['success'] = $this->getCounterByCustomFilter($accountProviders,'success');
-                
-                // $response[$countries['country']]['total']['today'] = $this->mdl_admin_home->getTotalLeadCounter($accountProviders,$this->getCondition('td'));
-                // $response[$countries['country']]['total']['yesterday'] = $this->mdl_admin_home->getTotalLeadCounter($accountProviders,$this->getCondition('yd'));
-                // $response[$countries['country']]['total']['current_week'] = $this->mdl_admin_home->getTotalLeadCounter($accountProviders,$this->getCondition('lSvnD'));
-                // $response[$countries['country']]['total']['current_month'] = $this->mdl_admin_home->getTotalLeadCounter($accountProviders,$this->getCondition('lThrtyD'));
-
-                // //january month dainamic data get
-                // $monthNum = date('m');
-                // $year = date('Y');
-                // for($month=$monthNum;$month>=1;$month--){
-                //     $monthName = date("F", mktime(0, 0, 0, $month, 10));
-                //     $response[$countries['country']]['total'][$monthName] = $this->mdl_admin_home->getTotalLeadCounter($accountProviders,$this->getCondition('dM',$monthName,$year));
-                // }
-            }else{
-                // $response[$countries['country']]['total']['today'] = 0;
-                // $response[$countries['country']]['total']['yesterday'] = 0;
-                // $response[$countries['country']]['total']['current_week'] = 0;
-                // $response[$countries['country']]['total']['current_month'] = 0;
-                // for($month=$monthNum;$month>=1;$month--){
-                //     $monthName = date("F", mktime(0, 0, 0, $month, 10));
-                //     $response[$countries['country']]['total'][$monthName] = 0;
-                // }
-            }
-            
-        }   
-        pre($response);
-        die;
         $data = array();
-        $data['countriesStat'] = $response;
 
         // keyword % and batchstat
         $keywordDataCount = GetAllRecordCount(KEYWORD_MASTER, array());
@@ -104,6 +50,38 @@ class AdminHome extends CI_Controller
         }
         
         $data['result']  = pagination_data('AdminHome/index/', $infoData_result_count, $start, 3, $perPage, $infoData_result);
+
+        //dashboard lead counter stat
+        $response = [];
+        $allCountries = getCountry();
+        foreach($allCountries as $countries){
+
+            $condition   = array('country' => $countries['country']);
+            $activeAccountCondition = array('provider' => [9,13,12,14,15,16]);
+            $is_single   = false;
+            $providers   = GetAllRecordIn(PROVIDERS, $condition, $is_single,array(),array(),array(),$activeAccountCondition,"id,provider");
+
+            $accountProviders = array();
+            foreach($providers as $provider){
+
+                $tableName = getDelayAccountTableName($provider['provider']);
+                $accountProviders[$tableName][] = $provider['id'];
+
+            }
+            
+            if(count($accountProviders) > 0){
+
+                $response[$countries['country']]['total'] = $this->getCounterByCustomFilter($accountProviders,'total');
+                $response[$countries['country']]['success'] = $this->getCounterByCustomFilter($accountProviders,'success');
+                $response[$countries['country']]['fail'] = $this->getCounterByCustomFilter($accountProviders,'fail');
+                $response[$countries['country']]['duplicate'] = $this->getCounterByCustomFilter($accountProviders,'duplicate');
+            }
+            
+        }   
+        $data['countriesStat'] = $response;
+        
+        //common fileds
+        $data['statFileds'] = $this->getStatFileds();
 
         // Country wise
         $returnOfFunc               = $this->getCountryWiseKeywordPer();
@@ -134,15 +112,44 @@ class AdminHome extends CI_Controller
         $response['current_month'] = $this->mdl_admin_home->getTotalLeadCounter($accountProviders,$filed,$this->getCondition('lThrtyD'));
 
         //january month dainamic data get
-        $monthNum = date('m');
+        $monthNum = date('m')-1;
         $year = date('Y');
         for($month=$monthNum;$month>=1;$month--){
             $monthName = date("F", mktime(0, 0, 0, $month, 10));
             $response[$monthName] = $this->mdl_admin_home->getTotalLeadCounter($accountProviders,$filed,$this->getCondition('dM',$monthName,$year));
         }
         return $response;
+        
     }
 
+    function getStatFileds(){
+
+        $fileds = [];
+        $fileds['today'] = 1;
+        $fileds['yesterday'] = 2;
+        $fileds['current_week'] = 7;
+
+        $currentMonthDate = $this->getCondition('lThrtyD');
+        $fileds['current_month'] = $this->getDays($currentMonthDate['startDate'],$currentMonthDate['endDate']);
+        
+        //end of the january month dainamic data get
+        $monthNum = date('m')-1;
+        $year = date('Y');
+        for($month=$monthNum;$month>=1;$month--){
+            $monthName = date("F", mktime(0, 0, 0, $month, 10));
+            $prevMonth = $this->getCondition('dM',$monthName,$year);
+            $fileds[$monthName] = $this->getDays($prevMonth['startDate'],$prevMonth['endDate']);
+        }        
+        return $fileds;
+    }
+
+    function getDays($startDate,$endDate){
+        $datetime1 = new DateTime($startDate);
+        $datetime2 = new DateTime($endDate);
+        $days = $datetime1->diff($datetime2);
+        return $days->format('%a')+1;
+    }
+    
     function getCondition($chooseFilter = "td",$month=null,$year=null){
 
         if ($chooseFilter == 'td') {
@@ -178,12 +185,14 @@ class AdminHome extends CI_Controller
              $endDate = $today;   
  
          }elseif($chooseFilter == 'dM'){
+
             //get dM = daynamic month records
             if($month!=null && $year != null){
                 $timestamp    = strtotime($month." ".$year);
                 $startDate = date('Y-m-01', $timestamp);
                 $endDate  =date('Y-m-t',strtotime($startDate));
             }
+
          }
 
         $condition = array(
@@ -192,6 +201,7 @@ class AdminHome extends CI_Controller
         );             
          return $condition;        
      }
+    
     public function getCountryWiseKeywordPer(){
 
         $newCountryArr = array();
