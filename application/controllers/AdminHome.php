@@ -75,6 +75,7 @@ class AdminHome extends CI_Controller
                 $response[$countries['country']]['success'] = $this->getCounterByCustomFilter($accountProviders,'success');
                 $response[$countries['country']]['fail'] = $this->getCounterByCustomFilter($accountProviders,'fail');
                 $response[$countries['country']]['duplicate'] = $this->getCounterByCustomFilter($accountProviders,'duplicate');
+            
             }
             
         }   
@@ -128,11 +129,10 @@ class AdminHome extends CI_Controller
         $fileds['today'] = 1;
         $fileds['yesterday'] = 2;
         $fileds['current_week'] = 7;
-
         $currentMonthDate = $this->getCondition('lThrtyD');
         $fileds['current_month'] = $this->getDays($currentMonthDate['startDate'],$currentMonthDate['endDate']);
         
-        //end of the january month dainamic data get
+        //end of the january month daynamic data get
         $monthNum = date('m')-1;
         $year = date('Y');
         for($month=$monthNum;$month>=1;$month--){
@@ -177,7 +177,7 @@ class AdminHome extends CI_Controller
  
          }elseif ($chooseFilter == 'lThrtyD') {
              
-             //get lThrtyD = last thirty day's records
+             //get lThrtyD = current month records
              $lastThirtyDay  = date('Y-m-01');
              $today          = date('Y-m-d');
  
@@ -186,7 +186,7 @@ class AdminHome extends CI_Controller
  
          }elseif($chooseFilter == 'dM'){
 
-            //get dM = daynamic month records
+            //get dM = daynamic month records end of january
             if($month!=null && $year != null){
                 $timestamp    = strtotime($month." ".$year);
                 $startDate = date('Y-m-01', $timestamp);
