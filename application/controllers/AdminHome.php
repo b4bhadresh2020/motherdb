@@ -51,39 +51,6 @@ class AdminHome extends CI_Controller
         
         $data['result']  = pagination_data('AdminHome/index/', $infoData_result_count, $start, 3, $perPage, $infoData_result);
 
-        //dashboard lead counter stat
-        $response = [];
-        $allCountries = getCountry();
-        foreach($allCountries as $countries){
-
-            $condition   = array('country' => $countries['country']);
-            $activeAccountCondition = array('provider' => [9,13,12,14,15,16]);
-            $is_single   = false;
-            $providers   = GetAllRecordIn(PROVIDERS, $condition, $is_single,array(),array(),array(),$activeAccountCondition,"id,provider");
-
-            $accountProviders = array();
-            foreach($providers as $provider){
-
-                $tableName = getDelayAccountTableName($provider['provider']);
-                $accountProviders[$tableName][] = $provider['id'];
-
-            }
-            
-            if(count($accountProviders) > 0){
-
-                $response[$countries['country']]['total'] = $this->getCounterByCustomFilter($accountProviders,'total');
-                $response[$countries['country']]['success'] = $this->getCounterByCustomFilter($accountProviders,'success');
-                $response[$countries['country']]['fail'] = $this->getCounterByCustomFilter($accountProviders,'fail');
-                $response[$countries['country']]['duplicate'] = $this->getCounterByCustomFilter($accountProviders,'duplicate');
-            
-            }
-            
-        }   
-        $data['countriesStat'] = $response;
-        
-        //common fileds
-        $data['statFileds'] = $this->getStatFileds();
-
         // Country wise
         $returnOfFunc               = $this->getCountryWiseKeywordPer();
         $data['countryKeywordPers'] = $returnOfFunc['newCountryArr'];
@@ -104,6 +71,43 @@ class AdminHome extends CI_Controller
         $this->load->view('commonTemplates/templateLayout', $data);
     }
 
+    function getAllCountries(){
+        echo json_encode(getCountry());
+    }
+
+    function getDashboarsStat(){
+
+        //dashboard lead counter stat
+        $response = [];
+        $allCountries = getCountry();
+       
+        $country = $this->input->post('country');
+        $condition   = array('country' => $country);
+        $activeAccountCondition = array('provider' => [9,13,12,14,15,16]);
+        $is_single   = false;
+        $providers   = GetAllRecordIn(PROVIDERS, $condition, $is_single,array(),array(),array(),$activeAccountCondition,"id,provider");
+
+        $accountProviders = array();
+        foreach($providers as $provider){
+
+            $tableName = getDelayAccountTableName($provider['provider']);
+            $accountProviders[$tableName][] = $provider['id'];
+
+        }
+        
+        if(count($accountProviders) > 0){
+
+            $response[$country]['total'] = $this->getCounterByCustomFilter($accountProviders,'total');
+            $response[$country]['success'] = $this->getCounterByCustomFilter($accountProviders,'success');
+            $response[$country]['fail'] = $this->getCounterByCustomFilter($accountProviders,'fail');
+            $response[$country]['duplicate'] = $this->getCounterByCustomFilter($accountProviders,'duplicate');
+
+            $data['countriesStat'] = $response;
+            $data['statFileds'] = $this->getStatFileds();
+            $this->load->view('dashboard/dashboardStat', $data);
+        
+        }   
+    }
 
     function getCounterByCustomFilter($accountProviders,$filed){
 
@@ -120,7 +124,7 @@ class AdminHome extends CI_Controller
             $response[$monthName] = $this->mdl_admin_home->getTotalLeadCounter($accountProviders,$filed,$this->getCondition('dM',$monthName,$year));
         }
         return $response;
-        
+
     }
 
     function getStatFileds(){
