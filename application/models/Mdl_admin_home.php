@@ -48,4 +48,7 @@ class Mdl_admin_home extends CI_Model {
         $total = $query->result_array()[0];
         return $total['total'];
     }
+
+    function getDashboardTotalRecord(){}
+    
 }
