@@ -564,7 +564,16 @@
             providerList +="<option value='7'>Velkomstgaven/DK</option>";            
             providerList +="<option value='8'>Velkomstgaven/com</option>";            
             providerList +="<option value='9'>Gratispresent/SE</option>";            
-            providerList +="<option value='10'>Unelmalaina/FI</option>";            
+            providerList +="<option value='10'>Unelmalaina/FI</option>";     
+            providerList +="<option value='11'>Velkomst/DK</option>";
+            providerList +="<option value='12'>Signe/DK</option>";
+            providerList +="<option value='13'>Dagens/SE</option>";
+            providerList +="<option value='14'>Felina/SE</option>";
+            providerList +="<option value='15'>Venla/FI</option>";
+            providerList +="<option value='16'>Katariina/FI</option>";
+            providerList +="<option value='17'>Allfree/CA</option>";
+            providerList +="<option value='18'>Abbie/CA</option>";
+            providerList +="<option value='19'>Ashley/NZ</option>";         
         } else if(providerId == 13){
             providerList +="<option value='1'>Velkomstgaven/NOR</option>";   
             providerList +="<option value='2'>GratisPresent/SE</option>";       
