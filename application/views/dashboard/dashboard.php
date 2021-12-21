@@ -25,6 +25,7 @@
             <!-- /# row -->
             <section id="main-content">
                 <div class="row" id="dashboardStat">
+                    <?php include('dashboardStat.php'); ?>
                 </div>
                 <div class="row" style="display: none;">
                     <div class="col-lg-12">

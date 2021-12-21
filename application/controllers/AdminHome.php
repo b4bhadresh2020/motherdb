@@ -60,6 +60,26 @@ class AdminHome extends CI_Controller
         $data['CountryWise'] = $this->CountryWise();
         $data['GroupWise']   = $this->GroupWise();
 
+        // Get dashboard Stat
+        $currentYear = date('Y');
+        $condition = array('year' => $currentYear);
+        $is_single = false;
+        $dashboardStats = GetAllRecord(DASHBOARD_STATS, $condition, $is_single);
+
+        // get country data
+        $is_single = false;
+        $countryList = GetAllRecord(COUNTRY_MASTER, array(), $is_single, array(), array(), array(), 'countryId, country');
+
+        $StatData = [];
+        foreach($countryList as $country) {
+            foreach($dashboardStats as $dashboardStat) {
+                if($country['countryId'] == $dashboardStat['countryId']) {
+                    $StatData[$country['country']][$dashboardStat['field']] = $dashboardStat;
+                }
+            }
+        }
+        $data['StatData'] = $StatData;
+        $data['statFileds'] = $this->getStatFileds();
         $data['load_page']       = 'dashboard';
         $data["curTemplateName"] = "dashboard/dashboard";
         $data['error_msg']       = GetMsg('loginErrorMsg');
@@ -75,75 +95,33 @@ class AdminHome extends CI_Controller
         echo json_encode(getCountry());
     }
 
-    function getDashboarsStat(){
-
-        //dashboard lead counter stat
-        $response = [];
-        $allCountries = getCountry();
-       
-        $country = $this->input->post('country');
-        $condition   = array('country' => $country);
-        $activeAccountCondition = array('provider' => [9,13,12,14,15,16]);
-        $is_single   = false;
-        $providers   = GetAllRecordIn(PROVIDERS, $condition, $is_single,array(),array(),array(),$activeAccountCondition,"id,provider");
-
-        $accountProviders = array();
-        foreach($providers as $provider){
-
-            $tableName = getDelayAccountTableName($provider['provider']);
-            $accountProviders[$tableName][] = $provider['id'];
-
-        }
-        
-        if(count($accountProviders) > 0){
-
-            $response[$country]['total'] = $this->getCounterByCustomFilter($accountProviders,'total');
-            $response[$country]['success'] = $this->getCounterByCustomFilter($accountProviders,'success');
-            $response[$country]['fail'] = $this->getCounterByCustomFilter($accountProviders,'fail');
-            $response[$country]['duplicate'] = $this->getCounterByCustomFilter($accountProviders,'duplicate');
-
-            $data['countriesStat'] = $response;
-            $data['statFileds'] = $this->getStatFileds();
-            $this->load->view('dashboard/dashboardStat', $data);
-        
-        }   
-    }
-
-    function getCounterByCustomFilter($accountProviders,$filed){
-
-        $response['today'] = $this->mdl_admin_home->getTotalLeadCounter($accountProviders,$filed,$this->getCondition('td'));
-        $response['yesterday'] = $this->mdl_admin_home->getTotalLeadCounter($accountProviders,$filed,$this->getCondition('yd'));
-        $response['current_week'] = $this->mdl_admin_home->getTotalLeadCounter($accountProviders,$filed,$this->getCondition('lSvnD'));
-        $response['current_month'] = $this->mdl_admin_home->getTotalLeadCounter($accountProviders,$filed,$this->getCondition('lThrtyD'));
-
-        //january month dainamic data get
-        $monthNum = date('m')-1;
-        $year = date('Y');
-        for($month=$monthNum;$month>=1;$month--){
-            $monthName = date("F", mktime(0, 0, 0, $month, 10));
-            $response[$monthName] = $this->mdl_admin_home->getTotalLeadCounter($accountProviders,$filed,$this->getCondition('dM',$monthName,$year));
-        }
-        return $response;
-
-    }
-
     function getStatFileds(){
 
         $fileds = [];
         $fileds['today'] = 1;
         $fileds['yesterday'] = 2;
         $fileds['current_week'] = 7;
-        $currentMonthDate = $this->getCondition('lThrtyD');
+        $currentMonthDate = getCondition('lThrtyD');
         $fileds['current_month'] = $this->getDays($currentMonthDate['startDate'],$currentMonthDate['endDate']);
         
         //end of the january month daynamic data get
         $monthNum = date('m')-1;
         $year = date('Y');
         for($month=$monthNum;$month>=1;$month--){
-            $monthName = date("F", mktime(0, 0, 0, $month, 10));
-            $prevMonth = $this->getCondition('dM',$monthName,$year);
+            $monthName = strtolower(date("F", mktime(0, 0, 0, $month, 10)));
+            $prevMonth = getCondition('dM',$monthName,$year);
             $fileds[$monthName] = $this->getDays($prevMonth['startDate'],$prevMonth['endDate']);
-        }        
+        }     
+
+        // previos year remain month
+        $curretMonth = date('m') + 1;
+        $prevYear = date('Y')-1;
+        for($month=$curretMonth;$month<=12;$month++){
+            $monthName = strtolower(date("F", mktime(0, 0, 0, $month, 10)));
+            $prevMonth = getCondition('dM',$monthName,$prevYear);
+            $fileds[$monthName] = $this->getDays($prevMonth['startDate'],$prevMonth['endDate']);
+        }
+
         return $fileds;
     }
 
@@ -153,59 +131,7 @@ class AdminHome extends CI_Controller
         $days = $datetime1->diff($datetime2);
         return $days->format('%a')+1;
     }
-    
-    function getCondition($chooseFilter = "td",$month=null,$year=null){
 
-        if ($chooseFilter == 'td') {
- 
-             //get td = today's clicks and registrations
-             $today = date('Y-m-d');
-             $startDate = $today;
-             $endDate = $today;
-                 
-         }elseif ($chooseFilter == 'yd') {
- 
-             //get yd = yester's records
-             $yesterday = date('Y-m-d',strtotime("-1 day"));
-             $startDate = $yesterday;
-             $endDate = $yesterday;
- 
-         }elseif ($chooseFilter == 'lSvnD') {
-             
-             //get lSvnD = last seven day's records
-             $lastSevenDay   = date('Y-m-d',strtotime("-7 days"));
-             $today          = date('Y-m-d');
- 
-             $startDate = $lastSevenDay;
-             $endDate = $today;            
- 
-         }elseif ($chooseFilter == 'lThrtyD') {
-             
-             //get lThrtyD = current month records
-             $lastThirtyDay  = date('Y-m-01');
-             $today          = date('Y-m-d');
- 
-             $startDate = $lastThirtyDay;
-             $endDate = $today;   
- 
-         }elseif($chooseFilter == 'dM'){
-
-            //get dM = daynamic month records end of january
-            if($month!=null && $year != null){
-                $timestamp    = strtotime($month." ".$year);
-                $startDate = date('Y-m-01', $timestamp);
-                $endDate  =date('Y-m-t',strtotime($startDate));
-            }
-
-         }
-
-        $condition = array(
-            'startDate' => $startDate.' '.'00:00:00',
-            'endDate'   => $endDate.' '.'23:59:59'
-        );             
-         return $condition;        
-     }
-    
     public function getCountryWiseKeywordPer(){
 
         $newCountryArr = array();

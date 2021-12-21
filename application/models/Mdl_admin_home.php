@@ -44,11 +44,9 @@ class Mdl_admin_home extends CI_Model {
         (
         ".$query."
         ) counter";
+
         $query = $this->db->query($countTotalLeadQry);
-        $total = $query->result_array()[0];
+        $total = $query->row_array();
         return $total['total'];
     }
-
-    function getDashboardTotalRecord(){}
-    
 }
