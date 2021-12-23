@@ -17,7 +17,11 @@ class Mdl_admin_home extends CI_Model {
             $providerId = implode(',',$providerIds);
             $query.= "select count(*) as ".$tableName." from ".$tableName." WHERE providerId IN (".$providerId.") AND createdDate>='".$date['startDate']."' AND createdDate<='".$date['endDate']."'";
             
-            if($filed == "success"){
+            if($filed == "total"){
+                
+                $query.= " AND status!='0' ";
+                
+            }else if($filed == "success"){
 
                 $query.= " AND status='1' AND response LIKE '".'%'.'"result":"success"'.'%'."' ";
 
@@ -40,8 +44,9 @@ class Mdl_admin_home extends CI_Model {
         (
         ".$query."
         ) counter";
+
         $query = $this->db->query($countTotalLeadQry);
-        $total = $query->result_array()[0];
+        $total = $query->row_array();
         return $total['total'];
     }
 }

@@ -212,6 +212,7 @@ define('ACTIVE_CAMPAIGN_ACCOUNTS','active_campaign_accounts');
 define('EXPERT_SENDER_ACCOUNTS', 'expert_sender_accounts');
 define('CLEVER_REACH_ACCOUNTS', 'clever_reach_accounts');
 define('OMNISEND_ACCOUNTS', 'omnisend_accounts');
+define('DASHBOARD_STATS', 'dashboard_stats');
 
 // MX Block account
 define('TELIA_DOMAIN', 'telia.com');

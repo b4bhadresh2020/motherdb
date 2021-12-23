@@ -2272,3 +2272,56 @@ function getDelayAccountTableName($provider) {
         return $tableNames[$provider];
     }
 }
+
+// get condition: dashboard stats by jalpa
+function getCondition($chooseFilter = "td",$month=null,$year=null){
+
+    if ($chooseFilter == 'td') {
+
+         //get td = today's clicks and registrations
+         $today = date('Y-m-d');
+         $startDate = $today;
+         $endDate = $today;
+             
+     }elseif ($chooseFilter == 'yd') {
+
+         //get yd = yester's records
+         $yesterday = date('Y-m-d',strtotime("-1 day"));
+         $startDate = $yesterday;
+         $endDate = $yesterday;
+
+     }elseif ($chooseFilter == 'lSvnD') {
+         
+         //get lSvnD = last seven day's records
+         $lastSevenDay   = date('Y-m-d',strtotime("-7 days"));
+         $today          = date('Y-m-d');
+
+         $startDate = $lastSevenDay;
+         $endDate = $today;            
+
+     }elseif ($chooseFilter == 'lThrtyD') {
+         
+         //get lThrtyD = current month records
+         $lastThirtyDay  = date('Y-m-01');
+         $today          = date('Y-m-d');
+
+         $startDate = $lastThirtyDay;
+         $endDate = $today;   
+
+     }elseif($chooseFilter == 'dM'){
+        //get dM = daynamic month records end of january
+        if($month!=null && $year != null){
+            $timestamp    = strtotime($month." ".$year);
+            $startDate = date('Y-m-01', $timestamp);
+            $endDate  =date('Y-m-t',strtotime($startDate));
+        }
+
+     }
+
+    $condition = array(
+        'startDate' => $startDate.' '.'00:00:00',
+        'endDate'   => $endDate.' '.'23:59:59'
+    );  
+   
+    return $condition;        
+ }
