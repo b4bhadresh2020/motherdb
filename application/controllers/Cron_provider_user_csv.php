@@ -546,7 +546,16 @@ class Cron_provider_user_csv extends CI_Controller
             "7" => "194",  // Velkomstgaven/DK
             "8" => "195",  // Velkomstgaven/com
             "9" => "196",  // Gratispresent/SE
-            "10" => "197",  // Unelmalaina/FI      
+            "10" => "197",  // Unelmalaina/FI 
+            "11" => "200",  // Velkomst/DK 
+            "12" => "201",  // Signe/DK 
+            "13" => "202",  // Dagens/SE      
+            "14" => "203",  // Felina/SE 
+            "15" => "204",  // Venla/FI 
+            "16" => "205",  // Katariina/FI 
+            "17" => "206",  // Allfree/CA 
+            "18" => "207",  // Abbie/CA 
+            "19" => "208",  // Ashley/NZ 
         );
         return $provider[$providerId];
     }

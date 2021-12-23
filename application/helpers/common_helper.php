@@ -903,6 +903,15 @@ function getOntraportProviderListName($providerListId){
         "8" => "Velkomstgaven/com", 
         "9" => "Gratispresent/SE",
         "10" => "Unelmalaina/FI",
+        "11" => "Velkomst/DK",
+        "12" => "Signe/DK",
+        "13" => "Dagens/SE",
+        "14" => "Felina/SE",
+        "15" => "Venla/FI",
+        "16" => "Katariina/FI",
+        "17" => "Allfree/CA",
+        "18" => "Abbie/CA",
+        "19" => "Ashley/NZ"
     );
     return $ontraportList[$providerListId];
 }
