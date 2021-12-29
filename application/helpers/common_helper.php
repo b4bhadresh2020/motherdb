@@ -2324,4 +2324,15 @@ function getCondition($chooseFilter = "td",$month=null,$year=null){
     );  
    
     return $condition;        
- }
+}
+
+// get all esp response field from provider - DAB
+function getAllResponseFieldName() {
+    $CI = & get_instance();
+    $getProvideDetail = $CI->db->select('response_field')
+                                ->from('providers')
+                                ->where_in('provider', [9,12,13,14,15,16])
+                                ->get()->result_array();
+    $responseFields = array_column($getProvideDetail, 'response_field');
+    return $responseFields;
+}
