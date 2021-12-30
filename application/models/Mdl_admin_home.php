@@ -9,44 +9,55 @@ class Mdl_admin_home extends CI_Model {
 
     }
 
-    function getTotalLeadCounter($accountProviders,$filed,$date){
-        
-        $aliasName = array_keys($accountProviders)[0];
-        $query = "";
-        foreach($accountProviders as $tableName => $providerIds){
-            $providerId = implode(',',$providerIds);
-            $query.= "select count(*) as ".$tableName." from ".$tableName." WHERE providerId IN (".$providerId.") AND createdDate>='".$date['startDate']."' AND createdDate<='".$date['endDate']."'";
+    function getTotalLeadCounter($country,$filed,$date,$getAllResponseFieldName){
+        // (count of only record when comes in motherdb)
+        $startDate = $date['startDate'];
+        $endDate = $date['endDate'];
+        if($filed == "total" || $filed == "success" ||  $filed == "fail") {
+            $getCounterSql = "SELECT 
+                    IFNULL(SUM(CASE isFail
+                            WHEN '0' THEN 1
+                            ELSE 0
+                        END), 0) AS successCount,
+                    IFNULL(SUM(CASE isFail
+                            WHEN '1' THEN 1
+                            ELSE 0
+                    END), 0) AS failureCount
+                FROM live_delivery_data
+                WHERE `country` = '".$country."'";
             
-            if($filed == "total"){
-                
-                $query.= " AND status!='0' ";
-                
-            }else if($filed == "success"){
-
-                $query.= " AND status='1' AND response LIKE '".'%'.'"result":"success"'.'%'."' ";
-
-            }else if($filed == "fail"){
-
-                $query.= " AND response LIKE '".'%'.'"result":"error"'.'%'."' ";
-
-            }else if($filed == "duplicate"){
-
-                $query.= " AND (response LIKE '%Subscriber already%' OR  response LIKE '%Email is present%') ";
-
+            if($startDate != null && $endDate != null) {
+                $getCounterSql .= " AND `createdDate` >= '".$startDate."' AND `createdDate` <= '".$endDate."'";
             }
-
-            $query.= 'UNION ALL ';
-
+            $getCounter = $this->db->query($getCounterSql)->row_array();
+        } else if($filed == "duplicate") {
+            $getCounterSql = "SELECT count(*) AS total
+                            FROM live_delivery_data
+                            WHERE (`country` = '".$country."' AND `createdDate` >= '".$startDate."' AND `createdDate` <= '".$endDate."')"; 
+            
+            foreach($getAllResponseFieldName As $index => $responseField) {
+                if($index == 0) {
+                    $getCounterSql .= " AND ( ".$responseField." LIKE '".'%'.'"result":"success"'.'%'."' ";
+                } else if($index == count($getAllResponseFieldName)-1) {
+                    $getCounterSql .= " OR ".$responseField." LIKE '".'%'.'"result":"success"'.'%'."') ";
+                } else {
+                    $getCounterSql .= " OR ".$responseField." LIKE '".'%'.'"result":"success"'.'%'."' ";
+                }
+            }
+            $totalAccepted = $this->db->query($getCounterSql)->row_array();
         }
-        $query = rtrim($query,'UNION ALL ');
-        $countTotalLeadQry =  "select sum(counter.".$aliasName.") as total
-        from
-        (
-        ".$query."
-        ) counter";
 
-        $query = $this->db->query($countTotalLeadQry);
-        $total = $query->row_array();
-        return $total['total'];
+        if($filed == "total") {
+            $result = $getCounter['successCount'] + $getCounter['failureCount'];
+        } else if($filed == "success") {
+            $result = $getCounter['successCount'];
+        } else if($filed == "fail") {
+            $result = $getCounter['failureCount'];
+        } else if($filed == "duplicate") {
+            $result = $totalAccepted['total'];
+        } else {
+            $result = 0;
+        }
+        return $result;
     }
 }
