@@ -33,7 +33,8 @@ class Mdl_admin_home extends CI_Model {
         } else if($filed == "duplicate") {
             $getCounterSql = "SELECT count(*) AS total
                             FROM live_delivery_data
-                            WHERE (`createdDate` >= '".$startDate."' AND `createdDate` <= '".$endDate."')";
+                            WHERE (`country` = '".$country."' AND `createdDate` >= '".$startDate."' AND `createdDate` <= '".$endDate."')"; 
+            
             foreach($getAllResponseFieldName As $index => $responseField) {
                 if($index == 0) {
                     $getCounterSql .= " AND ( ".$responseField." LIKE '".'%'.'"result":"success"'.'%'."' ";
