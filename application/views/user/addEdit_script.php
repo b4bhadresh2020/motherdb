@@ -573,7 +573,8 @@
             providerList +="<option value='16'>Katariina/FI</option>";
             providerList +="<option value='17'>Allfree/CA</option>";
             providerList +="<option value='18'>Abbie/CA</option>";
-            providerList +="<option value='19'>Ashley/NZ</option>";         
+            providerList +="<option value='19'>Ashley/NZ</option>";    
+            providerList +="<option value='20'>Produkt/NO</option>";      
         } else if(providerId == 13){
             providerList +="<option value='1'>Velkomstgaven/NOR</option>";   
             providerList +="<option value='2'>GratisPresent/SE</option>";       

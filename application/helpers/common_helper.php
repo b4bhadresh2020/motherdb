@@ -911,7 +911,8 @@ function getOntraportProviderListName($providerListId){
         "16" => "Katariina/FI",
         "17" => "Allfree/CA",
         "18" => "Abbie/CA",
-        "19" => "Ashley/NZ"
+        "19" => "Ashley/NZ",
+        "20" => "Produkt/NO"
     );
     return $ontraportList[$providerListId];
 }
