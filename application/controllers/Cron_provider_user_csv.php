@@ -555,7 +555,8 @@ class Cron_provider_user_csv extends CI_Controller
             "16" => "205",  // Katariina/FI 
             "17" => "206",  // Allfree/CA 
             "18" => "207",  // Abbie/CA 
-            "19" => "208",  // Ashley/NZ 
+            "19" => "208",  // Ashley/NZ
+            "20" => "209"   // Produkt/NO  
         );
         return $provider[$providerId];
     }
