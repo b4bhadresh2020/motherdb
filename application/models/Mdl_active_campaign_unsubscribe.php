@@ -37,8 +37,9 @@ class Mdl_active_campaign_unsubscribe extends CI_Model {
             // check user is exist by list & email (live delivery)
             $responseField	= $providerData['response_field'];
             $liveDeliveryData = getLivedeliveryDetail($email, $responseField);
-            $emailresponse = json_decode($liveDeliveryData[$responseField],true);
+            
             if(!empty($liveDeliveryData)) {
+                $emailresponse = json_decode($liveDeliveryData[$responseField],true);
                 $subscriptionId = $emailresponse['data']['id'];
             }
             // check user is exist by list & email (user csv)

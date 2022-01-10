@@ -32,7 +32,10 @@ class Mdl_omnisend_unsubscribe extends CI_Model {
             // check user is exist by list & email (live delivery)
             $responseField	= $providerData['response_field'];
             $liveDeliveryData = getLivedeliveryDetail($email, $responseField);
-            $emailresponse = json_decode($liveDeliveryData[$responseField],true);
+            if(!empty($liveDeliveryData)){
+                $emailresponse = json_decode($liveDeliveryData[$responseField],true);
+            }
+            
 
             // check user is exist by list & email (user csv)
             $condition = array(
