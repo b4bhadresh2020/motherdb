@@ -37,7 +37,6 @@ class Cron_dashboard_stat extends CI_Controller
         // get country data
         $is_single = false;
         $countryList = GetAllRecord(COUNTRY_MASTER, array(), $is_single, array(), array(), array(), 'countryId, country');
-
         foreach($countryList as $ct) {
             $country = $ct['country'];
 
@@ -51,7 +50,7 @@ class Cron_dashboard_stat extends CI_Controller
 
             if(empty($dashboardStats)) {
                 // field array
-                $fields = ['total', 'success', 'fail', 'duplicate'];
+                $fields = ['total', 'success', 'fail', 'duplicate', 'fb_lead_ads', 'fb_hosted_ads','total_fb'];
                 foreach($fields as $field) {
                     
                     $response = [];
@@ -74,7 +73,7 @@ class Cron_dashboard_stat extends CI_Controller
                     }
                     $dashboard_stats_data['createdDate'] = date('Y-m-d H:i:s');
                     $dashboard_stats_data['updatedDate'] = date('Y-m-d H:i:s');
-                    
+                                       
                     $condition = array();
                     $is_insert = true;
                     $dashboardStatsId = ManageData(DASHBOARD_STATS, $condition, $dashboard_stats_data, $is_insert);

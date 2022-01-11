@@ -9,7 +9,7 @@ class Mdl_admin_home extends CI_Model {
 
     }
 
-    function getTotalLeadCounter($country,$filed,$date,$getAllResponseFieldName){
+    function getTotalLeadCounter($country,$filed,$date,$getAllResponseFieldName){       
         // (count of only record when comes in motherdb)
         $startDate = $date['startDate'];
         $endDate = $date['endDate'];
@@ -30,6 +30,7 @@ class Mdl_admin_home extends CI_Model {
                 $getCounterSql .= " AND `createdDate` >= '".$startDate."' AND `createdDate` <= '".$endDate."'";
             }
             $getCounter = $this->db->query($getCounterSql)->row_array();
+           
         } else if($filed == "duplicate") {
             $getCounterSql = "SELECT count(*) AS total
                             FROM live_delivery_data
@@ -45,6 +46,20 @@ class Mdl_admin_home extends CI_Model {
                 }
             }
             $totalAccepted = $this->db->query($getCounterSql)->row_array();
+        } else if($filed == "fb_lead_ads" || $filed == "fb_hosted_ads" || $filed == "total_fb") {
+            $getCounterSql = "SELECT COUNT(*) AS fbTotal
+                FROM inboxgame_facebooklead_data
+                WHERE `country` = '".$country."'";
+            
+            if($startDate != null && $endDate != null) {
+                $getCounterSql .= " AND `createdDate` >= '".$startDate."' AND `createdDate` <= '".$endDate."'";
+            }
+            if($filed == "fb_hosted_ads") {
+                $getCounterSql .= " AND dataSourceType = 1";
+            } else if($filed == "fb_lead_ads") {
+                $getCounterSql .= " AND dataSourceType = 2";
+            }
+            $getCounter = $this->db->query($getCounterSql)->row_array();           
         }
 
         if($filed == "total") {
@@ -55,6 +70,8 @@ class Mdl_admin_home extends CI_Model {
             $result = $getCounter['failureCount'];
         } else if($filed == "duplicate") {
             $result = $totalAccepted['total'];
+        } else if($filed == "fb_lead_ads" || $filed == "fb_hosted_ads" || $filed == "total_fb") {
+            $result = $getCounter['fbTotal'];
         } else {
             $result = 0;
         }

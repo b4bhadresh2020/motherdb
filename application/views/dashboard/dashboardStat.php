@@ -147,6 +147,57 @@
                                     </td>
                                 <?php }  ?>
                             </tr>
+                            <tr>
+                                <td><b><?= $country ?> Facebook Lead Ads</b></td>
+                                <?php foreach($statFileds as $filed => $day){ ?>
+                                    <td>
+                                        <?php 
+                                            if($filed == 'current_week') {
+                                                $filed = "lastSevenDay";
+                                            } else if ($filed == 'current_month') {
+                                                $filed = $currentMonth;
+                                            } else {
+                                                $filed = $filed;
+                                            }
+                                            echo $stat['fb_lead_ads'][$filed];
+                                        ?>
+                                    </td>
+                                <?php } ?>
+                            </tr>
+                            <tr>
+                                <td><b><?= $country ?> Facebook Hosted Ads</b></td>
+                                <?php foreach($statFileds as $filed => $day){ ?>
+                                    <td>
+                                        <?php 
+                                            if($filed == 'current_week') {
+                                                $filed = "lastSevenDay";
+                                            } else if ($filed == 'current_month') {
+                                                $filed = $currentMonth;
+                                            } else {
+                                                $filed = $filed;
+                                            }
+                                            echo $stat['fb_hosted_ads'][$filed];
+                                        ?>
+                                    </td>
+                                <?php } ?>
+                            </tr>
+                            <tr>
+                                <td><b>Total Facebook</b></td>
+                                <?php foreach($statFileds as $filed => $day){ ?>
+                                    <td>
+                                        <?php 
+                                            if($filed == 'current_week') {
+                                                $filed = "lastSevenDay";
+                                            } else if ($filed == 'current_month') {
+                                                $filed = $currentMonth;
+                                            } else {
+                                                $filed = $filed;
+                                            }
+                                            echo $stat['total_fb'][$filed];
+                                        ?>
+                                    </td>
+                                <?php } ?>
+                            </tr>
                         </tbody>
                     </table>
                 <?php } ?>

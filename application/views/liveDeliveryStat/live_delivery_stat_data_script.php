@@ -150,7 +150,7 @@
                         hasNoMoreData = false;
                     } else {
                         hasNoMoreData = true;
-                        $('#inboxgame_facebooklead__stat_data').append('<tr><td colspan="5" style="text-align: center;">No More Data</td></tr>');
+                            $('#inboxgame_facebooklead__stat_data').append('<tr><td colspan="5" style="text-align: center;">No More Data</td></tr>');
                         if(start == 0) {
                             $('#inboxgame_facebooklead__stat_data').html('<tr><td colspan="5"> No Data Found</td></tr>');
                         }

@@ -16,7 +16,7 @@
     $expertSenderList = getProviderList(EXPERT_SENDER);
     $cleverReachList = getProviderList(CLEVER_REACH);
     $omnisendList = getProviderList(OMNISEND);
-
+   
     $mailProviders = array(
         'none' => 'None',
         'egoi' => 'E-goi'
@@ -270,7 +270,7 @@
                                             <div class="col-lg-3">
                                                 <div class="form-group">
                                                     <label>Data Source Type</label>
-                                                    <select id="dataSourceType" name="dataSourceType" class="form-control">
+                                                    <select id="dataSourceType" name="dataSourceType" class="form-control" <?=(!empty($liveDeliveryId)?"disabled":"")?>>
                                                         <?php
                                                             foreach($dataSourceTypes as $key => $value) { ?>
                                                             <option value="<?php echo $key; ?>" <?php if(@$dataSourceType == $key) { echo 'selected'; }?>><?php echo $value; ?></option>

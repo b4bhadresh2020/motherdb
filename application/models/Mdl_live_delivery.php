@@ -258,20 +258,29 @@ class Mdl_live_delivery extends CI_Model
                     $chooseSucFailRes = $getData['chooseSucFailRes'];
                     $condition['sucFailMsgIndex'] = $chooseSucFailRes; 
                 }
-
-                if (@$getData['globleSearch'] != '' ) {
-
-                    $globleSearch = trim($getData['globleSearch']);
-                    $where = '(firstName LIKE "%'.$globleSearch.'%" OR lastName LIKE "%'.$globleSearch.'%" OR emailId LIKE "%'.$globleSearch.'%" OR city LIKE "%'.$globleSearch.'%")';
-                    $this->db->where($where);
-                }
-
-                $is_single = FALSE;
-                $this->db->limit($perPage,$start);
+               
                 if($dataSourceType == 1) {
+                    if (@$getData['globleSearch'] != '' ) {
+
+                        $globleSearch = trim($getData['globleSearch']);
+                        $where = 'emailId LIKE "%'.$globleSearch.'%"';
+                        $this->db->where($where);
+                    }
+    
+                    $is_single = FALSE;
+                    $this->db->limit($perPage,$start);   
                     $condition['dataSourceType'] = 1;
                     $filteredData = GetAllRecord(INBOXGAME_FACEBOOKLEAD_DATA,$condition,$is_single,array(),array(),array(array('id' => 'DESC')));
                 } else {
+                    if (@$getData['globleSearch'] != '' ) {
+
+                        $globleSearch = trim($getData['globleSearch']);
+                        $where = '(firstName LIKE "%'.$globleSearch.'%" OR lastName LIKE "%'.$globleSearch.'%" OR emailId LIKE "%'.$globleSearch.'%" OR city LIKE "%'.$globleSearch.'%")';
+                        $this->db->where($where);
+                    }
+    
+                    $is_single = FALSE;
+                    $this->db->limit($perPage,$start);
                     $filteredData = GetAllRecord(LIVE_DELIVERY_DATA,$condition,$is_single,array(),array(),array(array('liveDeliveryDataId' => 'DESC')));
                 }
                 //---------------------------------------------------------------------------------------------------
@@ -391,7 +400,11 @@ class Mdl_live_delivery extends CI_Model
 
 
     function getFilteredData($startDate,$endDate,$apikey,$start,$perPage,$getData){
-        
+        $condition = array('apikey'=>$apikey);
+        $is_single = true;
+        $getLiveDelivery = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(array('liveDeliveryId'=>'asc')),'apikey,dataSourceType');
+        $dataSourceType = $getLiveDelivery['dataSourceType'];
+
         if ($this->isDateWithoutTime($startDate) == 'true') {
             $startDate = $startDate.' 00:00:00';
         }
@@ -410,17 +423,27 @@ class Mdl_live_delivery extends CI_Model
             $chooseSucFailRes = $getData['chooseSucFailRes'];
             $condition['sucFailMsgIndex'] = $chooseSucFailRes; 
         }
+       
+        if($dataSourceType == 1) {
+            if (@$getData['globleSearch'] != '' ) {
+                $globleSearch = trim($getData['globleSearch']);
+                $this->db->where('emailId LIKE "%'.$globleSearch.'%"');
+            }
+            $is_single = false;
+            $this->db->limit($perPage, $start);
+            $filteredData = GetAllRecord(INBOXGAME_FACEBOOKLEAD_DATA, $condition, $is_single, array(), array(), array(array('id'=>'DESC')));
+        } else {
+            if (@$getData['globleSearch'] != '' ) {
 
-        if (@$getData['globleSearch'] != '' ) {
-
-            $globleSearch = trim($getData['globleSearch']);
-            $where = '(firstName LIKE "%'.$globleSearch.'%" OR lastName LIKE "%'.$globleSearch.'%" OR emailId LIKE "%'.$globleSearch.'%"  OR city LIKE "%'.$globleSearch.'%")';
-            $this->db->where($where);
+                $globleSearch = trim($getData['globleSearch']);
+                $where = '(firstName LIKE "%'.$globleSearch.'%" OR lastName LIKE "%'.$globleSearch.'%" OR emailId LIKE "%'.$globleSearch.'%"  OR city LIKE "%'.$globleSearch.'%")';
+                $this->db->where($where);
+            }
+    
+            $is_single = FALSE;
+            $this->db->limit($perPage,$start);
+            $filteredData = GetAllRecord(LIVE_DELIVERY_DATA,$condition,$is_single,array(),array(),array(array('liveDeliveryDataId' => 'DESC')));
         }
-
-        $is_single = FALSE;
-        $this->db->limit($perPage,$start);
-        $filteredData = GetAllRecord(LIVE_DELIVERY_DATA,$condition,$is_single,array(),array(),array(array('liveDeliveryDataId' => 'DESC')));
         
         return $filteredData;
     }
