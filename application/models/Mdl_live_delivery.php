@@ -248,6 +248,11 @@ class Mdl_live_delivery extends CI_Model
                 //get data
 
                 $condition = array('apikey' => $apikey);
+                $is_single = true;
+                $getLiveDelivery = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(),array(array('liveDeliveryId' => 'asc')),'apikey,dataSourceType');
+                $dataSourceType = $getLiveDelivery['dataSourceType'];
+
+
 
                 if (@$getData['chooseSucFailRes'] != '') {
                     $chooseSucFailRes = $getData['chooseSucFailRes'];
@@ -263,13 +268,19 @@ class Mdl_live_delivery extends CI_Model
 
                 $is_single = FALSE;
                 $this->db->limit($perPage,$start);
-                $filteredData = GetAllRecord(LIVE_DELIVERY_DATA,$condition,$is_single,array(),array(),array(array('liveDeliveryDataId' => 'DESC')));
+                if($dataSourceType == 1) {
+                    $condition['dataSourceType'] = 1;
+                    $filteredData = GetAllRecord(INBOXGAME_FACEBOOKLEAD_DATA,$condition,$is_single,array(),array(),array(array('id' => 'DESC')));
+                } else {
+                    $filteredData = GetAllRecord(LIVE_DELIVERY_DATA,$condition,$is_single,array(),array(),array(array('liveDeliveryDataId' => 'DESC')));
+                }
                 //---------------------------------------------------------------------------------------------------
 
             }else{
                 //---------------------------------------------------------------------------------------------------
                 //get all successCount and failureCount
                 $getCounterArr = $this->getStatCounter($apikey);
+
                 $rejectDetailCountsArr = $getCounterArr['rejectDetailCountsArr'];
                 $countsArr = $getCounterArr['countsArr'];
                 //---------------------------------------------------------------------------------------------------
@@ -433,7 +444,17 @@ class Mdl_live_delivery extends CI_Model
 
     //count for all stat
     function getStatCounter($apikey,$startDate=null,$endDate=null){
-
+        $condition = array('apikey'=>$apikey);
+        $is_single = true;
+        $getLiveDelivery = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(),array(array('liveDeliveryId' => 'asc')),'apikey,dataSourceType');
+        $dataSourceType = $getLiveDelivery['dataSourceType'];
+        
+        if($dataSourceType == 1) {
+            $tableName = 'inboxgame_facebooklead_data';
+        } else {
+            $tableName = 'live_delivery_data';
+        }
+        
         $getCounterSql ="SELECT
             SUM(CASE isFail
                     WHEN '0' THEN 1
@@ -519,7 +540,7 @@ class Mdl_live_delivery extends CI_Model
                 WHEN '18' THEN 1
                 ELSE 0
                 END) AS gmxMxBlock
-        FROM live_delivery_data
+        FROM $tableName
         WHERE `apikey` ='".$apikey."'";
 
         if($startDate != null || $endDate != null){

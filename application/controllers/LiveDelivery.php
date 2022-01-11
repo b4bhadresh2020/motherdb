@@ -58,7 +58,7 @@ class LiveDelivery extends CI_Controller {
         if ($this->form_validation->run() != FALSE) {
 
             $postVal = $_POST;
-            $fieldArr = array('country','mailProvider','identifier','groupName','keyword','dataSource','delay','isDuplicate','checkEmail','checkPhone');
+            $fieldArr = array('country','mailProvider','identifier','groupName','keyword','dataSource','delay','isDuplicate','checkEmail','checkPhone', 'dataSourceType');
             $dataArr = array();
             foreach ($fieldArr as $value) {           
                 if(isset($postVal[$value])){

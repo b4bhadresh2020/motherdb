@@ -1,5 +1,4 @@
 <?php
-    
     $countries = getCountry();
     $aweberList = getProviderList(AWEBER);
     $transmitviaList = getProviderList(TRANSMITVIA);
@@ -19,6 +18,7 @@
     $omnisendList = getProviderList(OMNISEND);
 
     $mailProviders = array(
+        'none' => 'None',
         'egoi' => 'E-goi'
     );
 
@@ -124,6 +124,13 @@
     }else{
         $isDuplicate = array();
     } 
+
+    // type
+    $dataSourceTypes = array(
+        '0' => 'Motherdb',
+        '1' => 'Inboxgame',
+        '2' => 'Facebook Lead'
+    )
     
 ?>
 <style>
@@ -260,6 +267,19 @@
                                                     <input type="text" class="form-control"  name="dataSource" value="<?php echo @$dataSource; ?>">
                                                 </div>
                                             </div>
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label>Data Source Type</label>
+                                                    <select id="dataSourceType" name="dataSourceType" class="form-control">
+                                                        <?php
+                                                            foreach($dataSourceTypes as $key => $value) { ?>
+                                                            <option value="<?php echo $key; ?>" <?php if(@$dataSourceType == $key) { echo 'selected'; }?>><?php echo $value; ?></option>
+                                                            <?php }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                         <div class="row">
@@ -377,14 +397,16 @@
             }            
             jQuery('#mailProvider option:selected').each(function(index){                
                 var value = $(this).val();
-                var text = $(this).text();
-                if($(".providerBlock").find(".provider_"+value).length == 0){                    
-                    var newRecord = $(".newProvider .row").clone(); 
-                    newRecord.addClass("provider_"+value).attr("id",value);  
-                    newRecord.find(".pname").text(text);              
-                    newRecord.find(".delay").attr("name","delay["+value+"]").val(currentIndex);              
-                    newRecord.find(".duplicate").attr("name","isDuplicate["+value+"]").val(currentIndex);              
-                    $(".providerBlock").append(newRecord);  
+                if(value !== 'none') {
+                    var text = $(this).text();
+                    if($(".providerBlock").find(".provider_"+value).length == 0){                    
+                        var newRecord = $(".newProvider .row").clone(); 
+                        newRecord.addClass("provider_"+value).attr("id",value);  
+                        newRecord.find(".pname").text(text);              
+                        newRecord.find(".delay").attr("name","delay["+value+"]").val(currentIndex);              
+                        newRecord.find(".duplicate").attr("name","isDuplicate["+value+"]").val(currentIndex);              
+                        $(".providerBlock").append(newRecord);  
+                    }
                 }
             });   
 

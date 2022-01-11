@@ -145,12 +145,23 @@ class LiveDeliveryStat extends CI_Controller {
         $wantToDataRecords = TRUE;
         $liveDeliveryData = $this->mdl_live_delivery->getLiveDeliveryStatData($getData,$start,$perPage,$wantToDataRecords);
         $data = array();
-        
         $data['listArr'] = $liveDeliveryData['filteredData'];
         $data['start'] = $start;
 
         $this->load->view('liveDeliveryStat/live_delivery_partial_table', $data);
 
+    }
+
+    function getDataSourceType(){
+        $apikey = $this->input->post('apikey');
+        if(!empty($apikey)) {
+            $condition = array('apikey' => $apikey);
+            $is_single = true;
+            $getLiveDelivery = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(array('liveDeliveryId' => 'asc')),'apikey,dataSourceType');
+
+            echo json_encode($getLiveDelivery);
+        }
+        
     }
 
 }
