@@ -72,6 +72,7 @@
                                                         </optgroup> 
                                                     <?php  } ?>
                                                 </select>
+                                                <input type="hidden" id="hiddenDataSourceType" />
                                             </div>
                                            
                                             <?php $filter = array(
@@ -559,7 +560,8 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="table-responsive">
+                                <!-- live Delivery List -->
+                                <div class="table-responsive" id="liveDeliveryList" style="display: none;">
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
@@ -589,6 +591,24 @@
                                             </tr>
                                         </thead>
                                         <tbody id="live_delivery_stat_data">
+                                            <!-- table will load here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- inboxgame FacebookLead List -->
+                                <div class="table-responsive" id="inboxgameFacebookLeadList" style="display: none;">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Status</th>
+                                                <th>Msg</th>
+                                                <th>Email</th>
+                                                <th>Created Date</th>                                               
+                                            </tr>
+                                        </thead>
+                                        <tbody id="inboxgame_facebooklead__stat_data">
                                             <!-- table will load here -->
                                         </tbody>
                                     </table>

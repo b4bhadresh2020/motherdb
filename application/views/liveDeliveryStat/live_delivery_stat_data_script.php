@@ -77,6 +77,7 @@
     var endDate = $("#endDate").val();
     var chooseSucFailRes = $('#chooseSucFailRes').val();
     var globleSearch = $('#globleSearch').val();
+    var dataSourceType = $('#hiddenDataSourceType').val();
 
     var filterData = {
         apikey:apikey,
@@ -84,26 +85,52 @@
         startDate:startDate,
         endDate:endDate,
         chooseSucFailRes:chooseSucFailRes,
-        globleSearch:globleSearch
+        globleSearch:globleSearch,
+        dataSourceType: dataSourceType,
     };
 
     $(document).ready(function(){
+        getDataSourceType(apikey);
+        setTimeout(function(){
+            var dataSourceType = $('#hiddenDataSourceType').val(); 
+            loadCampaignData(dataSourceType);
+            
+            $(window).scroll(function() {
 
-        loadCampaignData();   
-        
-        $(window).scroll(function() {
+                if($(window).scrollTop() + $(window).height() >= $(document).height() && hasNoMoreData == false){
 
-            if($(window).scrollTop() + $(window).height() >= $(document).height() && hasNoMoreData == false){
+                    start = start + perPage;
+                    loadCampaignData(dataSourceType);
+                }
 
-                start = start + perPage;
-                loadCampaignData();
-            }
-
-            scrollFunction();
-        });     
+                scrollFunction();
+            });
+        }, 1500);
     });
 
-    function loadCampaignData(){
+    function getDataSourceType(apikey){
+        $.ajax({
+            url : BASE_URL + 'liveDeliveryStat/getDataSourceType',
+            type: 'post',
+            data: {
+                apikey: apikey
+            },
+            success: function(data) {
+                var result = JSON.parse(data);
+                var dataSourceType = result.dataSourceType;
+                $('#hiddenDataSourceType').val(dataSourceType);
+
+                // display live delivery stat/ inboxgame_fblead stat
+                if(dataSourceType == 1) {
+                    $('#inboxgameFacebookLeadList').show();
+                } else {
+                    $('#liveDeliveryList').show();
+                }
+            }
+        });
+    }
+
+    function loadCampaignData(dataSourceType){
         
         //get data by ajax
         $.ajax({
@@ -113,23 +140,38 @@
                 getData:filterData
             },
             success:function(data){
-
-                if (data != '') {
-
-                    if (start == 0) {
-                        $('#live_delivery_stat_data').html(data); 
-                    }else{
-                        $('#live_delivery_stat_data').append(data);   
+                if(dataSourceType == 1) {
+                    if (data != '') {
+                        if(start == 0) {
+                            $('#inboxgame_facebooklead__stat_data').html(data);
+                        } else {
+                            $('#inboxgame_facebooklead__stat_data').append(data);
+                        }
+                        hasNoMoreData = false;
+                    } else {
+                        hasNoMoreData = true;
+                            $('#inboxgame_facebooklead__stat_data').append('<tr><td colspan="5" style="text-align: center;">No More Data</td></tr>');
+                        if(start == 0) {
+                            $('#inboxgame_facebooklead__stat_data').html('<tr><td colspan="5"> No Data Found</td></tr>');
+                        }
                     }
-                    hasNoMoreData = false;
+                } else {
+                    if (data != '') {
+                        if (start == 0) {
+                            $('#live_delivery_stat_data').html(data); 
+                        }else{
+                            $('#live_delivery_stat_data').append(data);   
+                        }
+                        hasNoMoreData = false;
 
-                }else{
-                    
-                    hasNoMoreData = true;
-                    $('#live_delivery_stat_data').append('<tr><td colspan = "19" style="text-align:center;">No More Data</td></tr>'); 
+                    }else{
 
-                    if (start == 0) {
-                        $('#live_delivery_stat_data').html('<tr><td colspan = "19">No Data Found</td></tr>');   
+                        hasNoMoreData = true;
+                        $('#live_delivery_stat_data').append('<tr><td colspan = "19" style="text-align:center;">No More Data</td></tr>'); 
+
+                        if (start == 0) {
+                            $('#live_delivery_stat_data').html('<tr><td colspan = "19">No Data Found</td></tr>');   
+                        }
                     }
                 }
                 

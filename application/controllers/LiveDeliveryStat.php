@@ -61,11 +61,21 @@ class LiveDeliveryStat extends CI_Controller {
         
         $userDataResponse = $this->mdl_live_delivery->getLiveDeliveryStatData($getData,$start,$perpage,TRUE);
         $userdata         = $userDataResponse['filteredData'];
+       
         $userdataCount    = count($userdata);
         if ($userdataCount > 0) {
-
+         
+            $condition = array('apikey' => $_GET['apikey']);
+            $is_single = true;
+            $getLiveDelivery = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(),array(array('liveDeliveryId' => 'asc')),'apikey,dataSourceType');
+            $dataSourceType = $getLiveDelivery['dataSourceType'];
+            
             $reArrangeArray = array();
-            $keyArr         = array('firstName', 'lastName', 'emailId', 'address', 'postCode', 'city', 'phone', 'gender', 'birthdateDay', 'birthdateMonth', 'birthdateYear', 'ip', 'createdDate');
+            if($dataSourceType == 1) {
+                $keyArr = array('emailId', 'createdDate');
+            } else {
+                $keyArr         = array('firstName', 'lastName', 'emailId', 'address', 'postCode', 'city', 'phone', 'gender', 'birthdateDay', 'birthdateMonth', 'birthdateYear', 'ip', 'createdDate');
+            }
 
             for ($i = 0; $i < $userdataCount; $i++) {
 
@@ -74,11 +84,14 @@ class LiveDeliveryStat extends CI_Controller {
                 }
 
             }
-
+            
             // file creation
             if ($start == 0) {
-
-                $header   = array('Full Name', 'Last Name', 'Email Id', 'Address', 'Postcode', 'City', 'Phone', 'Gender', 'Birthdate Day', 'Birthdate Month', 'Birthdate Year', 'Ip', 'Created on');
+                if($dataSourceType == 1) {
+                    $header   = array('Email Id', 'Created on');
+                } else {
+                    $header   = array('Full Name', 'Last Name', 'Email Id', 'Address', 'Postcode', 'City', 'Phone', 'Gender', 'Birthdate Day', 'Birthdate Month', 'Birthdate Year', 'Ip', 'Created on');
+                }
                 
                 $filename = 'liveuserdata_' . date('Y-m-d H:i:s') . '_Total_' . $userdataCount . '_Entries.csv';
                 
@@ -119,7 +132,6 @@ class LiveDeliveryStat extends CI_Controller {
             }
             fclose($file);
             exit;
-
         }
 
     }
@@ -145,12 +157,23 @@ class LiveDeliveryStat extends CI_Controller {
         $wantToDataRecords = TRUE;
         $liveDeliveryData = $this->mdl_live_delivery->getLiveDeliveryStatData($getData,$start,$perPage,$wantToDataRecords);
         $data = array();
-        
         $data['listArr'] = $liveDeliveryData['filteredData'];
         $data['start'] = $start;
 
         $this->load->view('liveDeliveryStat/live_delivery_partial_table', $data);
 
+    }
+
+    function getDataSourceType(){
+        $apikey = $this->input->post('apikey');
+        if(!empty($apikey)) {
+            $condition = array('apikey' => $apikey);
+            $is_single = true;
+            $getLiveDelivery = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(array('liveDeliveryId' => 'asc')),'apikey,dataSourceType');
+
+            echo json_encode($getLiveDelivery);
+        }
+        
     }
 
 }
