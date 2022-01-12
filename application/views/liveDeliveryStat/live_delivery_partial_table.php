@@ -2,7 +2,7 @@
 
 $i = 0 + $start;
 foreach ($listArr as $curEntry) {
-    if(@$curEntry['dataSourceType'] == 1) {
+    if(@$curEntry['dataSourceType'] == 1 || @$curEntry['dataSourceType'] == 2) {
         $i++;
         $isEmailChecked = $curEntry["isEmailChecked"];
 

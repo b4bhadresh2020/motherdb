@@ -252,14 +252,12 @@ class Mdl_live_delivery extends CI_Model
                 $getLiveDelivery = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(),array(array('liveDeliveryId' => 'asc')),'apikey,dataSourceType');
                 $dataSourceType = $getLiveDelivery['dataSourceType'];
 
-
-
                 if (@$getData['chooseSucFailRes'] != '') {
                     $chooseSucFailRes = $getData['chooseSucFailRes'];
                     $condition['sucFailMsgIndex'] = $chooseSucFailRes; 
                 }
                
-                if($dataSourceType == 1) {
+                if($dataSourceType == 1 || $dataSourceType == 2) {
                     if (@$getData['globleSearch'] != '' ) {
 
                         $globleSearch = trim($getData['globleSearch']);
@@ -269,7 +267,7 @@ class Mdl_live_delivery extends CI_Model
     
                     $is_single = FALSE;
                     $this->db->limit($perPage,$start);   
-                    $condition['dataSourceType'] = 1;
+                    $condition['dataSourceType'] = $dataSourceType;
                     $filteredData = GetAllRecord(INBOXGAME_FACEBOOKLEAD_DATA,$condition,$is_single,array(),array(),array(array('id' => 'DESC')));
                 } else {
                     if (@$getData['globleSearch'] != '' ) {
@@ -424,7 +422,7 @@ class Mdl_live_delivery extends CI_Model
             $condition['sucFailMsgIndex'] = $chooseSucFailRes; 
         }
        
-        if($dataSourceType == 1) {
+        if($dataSourceType == 1 || $dataSourceType == 2) {
             if (@$getData['globleSearch'] != '' ) {
                 $globleSearch = trim($getData['globleSearch']);
                 $this->db->where('emailId LIKE "%'.$globleSearch.'%"');
@@ -472,7 +470,7 @@ class Mdl_live_delivery extends CI_Model
         $getLiveDelivery = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(),array(array('liveDeliveryId' => 'asc')),'apikey,dataSourceType');
         $dataSourceType = $getLiveDelivery['dataSourceType'];
         
-        if($dataSourceType == 1) {
+        if($dataSourceType == 1 || $dataSourceType == 2) {
             $tableName = 'inboxgame_facebooklead_data';
         } else {
             $tableName = 'live_delivery_data';

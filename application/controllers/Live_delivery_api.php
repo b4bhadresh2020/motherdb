@@ -38,7 +38,7 @@ class Live_delivery_api extends CI_Controller
                     //check link is active or not
                     if ($getLiveDeliveryData['isInActive'] == 0) {
                         
-                        if($getLiveDeliveryData['dataSourceType'] == 1) {
+                        if($getLiveDeliveryData['dataSourceType'] == 1 || $getLiveDeliveryData['dataSourceType'] == 2) {
                             $identifier = $getLiveDeliveryData['identifier'];
                             if (isset($_GET[$identifier])) {
                                 if($_GET[$identifier] != '' ) {
@@ -544,7 +544,7 @@ class Live_delivery_api extends CI_Controller
                         $response['error'] = 'Api key is not active. Please contact to admin';
                     }
                    
-                    if($getLiveDeliveryData['dataSourceType'] == 1) {
+                    if($getLiveDeliveryData['dataSourceType'] == 1 || $getLiveDeliveryData['dataSourceType'] == 2) {
                         $response['inbox_fblead'] = $this->addToInboxgameFacebookleadData($_GET, $getLiveDeliveryData, $sucFailMsgIndex, $isFail, $isEmailChecked);
                     } else {
                         //add data to live delivery table
@@ -1337,6 +1337,7 @@ class Live_delivery_api extends CI_Controller
         $is_insert = true;
         $dataArr = [];
 
+
         $dataArr['apikey'] = $getData['apikey'];
         $dataArr['emailId'] = $getData['emailId'];
         $dataArr['country'] = $getLiveDeliveryData['country'];
@@ -1346,7 +1347,7 @@ class Live_delivery_api extends CI_Controller
         $dataArr['isFail']          = $isFail;
         $dataArr['sucFailMsgIndex'] = $sucFailMsgIndex;
         $dataArr['isEmailChecked']  = $isEmailChecked;
-        $dataArr['dataSourceType'] = 1; // inboxgame data 
+        $dataArr['dataSourceType'] = $getLiveDeliveryData['dataSourceType']; // 1 - inboxgame data , 2 - facebook lead api
         $dataArr['createdDate'] = date('Y-m-d H:i:s');
         $dataArr['updatedDate'] = date('Y-m-d H:i:s');
 
