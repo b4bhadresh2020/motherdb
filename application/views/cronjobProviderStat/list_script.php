@@ -165,6 +165,9 @@
                 providerList +="<option value='5'>Signesmail/DK</option>";
                 providerList +="<option value='6'>Signesmail2/NO</option>";
                 providerList +="<option value='7'>Produkttest/SE</option>";
+                providerList +="<option value='8'>DagensPresent/SE</option>";
+                providerList +="<option value='9'>VelkomstgavenVIP/DK</option>";
+                providerList +="<option value='10'>VelkomstgavenVIP/NO</option>";
             } else if(providerId == 10){
                 providerList +="<option value='1'>Camilla/DK</option>";
                 providerList +="<option value='2'>Camilla/SE</option>";

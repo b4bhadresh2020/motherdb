@@ -855,6 +855,9 @@ function getMailjetProviderListName($providerListId){
         "5" => "Signesmail/DK",
         "6" => "Signesmail2/NO",
         "7" => "Produkttest/SE",
+        "8" => "DagensPresent/SE",
+        "9" => "VelkomstgavenVIP/DK",
+        "10" => "VelkomstgavenVIP/NO",
     );
     return $mailjetList[$providerListId];
 }

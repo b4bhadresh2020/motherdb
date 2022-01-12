@@ -101,10 +101,11 @@ class Mdl_provider_state extends CI_Model
 
         // LIVE DELIVERY PROVIDER
         $liveDeliveryProvidersData = GetAllRecord(LIVE_DELIVERY,array(),false,array(),array(),array(),"mailProvider,keyword,groupName");
-        $liveDeliveryProvider = array();        
+        $liveDeliveryProvider = array();      
+        
         foreach($liveDeliveryProvidersData as $providers){
             foreach(json_decode($providers['mailProvider']) as $provider){
-                if($provider != "egoi"){
+                if($provider != "egoi" && $provider != 'none'){
                     if(!in_array($allProvider[$provider],$liveDeliveryProvider)){
                         $liveDeliveryProvider[] = $allProvider[$provider]; 
                     }                    
