@@ -140,7 +140,7 @@
                 getData:filterData
             },
             success:function(data){
-                if(dataSourceType == 1) {
+                if(dataSourceType == 1 || dataSourceType == 2) {
                     if (data != '') {
                         if(start == 0) {
                             $('#inboxgame_facebooklead__stat_data').html(data);

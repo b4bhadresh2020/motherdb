@@ -71,7 +71,7 @@ class LiveDeliveryStat extends CI_Controller {
             $dataSourceType = $getLiveDelivery['dataSourceType'];
             
             $reArrangeArray = array();
-            if($dataSourceType == 1) {
+            if($dataSourceType == 1 || $dataSourceType == 2) {
                 $keyArr = array('emailId', 'createdDate');
             } else {
                 $keyArr         = array('firstName', 'lastName', 'emailId', 'address', 'postCode', 'city', 'phone', 'gender', 'birthdateDay', 'birthdateMonth', 'birthdateYear', 'ip', 'createdDate');
@@ -87,7 +87,7 @@ class LiveDeliveryStat extends CI_Controller {
             
             // file creation
             if ($start == 0) {
-                if($dataSourceType == 1) {
+                if($dataSourceType == 1 || $dataSourceType == 2) {
                     $header   = array('Email Id', 'Created on');
                 } else {
                     $header   = array('Full Name', 'Last Name', 'Email Id', 'Address', 'Postcode', 'City', 'Phone', 'Gender', 'Birthdate Day', 'Birthdate Month', 'Birthdate Year', 'Ip', 'Created on');
