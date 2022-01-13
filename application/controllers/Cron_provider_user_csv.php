@@ -499,6 +499,10 @@ class Cron_provider_user_csv extends CI_Controller
             "5" => "190",  //Signesmail/DK
             "6" => "191",  //Signesmail2/NO
             "7" => "192",  //Produkttest/SE
+            "8" => "210",  //DagensPresent/SE
+            "9" => "211",  //VelkomstgavenVIP/DK
+            "10" => "212",  //VelkomstgavenVIP/NO
+
         );
         return $provider[$providerId];
     }
