@@ -13,6 +13,7 @@ class Api_get_liveurl extends CI_Controller
     }
 
     public function index() {
+        $result = array();
         $country = $_GET['country'];
         $dataSourceType = $_GET['dataSourceType'];
         
@@ -20,7 +21,10 @@ class Api_get_liveurl extends CI_Controller
         $is_single = true;
         $getLiveDeliveryData = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(array('liveDeliveryId' => 'asc')),'apikey');
 
-        echo json_encode(array('apikey' => $getLiveDeliveryData['apikey']));
+        if(!empty($getLiveDeliveryData)) {
+            $result = array('apikey' => $getLiveDeliveryData['apikey']);
+        } 
+        echo json_encode($result);
     }
 }
 ?>
