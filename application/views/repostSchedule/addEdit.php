@@ -305,12 +305,12 @@ foreach($omnisendList as $list){
                                                         $status = 'Deactive'; 
                                                         $action = 'Active';
                                                         $class = "btn btn-success";
-                                                        $url = 'updateStatus/'.$curEntry["id"].'/1';                                                   
+                                                        $url = base_url() . 'repostSchedule/updateStatus/'.$curEntry["id"].'/1';                                                   
                                                     }else if($curEntry['status'] == '1'){
                                                         $status = 'Active';
                                                         $action = 'Deactive';
                                                         $class = "btn btn-danger"; 
-                                                        $url = 'updateStatus/'.$curEntry["id"].'/0';
+                                                        $url = base_url() . 'repostSchedule/updateStatus/'.$curEntry["id"].'/0';
                                                     }else if($curEntry['status'] == '2'){
                                                         $status = 'Completed';
                                                         $action = 'Complete';
