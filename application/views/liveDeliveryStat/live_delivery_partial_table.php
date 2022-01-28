@@ -18,7 +18,13 @@ foreach ($listArr as $curEntry) {
             <td><?php echo $i; ?></td>
             <td><?php echo $status; ?></td>
             <td><?php echo $sucFailMsgIndexArr[$curEntry['sucFailMsgIndex']]; ?></td>
+            <td><?=!empty($curEntry['name']) ? $curEntry['name'] : '<div class="text-center">-</div>'?></td>
             <td style="color:<?= ($isEmailChecked) ? "green":"" ?>"><?php echo $curEntry['emailId']; ?></td>
+            <td><?=!empty($curEntry['signupDate']) ? $curEntry['signupDate'] : '<div class="text-center">-</div>'?></td>
+            <td><?=!empty($curEntry['timestamp']) ? $curEntry['timestamp'] : '<div class="text-center">-</div>'?></td>
+            <td><?=!empty($curEntry['ip']) ? $curEntry['ip'] : '<div class="text-center">-</div>'?></td>
+            <td><?=!empty($curEntry['apiSource']) ? $curEntry['apiSource'] : '<div class="text-center">-</div>'?></td>
+            <td><?=!empty($curEntry['apiCountry']) ? $curEntry['apiCountry'] : '<div class="text-center">-</div>'?></td>
             <td><?php echo date('Y-m-d H:i:s',strtotime($curEntry['createdDate'])); ?></td>
         </tr>
         <?php

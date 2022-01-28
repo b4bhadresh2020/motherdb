@@ -101,9 +101,13 @@ class LiveDelivery extends CI_Controller {
             //create apikey by encrypted createdId and update it to table
             $apikey = @encrypt($liveDeliveryId);
             
-            $dataSourceType = $this->input->post('dataSourceType');
+            $condition = array("liveDeliveryId" => $liveDeliveryId);
+            $is_single           = true;
+            $getLiveDeliveryData = GetAllRecord(LIVE_DELIVERY, $condition, $is_single); 
+            $dataSourceType = $getLiveDeliveryData['dataSourceType'];
+            
             if($dataSourceType == 1 || $dataSourceType == 2) {
-                $liveDeliveryUrl = LIVE_DELIVERY_URL_DOMAIN."live_delivery_api/rest?apikey=".$apikey."&emailId=email";
+                $liveDeliveryUrl = LIVE_DELIVERY_URL_DOMAIN."live_delivery_api/rest?apikey=".$apikey."&emailId=email&name=name&signupDate=signupDate&ip=ip&source=source&country=country";
             } else {
                 $liveDeliveryUrl = LIVE_DELIVERY_URL_DOMAIN."live_delivery_api/rest?apikey=".$apikey."&emailId=email&firstName=firstname&lastName=lastname&phone=phone&gender=gender&address=address&postCode=postcode&city=city&birthdateDay=birthdateDay&birthdateMonth=birthdateMonth&birthdateYear=birthdateYear&age=age&ip=ip&optinurl=optinurl&optindate=optindate&tag=tag";
             }

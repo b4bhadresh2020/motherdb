@@ -1348,6 +1348,14 @@ class Live_delivery_api extends CI_Controller
         $dataArr['sucFailMsgIndex'] = $sucFailMsgIndex;
         $dataArr['isEmailChecked']  = $isEmailChecked;
         $dataArr['dataSourceType'] = $getLiveDeliveryData['dataSourceType']; // 1 - inboxgame data , 2 - facebook lead api
+        
+        $dataArr['name'] = $getData['name'];
+        $dataArr['signupDate'] = $getData['signupDate'];
+        $dataArr['timestamp'] = time();
+        $dataArr['ip'] = $getData['ip'];
+        $dataArr['apiSource'] = $getData['source']; // source data when api call using get live url
+        $dataArr['apiCountry'] = $getData['country']; // country data of get API
+
         $dataArr['createdDate'] = date('Y-m-d H:i:s');
         $dataArr['updatedDate'] = date('Y-m-d H:i:s');
 

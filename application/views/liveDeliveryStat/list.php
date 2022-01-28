@@ -604,7 +604,13 @@
                                                 <th>#</th>
                                                 <th>Status</th>
                                                 <th>Msg</th>
+                                                <th>Name</th>
                                                 <th>Email</th>
+                                                <th>Signup Date</th>
+                                                <th>timestamp</th>
+                                                <th>Source</th>
+                                                <th>IP</th>
+                                                <th>Country</th>
                                                 <th>Created Date</th>                                               
                                             </tr>
                                         </thead>
