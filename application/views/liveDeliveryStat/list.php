@@ -4,7 +4,7 @@
 
     $condition = array('isInActive' => 0);
     $is_single = FALSE;
-    $getApiKeys = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(array("country","ASC"),array('liveDeliveryId' => 'desc')), 'country,apikey,groupName,keyword,mailProvider,live_status');
+    $getApiKeys = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(array("country","ASC"),array('liveDeliveryId' => 'desc')), 'country,apikey,groupName,keyword,mailProvider,live_status,dataSourceType');
     foreach ($getApiKeys as $key => $liveDelivery) {
         $liveDeliveriesGroups[$liveDelivery['country']][] = $liveDelivery;
     }
@@ -59,7 +59,7 @@
                                                     <?php foreach ($liveDeliveriesGroups as $country =>  $apikeyGroup) { ?>
                                                         <optgroup label="<?php echo $country; ?>"> 
                                                             <?php foreach ($apikeyGroup as $value){     
-                                                                if($value['live_status'] == 1){
+                                                                if($value['live_status'] == 1 || $value['dataSourceType'] == 1){ // dataSourceType 0:motherdb, 1: inboxgame, 2:facebook lead
                                                                     $liveDeliveryStatusHighlight = "green";
                                                                 }else if($value['live_status'] == 2){
                                                                     $liveDeliveryStatusHighlight = "orange";
