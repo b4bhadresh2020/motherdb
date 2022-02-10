@@ -1,3 +1,4 @@
 /upload/uploaded_csv/*.csv
 /upload/uploaded_csv
 /upload/enrichment_csv
+/application/logs
