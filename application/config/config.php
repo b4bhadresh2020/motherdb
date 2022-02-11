@@ -26,8 +26,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 if ($_SERVER['HTTP_HOST'] == 'localhost') {
     $config['base_url'] = 'http://localhost/motherdb/';
 } else {
-    //$config['base_url'] = 'https://suprdat.dk/';
-    $config['base_url'] = 'http://192.168.0.130/motherdb/';
+    $config['base_url'] = 'https://suprdat.dk/';
+    // $config['base_url'] = 'http://192.168.0.130/motherdb/';
 }
 
 /*
