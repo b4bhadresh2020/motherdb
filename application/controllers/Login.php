@@ -65,7 +65,7 @@ class Login extends CI_Controller {
             $data['error_msg'] = $errorMsg;
         $data['suc_msg'] = GetMsg('adminSucMsg');
         $data["adminLoginUname"] = $adminLoginUname;
-        $data['gCode'] = $this->getCode();
+        $data['gCode'] = '';
         $data["curTemplateName"] = "login/login";
         $this->load->view('login/login', $data);
     }
