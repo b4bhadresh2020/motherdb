@@ -2,7 +2,7 @@
     
     $liveDeliveriesGroups = [];
 
-    $condition = array('isInActive' => 0);
+    $condition = array();
     $is_single = FALSE;
     $getApiKeys = GetAllRecord(LIVE_DELIVERY, $condition, $is_single, array(), array(), array(array("country","ASC"),array('liveDeliveryId' => 'desc')), 'country,apikey,groupName,keyword,mailProvider,live_status,dataSourceType');
     foreach ($getApiKeys as $key => $liveDelivery) {
