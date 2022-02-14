@@ -812,7 +812,7 @@ function getOngageProviderListName($providerListId){
 
 function getSendgridProviderListName($providerListId){
     $sendgridList = array(
-        "1" => "CA",
+        "1" => "CA-Abbiesmail",
     );
     return $sendgridList[$providerListId];
 }
