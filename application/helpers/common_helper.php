@@ -1100,7 +1100,7 @@ function getLiveRepostOngageProviderID($providerId){
 
 function getLiveRepostSendgridProviderID($providerId){
     $provider = array(
-        "1" => "60",  // CA
+        "1" => "60",  // CA-Abbiesmail
     );
     return $provider[$providerId];
 }

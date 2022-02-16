@@ -239,25 +239,32 @@ class Repost extends CI_Controller
         $providerCondition   = array('id' => $mailProvider);
         $is_single           = true;
         $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
+        $sendgridAccountId     = $providerData['aweber_account']; 
 
-        if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
+        $sendgridCondition   = array('id' => $sendgridAccountId);
+        $is_single           = true;
+        $sendgridAccountData   = GetAllRecord(SENDGRID_ACCOUNTS, $sendgridCondition, $is_single);
 
-            $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
+        if($sendgridAccountData['status'] == 1) {
+            if (@$apiDataDetail['birthdateDay'] != '' && @$apiDataDetail['birthdateMonth'] != '' && @$apiDataDetail['birthdateYear'] != '') {
 
-            $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
+                $birthDate = $apiDataDetail['birthdateYear'] . '-' . $apiDataDetail['birthdateMonth'] . '-' . $apiDataDetail['birthdateDay'];
+
+                $apiDataDetail['birthDate'] = date('Y-m-d', strtotime($birthDate));
+            }
+
+            $this->load->model('mdl_sendgrid');
+            $response = $this->mdl_sendgrid->AddEmailToSendgridSubscriberList($apiDataDetail, $mailProvider);
+            // ADD RECORD IN HISTORY
+            addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
+
+            //update to live delivery data
+            $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
+            $is_insert = FALSE;
+            $responseField = $providerData['response_field'];
+            $updateArr = array($responseField => json_encode($response));
+            ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
         }
-
-        $this->load->model('mdl_sendgrid');
-        $response = $this->mdl_sendgrid->AddEmailToSendgridSubscriberList($apiDataDetail, $mailProvider);
-        // ADD RECORD IN HISTORY
-        addRecordInHistory($apiDataDetail, $mailProvider, $provider, $response, $groupName, $keyword,$apiDataDetail['emailId']);
-
-        //update to live delivery data
-        $condition = array('liveDeliveryDataId' => $apiDataDetail['liveDeliveryDataId']);
-        $is_insert = FALSE;
-        $responseField = $providerData['response_field'];
-        $updateArr = array($responseField => json_encode($response));
-        ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
     }
 
     function addDataToSendInBlue()

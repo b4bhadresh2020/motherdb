@@ -142,7 +142,7 @@
                 providerList +="<option value='14'>Denmark  - Camilla</option>";
                 providerList +="<option value='15'>FI - Test</option>";
             }else if(providerId == 5){
-                providerList +="<option value='1'>CA</option>";
+                providerList +="<option value='1'>CA-Abbiesmail</option>";
             }else if(providerId == 6){
                 providerList +="<option value='1'>NO</option>";
                 providerList +="<option value='2'>CA</option>";

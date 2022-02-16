@@ -138,9 +138,24 @@ class Cron_provider_user_csv extends CI_Controller
                                     $userData['birthDate']  = date('Y-m-d', strtotime($birthDate));
                                 } 
                                 $responseField = "sendgridResponse";
-                                $mailProvider = $this->getSendgridMailProviderId($provider["providerList"]);                                
-                                $response = $this->mdl_sendgrid->AddEmailToSendgridSubscriberList($userData,$mailProvider);
-                                addRecordInHistoryFromCSV($userData, $mailProvider, SENDGRID, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
+                                $mailProvider = $this->getSendgridMailProviderId($provider["providerList"]);
+                                
+                                // fetch mail provider data from providers table
+                                $providerCondition   = array('id' => $mailProvider);
+                                $is_single           = true;
+                                $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);   
+                                $sendgridAccountId     = $providerData['aweber_account']; 
+                                
+                                $sendgridCondition   = array('id' => $sendgridAccountId);
+                                $is_single           = true;
+                                $sendgridAccountData   = GetAllRecord(SENDGRID_ACCOUNTS, $sendgridCondition, $is_single);
+
+                                if($sendgridAccountData['status'] == 1) {
+                                    $response = $this->mdl_sendgrid->AddEmailToSendgridSubscriberList($userData,$mailProvider);
+                                    addRecordInHistoryFromCSV($userData, $mailProvider, SENDGRID, $response,$provider['groupName'],$provider['keyword'],$userData['emailId']);
+                                } else {
+                                    $response = array("result" => "error","error" => array("msg" => "Account is closed"));
+                                }
                             } else if($provider['providerName'] == SENDINBLUE){
                                 if (@$userData['birthdateDay'] != '' && @$userData['birthdateMonth'] != '' && @$userData['birthdateYear'] != '') {
                                     $birthDate              = $userData['birthdateYear'] . '-' . $userData['birthdateMonth'] . '-' . $userData['birthdateDay'];
@@ -428,7 +443,7 @@ class Cron_provider_user_csv extends CI_Controller
 
     public function getSendgridMailProviderId($providerId){
         $provider = array(
-            "1" => "60",  // Australia-camilla 
+            "1" => "60",  // CA-Abbiesmail 
         );
         return $provider[$providerId];
     }
