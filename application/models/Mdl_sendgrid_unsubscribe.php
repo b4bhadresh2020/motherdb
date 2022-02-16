@@ -58,7 +58,7 @@ class Mdl_sendgrid_unsubscribe extends CI_Model {
                 $response = $checkSubscriber['response'];
                 $getStatusCode = $checkSubscriber['getStatusCode'];
             }
-           
+            
             if((!empty($liveDeliveryData) && $emailresponse['result'] == 'success') || (!empty($csvCronUserData) && $csvEmailresponse['result'] == 'success') || ($getStatusCode == 200 && !empty($response))){
                 
                 if(!isset($getStatusCode)) {
@@ -67,38 +67,23 @@ class Mdl_sendgrid_unsubscribe extends CI_Model {
                     $getStatusCode = $checkSubscriber['getStatusCode'];
                 }
                 $contactID = @$response['result'][0]['id'];
-
+                
                 // UPDATE SUSBCRIBER STATUS (unsubscribe)
                 if(!empty($response) && $getStatusCode == 200 && !empty($contactID)){
-                    echo "hii";
-                    die;
-                    $todayDateTime = date("Y-m-d\TH:i:s\Z", strtotime(date('Y-m-d h:i:s')));
                     $details = [
-                        'identifiers' => [
-                            [
-                                'type' => 'email',
-                                'id' => $email,
-                                'channels' => [
-                                    'email' => [
-                                        'status' => 'unsubscribed',
-                                        'statusDate' => $todayDateTime
-                                    ]
-                                ]
-                            ]
-                        ]
+                        'recipient_emails' => [$email]
                     ];
-                    $data = json_encode($details);  
-                    $unsubscriberUrl = "https://api.omnisend.com/v3/contacts/".$contactID;
-                    $updateResponse = $client->patch($unsubscriberUrl, [
-                        'body' => $data, 
+                    $apiData = json_encode($details);
+                    $unsubscriberUrl = "https://api.sendgrid.com/v3/asm/suppressions/global";
+                    $body = $client->post($unsubscriberUrl, [
+                        'body' => $apiData, 
                         'headers' => [
-                            'Content-Type' => 'application/json',
-                            'x-api-key' => $api_key
+                            'Authorization' => 'Bearer '.$api_key,
+                            'Content-Type' => 'application/json'
                         ]
                     ]);
-                    
-                    if($updateResponse->getStatusCode() == 200) {
-                        $name = @$response['contacts'][0]['firstName'] . " " . @$response['contacts'][0]['lastName'];
+                    if($body->getStatusCode() == 201) {
+                        $name = @$response['result'][0]['first_name'] . " " . @$response['result'][0]['last_name'];
                         return array("result" => "success","data" => array("name" => $name,"updated_at" => date('Y-m-d H:i:s')));
                     } else {
                         return array("result" => "error","msg" => "Subscriber not unsubscribed");
