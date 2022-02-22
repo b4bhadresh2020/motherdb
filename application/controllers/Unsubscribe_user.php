@@ -253,6 +253,47 @@ class Unsubscribe_user extends CI_Controller
         }
     }
 
+    public function sendgrid() {
+        //  Get all list of sendgrid account
+        $condition  = array(
+            'provider' => SENDGRID,
+            'sendgrid_accounts.status' => 1,
+        );
+        $is_single = false;
+        $getSendgridLists = JoinData(PROVIDERS,$condition,SENDGRID_ACCOUNTS,"aweber_account","id","left",$is_single,array(),'providers.*,sendgrid_accounts.*,providers.id AS providers_id');
+        
+        $currentTimestamp = time();
+        $timestampHourAgo = $currentTimestamp - (60*60) - 1;
+        $timestampHourAgo = 1644994797; 
+        
+        $this->load->model('mdl_sendgrid_esp');
+        foreach($getSendgridLists as $getSendgridList) {
+            $getUnsubscriberData = $this->mdl_sendgrid_esp->GetSendgridUnsubscriberList($getSendgridList, $currentTimestamp, $timestampHourAgo);
+            if($getUnsubscriberData['result'] == 'success') {
+                $unsubscribers = @$getUnsubscriberData['msg'];
+                foreach($unsubscribers as $unsubscriber) {
+                    // pre($unsubscriber);
+                    $unsubscribeTimestamp = $unsubscriber['created'];
+                   
+                    if($unsubscribeTimestamp < $currentTimestamp && $unsubscribeTimestamp > $timestampHourAgo) {
+                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                        $unsubscribeData = [
+                            "provider_id" => $getSendgridList['providers_id'],
+                            "esp"         => SENDGRID,
+                            "email"       => $unsubscriber['email'],
+                            "name"        => NULL,
+                            "status"      => 1, // success
+                            "unsub_method"=> 1, // 1 - webhook(by main ESP)
+                            "response"    => date('Y-m-d H:i:s', $unsubscribeTimestamp)
+                        ];
+                        ManageData(PROVIDER_UNSUBSCRIBER,[],$unsubscribeData,true);
+                        $this->unsubFromOtherEsp($unsubscriber['email'], SENDGRID, $getSendgridList['providers_id']);
+                    }
+                }
+            }
+        }
+    }
+
     public function unsubFromOtherEsp($email, $mainProvider, $mainProviderId) {
         $this->is_main_webhook_called = 1;
         $providerCondition   = array('main_provider' => $mainProvider);
@@ -267,7 +308,8 @@ class Unsubscribe_user extends CI_Controller
                 '13' => 'active_campaign',
                 '15' => 'clever_reach',
                 '16' => 'omnisend',
-                '14' => 'expert_sender'
+                '14' => 'expert_sender',
+                '5' => 'sendgrid'
             ];
             // GET UNSUBSCRIBER LIST USING EMAIL ID THAT ALREADY HANDLE WHEN EMPLOYEE UNSUB USER (+ WEBHOOK (TO HANDLE DUPLICATE ENTRY WHEN EMPLOYEE UNSUB USER AND AT THAT MOMENT WEBHOOK EVENT IS ALSO CALLED))
             $condition       = array('email' => $email);
@@ -812,6 +854,79 @@ class Unsubscribe_user extends CI_Controller
                                     $data = [
                                         "provider_id" => $listID,
                                         "esp"         => OMNISEND,
+                                        "email"       => $email,
+                                        "name"        => NULL,
+                                        "status"      => 3, // already unsubscribed
+                                        "unsub_method"=> 2, // webhook (by other ESP)
+                                        "response"    => "Already unsubscribed"                                        
+                                    ];                                   
+                                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                                }                                
+                            }
+                        }                
+                    } else if($provider == SENDGRID) { 
+                        $this->load->model('mdl_sendgrid_unsubscribe');
+                        //LIST ID EMPTY GET COUNTRY WISE LIST  
+                        $listCondition  = array(
+                            'provider' => $provider,
+                            'sendgrid_accounts.status' => 1
+                        );  
+                        if(!empty($country)) {
+                            $listCondition['country'] = $country;
+                        } 
+                        if($mainProvider == SENDGRID) {
+                            $listCondition['providers.id !='] = $mainProviderId;
+                        }
+                        $is_single             = false;
+                        // $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
+                        $getListIDByCountry = JoinData(PROVIDERS,$listCondition,SENDGRID_ACCOUNTS,"aweber_account","id","left",$is_single,array(),"providers.id","");
+
+                        $list = array_column($getListIDByCountry,'id');
+        
+                        foreach ($list as $listID) {
+                            // CHECK EMAIL ALREADY UNSUBSCRIBE USING EMPLOYEE 
+                            if(!in_array($listID,$empProviderID)){   
+                                // CHECK EMAIL ALREADY UNSUBSCRIBE
+                                if(!in_array($listID,$providerID)){
+                                    
+                                    // SEND DATA FOR UNSUBSCRIBE
+                                    $response = $this->mdl_sendgrid_unsubscribe->makeUnsubscribe($email,$listID);
+                                
+                                    // GET ALREDY UNSUBSCRIBER LIST
+                                    $condition       = array('email' => $email,'provider_id' => $listID,'status' => 1);
+                                    $is_single       = true;
+                                    $getUnsubscribeData    = GetAllRecord(PROVIDER_UNSUBSCRIBER, $condition, $is_single,[],[],[],'id');
+                                    if(empty($getUnsubscribeData)) {
+                                        // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
+                                        if($response["result"] == "success"){
+                                            $data = [
+                                                "provider_id" => $listID,
+                                                "esp"         => SENDGRID,
+                                                "email"       => $email,
+                                                "name"        => $response["data"]["name"],
+                                                "status"      => 1, // success
+                                                "unsub_method"=> 2, // webhook (by other ESP)
+                                                "response"    => $response["data"]["updated_at"]                                            
+                                            ];                                            
+                                        }else{
+                                            $data = [
+                                                "provider_id" => $listID,
+                                                "esp"         => SENDGRID,
+                                                "email"       => $email,
+                                                "name"        => NULL,
+                                                "status"      => 2, // error
+                                                "unsub_method"=> 2, // webhook (by other ESP)
+                                                "response"    => $response["msg"]                                           
+                                            ];                                            
+                                        }
+                                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                                    }
+                                }else{
+                                    $data = [
+                                        "provider_id" => $listID,
+                                        "esp"         => SENDGRID,
                                         "email"       => $email,
                                         "name"        => NULL,
                                         "status"      => 3, // already unsubscribed

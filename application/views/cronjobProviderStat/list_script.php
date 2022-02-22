@@ -143,6 +143,9 @@
                 providerList +="<option value='15'>FI - Test</option>";
             }else if(providerId == 5){
                 providerList +="<option value='1'>CA-Abbiesmail</option>";
+                providerList +="<option value='2'>NZ-Ashleysmail</option>";
+                providerList +="<option value='3'>NZ-Allfreeca</option>";
+                providerList +="<option value='4'>CA-Allfreeca</option>";
             }else if(providerId == 6){
                 providerList +="<option value='1'>NO</option>";
                 providerList +="<option value='2'>CA</option>";

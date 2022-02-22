@@ -444,6 +444,9 @@ class Cron_provider_user_csv extends CI_Controller
     public function getSendgridMailProviderId($providerId){
         $provider = array(
             "1" => "60",  // CA-Abbiesmail 
+            "2" => "214",  // NZ-Ashleysmail
+            "3" => "215",  // NZ-Allfreeca
+            "4" => "216",  // CA-Allfreeca
         );
         return $provider[$providerId];
     }
