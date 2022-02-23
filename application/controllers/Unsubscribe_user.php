@@ -264,7 +264,6 @@ class Unsubscribe_user extends CI_Controller
         
         $currentTimestamp = time();
         $timestampHourAgo = $currentTimestamp - (60*60) - 1;
-        $timestampHourAgo = 1644994797; 
         
         $this->load->model('mdl_sendgrid_esp');
         foreach($getSendgridLists as $getSendgridList) {
@@ -288,6 +287,7 @@ class Unsubscribe_user extends CI_Controller
                         ];
                         ManageData(PROVIDER_UNSUBSCRIBER,[],$unsubscribeData,true);
                         $this->unsubFromOtherEsp($unsubscriber['email'], SENDGRID, $getSendgridList['providers_id']);
+                        return;
                     }
                 }
             }
@@ -866,6 +866,7 @@ class Unsubscribe_user extends CI_Controller
                             }
                         }                
                     } else if($provider == SENDGRID) { 
+                        // unsub contact globally means from all the list (unsub)
                         $this->load->model('mdl_sendgrid_unsubscribe');
                         //LIST ID EMPTY GET COUNTRY WISE LIST  
                         $listCondition  = array(

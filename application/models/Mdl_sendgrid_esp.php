@@ -30,7 +30,7 @@ class Mdl_sendgrid_esp extends CI_Model {
             if ($responseCode == 200) { 
                 return array("result" => "success","msg" => $results);
             } else {
-                $errorLog = array("responseCode" => $responseCode, "currentTimestamp" => $currentTimestamp, "segmentID" => $getData['code'], "response" => json_encode($results));
+                $errorLog = array("responseCode" => $responseCode, "currentTimestamp" => $currentTimestamp, "apiKey" => $getData['api_key'], "sendgridAccountId" => $getData['id'], "response" => json_encode($results));
 
                 //LOG ENTRY
                 $logPath    = FCPATH."log/sendgrid_esp/";
@@ -44,7 +44,7 @@ class Mdl_sendgrid_esp extends CI_Model {
             }
         }catch(\GuzzleHttp\Exception\ClientException $e){
             $response = json_decode($e->getResponse()->getBody()->getContents(),true);
-            $errorLog = array("currentTimestamp" => $currentTimestamp, "segmentID" => $getData['code'], "response" => json_encode($response));
+            $errorLog = array("currentTimestamp" => $currentTimestamp, "apiKey" => $getData['api_key'], "sendgridAccountId" => $getData['id'], "response" => json_encode($response));
             
             //LOG ENTRY
             $logPath    = FCPATH."log/sendgrid_esp/";
