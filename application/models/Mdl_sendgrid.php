@@ -19,12 +19,12 @@ class Mdl_sendgrid extends CI_Model {
             // fetch mail provider data from providers table
             $providerCondition   = array('id' => $sendGridListId);
             $is_single           = true;
-            $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);            
+            $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
+            $sendgridAccountId   = $providerData['aweber_account'];           
             
-            //LIST ID 
-            $list_id = $providerData['code'];      
-            $newsubscriberUrl = "https://api.sendgrid.com/v3/marketing/contacts";
-            $accessToken = "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";
+            $sendgridCondition   = array('id' => $sendgridAccountId);
+            $is_single           = true;
+            $sendgridAccountData   = GetAllRecord(SENDGRID_ACCOUNTS, $sendgridCondition, $is_single);
 
             // Find tag value
             if(isset($getData["otherLable"]) && isset($getData["other"])){
@@ -51,27 +51,47 @@ class Mdl_sendgrid extends CI_Model {
             fwrite($logFile,$logData);
             fclose($logFile);
 
+            //LIST ID 
+            $list_id = $providerData['code'];      
+            $accessToken = $sendgridAccountData['api_key'];
+            $newsubscriberUrl = "https://api.sendgrid.com/v3/marketing/contacts";
+
             $data = array(
                 "list_ids" => array($list_id),
                 "contacts" => array(
                     array(
-                        "email"         => $getData['emailId'],
-                        "first_name"    => $getData['firstName'],
-                        "last_name"     => $getData['lastName'],
-                        "phone_number"  => @$getData['phone'],
-                        "address_line_1"=> @$getData['address'],
-                        "city"          => @$getData['city'],
-                        "country"       => @$getData['country'],
-                        "postal_code"   => @$getData['postCode'],
-                        "custom_fields" => array(
-                            "w1_T" => strtolower($getData['gender']),
-                            "w2_T" => @$getData['phone'],
-                            "w3_T" => @$getData['birthDate'],
-                            "w4_T" => @$tagValue
-                        )
+                        "email"  => $getData['emailId'],
                     )
                 )
-            );  
+            );
+            
+            if(!empty($getData['firstName'])) {
+                $data['contacts'][0]['first_name'] = $getData['firstName'];
+            }
+            if(!empty($getData['lastName'])) {
+                $data['contacts'][0]['last_name'] = $getData['lastName'];
+            }
+            if(!empty($getData['phone'])) {
+                $data['contacts'][0]['phone_number'] = $getData['phone'];
+            }
+            if(!empty($getData['address'])) {
+                $data['contacts'][0]['address_line_1'] = $getData['address'];
+            }
+            if(!empty($getData['city'])) {
+                $data['contacts'][0]['city'] = $getData['city'];
+            }
+            if(!empty($getData['postCode'])) {
+                $data['contacts'][0]['postal_code'] = $getData['postCode'];
+            }   
+            if(!empty($getData['gender'])){
+                $data['contacts'][0]['custom_fields']['w1_T'] = strtolower($getData['gender']);
+            }
+            if(!empty($getData['birthDate'])){
+                $data['contacts'][0]['custom_fields']['w2_T'] = $getData['birthDate'];
+            }
+            if(!empty($tagValue)){
+                $data['contacts'][0]['custom_fields']['w3_T'] = $tagValue;
+            }
 
             $body = $client->put($newsubscriberUrl, [
                     'json' => $data, 
@@ -89,8 +109,9 @@ class Mdl_sendgrid extends CI_Model {
             }else{
                 return array("result" => "error","error" => array("msg" => "Unknown Error Response"));
             }
-        }catch (\GuzzleHttp\Exception\ClientException $e) {            
-                return array("result" => "error","error" => array("msg" => "Bad Request"));            
+        }catch (\GuzzleHttp\Exception\ClientException $e) {        
+            $statusCode =  $e->getResponse()->getStatusCode();   
+            return array("result" => "error","error" => array("msg" => $statusCode." - Bad Request - ". $e->getMessage()));      
         }
     } 
 }

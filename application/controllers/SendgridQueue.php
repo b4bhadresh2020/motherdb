@@ -21,7 +21,16 @@ class SendgridQueue extends CI_Controller {
 
     function manage($start = 0) {
         $data = array();
-        $providers = GetAllRecord(PROVIDERS,array("provider" => SENDGRID),false,array(),array(),array());
+        // $providers = GetAllRecord(PROVIDERS,array("provider" => SENDGRID),false,array(),array(),array());
+
+        //get file data
+        $condition = array(
+            'providers.provider' => SENDGRID,
+            'omnisend_accounts.status' => 1
+        );
+        $is_single = FALSE;
+        $providers = JoinData(PROVIDERS,$condition,SENDGRID_ACCOUNTS,"aweber_account","id","left",$is_single,array(),"","");
+
         if (@$this->input->get('reset')) {
             $_GET = array();
         }

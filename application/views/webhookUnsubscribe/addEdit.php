@@ -55,6 +55,7 @@
                                                             <th class="text-center" style="width:10% !important">Clever Reach</th>
                                                             <th class="text-center" style="width:10% !important">Omnisend</th>
                                                             <th class="text-center" style="width:10% !important">Expert Sender</th>
+                                                            <th class="text-center" style="width:10% !important">Sendgrid</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -66,7 +67,8 @@
                                                         '13' => 'Active Campaign',
                                                         '15' => 'Clever Reach',
                                                         '16' => 'Omnisend',
-                                                        '14' => 'Expert Sender'
+                                                        '14' => 'Expert Sender',
+                                                        '5' => 'Sendgrid'
                                                     ];
                                                     foreach($unsubscribeSettings as $key => $setting){
                                                         ?>
@@ -92,6 +94,9 @@
                                                             </td>
                                                             <td>
                                                                 <input type="checkbox" name="<?=$setting['main_provider']?>[14]" value="1" <?=(!empty($setting['expert_sender']) && $setting['expert_sender'] == 1) ? 'checked' : ''?>>
+                                                            </td>
+                                                            <td>
+                                                                <input type="checkbox" name="<?=$setting['main_provider']?>[5]" value="1" <?=(!empty($setting['sendgrid']) && $setting['sendgrid'] == 1) ? 'checked' : ''?>>
                                                             </td>
                                                         </tr>  
                                                         <?php

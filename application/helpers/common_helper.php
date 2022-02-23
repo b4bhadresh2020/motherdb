@@ -638,6 +638,7 @@ function getAccountTableName($provider) {
     $tableNames = array(
         '1' => 'aweber_accounts',
         '4' => 'ongage_accounts',
+        '5' => 'sendgrid_accounts',
         '7' => 'sendpulse_accounts',
         '8' => 'mailerlite_accounts',
         '9' => 'mailjet_accounts',
@@ -812,7 +813,10 @@ function getOngageProviderListName($providerListId){
 
 function getSendgridProviderListName($providerListId){
     $sendgridList = array(
-        "1" => "CA",
+        "1" => "CA-Abbiesmail",
+        "2" => "NZ-Ashleysmail",
+        "3" => "NZ-Allfreeca",
+        "4" => "CA-Allfreeca"
     );
     return $sendgridList[$providerListId];
 }
@@ -1100,7 +1104,10 @@ function getLiveRepostOngageProviderID($providerId){
 
 function getLiveRepostSendgridProviderID($providerId){
     $provider = array(
-        "1" => "60",  // CA
+        "1" => "60",  // CA-Abbiesmail
+        "2" => "214",  // NZ-Ashleysmail
+        "3" => "215",  // NZ-Allfreeca
+        "4" => "216",  // CA-Allfreeca
     );
     return $provider[$providerId];
 }
@@ -2277,6 +2284,7 @@ function getDelayAccountTableName($provider) {
     $tableNames = array(
         '1' => 'aweber_delay_user_data',
         '4' => 'ongage_delay_user_data',
+        '5' => 'sendgrid_delay_user_data',
         '7' => 'sendpulse_delay_user_data',
         '8' => 'mailerlite_delay_user_data',
         '9' => 'mailjet_delay_user_data',

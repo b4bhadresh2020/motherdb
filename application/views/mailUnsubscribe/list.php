@@ -76,11 +76,11 @@
                                                         <label>Provider *</label>
                                                         <select class="form-control" name="provider" id="provider">
                                                             <option value="0">Select Provider</option>                                                        
-                                                            <!-- <option value="1">Aweber</option>                                                         -->
+                                                            <!-- <option value="1">Aweber</option> -->                                                         -->
                                                             <!-- <option value="2">Transmitvia</option>                                                        
-                                                            <option value="4">Ongage</option>                                                        
+                                                            <option value="4">Ongage</option>                                                         -->
                                                             <option value="5">Sendgrid</option>                                                        
-                                                            <option value="6">Sendinblue</option> 
+                                                            <!-- <option value="6">Sendinblue</option> 
                                                             <option value="7">Sendpulse</option> -->
                                                             <!-- <option value="8">Mailerlite</option> -->
                                                             <option value="9">Mailjet</option>
@@ -251,16 +251,16 @@
                                     <label>Provider Name *</label>
                                     <select class="form-control" name="provider" id="popupProvider">
                                         <option value="0">All</option>                                                        
-                                        <!-- <option value="1">Aweber</option>                                                         -->
-                                        <!-- <option value="2">Transmitvia</option>                                                        
-                                        <option value="4">Ongage</option>                                                        
+                                        <!-- <option value="1">Aweber</option>                                                    
+                                        <option value="2">Transmitvia</option>                                                       
+                                        <option value="4">Ongage</option> -->
                                         <option value="5">Sendgrid</option>                                                        
-                                        <option value="6">Sendinblue</option> 
-                                        <option value="7">Sendpulse</option> -->
-                                        <!-- <option value="8">Mailerlite</option> -->
+                                        <!-- <option value="6">Sendinblue</option> 
+                                        <option value="7">Sendpulse</option> --> 
+                                        <!-- <option value="8">Mailerlite</option>
                                         <option value="9">Mailjet</option>   
-                                        <!-- <option value="10">Convertkit</option> -->
-                                        <!-- <option value="11">Marketing Platform</option> -->
+                                        <option value="10">Convertkit</option>
+                                        <option value="11">Marketing Platform</option> -->
                                         <option value="12">Ontraport</option>     
                                         <option value="13">Active Campaign</option> 
                                         <option value="14">Expert Sender</option>                                            
