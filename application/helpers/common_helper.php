@@ -2364,3 +2364,74 @@ function getAllResponseFieldName() {
     $responseFields = array_column($getProvideDetail, 'response_field');
     return $responseFields;
 }
+
+// get table name according to esp - DAB
+function getAccountTable($esp) {
+    $table = "";
+    if($esp == 9) {
+        $table = 'mailjet_accounts';
+    } else if($esp == 12) {
+        $table = 'ontraport_accounts';
+    }  else if($esp == 13) {
+        $table = 'active_campaign_accounts';
+    }  else if($esp == 14) {
+        $table = 'expert_sender_accounts';
+    }  else if($esp == 15) {
+        $table = 'clever_reach_accounts';
+    }  else if($esp == 16) {
+        $table = 'omnisend_accounts';
+    }  else if($esp == 5) {
+        $table = 'sendgrid_accounts';
+    }  
+    return $table;
+}
+
+// get IP - DAB
+function getIPAddress() {
+    $ipaddress = '';
+    if (getenv('HTTP_CLIENT_IP'))
+        $ipaddress = getenv('HTTP_CLIENT_IP');
+    else if(getenv('HTTP_X_FORWARDED_FOR'))
+        $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+    else if(getenv('HTTP_X_FORWARDED'))
+        $ipaddress = getenv('HTTP_X_FORWARDED');
+    else if(getenv('HTTP_FORWARDED_FOR'))
+        $ipaddress = getenv('HTTP_FORWARDED_FOR');
+    else if(getenv('HTTP_FORWARDED'))
+       $ipaddress = getenv('HTTP_FORWARDED');
+    else if(getenv('REMOTE_ADDR'))
+        $ipaddress = getenv('REMOTE_ADDR');
+    else
+        $ipaddress = 'UNKNOWN';
+    return $ipaddress; 
+}
+
+function getHeadingName($esp) {
+    $heading = '';
+    if($esp == 9) {
+        $heading = 'Mailjet';
+    }else if($esp == 12) {
+        $heading = 'Ontraport';
+    }else if($esp == 13) {
+        $heading = 'Active Campaign';
+    }else if($esp == 14) {
+        $heading = 'Expert Sender';
+    }else if($esp == 15) {
+        $heading = 'Clever Reach';
+    }else if($esp == 16) {
+        $heading = 'Omnisend';
+    }else if($esp == 9) {
+        $heading = 'Sendgrid';
+    }
+    return $heading;
+}
+
+function getAccountStatusLog($esp, $accountId) {
+    $condition = array(
+        'account_status_log.esp' => $esp,
+        'account_status_log.account_id' => $accountId
+    );
+    $is_single = false;
+    $dataCount = GetAllRecordCount(ACCOUNT_STATUS_LOG, $condition, $is_single);
+    return $dataCount;
+}
