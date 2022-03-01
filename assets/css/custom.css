@@ -398,3 +398,95 @@
   border-color: #99FF00;
   color: #35a60b;
 }
+/* account list - DAB */
+.toggle-button-cover {
+  position: relative;
+}
+.custom-toggle .button-cover,
+.custom-toggle .knobs,
+.custom-toggle .layer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.custom-toggle .button {
+  position: relative;
+  top: 50%;
+  width: 74px;
+  height: 36px;
+  overflow: hidden;
+}
+.custom-toggle .button.r,
+.custom-toggle .button.r .layer {
+  border-radius: 100px;
+}
+.custom-toggle .button.b2 {
+  border-radius: 2px;
+}
+.custom-toggle .checkbox {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 3;
+}
+.custom-toggle .knobs {
+  z-index: 2;
+}
+.custom-toggle .layer {
+  width: 100%;
+  background-color: #f9d7d7;
+  transition: 0.3s ease all;
+  z-index: 1;
+}
+.custom-toggle #switch-btn .knobs:before {
+  content: "OFF";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 30px;
+  height: 27px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1;
+  padding: 9px 4px;
+  background-color: #f44336;
+  border-radius: 2px;
+  transition: 0.3s ease all, left 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15);
+}
+
+.custom-toggle #switch-btn .checkbox:active + .knobs:before {
+  width: 46px;
+}
+
+.custom-toggle #switch-btn .checkbox:checked:active + .knobs:before {
+  margin-left: -26px;
+}
+
+.custom-toggle #switch-btn .checkbox:checked + .knobs:before {
+  content: "ON";
+  left: 40px;
+  background-color: #03a9f4;
+}
+
+.custom-toggle #switch-btn .checkbox:checked ~ .layer {
+  background-color: #ccedfb;
+}
+
+.db-log-btn {
+  position: relative;
+  left: 80px;
+}
+.text-green {
+  color: green;
+}
+.text-red {
+  color: red;;
+}

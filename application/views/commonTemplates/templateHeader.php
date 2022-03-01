@@ -58,6 +58,16 @@
                     <li class="<?php echo (@$load_page == 'dashboard')?"active":"";?>" title = "dashboard"><a href="<?php echo base_url('adminHome');?>"><i class="ti-home"></i> Dashboard </a>
                     </li>
 
+                    <li class="label">ESP Accounts</li>
+
+                    <li class="<?php echo (@$load_page == 'espMailjetAc')?"active":"";?>" title = "Mailjet Account List" ><a href="<?php echo base_url('espAccount/mailjet');?>"><i class="ti-user" ></i>Mailjet Account List </a> </li> 
+                    <li class="<?php echo (@$load_page == 'espOntraportAc')?"active":"";?>" title = "Ontraport Account List" ><a href="<?php echo base_url('espAccount/ontraport');?>"><i class="ti-user" ></i>Ontraport Account List </a> </li>
+                    <li class="<?php echo (@$load_page == 'espActiveCampaignAc')?"active":"";?>" title = "Active Campaign Account List" ><a href="<?php echo base_url('espAccount/activeCampaign');?>"><i class="ti-user" ></i>Active Campaign Account List </a> </li>
+                    <li class="<?php echo (@$load_page == 'espExpertSenderAc')?"active":"";?>" title = "Expert Sender Account List" ><a href="<?php echo base_url('espAccount/expertSender');?>"><i class="ti-user" ></i>Expert Sender Account List </a> </li>
+                    <li class="<?php echo (@$load_page == 'espCleverReachAc')?"active":"";?>" title = "Clever Reach Account List" ><a href="<?php echo base_url('espAccount/cleverReach');?>"><i class="ti-user" ></i>Clever Reach Account List </a> </li> 
+                    <li class="<?php echo (@$load_page == 'espOmnisendAc')?"active":"";?>" title = "Omnisend Account List" ><a href="<?php echo base_url('espAccount/omnisend');?>"><i class="ti-user" ></i>Omnisend Account List </a> </li> 
+                    <li class="<?php echo (@$load_page == 'espSendgridAc')?"active":"";?>" title = "Sendgrid Account List" ><a href="<?php echo base_url('espAccount/sendgrid');?>"><i class="ti-user" ></i>Sendgrid Account List </a> </li>    
+
                     <li class="label">User</li>
                    
                     <li class="<?php echo (@$load_page == 'user')?"active":"";?>" title = "Upload User CSV" ><a href="<?php echo base_url('user/manage');?>" ><i class="ti-files"></i> Upload User CSV </a> </li>
