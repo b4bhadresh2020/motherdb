@@ -35,7 +35,6 @@
                                             <tr class="table-header-font-small">
                                                 <th>#</th>
                                                 <th>Email</th>
-                                                <th style="width: 40%;">Password</th>
                                                 <th>CME Network</th>
                                                 <th>Status</th>
                                             </tr>
@@ -55,13 +54,7 @@
                                                                 echo $page + $key + 1;
                                                             ?>
                                                         </td>
-                                                        <td><?php echo $account['email_id']; ?></td>
-                                                        <td style="width:40%;">
-                                                            <div class="pass-main">
-                                                                <input type="password" class="password" value="<?php echo $account['email_password']; ?>" disabled/>
-                                                                <i class="ti ti-eye show-pass-icon" title="show password"></i>
-                                                            </div>
-                                                        </td>
+                                                        <td><?php echo $account['email_id']; ?></td>                                                        
                                                         <th><?php echo $account['cme_network']; ?></th>
                                                         <td>
                                                             <div class="toggle-button-cover custom-toggle">
@@ -73,6 +66,12 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <?php
+                                                            $totalLog = getAccountStatusLog(14, $account['id']);
+                                                            if($totalLog > 0) {
+                                                            ?>
+                                                                <a href="<?php echo site_url('/espAccount/statusLogData/0?esp=14&accountId='.$account['id'])?>" class="btn btn-default db-log-btn" title = "status log">Log</a> 
+                                                            <?php } ?>
                                                         </td>
                                                     </tr>
                                             <?php }} ?>

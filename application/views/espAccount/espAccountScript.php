@@ -8,17 +8,7 @@
         $.getJSON("https://api.ipify.org?format=json", function(data) {
             CURRENT_IP = data.ip;
         })
-
-        $('.show-pass-icon').on('click', function(){
-            if($(this).prev('.password').attr('type') == 'password') {
-                $(this).prev('.password').attr('type', 'text');
-                $(this).attr('title', 'hide password');
-            } else {
-                $(this).prev('.password').attr('type', 'password');
-                $(this).attr('title', 'show password');
-            }
-        });   
-
+        
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
