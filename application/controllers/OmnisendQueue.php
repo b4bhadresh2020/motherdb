@@ -21,15 +21,7 @@ class OmnisendQueue extends CI_Controller {
 
     function manage($start = 0) {
         $data = array();
-        // $providers = GetAllRecord(PROVIDERS,array("provider" => OMNISEND),false,array(),array(),array());
-
-        //get file data
-        $condition = array(
-            'providers.provider' => OMNISEND,
-            'omnisend_accounts.status' => 1
-        );
-        $is_single = FALSE;
-        $providers = JoinData(PROVIDERS,$condition,OMNISEND_ACCOUNTS,"aweber_account","id","left",$is_single,array(),"","");
+        $providers = GetAllRecord(PROVIDERS,array("provider" => OMNISEND),false,array(),array(),array());
 
         if (@$this->input->get('reset')) {
             $_GET = array();

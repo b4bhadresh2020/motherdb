@@ -21,16 +21,16 @@ class SendgridQueue extends CI_Controller {
 
     function manage($start = 0) {
         $data = array();
-        // $providers = GetAllRecord(PROVIDERS,array("provider" => SENDGRID),false,array(),array(),array());
+        $providers = GetAllRecord(PROVIDERS,array("provider" => SENDGRID),false,array(),array(),array());
 
         //get file data
-        $condition = array(
-            'providers.provider' => SENDGRID,
-            'omnisend_accounts.status' => 1
-        );
-        $is_single = FALSE;
-        $providers = JoinData(PROVIDERS,$condition,SENDGRID_ACCOUNTS,"aweber_account","id","left",$is_single,array(),"","");
-
+        // $condition = array(
+        //     'providers.provider' => SENDGRID,
+        //     'sendgrid_accounts.status' => 1
+        // );
+        // $is_single = FALSE;
+        // $providers = JoinData(PROVIDERS,$condition,SENDGRID_ACCOUNTS,"aweber_account","id","left",$is_single,array(),"sendgrid_accounts.*,providers.id as providerId,providers.aweber_account,providers.provider,providers.listname,providers.displayname,providers.account_id,providers.code,providers.status,providers.response_field,providers.country","");
+       
         if (@$this->input->get('reset')) {
             $_GET = array();
         }
