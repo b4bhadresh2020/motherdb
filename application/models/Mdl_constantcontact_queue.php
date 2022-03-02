@@ -44,7 +44,7 @@ class Mdl_constantcontact_queue extends CI_Model
         
         $is_single = false;
         $userData = array();
-        $totalUserData = JoinData(CONTACT_DELAY_USER_DATA,$condition,LIVE_DELIVERY_DATA,"liveDeliveryDataId","liveDeliveryDataId","left",$is_single,array());
+        $totalUserData = GetAllRecordCount(CONTACT_DELAY_USER_DATA, $condition);
         
         $this->db->limit($perpage,$start);        
         $userData = JoinData(CONTACT_DELAY_USER_DATA,$condition,LIVE_DELIVERY_DATA,"liveDeliveryDataId","liveDeliveryDataId","left",$is_single,array(array("currentTimestamp" => "desc")));        

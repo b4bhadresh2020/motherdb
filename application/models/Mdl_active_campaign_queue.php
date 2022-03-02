@@ -44,7 +44,7 @@ class Mdl_active_campaign_queue extends CI_Model
         
         $is_single = false;
         $userData = array();
-        $totalUserData = JoinData(ACTIVE_CAMPAIGN_DELAY_USER_DATA,$condition,LIVE_DELIVERY_DATA,"liveDeliveryDataId","liveDeliveryDataId","left",$is_single,array());
+        $totalUserData = GetAllRecordCount(ACTIVE_CAMPAIGN_DELAY_USER_DATA, $condition);
         
         $this->db->limit($perpage,$start);        
         $userData = JoinData(ACTIVE_CAMPAIGN_DELAY_USER_DATA,$condition,LIVE_DELIVERY_DATA,"liveDeliveryDataId","liveDeliveryDataId","left",$is_single,array(array("currentTimestamp" => "desc")));   
