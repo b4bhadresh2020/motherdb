@@ -44,7 +44,7 @@ class Mdl_expert_sender_queue extends CI_Model
         
         $is_single = false;
         $userData = array();
-        $totalUserData = JoinData(EXPERT_SENDER_DELAY_USER_DATA,$condition,LIVE_DELIVERY_DATA,"liveDeliveryDataId","liveDeliveryDataId","left",$is_single,array());
+        $totalUserData = GetAllRecordCount(EXPERT_SENDER_DELAY_USER_DATA, $condition);
         
         $this->db->limit($perpage,$start);        
         $userData = JoinData(EXPERT_SENDER_DELAY_USER_DATA,$condition,LIVE_DELIVERY_DATA,"liveDeliveryDataId","liveDeliveryDataId","left",$is_single,array(array("currentTimestamp" => "desc")));   
