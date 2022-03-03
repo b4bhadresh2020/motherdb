@@ -44,7 +44,7 @@ class Mdl_omnisend_queue extends CI_Model
         
         $is_single = false;
         $userData = array();
-        $totalUserData = GetAllRecordCount(OMNISEND_DELAY_USER_DATA, $condition);
+        $totalUserData = JoinData(OMNISEND_DELAY_USER_DATA,$condition,LIVE_DELIVERY_DATA,"liveDeliveryDataId","liveDeliveryDataId","left",$is_single,array(),'omnisend_delay_user_data.id');
         
         $this->db->limit($perpage,$start);        
         $userData = JoinData(OMNISEND_DELAY_USER_DATA,$condition,LIVE_DELIVERY_DATA,"liveDeliveryDataId","liveDeliveryDataId","left",$is_single,array(array("currentTimestamp" => "desc")));   

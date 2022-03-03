@@ -44,7 +44,7 @@ class Mdl_ongage_queue extends CI_Model
         
         $is_single = false;
         $userData = array();
-        $totalUserData = GetAllRecordCount(ONGAGE_DELAY_USER_DATA, $condition);
+        $totalUserData = JoinData(ONGAGE_DELAY_USER_DATA,$condition,LIVE_DELIVERY_DATA,"liveDeliveryDataId","liveDeliveryDataId","left",$is_single,array(),'ongage_delay_user_data.id');
         
         $this->db->limit($perpage,$start);        
         $userData = JoinData(ONGAGE_DELAY_USER_DATA,$condition,LIVE_DELIVERY_DATA,"liveDeliveryDataId","liveDeliveryDataId","left",$is_single,array(array("currentTimestamp" => "desc")));        
