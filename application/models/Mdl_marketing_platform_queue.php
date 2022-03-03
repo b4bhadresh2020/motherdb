@@ -44,7 +44,7 @@ class Mdl_marketing_platform_queue extends CI_Model
         
         $is_single = false;
         $userData = array();
-        $totalUserData = GetAllRecordCount(MARKETING_PLATFORM_DELAY_USER_DATA, $condition);
+        $totalUserData = JoinData(MARKETING_PLATFORM_DELAY_USER_DATA,$condition,LIVE_DELIVERY_DATA,"liveDeliveryDataId","liveDeliveryDataId","left",$is_single,array(),'marketing_platform_delay_user_data.id');
         
         $this->db->limit($perpage,$start);        
         $userData = JoinData(MARKETING_PLATFORM_DELAY_USER_DATA,$condition,LIVE_DELIVERY_DATA,"liveDeliveryDataId","liveDeliveryDataId","left",$is_single,array(array("currentTimestamp" => "desc")));   
