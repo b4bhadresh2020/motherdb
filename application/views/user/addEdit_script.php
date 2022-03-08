@@ -513,6 +513,9 @@
             providerList +="<option value='2'>NZ-Ashleysmail</option>";
             providerList +="<option value='3'>NZ-Allfreeca</option>";
             providerList +="<option value='4'>CA-Allfreeca</option>";
+            providerList +="<option value='5'>Katariinasmail</option>";
+            providerList +="<option value='6'>Velkomstgaven/NO</option>";
+            providerList +="<option value='7'>Gratispresent/SE</option>";
         }else if(providerId == 6){
             providerList +="<option value='1'>NO</option>";
             providerList +="<option value='2'>CA</option>";

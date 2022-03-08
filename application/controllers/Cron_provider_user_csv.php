@@ -447,6 +447,9 @@ class Cron_provider_user_csv extends CI_Controller
             "2" => "214",  // NZ-Ashleysmail
             "3" => "215",  // NZ-Allfreeca
             "4" => "216",  // CA-Allfreeca
+            "5" => "217",  // Katariinasmail
+            "6" => "218",  // Velkomstgaven/NO
+            "7" => "219",  // Gratispresent/SE
         );
         return $provider[$providerId];
     }
