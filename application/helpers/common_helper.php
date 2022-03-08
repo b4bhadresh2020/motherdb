@@ -820,6 +820,8 @@ function getSendgridProviderListName($providerListId){
         "5" => "Katariinasmail",
         "6" => "Velkomstgaven/NO",
         "7" => "Gratispresent/SE",
+        "8" => "Signesmail/NO",
+        "9" => "Dagenspresent/SE",
     );
     return $sendgridList[$providerListId];
 }
@@ -1114,6 +1116,8 @@ function getLiveRepostSendgridProviderID($providerId){
         "5" => "217",  // Katariinasmail
         "6" => "218",  // Velkomstgaven/NO
         "7" => "219",  // Gratispresent/SE
+        "8" => "220",  // Signesmail/NO
+        "9" => "221",  // Dagenspresent/SE
     );
     return $provider[$providerId];
 }
