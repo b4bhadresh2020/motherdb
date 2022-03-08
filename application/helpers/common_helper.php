@@ -816,7 +816,10 @@ function getSendgridProviderListName($providerListId){
         "1" => "CA-Abbiesmail",
         "2" => "NZ-Ashleysmail",
         "3" => "NZ-Allfreeca",
-        "4" => "CA-Allfreeca"
+        "4" => "CA-Allfreeca",
+        "5" => "Katariinasmail",
+        "6" => "Velkomstgaven/NO",
+        "7" => "Gratispresent/SE",
     );
     return $sendgridList[$providerListId];
 }
@@ -1108,6 +1111,9 @@ function getLiveRepostSendgridProviderID($providerId){
         "2" => "214",  // NZ-Ashleysmail
         "3" => "215",  // NZ-Allfreeca
         "4" => "216",  // CA-Allfreeca
+        "5" => "217",  // Katariinasmail
+        "6" => "218",  // Velkomstgaven/NO
+        "7" => "219",  // Gratispresent/SE
     );
     return $provider[$providerId];
 }
