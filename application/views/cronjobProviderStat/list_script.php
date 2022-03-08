@@ -149,6 +149,8 @@
                 providerList +="<option value='5'>Katariinasmail</option>";
                 providerList +="<option value='6'>Velkomstgaven/NO</option>";
                 providerList +="<option value='7'>Gratispresent/SE</option>";
+                providerList +="<option value='8'>Signesmail/NO</option>";
+                providerList +="<option value='9'>Dagenspresent/SE</option>";
             }else if(providerId == 6){
                 providerList +="<option value='1'>NO</option>";
                 providerList +="<option value='2'>CA</option>";
