@@ -156,6 +156,12 @@ class Live_delivery_api extends CI_Controller
                                                 $isEmailChecked = 1;
                                             }
                                         }
+
+                                        // dublicate old (birth year older than 1957)
+                                        $birthdateYear = $_GET['birthdateYear'];
+                                        if($birthdateYear < 1957) {
+                                            $notToCheckFuther = 10; // dublicate old                                           
+                                        }                                       
                                     }
                                     // check phone number if check phone status enable from live delivery
                                     if ($getLiveDeliveryData['checkPhone'] == 1) {
@@ -506,6 +512,11 @@ class Live_delivery_api extends CI_Controller
                                         $isFail            = 1;
                                         $sucFailMsgIndex   = 18; //GMX MX Block
                                         $response['error'] = 'Duplicate record found.';
+                                    } else if ($notToCheckFuther == 10) {
+                                        //data save to live_delivery_data table
+                                        $isFail            = 1;
+                                        $sucFailMsgIndex   = 19; //dublicate old
+                                        $response['error'] = 'Duplicate Old.';
                                     }
                                     
                                 } else {
