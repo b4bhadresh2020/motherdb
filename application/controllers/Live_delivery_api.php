@@ -161,6 +161,8 @@ class Live_delivery_api extends CI_Controller
                                             $notToCheckFuther = 9; // GMX MX Block
                                         } else if($birthdateYear < 1957) {
                                             $notToCheckFuther = 10; // dublicate old                                           
+                                        } else if($emailAddressChunk[1] == PROTONMAIL_DOMAIN) {
+                                            $notToCheckFuther = 12; // Protonmail MX Block	
                                         }
                                         
                                         // check live email check flag is on
@@ -535,6 +537,11 @@ class Live_delivery_api extends CI_Controller
                                         $isFail            = 1;
                                         $sucFailMsgIndex   = 20; // Blacklisted IP
                                         $response['error'] = 'Blacklisted IP.';
+                                    } else if ($notToCheckFuther == 12) {
+                                        //data save to live_delivery_data table
+                                        $isFail            = 1;
+                                        $sucFailMsgIndex   = 21; // Protonmail MX Block
+                                        $response['error'] = 'Protonmail MX Block.';
                                     }
                                     
                                 } else {
@@ -572,7 +579,7 @@ class Live_delivery_api extends CI_Controller
                         $sucFailMsgIndex   = 4; //api key is not active
                         $response['error'] = 'Api key is not active. Please contact to admin';
                     }
-                   
+
                     if($getLiveDeliveryData['dataSourceType'] == 1 || $getLiveDeliveryData['dataSourceType'] == 2) {
                         $response['inbox_fblead'] = $this->addToInboxgameFacebookleadData($_GET, $getLiveDeliveryData, $sucFailMsgIndex, $isFail, $isEmailChecked);
                     } else {

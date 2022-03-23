@@ -119,7 +119,7 @@
                                                     </div>    
                                                 </div>
                                             </div>
-                                            <?php $sucFailTypeArr =  array('0' => 'Success', '1' => 'Duplicate', '2' => 'Blacklisted', '3' => 'Server Issue','4' => 'Api Key Is Not Active', '5' => 'Email Is Required', '6' => 'Phone Is Required', '7' => 'Email Is Blank', '8' => 'Phone Is Blank', '9' => 'Invalid Email Format', '10' => 'Invalid Phone', '11' => 'Invalid Gender', '12' => 'Telia MX Block','13' => 'Luukku Mx Block', '14' => 'PP MX Block', '15' => 'User Already Unsubscribed', '16' => 'Yahoo MX Block', '17' => 'Icloud MX Block','18' => 'GMX MX Block', '19' => 'Duplicate Old', '20' => 'Blacklisted IP'); ?>
+                                            <?php $sucFailTypeArr =  array('0' => 'Success', '1' => 'Duplicate', '2' => 'Blacklisted', '3' => 'Server Issue','4' => 'Api Key Is Not Active', '5' => 'Email Is Required', '6' => 'Phone Is Required', '7' => 'Email Is Blank', '8' => 'Phone Is Blank', '9' => 'Invalid Email Format', '10' => 'Invalid Phone', '11' => 'Invalid Gender', '12' => 'Telia MX Block','13' => 'Luukku Mx Block', '14' => 'PP MX Block', '15' => 'User Already Unsubscribed', '16' => 'Yahoo MX Block', '17' => 'Icloud MX Block','18' => 'GMX MX Block', '19' => 'Duplicate Old', '20' => 'Blacklisted IP', '21' => 'Protonmail MX Block'); ?>
                                             
                                             <div class="row" >
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -340,6 +340,7 @@
                                             $gmxMxBlockCount = $rejectDetailCountsArr['gmxMxBlock'];
                                             $duplicateOldCount = $rejectDetailCountsArr['duplicateOld'];
                                             $blacklistIPCount = $rejectDetailCountsArr['blacklistIP'];
+                                            $protonmailMxBlockCount = $rejectDetailCountsArr['protonmailMxBlock'];
 
                                             if ($totalRejectCount > 0) {
                                                 
@@ -403,6 +404,9 @@
                                                 $blacklistIPPer = ($blacklistIPCount / $totalRejectCount) * 100;
                                                 $blacklistIPPer = reformat_number_format($blacklistIPPer);
 
+                                                $protonmailMxBlockPer = ($protonmailMxBlockCount / $totalRejectCount) * 100;
+                                                $protonmailMxBlockPer = reformat_number_format($protonmailMxBlockPer);
+
                                             }else{
 
                                                 $duplicatePer = 0;
@@ -425,6 +429,7 @@
                                                 $gmxMxBlockPer = 0;
                                                 $duplicateOldPer = 0;
                                                 $blacklistIPPer = 0;
+                                                $protonmailMxBlockPer = 0;
                                             }
                                             
 
@@ -548,6 +553,12 @@
                                                 <td>Blacklisted IP</td>
                                                 <td><?php echo $blacklistIPCount; ?></td>
                                                 <td><?php echo $blacklistIPPer.' %'; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td>21</td>
+                                                <td>Protonmail MX Block</td>
+                                                <td><?php echo $protonmailMxBlockCount; ?></td>
+                                                <td><?php echo $protonmailMxBlockPer.' %'; ?></td>
                                             </tr>
                                         </tbody>
                                     </table>
