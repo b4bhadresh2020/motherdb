@@ -206,6 +206,7 @@
 
                     <li class="label">Black List</li>
                     <li class="<?php echo (@$load_page == 'blacklist')?"active":"";?>" title = "Blacklist Users" ><a href="<?php echo base_url('blacklist/manage'); ?>"><i class="ti-unlink"></i> Blacklist Users</a></li>
+                    <li class="<?php echo (@$load_page == 'blacklistIP')?"active":"";?>" title = "Blacklist IP" ><a href="<?php echo base_url('blacklist/blacklistIP'); ?>"><i class="ti-unlink"></i> Blacklist IP</a></li>
                     <li class="<?php echo (@$load_page == 'blackListUpload')?"active":"";?>" title = "Upload Black List CSV" ><a href="<?php echo base_url('blacklist/upload');?>"><i class="ti-files"></i> Upload Blacklist CSV </a></li>
 
                     <li class="label">Synchronise Section</li>

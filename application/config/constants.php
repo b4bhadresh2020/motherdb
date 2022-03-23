@@ -119,6 +119,7 @@ define("HISTORY"						,		"history");
 define("LIVE_DELIVERY"					,		"live_delivery");
 define("LIVE_DELIVERY_STAT"				,		"live_delivery_stat");
 define("BLACKLIST"						,		"blacklist");
+define("IP_BLACKLIST"					,		"ip_blacklist");
 define("LIVE_DELIVERY_DATA"				,		"live_delivery_data");
 define("LIVE_DELIVERY_UNDEFINED_KEY_DATA"	,		"live_delivery_undefined_key_data");
 define("TEST"							,		"test");
