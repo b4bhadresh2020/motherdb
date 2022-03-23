@@ -221,6 +221,7 @@ define('ACCOUNT_STATUS_LOG', 'account_status_log');
 // MX Block account
 define('TELIA_DOMAIN', 'telia.com');
 define('LUUKKU_DOMAIN', 'luukku.com');
+define('PROTONMAIL_DOMAIN', 'protonmail.com');
 
 define('PP_DOMAIN_START', 'pp');
 define('PP_DOMAIN_END', '.inet.fi');
