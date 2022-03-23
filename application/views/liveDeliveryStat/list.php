@@ -119,7 +119,7 @@
                                                     </div>    
                                                 </div>
                                             </div>
-                                            <?php $sucFailTypeArr =  array('0' => 'Success', '1' => 'Duplicate', '2' => 'Blacklisted', '3' => 'Server Issue','4' => 'Api Key Is Not Active', '5' => 'Email Is Required', '6' => 'Phone Is Required', '7' => 'Email Is Blank', '8' => 'Phone Is Blank', '9' => 'Invalid Email Format', '10' => 'Invalid Phone', '11' => 'Invalid Gender', '12' => 'Telia MX Block','13' => 'Luukku Mx Block', '14' => 'PP MX Block', '15' => 'User Already Unsubscribed', '16' => 'Yahoo MX Block', '17' => 'Icloud MX Block','18' => 'GMX MX Block', '19' => 'Duplicate Old', '20' => 'Blacklisted IP'); ?>
+                                            <?php $sucFailTypeArr =  array('0' => 'Success', '1' => 'Duplicate', '2' => 'Blacklisted', '3' => 'Server Issue','4' => 'Api Key Is Not Active', '5' => 'Email Is Required', '6' => 'Phone Is Required', '7' => 'Email Is Blank', '8' => 'Phone Is Blank', '9' => 'Invalid Email Format', '10' => 'Invalid Phone', '11' => 'Invalid Gender', '12' => 'Telia MX Block','13' => 'Luukku Mx Block', '14' => 'PP MX Block', '15' => 'User Already Unsubscribed', '16' => 'Yahoo MX Block', '17' => 'Icloud MX Block','18' => 'GMX MX Block', '19' => 'Duplicate Old'); ?>
                                             
                                             <div class="row" >
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -339,7 +339,6 @@
                                             $icloudMxBlockCount = $rejectDetailCountsArr['icloudMxBlock'];
                                             $gmxMxBlockCount = $rejectDetailCountsArr['gmxMxBlock'];
                                             $duplicateOldCount = $rejectDetailCountsArr['duplicateOld'];
-                                            $blacklistIPCount = $rejectDetailCountsArr['blacklistIP'];
 
                                             if ($totalRejectCount > 0) {
                                                 
@@ -400,9 +399,6 @@
                                                 $duplicateOldPer = ($duplicateOldCount / $totalRejectCount) * 100;
                                                 $duplicateOldPer = reformat_number_format($duplicateOldPer);
 
-                                                $blacklistIPPer = ($blacklistIPCount / $totalRejectCount) * 100;
-                                                $blacklistIPPer = reformat_number_format($blacklistIPPer);
-
                                             }else{
 
                                                 $duplicatePer = 0;
@@ -424,7 +420,6 @@
                                                 $icloudMxBlockPer = 0;
                                                 $gmxMxBlockPer = 0;
                                                 $duplicateOldPer = 0;
-                                                $blacklistIPPer = 0;
                                             }
                                             
 
@@ -542,12 +537,6 @@
                                                 <td>Duplicate Old</td>
                                                 <td><?php echo $duplicateOldCount; ?></td>
                                                 <td><?php echo $duplicateOldPer.' %'; ?></td>
-                                            </tr>
-                                            <tr>
-                                                <td>20</td>
-                                                <td>Blacklisted IP</td>
-                                                <td><?php echo $blacklistIPCount; ?></td>
-                                                <td><?php echo $blacklistIPPer.' %'; ?></td>
                                             </tr>
                                         </tbody>
                                     </table>

@@ -342,75 +342,7 @@ class Blacklist extends CI_Controller
         
     }
 
-    public function blacklistIP($start = 0) {
-        $data = array();
 
-        if (@$this->input->get('reset')) {
-            $_GET = array();
-        }
-        
-        $perPage = 25;
-        $responseData = $this->mdl_blacklist->getBlacklistIP($_GET,$start,$perPage);
-        
-        $dataCount = $responseData['totalCount'];
-        $blacklistIPData = $responseData['blacklistIPData'];
-        
-        $data = pagination_data('blacklist/blacklistIP/', $dataCount, $start, 3, $perPage,$blacklistIPData);
 
-        $data['load_page'] = 'blacklistIP';
-        $data["curTemplateName"] = "blacklistIP/list";
-        $data['headerTitle'] = "Blacklist IP List";
-        $data['pageTitle'] = "Blacklist IP List";
-
-        $this->load->view('commonTemplates/templateLayout', $data);
-    }
-
-    /*
-     *  add/edit code starts here
-     */
-
-    function addEditBlacklistIP() {
-
-        $this->form_validation->set_rules('ip','IP', 'required');
-        if ($this->form_validation->run() != FALSE) {
-            // current login user
-            $condition = array(
-                'adminId' => $this->session->userdata('adminId')
-            );
-            $getAdminUser = GetAllRecord(ADMINMASTER,$condition,true);
-            
-            $dataArr = array();
-            $dataArr['ip'] = $this->input->post('ip');
-            $dataArr['added_by'] = $getAdminUser['adminUname'];
-            $dataArr['created_at'] = date('Y-m-d H:i:s');
-            
-            $is_add = true;
-            $response = ManageData(IP_BLACKLIST, array(), $dataArr, $is_add);      
-            SetMsg('loginSucMsg', loginRegSectionMsg("insertData"));
-            redirect("blacklist/blacklistIP");
-        }
-        $data = array();
-        $data['addEditTitle'] = "Add Blacklist IP";
-        $data['headerTitle'] = "Add Blacklist IP";
-
-        $data['load_page'] = 'blacklistIP';
-        $data['error_msg'] = GetFormError();
-        $data["curTemplateName"] = "blacklistIP/addEdit";
-        $this->load->view('commonTemplates/templateLayout', $data);
-    }
-
-    function deleteBlacklistIP() {
-        $response = [];
-        $blacklistIPId = $this->input->post('blacklistIPId');
-        
-        $this->db->where('id', $blacklistIPId);
-        $result = $this->db->delete(IP_BLACKLIST);
-        if($result) {
-            $response = array('result' => 'success');
-        } else {
-            $response = array('result' => 'error');
-        }
-        echo json_encode($response);
-    }
-
+    
 }
