@@ -122,9 +122,8 @@ class Live_delivery_api extends CI_Controller
                                     $isEmailChecked = 0;  
                                     
                                     // get current ip
-                                    $getIP = json_decode(file_get_contents('https://api.ipify.org?format=json'), true);
-                                    $ipValue = $getIP['ip'];
-
+                                    $ipValue = getIPAddress();
+                                        
                                     // get all blacklist ip
                                     $condition           = array();
                                     $is_single           = false;
