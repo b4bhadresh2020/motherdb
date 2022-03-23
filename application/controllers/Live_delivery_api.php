@@ -119,23 +119,8 @@ class Live_delivery_api extends CI_Controller
                                 if ($_GET[$identifier] != '') {
 
                                     $notToCheckFuther = 0;
-                                    $isEmailChecked = 0;  
-                                    
-                                    // get current ip
-                                    $getIP = json_decode(file_get_contents('https://api.ipify.org?format=json'), true);
-                                    $ipValue = $getIP['ip'];
+                                    $isEmailChecked = 0;                                                              
 
-                                    // get all blacklist ip
-                                    $condition           = array();
-                                    $is_single           = false;
-                                    $getIPBlacklistData = GetAllRecord(IP_BLACKLIST, $condition, $is_single, array(), array(), array(), 'ip');
-
-                                    $allBlackListIP = array_column($getIPBlacklistData, 'ip');
-                                    // check whether IP is in blacklist
-                                    if(!empty($ipValue) && in_array($ipValue, $allBlackListIP)) {
-                                        $notToCheckFuther = 11;
-                                    } 
-                                   
                                     if (@$_GET['emailId'] != '' && isValidEmail($_GET['emailId']) == 0) {
                                         $notToCheckFuther = 1;
                                     }
@@ -144,9 +129,6 @@ class Live_delivery_api extends CI_Controller
                                         // check email id host in blocklist array.
                                         $emailAddressChunk = explode("@",$_GET['emailId']);
                                         $country = $getLiveDeliveryData['country'];
-
-                                        // dublicate old (birth year older than 1957)
-                                        $birthdateYear = $_GET['birthdateYear'];
                                         
                                         if($emailAddressChunk[1] == TELIA_DOMAIN){
                                             $notToCheckFuther = 4; // Telia MX Block	
@@ -160,8 +142,6 @@ class Live_delivery_api extends CI_Controller
                                             $notToCheckFuther = 8; // Icloud MX Block
                                         } else if (strpos($emailAddressChunk[1], GMX_DOMAIN) !== false) {
                                             $notToCheckFuther = 9; // GMX MX Block
-                                        } else if($birthdateYear < 1957) {
-                                            $notToCheckFuther = 10; // dublicate old                                           
                                         }
                                         
                                         // check live email check flag is on
@@ -176,6 +156,12 @@ class Live_delivery_api extends CI_Controller
                                                 $isEmailChecked = 1;
                                             }
                                         }
+
+                                        // dublicate old (birth year older than 1957)
+                                        $birthdateYear = $_GET['birthdateYear'];
+                                        if($birthdateYear < 1957) {
+                                            $notToCheckFuther = 10; // dublicate old                                           
+                                        }                                       
                                     }
                                     // check phone number if check phone status enable from live delivery
                                     if ($getLiveDeliveryData['checkPhone'] == 1) {
@@ -531,11 +517,6 @@ class Live_delivery_api extends CI_Controller
                                         $isFail            = 1;
                                         $sucFailMsgIndex   = 19; //dublicate old
                                         $response['error'] = 'Duplicate Old.';
-                                    } else if ($notToCheckFuther == 11) {
-                                        //data save to live_delivery_data table
-                                        $isFail            = 1;
-                                        $sucFailMsgIndex   = 20; // Blacklisted IP
-                                        $response['error'] = 'Blacklisted IP.';
                                     }
                                     
                                 } else {
