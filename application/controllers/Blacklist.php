@@ -380,7 +380,7 @@ class Blacklist extends CI_Controller
             $getAdminUser = GetAllRecord(ADMINMASTER,$condition,true);
             
             $dataArr = array();
-            $dataArr['ip'] = $this->input->post('ip');
+            $dataArr['ip'] = trim($this->input->post('ip'));
             $dataArr['added_by'] = $getAdminUser['adminUname'];
             $dataArr['created_at'] = date('Y-m-d H:i:s');
             
