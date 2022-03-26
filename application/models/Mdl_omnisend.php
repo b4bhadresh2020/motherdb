@@ -48,6 +48,9 @@ class Mdl_omnisend extends CI_Model {
             }
 
             // LOG ENTRY
+            if (!file_exists(FCPATH."log/omnisend/")) {   
+                mkdir(FCPATH."log/omnisend/", 0777, true);
+            }
             $logPath    = FCPATH."log/omnisend/";
             $fileName   = date("Ymd")."_log.txt"; 
             $logFile    = fopen($logPath.$fileName,"a");

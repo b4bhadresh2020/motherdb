@@ -17,6 +17,9 @@ class Mdl_sendgrid_esp extends CI_Model {
 
         // API key
         $api_key = $getData['api_key'];  
+        if (!file_exists(FCPATH."log/sendgrid_esp/")) {   
+            mkdir(FCPATH."log/sendgrid_esp/", 0777, true);
+        }
         try{   
             $getUnsubscriberUrl = "https://api.sendgrid.com/v3/suppression/unsubscribes?start_time=".$timestampHourAgo."&end_time=".$currentTimestamp;
             // Get clever reach unsubscribe data send api called

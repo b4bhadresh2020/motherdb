@@ -17,6 +17,9 @@ class Mdl_clever_reach_esp extends CI_Model {
         $clientId = $getData['client_id'];
         $clientSecret = $getData['client_secret'];
         $token = $getData['token'];
+        if (!file_exists(FCPATH."log/clever_reach_esp/")) {   
+            mkdir(FCPATH."log/clever_reach_esp/", 0777, true);
+        }
 
         if($getData['token'] == null || ($getData['expires_in'] != null && time() > $getData['expires_in']) ){
             try{

@@ -15,7 +15,10 @@ class Mdl_omnisend_esp extends CI_Model {
         $client = new GuzzleHttp\Client();     
 
         // API key
-        $api_key = $getData['api_key'];       
+        $api_key = $getData['api_key'];
+        if (!file_exists(FCPATH."log/omnisend_esp/")) {   
+            mkdir(FCPATH."log/omnisend_esp/", 0777, true);
+        }       
         try{                      
             $getUnsubscriberUrl = "https://api.omnisend.com/v3/contacts?status=unsubscribed&segmentID=".$getData['code'];
             // Get clever reach unsubscribe data send api called

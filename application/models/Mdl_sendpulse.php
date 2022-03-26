@@ -45,12 +45,15 @@ class Mdl_sendpulse extends CI_Model {
             }
 
              // LOG ENTRY
-             $logPath    = FCPATH."log/sendpulse/";
-             $fileName   = date("Ymd")."_log.txt"; 
-             $logFile    = fopen($logPath.$fileName,"a");
-             $logData    = $getData['emailId']." ".$getData['firstName']." ".$getData['lastName']." ".time()."\n";
-             fwrite($logFile,$logData);
-             fclose($logFile);
+            if (!file_exists(FCPATH."log/sendpulse/")) {   
+                mkdir(FCPATH."log/sendpulse/", 0777, true);
+            }
+            $logPath    = FCPATH."log/sendpulse/";
+            $fileName   = date("Ymd")."_log.txt"; 
+            $logFile    = fopen($logPath.$fileName,"a");
+            $logData    = $getData['emailId']." ".$getData['firstName']." ".$getData['lastName']." ".time()."\n";
+            fwrite($logFile,$logData);
+            fclose($logFile);
 
             $details = [[
                 'email' => $getData['emailId'],

@@ -47,6 +47,9 @@ class Mdl_marketing_platform extends CI_Model {
             }
 
             // LOG ENTRY
+            if (!file_exists(FCPATH."log/marketing_platform/")) {   
+                mkdir(FCPATH."log/marketing_platform/", 0777, true);
+            }
             $logPath    = FCPATH."log/marketing_platform/";
             $fileName   = date("Ymd")."_log.txt"; 
             $logFile    = fopen($logPath.$fileName,"a");

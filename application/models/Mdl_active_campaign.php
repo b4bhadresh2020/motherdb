@@ -47,6 +47,9 @@ class Mdl_active_campaign extends CI_Model {
             }
 
             // LOG ENTRY
+            if (!file_exists(FCPATH."log/active_campaign/")) {   
+                mkdir(FCPATH."log/active_campaign/", 0777, true);
+            }
             $logPath    = FCPATH."log/active_campaign/";
             $fileName   = date("Ymd")."_log.txt"; 
             $logFile    = fopen($logPath.$fileName,"a");

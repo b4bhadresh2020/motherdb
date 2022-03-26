@@ -17,6 +17,9 @@ class Mdl_expert_sender_esp extends CI_Model {
         // API key
         $api_key = $getData['api_key'];   
         $today = date('Y-m-d');    
+        if (!file_exists(FCPATH."log/expert_sender_esp/")) {   
+            mkdir(FCPATH."log/expert_sender_esp/", 0777, true);
+        }
         try{                      
             // Get clever reach unsubscribe data send api called
             $getUnsubscriberUrl = EXPERT_SENDER_API_PATH . 'Api/RemovedSubscribers?apiKey='.$api_key.'&startDate='.$today.'&endDate='.$today;
