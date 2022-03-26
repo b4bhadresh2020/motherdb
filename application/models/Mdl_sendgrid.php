@@ -44,6 +44,9 @@ class Mdl_sendgrid extends CI_Model {
             }
 
             // LOG ENTRY
+            if (!file_exists(FCPATH."log/sendgrid/")) {   
+                mkdir(FCPATH."log/sendgrid/", 0777, true);
+            }
             $logPath    = FCPATH."log/sendgrid/";
             $fileName   = date("Ymd")."_log.txt"; 
             $logFile    = fopen($logPath.$fileName,"a");

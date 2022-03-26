@@ -26,12 +26,15 @@ class Mdl_clever_reach extends CI_Model {
             $accountData        = GetAllRecord(CLEVER_REACH_ACCOUNTS, $accountCondition, $is_single);        
             
              //LOG ENTRY
-             $logPath    = FCPATH."log/clever_reach/";
-             $fileName   = date("Ymd")."_log.txt"; 
-             $logFile    = fopen($logPath.$fileName,"a");
-             $logData    = $getData['emailId']." ".$getData['firstName']." ".$getData['lastName']." ".time()."\n";
-             fwrite($logFile,$logData);
-             fclose($logFile);
+            if (!file_exists(FCPATH."log/clever_reach/")) {   
+                mkdir(FCPATH."log/clever_reach/", 0777, true);
+            }
+            $logPath    = FCPATH."log/clever_reach/";
+            $fileName   = date("Ymd")."_log.txt"; 
+            $logFile    = fopen($logPath.$fileName,"a");
+            $logData    = $getData['emailId']." ".$getData['firstName']." ".$getData['lastName']." ".time()."\n";
+            fwrite($logFile,$logData);
+            fclose($logFile);
 
 
             // Find tag value

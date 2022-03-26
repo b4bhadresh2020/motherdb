@@ -28,6 +28,9 @@ class Mdl_Mailerlite extends CI_Model {
             $apiKey = $mailerliteAccountData['api_key'];
 
             // LOG ENTRY
+            if (!file_exists(FCPATH."log/mailerlite/")) {   
+                mkdir(FCPATH."log/mailerlite/", 0777, true);
+            }
             $logPath    = FCPATH."log/mailerlite/";
             $fileName   = date("Ymd")."_log.txt"; 
             $logFile    = fopen($logPath.$fileName,"a");

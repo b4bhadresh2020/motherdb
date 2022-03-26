@@ -11,13 +11,16 @@ class Mdl_ontraport extends CI_Model {
 
     
     function AddEmailToOntraportSubscriberList($getData,$ontraportListId){
-          //LOG ENTRY
-          $logPath    = FCPATH."log/ontraport/";
-          $fileName   = date("Ymd")."_log.txt"; 
-          $logFile    = fopen($logPath.$fileName,"a");
-          $logData    = $getData['emailId']." ".$getData['firstName']." ".$getData['lastName']." ".time()."\n";
-          fwrite($logFile,$logData);
-          fclose($logFile);
+        //LOG ENTRY
+        if (!file_exists(FCPATH."log/ontraport/")) {   
+            mkdir(FCPATH."log/ontraport/", 0777, true);
+        }
+        $logPath    = FCPATH."log/ontraport/";
+        $fileName   = date("Ymd")."_log.txt"; 
+        $logFile    = fopen($logPath.$fileName,"a");
+        $logData    = $getData['emailId']." ".$getData['firstName']." ".$getData['lastName']." ".time()."\n";
+        fwrite($logFile,$logData);
+        fclose($logFile);
 
         try{
             // Create a Guzzle client

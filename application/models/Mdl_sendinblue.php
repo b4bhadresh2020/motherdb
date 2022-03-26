@@ -44,6 +44,9 @@ class Mdl_sendinblue extends CI_Model {
             }
 
             // LOG ENTRY
+            if (!file_exists(FCPATH."log/sendinblue/")) {   
+                mkdir(FCPATH."log/sendinblue/", 0777, true);
+            }
             $logPath    = FCPATH."log/sendinblue/";
             $fileName   = date("Ymd")."_log.txt"; 
             $logFile    = fopen($logPath.$fileName,"a");

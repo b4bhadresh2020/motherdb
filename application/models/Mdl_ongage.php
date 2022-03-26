@@ -33,6 +33,9 @@ class Mdl_ongage extends CI_Model {
             $ongageAccountData   = GetAllRecord(ONGAGE_ACCOUNTS, $ongageAccountCondition, $is_single);
            
             // LOG ENTRY
+            if (!file_exists(FCPATH."log/ongage/")) {   
+                mkdir(FCPATH."log/ongage/", 0777, true);
+            }
             $logPath    = FCPATH."log/ongage/";
             $fileName   = date("Ymd")."_log.txt"; 
             $logFile    = fopen($logPath.$fileName,"a");

@@ -44,6 +44,9 @@ class Mdl_expert_sender extends CI_Model {
             }
 
             // LOG ENTRY
+            if (!file_exists(FCPATH."log/expert_sender/")) {   
+                mkdir(FCPATH."log/expert_sender/", 0777, true);
+            }
             $logPath    = FCPATH."log/expert_sender/";
             $fileName   = date("Ymd")."_log.txt"; 
             $logFile    = fopen($logPath.$fileName,"a");

@@ -51,6 +51,9 @@ class Mdl_mailjet extends CI_Model
         }
 
         // LOG ENTRY
+        if (!file_exists(FCPATH . "log/mailjet/")) {   
+            mkdir(FCPATH . "log/mailjet/", 0777, true);
+        }
         $logPath    = FCPATH . "log/mailjet/";
         $fileName   = date("Ymd") . "_log.txt";
         $logFile    = fopen($logPath . $fileName, "a");

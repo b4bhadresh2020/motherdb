@@ -51,6 +51,9 @@ class Mdl_aweber extends CI_Model {
             }
 
             //LOG ENTRY
+            if (!file_exists(FCPATH."log/aweber/")) {   
+                mkdir(FCPATH."log/aweber/", 0777, true);
+            }
             $logPath    = FCPATH."log/aweber/";
             $fileName   = date("Ymd")."_log.txt"; 
             $logFile    = fopen($logPath.$fileName,"a");

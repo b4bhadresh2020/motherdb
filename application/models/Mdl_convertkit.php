@@ -50,6 +50,9 @@ class Mdl_convertkit extends CI_Model {
             }
 
             // LOG ENTRY
+            if (!file_exists(FCPATH."log/convertkit/")) {   
+                mkdir(FCPATH."log/convertkit/", 0777, true);
+            }
             $logPath    = FCPATH."log/convertkit/";
             $fileName   = date("Ymd")."_log.txt"; 
             $logFile    = fopen($logPath.$fileName,"a");
