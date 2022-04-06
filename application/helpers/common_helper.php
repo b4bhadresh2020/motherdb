@@ -364,6 +364,21 @@ function JoinData($table_name = '', $condition = array(), $join_table = '', $tab
         return $res->result_array();
 }
 
+function JoinDataCount($table_name = '', $condition = array(), $join_table = '', $table_id = '', $join_id = '', $type = '') {
+    $ci = & get_instance();
+    #$ci->db->select('first_name,last_name');
+    
+    if ($condition && count($condition))
+        $ci->db->where($condition);
+    $ci->db->from($table_name);
+    
+    if ($join_table)
+        $ci->db->join($join_table, "$table_name.$table_id = $join_table.$join_id",$type);
+    
+    $res = $ci->db->count_all_results();
+    return $res;
+}
+
 #Creating Pagination Link
 
 function pagiationData($str, $num, $start, $segment, $perpage = 20, $isExpload = FALSE) {

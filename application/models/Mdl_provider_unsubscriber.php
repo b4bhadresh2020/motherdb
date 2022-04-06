@@ -12,14 +12,16 @@ class Mdl_provider_unsubscriber extends CI_Model
     public function getUnsubscriberData($getData,$start,$perpage) {
 
         $condition = array();
+        ($getData["provider"] != 0) ? $condition["providers.provider"] = $getData["provider"] : '';
+        !empty($getData["country"]) ? $condition["providers.country"] = $getData["country"] : '';
         isset($getData["list"]) && ($getData["list"] != 0) ? $condition["provider_id"] = $getData["list"] : '';
+        !empty($getData["deliveryDate"]) ? $condition["DATE(provider_unsubscriber.created_at)"] = $getData["deliveryDate"] : '';
         ($getData["status"] != 0) ? $condition["provider_unsubscriber.status"] = $getData["status"] : '';
         !empty($getData["email"]) ? $condition["email"] = $getData["email"] : '';
-        !empty($getData["deliveryDate"]) ? $condition["DATE(provider_unsubscriber.created_at)"] = $getData["deliveryDate"] : '';
 
         $is_single = false;
         
-        $totalCount = GetAllRecordCount(PROVIDER_UNSUBSCRIBER,$condition);
+        $totalCount = JoinDataCount(PROVIDER_UNSUBSCRIBER,$condition,PROVIDERS,"provider_id","id");
         $unsubscriberData = array();
         if ($totalCount > 0) {
             $this->db->limit($perpage,$start);
