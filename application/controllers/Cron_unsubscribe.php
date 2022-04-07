@@ -17,7 +17,6 @@ class Cron_unsubscribe extends CI_Controller
         );
         $unsubscriberPendingData = JoinData(PROVIDER_UNSUBSCRIBER,$condition,PROVIDERS,"provider_id","id",'',false,[["created_at" => "asc"]],"provider_unsubscriber.id,provider_id,email,provider",50);
 
-        pre($unsubscriberPendingData);
         if(count($unsubscriberPendingData)){
             foreach($unsubscriberPendingData as $unsubscriber){
                 
