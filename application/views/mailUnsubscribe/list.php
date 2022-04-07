@@ -130,6 +130,7 @@
                                                         <option value="1" <?php echo isset($status) && ($status == 1) ? "selected":'' ?>>Success</option>
                                                         <option value="2" <?php echo isset($status) && ($status == 2) ? "selected":'' ?>>Failed</option>
                                                         <option value="3" <?php echo isset($status) && ($status == 3) ? "selected":'' ?>>Already unsubscribed</option>
+                                                        <option value="4" <?php echo isset($status) && ($status == 4) ? "selected":'' ?>>Pending</option>
                                                     </select>    
                                                 </div>  
                                             </div>
@@ -209,7 +210,13 @@
                                                 <td><?php echo $providerName; ?></td>
                                                 <td><?php echo $unsubscriber['country']; ?></td>
                                                 <td><?php echo $unsubscriber['displayname']; ?></td>
-                                                <td><?php echo ($unsubscriber['status'] == 1)?"Success":"Failed"; ?></td>
+                                                <td><?php if($unsubscriber['status'] == 1){
+                                                    echo "Success";
+                                                }else if($unsubscriber['status'] == 2 ||  $unsubscriber['status'] == 3){
+                                                    echo "Failed";
+                                                }else if($unsubscriber['status'] == 4){
+                                                    echo "Pending";
+                                                } ?></td>
                                                 <td><?php echo ($unsubscriber['status'] == 1)? "Unsubscriber at: ".date("Y-m-d H:i:s",strtotime($unsubscriber['response'])):$unsubscriber['response']; ?></td>
                                             </tr>
                                             <?php }} ?>
@@ -323,10 +330,8 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <h5 class="alert-success-label" style="margin-bottom: 20px;"><strong>Successfully Unsubscriber List</strong></h5>
-                        <div class="alert alert-success custom-alert-success" role="alert"></div>
-                        <h5 class="alert-danger-label" style="margin-bottom: 20px;"><strong>Failed Unsubscriber List</strong></h5>
-                        <div class="alert alert-danger" role="alert"></div>
+                        <h5 class="alert-success-label" style="margin-bottom: 20px;"><strong>Queue Unsubscriber List</strong></h5>
+                        <div class="alert alert-success custom-alert-success" role="alert"></div>                        
                         <h5 class="alert-info-label" style="margin-bottom: 20px;"><strong>Already Unsubscriber List</strong></h5>
                         <div class="alert alert-info" role="alert"></div>
                     </div>

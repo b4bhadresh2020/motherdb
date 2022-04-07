@@ -132,8 +132,7 @@ class MailUnsubscribe extends CI_Controller
        
         foreach($providers as $provider){
             $list = '';
-            if($provider == AWEBER){
-                $this->load->model('mdl_aweber_unsubscribe');
+            if($provider == AWEBER){                
                 //LIST ID EMPTY GET COUNTRY WISE LIST
                 $list = $this->input->post('list');
                 if(empty($list)){
@@ -156,31 +155,15 @@ class MailUnsubscribe extends CI_Controller
 
                     // CHECK EMAIL ALREADY UNSUBSCRIBE
                     if(!in_array($listID,$providerID)){
-                        // SEND DATA FOR UNSUBSCRIBE
-                        $response = $this->mdl_aweber_unsubscribe->makeUnsubscribe($email,$listID);
-
-                        // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
-                        if($response["result"] == "success"){
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => $response["data"]["name"],
-                                "status"      => 1, // success
-                                "response"    => $response["data"]["updated_at"]
-                            ];
-                            $successUnsubscribe[] = $providerData['listname'].'(Aweber)';
-                        }else{
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => NULL,
-                                "status"      => 2, // error
-                                "response"    => $response["msg"]
-                            ];
-                            $failUnsubscribe[] = $providerData['listname'].'(Aweber)';
-                        }
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                        // SEND DATA IN QUEUE
+                        $data = [
+                            "provider_id" => $listID,
+                            "email"       => $email,
+                            "name"        => NULL,
+                            "status"      => 4, // Pending
+                            "response"    => "Pending"
+                        ];
+                        $queueUnsubscribe[] = $providerData['listname'].'(Aweber)'; 
                     }else{
                         $data = [
                             "provider_id" => $listID,
@@ -190,13 +173,11 @@ class MailUnsubscribe extends CI_Controller
                             "response"    => "Already unsubscribed"
                         ];
                         $alreadyUnsubscribe[] = $providerData['listname'].'(Aweber)';
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }
-                                    
+                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);                                    
                 }                
-            } else if($provider == MAILERLITE) {
-                $this->load->model('mdl_mailerlite_unsubscribe');
+            } else if($provider == MAILERLITE) {               
                 //LIST ID EMPTY GET COUNTRY WISE LIST
                 $list = $this->input->post('list');
                 if(empty($list)){
@@ -218,33 +199,16 @@ class MailUnsubscribe extends CI_Controller
                     $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
 
                     // CHECK EMAIL ALREADY UNSUBSCRIBE
-                    if(!in_array($listID,$providerID)){
-                        
-                        // SEND DATA FOR UNSUBSCRIBE
-                        $response = $this->mdl_mailerlite_unsubscribe->makeUnsubscribe($email,$listID);
-                    
-                        // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
-                        if($response["result"] == "success"){
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => $response["data"]["name"],
-                                "status"      => 1, // success
-                                "response"    => $response["data"]["updated_at"]
-                            ];
-                            $successUnsubscribe[] = $providerData['listname'].'(Mailerlite)';
-                        }else{
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => NULL,
-                                "status"      => 2, // error
-                                "response"    => $response["msg"]
-                            ];
-                            $failUnsubscribe[] = $providerData['listname'].'(Mailerlite)';
-                        }
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                    if(!in_array($listID,$providerID)){                        
+                        // SEND DATA IN QUEUE
+                        $data = [
+                            "provider_id" => $listID,
+                            "email"       => $email,
+                            "name"        => NULL,
+                            "status"      => 4, // Pending
+                            "response"    => "Pending"
+                        ];
+                        $queueUnsubscribe[] = $providerData['listname'].'(Mailerlite)';
                     }else{
                         $data = [
                             "provider_id" => $listID,
@@ -254,12 +218,11 @@ class MailUnsubscribe extends CI_Controller
                             "response"    => "Already unsubscribed"
                         ];
                         $alreadyUnsubscribe[] = $providerData['listname'].'(Mailerlite)';
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }
+                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                 }               
-            } else if($provider == MAILJET){
-                $this->load->model('mdl_mailjet_unsubscribe');
+            } else if($provider == MAILJET){                
                 //LIST ID EMPTY GET COUNTRY WISE LIST
                 $list = $this->input->post('list');
                 if(empty($list)){
@@ -285,31 +248,15 @@ class MailUnsubscribe extends CI_Controller
 
                     // CHECK EMAIL ALREADY UNSUBSCRIBE
                     if(!in_array($listID,$providerID)){
-                        // SEND DATA FOR UNSUBSCRIBE
-                        $response = $this->mdl_mailjet_unsubscribe->makeUnsubscribe($email,$listID);
-
-                        // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
-                        if($response["result"] == "success"){
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => $response["data"]["name"],
-                                "status"      => 1, // success
-                                "response"    => $response["data"]["updated_at"]
-                            ];
-                            $successUnsubscribe[] = $providerData['listname'].'(Mailjet)';
-                        }else{
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => NULL,
-                                "status"      => 2, // error
-                                "response"    => $response["msg"]
-                            ];
-                            $failUnsubscribe[] = $providerData['listname'].'(Mailjet)';
-                        }
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                        // SEND DATA IN QUEUE
+                        $data = [
+                            "provider_id" => $listID,
+                            "email"       => $email,
+                            "name"        => NULL,
+                            "status"      => 4, // Pending
+                            "response"    => "Pending"
+                        ];
+                        $queueUnsubscribe[] = $providerData['listname'].'(Mailjet)';                        
                     }else{
                         $data = [
                             "provider_id" => $listID,
@@ -318,15 +265,12 @@ class MailUnsubscribe extends CI_Controller
                             "status"      => 3, // already unsubscribed
                             "response"    => "Already unsubscribed"
                         ];
-                        $alreadyUnsubscribe[] = $providerData['listname'].'(Mailjet)';
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                        $alreadyUnsubscribe[] = $providerData['listname'].'(Mailjet)';                        
                     }
-                                    
+                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);                                    
                 }               
-            } else if($provider == CONVERTKIT){
-                $this->load->model('mdl_convertkit_unsubscribe');
-
+            } else if($provider == CONVERTKIT){            
                 //LIST ID EMPTY GET COUNTRY WISE LIST
                 $list = $this->input->post('list');
                 if(empty($list)){
@@ -350,30 +294,15 @@ class MailUnsubscribe extends CI_Controller
 
                     // CHECK EMAIL ALREADY UNSUBSCRIBE
                     if(!in_array($listID,$providerID)){
-                        // SEND DATA FOR UNSUBSCRIBE
-                        $response = $this->mdl_convertkit_unsubscribe->makeUnsubscribe($email,$listID);
-                        // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
-                        if($response["result"] == "success"){
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => $response["data"]["name"],
-                                "status"      => 1, // success
-                                "response"    => $response["data"]["updated_at"]
-                            ];
-                            $successUnsubscribe[] = $providerData['listname'].'(Convertkit)';
-                        }else{
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => NULL,
-                                "status"      => 2, // error
-                                "response"    => $response["msg"]
-                            ];
-                            $failUnsubscribe[] = $providerData['listname'].'(Convertkit)';
-                        }
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                        // SEND DATA IN QUEUE
+                        $data = [
+                            "provider_id" => $listID,
+                            "email"       => $email,
+                            "name"        => NULL,
+                            "status"      => 4, // Pending
+                            "response"    => "Pending"
+                        ];
+                        $queueUnsubscribe[] = $providerData['listname'].'(Convertkit)';                         
                     }else{
                         $data = [
                             "provider_id" => $listID,
@@ -383,79 +312,59 @@ class MailUnsubscribe extends CI_Controller
                             "response"    => "Already unsubscribed"
                         ];
                         $alreadyUnsubscribe[] = $providerData['listname'].'(Convertkit)';
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }
-                                    
+                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);                                    
                 }                
-            } else if($provider == MARKETING_PLATFORM) {
-                // $this->load->model('mdl_marketing_platform_unsubscribe');
-                // //LIST ID EMPTY GET COUNTRY WISE LIST
-                // $list = $this->input->post('list');
-                // if(empty($list)){
-                //     $listCondition  = array(
-                //         'provider' => $provider,
-                //         'marketing_platform_accounts.status' => 1
-                //     );
-                //     if(!empty($country)) {
-                //         $listCondition['country'] = $country;
-                //     }
-                //     $is_single             = false;
-                //     // $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
-                //     $getListIDByCountry = JoinData(PROVIDERS,$listCondition,MARKETING_PLATFORM_ACCOUNTS,"aweber_account","id","left",$is_single,array(),"providers.id","");
-                //     $list = array_column($getListIDByCountry,'id');
-                // }
+            } else if($provider == MARKETING_PLATFORM) {                
+                //LIST ID EMPTY GET COUNTRY WISE LIST
+                $list = $this->input->post('list');
+                if(empty($list)){
+                    $listCondition  = array(
+                        'provider' => $provider,
+                        'marketing_platform_accounts.status' => 1
+                    );
+                    if(!empty($country)) {
+                        $listCondition['country'] = $country;
+                    }
+                    $is_single             = false;
+                    // $getListIDByCountry    = GetAllRecord(PROVIDERS, $listCondition, $is_single,[],[],[],'id');
+                    $getListIDByCountry = JoinData(PROVIDERS,$listCondition,MARKETING_PLATFORM_ACCOUNTS,"aweber_account","id","left",$is_single,array(),"providers.id","");
+                    $list = array_column($getListIDByCountry,'id');
+                }
 
-                // foreach ($list as $listID) {   
+                foreach ($list as $listID) {   
                     
-                //     // fetch mail provider data from providers table
-                //     $providerCondition   = array('id' => $listID);
-                //     $is_single           = true;
-                //     $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
+                    // fetch mail provider data from providers table
+                    $providerCondition   = array('id' => $listID);
+                    $is_single           = true;
+                    $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
 
-                //     // CHECK EMAIL ALREADY UNSUBSCRIBE
-                //     if(!in_array($listID,$providerID)){
-                        
-                //         // SEND DATA FOR UNSUBSCRIBE
-                //         $response = $this->mdl_marketing_platform_unsubscribe->makeUnsubscribe($email,$listID);
-                    
-                //         // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
-                //         if($response["result"] == "success"){
-                //             $data = [
-                //                 "provider_id" => $listID,
-                //                 "email"       => $email,
-                //                 "name"        => $response["data"]["name"],
-                //                 "status"      => 1, // success
-                //                 "response"    => $response["data"]["updated_at"]
-                //             ];
-                //             $successUnsubscribe[] = $providerData['listname'].'(Marketing Platform)';
-                //         }else{
-                //             $data = [
-                //                 "provider_id" => $listID,
-                //                 "email"       => $email,
-                //                 "name"        => NULL,
-                //                 "status"      => 2, // error
-                //                 "response"    => $response["msg"]
-                //             ];
-                //             $failUnsubscribe[] = $providerData['listname'].'(Marketing Platform)';
-                //         }
-                //         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                //         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
-                //     }else{
-                //         $data = [
-                //             "provider_id" => $listID,
-                //             "email"       => $email,
-                //             "name"        => NULL,
-                //             "status"      => 3, // already unsubscribed
-                //             "response"    => "Already unsubscribed"
-                //         ];
-                //         $alreadyUnsubscribe[] = $providerData['listname'].'(Marketing Platform)';
-                //         // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                //         ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
-                //     }
-                // }                
-            } else if($provider == ONTRAPORT) {
-                $this->load->model('mdl_ontraport_unsubscribe');
+                    // CHECK EMAIL ALREADY UNSUBSCRIBE
+                    if(!in_array($listID,$providerID)){                        
+                        // SEND DATA IN QUEUE
+                        $data = [
+                            "provider_id" => $listID,
+                            "email"       => $email,
+                            "name"        => NULL,
+                            "status"      => 4, // Pending
+                            "response"    => "Pending"
+                        ];
+                        $queueUnsubscribe[] = $providerData['listname'].'(Marketing Platform)';                        
+                    }else{
+                        $data = [
+                            "provider_id" => $listID,
+                            "email"       => $email,
+                            "name"        => NULL,
+                            "status"      => 3, // already unsubscribed
+                            "response"    => "Already unsubscribed"
+                        ];
+                        $alreadyUnsubscribe[] = $providerData['listname'].'(Marketing Platform)';
+                    }
+                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                }                
+            } else if($provider == ONTRAPORT) {                
                 //LIST ID EMPTY GET COUNTRY WISE LIST
                 $list = $this->input->post('list');
                 if(empty($list)){
@@ -477,33 +386,16 @@ class MailUnsubscribe extends CI_Controller
                     $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
 
                     // CHECK EMAIL ALREADY UNSUBSCRIBE
-                    if(!in_array($listID,$providerID)){
-                        
-                        // SEND DATA FOR UNSUBSCRIBE
-                        $response = $this->mdl_ontraport_unsubscribe->makeUnsubscribe($email,$listID);
-                    
-                        // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
-                        if($response["result"] == "success"){
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => $response["data"]["name"],
-                                "status"      => 1, // success
-                                "response"    => $response["data"]["updated_at"]
-                            ];
-                            $successUnsubscribe[] = $providerData['listname'].'(Ontraport)';
-                        }else{
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => NULL,
-                                "status"      => 2, // error
-                                "response"    => $response["msg"]
-                            ];
-                            $failUnsubscribe[] = $providerData['listname'].'(Ontraport)';
-                        }
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                    if(!in_array($listID,$providerID)){                        
+                        // SEND DATA IN QUEUE
+                        $data = [
+                            "provider_id" => $listID,
+                            "email"       => $email,
+                            "name"        => NULL,
+                            "status"      => 4, // Pending
+                            "response"    => "Pending"
+                        ];
+                        $queueUnsubscribe[] = $providerData['listname'].'(Ontraport)';                        
                     }else{
                         $data = [
                             "provider_id" => $listID,
@@ -513,12 +405,11 @@ class MailUnsubscribe extends CI_Controller
                             "response"    => "Already unsubscribed"
                         ];
                         $alreadyUnsubscribe[] = $providerData['listname'].'(Ontraport)';
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }
+                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                 }               
-            } else if($provider == ACTIVE_CAMPAIGN) {
-                $this->load->model('mdl_active_campaign_unsubscribe');
+            } else if($provider == ACTIVE_CAMPAIGN) {                
                 //LIST ID EMPTY GET COUNTRY WISE LIST
                 $list = $this->input->post('list');
                 if(empty($list)){
@@ -541,33 +432,16 @@ class MailUnsubscribe extends CI_Controller
                     $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
 
                     // CHECK EMAIL ALREADY UNSUBSCRIBE
-                    if(!in_array($listID,$providerID)){
-                        
-                        // SEND DATA FOR UNSUBSCRIBE
-                        $response = $this->mdl_active_campaign_unsubscribe->makeUnsubscribe($email,$listID);
-                    
-                        // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
-                        if($response["result"] == "success"){
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => $response["data"]["name"],
-                                "status"      => 1, // success
-                                "response"    => $response["data"]["updated_at"]
-                            ];
-                            $successUnsubscribe[] = $providerData['listname'].'(Active Campaign)';
-                        }else{
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => NULL,
-                                "status"      => 2, // error
-                                "response"    => $response["msg"]
-                            ];
-                            $failUnsubscribe[] = $providerData['listname'].'(Active Campaign)';
-                        }
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                    if(!in_array($listID,$providerID)){                        
+                        // SEND DATA IN QUEUE
+                        $data = [
+                            "provider_id" => $listID,
+                            "email"       => $email,
+                            "name"        => NULL,
+                            "status"      => 4, // Pending
+                            "response"    => "Pending"
+                        ];
+                        $queueUnsubscribe[] = $providerData['listname'].'(Active Campaign)';                         
                     }else{
                         $data = [
                             "provider_id" => $listID,
@@ -577,12 +451,11 @@ class MailUnsubscribe extends CI_Controller
                             "response"    => "Already unsubscribed"
                         ];
                         $alreadyUnsubscribe[] = $providerData['listname'].'(Active Campaign)';
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }
+                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                 }               
-            } else if($provider == EXPERT_SENDER) {
-                $this->load->model('mdl_expert_sender_unsubscribe');
+            } else if($provider == EXPERT_SENDER) {                
                 //LIST ID EMPTY GET COUNTRY WISE LIST
                 $list = $this->input->post('list');
                 if(empty($list)){
@@ -605,33 +478,16 @@ class MailUnsubscribe extends CI_Controller
                     $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
 
                     // CHECK EMAIL ALREADY UNSUBSCRIBE
-                    if(!in_array($listID,$providerID)){
-                        
-                        // SEND DATA FOR UNSUBSCRIBE
-                        $response = $this->mdl_expert_sender_unsubscribe->makeUnsubscribe($email,$listID);
-                    
-                        // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
-                        if($response["result"] == "success"){
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => $response["data"]["name"],
-                                "status"      => 1, // success
-                                "response"    => $response["data"]["updated_at"]
-                            ];
-                            $successUnsubscribe[] = $providerData['listname'].'(Expert Sender)';
-                        }else{
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => NULL,
-                                "status"      => 2, // error
-                                "response"    => $response["msg"]
-                            ];
-                            $failUnsubscribe[] = $providerData['listname'].'(Expert Sender)';
-                        }
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                    if(!in_array($listID,$providerID)){                        
+                        // SEND DATA IN QUEUE
+                        $data = [
+                            "provider_id" => $listID,
+                            "email"       => $email,
+                            "name"        => NULL,
+                            "status"      => 4, // Pending
+                            "response"    => "Pending"
+                        ];
+                        $queueUnsubscribe[] = $providerData['listname'].'(Expert Sender)';                        
                     }else{
                         $data = [
                             "provider_id" => $listID,
@@ -641,12 +497,11 @@ class MailUnsubscribe extends CI_Controller
                             "response"    => "Already unsubscribed"
                         ];
                         $alreadyUnsubscribe[] = $providerData['listname'].'(Expert Sender)';
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }
+                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                 }               
-            } else if($provider == CLEVER_REACH){
-                $this->load->model('mdl_clever_reach_unsubscribe');
+            } else if($provider == CLEVER_REACH){                
                 //LIST ID EMPTY GET COUNTRY WISE LIST
                 $list = $this->input->post('list');
                 if(empty($list)){
@@ -672,31 +527,15 @@ class MailUnsubscribe extends CI_Controller
 
                     // CHECK EMAIL ALREADY UNSUBSCRIBE
                     if(!in_array($listID,$providerID)){
-                        // SEND DATA FOR UNSUBSCRIBE
-                        $response = $this->mdl_clever_reach_unsubscribe->makeUnsubscribe($email,$listID);
-
-                        // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
-                        if($response["result"] == "success"){
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => $response["data"]["name"],
-                                "status"      => 1, // success
-                                "response"    => $response["data"]["updated_at"]
-                            ];
-                            $successUnsubscribe[] = $providerData['listname'].'(Clever Reach)';
-                        }else{
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => NULL,
-                                "status"      => 2, // error
-                                "response"    => $response["msg"]
-                            ];
-                            $failUnsubscribe[] = $providerData['listname'].'(Clever Reach)';
-                        }
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                        // SEND DATA IN QUEUE
+                        $data = [
+                            "provider_id" => $listID,
+                            "email"       => $email,
+                            "name"        => NULL,
+                            "status"      => 4, // Pending
+                            "response"    => "Pending"
+                        ];
+                        $queueUnsubscribe[] = $providerData['listname'].'(Clever Reach)';                        
                     }else{
                         $data = [
                             "provider_id" => $listID,
@@ -706,13 +545,11 @@ class MailUnsubscribe extends CI_Controller
                             "response"    => "Already unsubscribed"
                         ];
                         $alreadyUnsubscribe[] = $providerData['listname'].'(Clever Reach)';
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }
-                                    
+                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);                                    
                 }               
-            } else if($provider == OMNISEND){
-                $this->load->model('mdl_omnisend_unsubscribe');
+            } else if($provider == OMNISEND){                
                 //LIST ID EMPTY GET COUNTRY WISE LIST
                 $list = $this->input->post('list');
                 if(empty($list)){
@@ -738,31 +575,15 @@ class MailUnsubscribe extends CI_Controller
 
                     // CHECK EMAIL ALREADY UNSUBSCRIBE
                     if(!in_array($listID,$providerID)){
-                        // SEND DATA FOR UNSUBSCRIBE
-                        $response = $this->mdl_omnisend_unsubscribe->makeUnsubscribe($email,$listID);
-
-                        // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
-                        if($response["result"] == "success"){
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => $response["data"]["name"],
-                                "status"      => 1, // success
-                                "response"    => $response["data"]["updated_at"]
-                            ];
-                            $successUnsubscribe[] = $providerData['listname'].'(Omnisend)';
-                        }else{
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => NULL,
-                                "status"      => 2, // error
-                                "response"    => $response["msg"]
-                            ];
-                            $failUnsubscribe[] = $providerData['listname'].'(Omnisend)';
-                        }
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                        // SEND DATA IN QUEUE
+                        $data = [
+                            "provider_id" => $listID,
+                            "email"       => $email,
+                            "name"        => NULL,
+                            "status"      => 4, // Pending
+                            "response"    => "Pending"
+                        ];
+                        $queueUnsubscribe[] = $providerData['listname'].'(Omnisend)';                         
                     }else{
                         $data = [
                             "provider_id" => $listID,
@@ -772,13 +593,11 @@ class MailUnsubscribe extends CI_Controller
                             "response"    => "Already unsubscribed"
                         ];
                         $alreadyUnsubscribe[] = $providerData['listname'].'(Omnisend)';
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }
-                                    
+                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);                                    
                 }               
-            } else if($provider == SENDGRID){
-                $this->load->model('mdl_sendgrid_unsubscribe');
+            } else if($provider == SENDGRID){                
                 //LIST ID EMPTY GET COUNTRY WISE LIST
                 $list = $this->input->post('list');
                 if(empty($list)){
@@ -804,31 +623,15 @@ class MailUnsubscribe extends CI_Controller
 
                     // CHECK EMAIL ALREADY UNSUBSCRIBE
                     if(!in_array($listID,$providerID)){
-                        // SEND DATA FOR UNSUBSCRIBE
-                        $response = $this->mdl_sendgrid_unsubscribe->makeUnsubscribe($email,$listID);
-
-                        // ADD RECORD IN DATABASE FOR UNSUBSCRIBER LIST.
-                        if($response["result"] == "success"){
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => $response["data"]["name"],
-                                "status"      => 1, // success
-                                "response"    => $response["data"]["updated_at"]
-                            ];
-                            $successUnsubscribe[] = $providerData['listname'].'(Sendgrid)';
-                        }else{
-                            $data = [
-                                "provider_id" => $listID,
-                                "email"       => $email,
-                                "name"        => NULL,
-                                "status"      => 2, // error
-                                "response"    => $response["msg"]
-                            ];
-                            $failUnsubscribe[] = $providerData['listname'].'(Sendgrid)';
-                        }
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
+                        // SEND DATA IN QUEUE
+                        $data = [
+                            "provider_id" => $listID,
+                            "email"       => $email,
+                            "name"        => NULL,
+                            "status"      => 4, // Pending
+                            "response"    => "Pending"
+                        ];
+                        $queueUnsubscribe[] = $providerData['listname'].'(Sendgrid)'; 
                     }else{
                         $data = [
                             "provider_id" => $listID,
@@ -838,16 +641,14 @@ class MailUnsubscribe extends CI_Controller
                             "response"    => "Already unsubscribed"
                         ];
                         $alreadyUnsubscribe[] = $providerData['listname'].'(Sendgrid)';
-                        // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
-                        ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);
                     }
-                                    
+                    // INSERT DATA IN PROVIDER UNSUBSCRIBER TABLE
+                    ManageData(PROVIDER_UNSUBSCRIBER,[],$data,true);                                    
                 }               
             }
         }
-        $successUnsubscribeList = implode(", ",$successUnsubscribe);
-        $failUnsubscribeList = implode(", ",$failUnsubscribe);
+        $queueUnsubscribeList = implode(", ",$queueUnsubscribe);
         $alreadyUnsubscribeList = implode(", ",$alreadyUnsubscribe);
-        echo json_encode(array("successList" => $successUnsubscribeList, "failList" => $failUnsubscribeList, "alreadyUnsubscribeList" => $alreadyUnsubscribeList));
+        echo json_encode(array("queueList" => $queueUnsubscribeList, "alreadyUnsubscribeList" => $alreadyUnsubscribeList));
     }
 }
