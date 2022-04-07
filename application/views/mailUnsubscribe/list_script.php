@@ -124,9 +124,8 @@
         // else if($("#popupCountry").val() == ""){
         //     $("#popupSucErrMsg").html("Please select country").show();
         // }
-        $(".alert-success,.alert-danger,.alert-info").html('');   
+        $(".alert-success,.alert-info").html('');   
         $(".alert-success-label,.alert-success").show();  
-        $(".alert-danger-label,.alert-danger").show();
         $(".alert-info-label,.alert-info").show();
 
         if($("#email").val() == ""){
@@ -146,16 +145,11 @@
                     $('#popupList').multiselect('rebuild');
 
                     var data = JSON.parse(response);
-                    if(data.successList != ""){
-                        $(".alert-success").html(data.successList);
+                    if(data.queueList != ""){
+                        $(".alert-success").html(data.queueList);
                     }else{
                         $(".alert-success-label,.alert-success").hide();
-                    }
-                    if(data.failList != ""){
-                        $(".alert-danger").html(data.failList);
-                    }else{
-                        $(".alert-danger-label,.alert-danger").hide();
-                    }
+                    }                    
                     if(data.alreadyUnsubscribeList != ""){
                         $(".alert-info").html(data.alreadyUnsubscribeList);
                     } else {
