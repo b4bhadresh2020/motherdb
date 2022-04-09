@@ -242,7 +242,6 @@
                                                         <?php foreach ($identifiers as $key => $value) { ?>
                                                             <option value="<?php echo $key; ?>" <?php if(@$identifier == $key){ echo 'selected'; } ?> ><?php echo $value; ?></option>
                                                         <?php } ?>
-
                                                     </select>
                                                 </div>
                                             </div>
@@ -281,7 +280,19 @@
                                             </div>
 
                                         </div>
-
+                                        <div class="row">
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label>Integromat Hook</label>
+                                                    <select id="integromatHookId" name="integromatHookId" class="form-control">
+                                                        <option value='0'>Select Hook</option> 
+                                                        <?php foreach ($integromatHooks as $hook) { ?>
+                                                            <option value="<?php echo $hook['id']; ?>" <?php if($hook['id'] == $integromatHookId){ echo 'selected'; } ?>><?php echo $hook['hook_name']; ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>                            
                                         <div class="row">
                                             <div class="col-lg-3">
                                                 <div class="form-group">

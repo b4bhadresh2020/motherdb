@@ -2460,3 +2460,30 @@ function getAccountStatusLog($esp, $accountId) {
     $dataCount = GetAllRecordCount(ACCOUNT_STATUS_LOG, $condition, $is_single);
     return $dataCount;
 }
+
+function sendLeadInIntegromat($insertedId,$firstname,$emailId,$country){
+    try{        
+
+        $integromatUserData = [
+            'firstname' => $firstname,
+            'email' => $emailId,
+            'country' => $country,
+            'timestamp'  => strtotime(date('Y-m-d H:i:s'))
+        ];
+        // Create a Guzzle client
+        $client = new GuzzleHttp\Client();
+        $subscriberUrl = "https://hook.integromat.com/7r8ow5ga0kix6mm388la3r2qjzeh3jk9";
+        $body = $client->post($subscriberUrl, [
+            'form_params' => $integromatUserData, 
+        ]); 
+        $response =  $body->getBody();
+
+        $is_insert = false;
+        $condition = array('userId' => $insertedId);
+        $updateArr = array('isSendIntegromat' => 1, 'integromat_date' => date('Y-m-d H:i'));
+
+        ManageData(USER,$condition,$updateArr,$is_insert);
+    } catch(\GuzzleHttp\Exception\ClientException $e) {
+        return json_encode(array("result" => "error","error" => array("msg" => "Bad Request")));
+    }
+}

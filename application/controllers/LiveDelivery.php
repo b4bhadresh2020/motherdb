@@ -58,7 +58,7 @@ class LiveDelivery extends CI_Controller {
         if ($this->form_validation->run() != FALSE) {
 
             $postVal = $_POST;
-            $fieldArr = array('country','mailProvider','identifier','groupName','keyword','dataSource','delay','isDuplicate','checkEmail','checkPhone', 'dataSourceType');
+            $fieldArr = array('country','mailProvider','identifier','groupName','keyword','dataSource','delay','isDuplicate','checkEmail','checkPhone', 'dataSourceType','integromatHookId');
             $dataArr = array();
             foreach ($fieldArr as $value) {           
                 if(isset($postVal[$value])){
@@ -135,7 +135,9 @@ class LiveDelivery extends CI_Controller {
             $data['addEditTitle'] = "Add Live Delivery";
             $data['headerTitle'] = "Add Live Delivery";
 
-        }        
+        }     
+        
+        $data['integromatHooks'] = GetAllRecord(INTEGROMAT_HOOKS,[],FALSE,[],[],[],"id,hook_name");
 
         $data['load_page'] = 'liveDelivery';
         $data["liveDeliveryId"]  = $liveDeliveryId;
