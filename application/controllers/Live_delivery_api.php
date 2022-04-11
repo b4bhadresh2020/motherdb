@@ -1150,10 +1150,14 @@ class Live_delivery_api extends CI_Controller
                             //     $responseField = $providerData['response_field'];
                             //     $updateArr = array($responseField => json_encode($response));
                             //     ManageData(LIVE_DELIVERY_DATA, $condition, $updateArr, $is_insert);
-                            // }                        
+                            // } 
                         }
                     }
                 }
+            }            
+            // Send data to Integromat hook
+            if ($sucFailMsgIndex == 0 || $sucFailMsgIndex == 1) {
+                sendLeadInIntegromat($lastDeliveryData,$getLiveDeliveryData);
             }
         }
 
