@@ -88,6 +88,9 @@
                    
                     <li class="<?php echo (@$load_page == 'campaign')?"active":"";?>" title = "campaign" ><a href="<?php echo base_url('campaign/manage');?>" ><i class="ti-announcement"></i> Create/Edit Campaign Name </a></li>
 
+                    <li class="label">Integromat</li>
+
+                    <li class="<?php echo (@$load_page == 'integromat')?"active":"";?>" title = "Integromat Hooks" ><a href="<?php echo base_url('integromat/manage');?>"><i class="ti-info" ></i>Integromat Hooks</a> </li>
 
                     <li class="label">Click URL</li>
                         
