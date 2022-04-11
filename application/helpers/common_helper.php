@@ -2461,28 +2461,43 @@ function getAccountStatusLog($esp, $accountId) {
     return $dataCount;
 }
 
-function sendLeadInIntegromat($insertedId,$firstname,$emailId,$country){
+function sendLeadInIntegromat($lastDeliveryData,$getLiveDeliveryData){
     try{        
+        require_once(FCPATH.'vendor/autoload.php');
+        $hookData = GetAllRecord(INTEGROMAT_HOOKS,array('id' => $getLiveDeliveryData['integromatHookId']),true);
 
+        $lastDeliveryData['birthDate'] = "";
+        if (@$lastDeliveryData['birthdateDay'] != '0' && @$lastDeliveryData['birthdateMonth'] != '0' && @$lastDeliveryData['birthdateYear'] != '0') {
+            $birthDate            = $lastDeliveryData['birthdateYear'] . '-' . $lastDeliveryData['birthdateMonth'] . '-' . $lastDeliveryData['birthdateDay'];
+            $lastDeliveryData['birthDate'] = date('Y-m-d', strtotime($birthDate));
+        }
+        
         $integromatUserData = [
-            'firstname' => $firstname,
-            'email' => $emailId,
-            'country' => $country,
+            'firstname' => $lastDeliveryData['firstName'],
+            'email' => $lastDeliveryData['emailId'],
+            'gender' => $lastDeliveryData['gender'],
+            'birthdate' => $lastDeliveryData['birthDate'],
+            'country' => $lastDeliveryData['country'],
             'timestamp'  => strtotime(date('Y-m-d H:i:s'))
         ];
         // Create a Guzzle client
         $client = new GuzzleHttp\Client();
-        $subscriberUrl = "https://hook.integromat.com/7r8ow5ga0kix6mm388la3r2qjzeh3jk9";
+        $subscriberUrl = $hookData['hook_url'];
         $body = $client->post($subscriberUrl, [
             'form_params' => $integromatUserData, 
         ]); 
         $response =  $body->getBody();
 
-        $is_insert = false;
-        $condition = array('userId' => $insertedId);
-        $updateArr = array('isSendIntegromat' => 1, 'integromat_date' => date('Y-m-d H:i'));
+        $is_insert = true;        
+        $live_delivery_integromat_data = array(
+            'liveDeliveryId' => $getLiveDeliveryData['liveDeliveryId'], 
+            'liveDeliveryDataId' => $lastDeliveryData['liveDeliveryDataId'], 
+            'integromatHookId' => $getLiveDeliveryData['integromatHookId'], 
+            'response' => $response,
+            'created_at' => date('Y-m-d H:i')
+        );
+        ManageData(LIVE_DELIVERY_INTEGROMAT_DATA,[],$live_delivery_integromat_data,$is_insert);
 
-        ManageData(USER,$condition,$updateArr,$is_insert);
     } catch(\GuzzleHttp\Exception\ClientException $e) {
         return json_encode(array("result" => "error","error" => array("msg" => "Bad Request")));
     }
