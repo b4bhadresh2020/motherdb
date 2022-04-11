@@ -287,7 +287,7 @@
                                                     <select id="integromatHookId" name="integromatHookId" class="form-control">
                                                         <option value='0'>Select Hook</option> 
                                                         <?php foreach ($integromatHooks as $hook) { ?>
-                                                            <option value="<?php echo $hook['id']; ?>" <?php if($hook['id'] == $integromatHookId){ echo 'selected'; } ?>><?php echo $hook['hook_name']; ?></option>
+                                                            <option value="<?php echo $hook['id']; ?>" <?php if($hook['id'] == @$integromatHookId){ echo 'selected'; } ?>><?php echo $hook['hook_name']; ?></option>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
