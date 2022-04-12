@@ -222,24 +222,24 @@ class LiveDelivery extends CI_Controller {
         pre($response);
     }*/
 
-    function testIntegromat(){
-        $lastDeliveryData = array(
-            'liveDeliveryDataId' => 2053789,
-            'firstName' => 'bhadresh',
-            'emailId' => 'bhadresh@codexivesolutions.com',
-            'gender' => 'male',
-            'birthdateYear' => "1991",
-            'birthdateMonth' => "10",
-            'birthdateDay' => "02",
-            'country' => 'SE'
-        );
+    // function testIntegromat(){
+    //     $lastDeliveryData = array(
+    //         'liveDeliveryDataId' => 2053789,
+    //         'firstName' => 'bhadresh',
+    //         'emailId' => 'bhadresh@codexivesolutions.com',
+    //         'gender' => 'male',
+    //         'birthdateYear' => "1991",
+    //         'birthdateMonth' => "10",
+    //         'birthdateDay' => "02",
+    //         'country' => 'SE'
+    //     );
 
-        $getLiveDeliveryData = array(
-            'integromatHookId' => 1,
-            'liveDeliveryId' => 18
-        );
+    //     $getLiveDeliveryData = array(
+    //         'integromatHookId' => 1,
+    //         'liveDeliveryId' => 18
+    //     );
 
-        sendLeadInIntegromat($lastDeliveryData,$getLiveDeliveryData);
-    }
+    //     sendLeadInIntegromat($lastDeliveryData,$getLiveDeliveryData);
+    // }
 
 }
