@@ -225,10 +225,12 @@ class LiveDelivery extends CI_Controller {
     function testIntegromat(){
         $lastDeliveryData = array(
             'liveDeliveryDataId' => 2053789,
-            'firstname' => 'bhadresh',
-            'email' => 'bhadresh@codexivesolutions.com',
+            'firstName' => 'bhadresh',
+            'emailId' => 'bhadresh@codexivesolutions.com',
             'gender' => 'male',
-            'birthdate' => "1991-02-10",
+            'birthdateYear' => "1991",
+            'birthdateMonth' => "10",
+            'birthdateDay' => "02",
             'country' => 'SE'
         );
 
