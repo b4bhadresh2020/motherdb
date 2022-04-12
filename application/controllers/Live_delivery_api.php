@@ -1156,9 +1156,9 @@ class Live_delivery_api extends CI_Controller
                 }
             }            
             // Send data to Integromat hook
-            if ($sucFailMsgIndex == 0 || $sucFailMsgIndex == 1) {
-                sendLeadInIntegromat($lastDeliveryData,$getLiveDeliveryData);
-            }
+            // if ($sucFailMsgIndex == 0 || $sucFailMsgIndex == 1) {
+            //     sendLeadInIntegromat($lastDeliveryData,$getLiveDeliveryData);
+            // }
         }
 
     }

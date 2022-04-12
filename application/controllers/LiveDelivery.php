@@ -222,4 +222,22 @@ class LiveDelivery extends CI_Controller {
         pre($response);
     }*/
 
+    function testIntegromat(){
+        $lastDeliveryData = array(
+            'liveDeliveryDataId' => 2053789,
+            'firstname' => 'bhadresh',
+            'email' => 'bhadresh@codexivesolutions.com',
+            'gender' => 'male',
+            'birthdate' => "1991-02-10",
+            'country' => 'SE'
+        );
+
+        $getLiveDeliveryData = array(
+            'integromatHookId' => 0,
+            'liveDeliveryId' => 18
+        );
+
+        sendLeadInIntegromat($lastDeliveryData,$getLiveDeliveryData);
+    }
+
 }
