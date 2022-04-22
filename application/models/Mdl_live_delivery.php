@@ -237,7 +237,7 @@ class Mdl_live_delivery extends CI_Model
                     $apikey = $getApiKeys['apikey'];
                 }else{
                     $countsArr =  array('successCount' => 0,'failureCount' => 0, 'checkEmailCount' => 0);
-                    $rejectDetailCountsArr = array('duplicateCount' => 0, 'blacklistCount' => 0, 'duplicateCount' => 0, 'blacklistCount' => 0, 'serverIssue' => 0, 'apiKeyIsNotActive' => 0, 'emailIsRequired' => 0, 'phoneIsRequired' => 0, 'emailIsBlank' => 0, 'phoneIsBlank' => 0, 'invalidEmailFormat' => 0, 'invalidPhone' => 0, 'invalidGender' => 0, 'teliaMxBlock' => 0, 'luukkuMxBlock' => 0 , 'ppMxBlock' => 0, 'alreadyUnsubscribed' => 0, 'yahooMxBlock' => 0, 'icloudMxBlock' => 0,'gmxMxBlock' => 0, 'duplicateOld' => 0, 'blacklistIP' => 0, 'protonmailMxBlock' => 0);
+                    $rejectDetailCountsArr = array('duplicateCount' => 0, 'blacklistCount' => 0, 'duplicateCount' => 0, 'blacklistCount' => 0, 'serverIssue' => 0, 'apiKeyIsNotActive' => 0, 'emailIsRequired' => 0, 'phoneIsRequired' => 0, 'emailIsBlank' => 0, 'phoneIsBlank' => 0, 'invalidEmailFormat' => 0, 'invalidPhone' => 0, 'invalidGender' => 0, 'teliaMxBlock' => 0, 'luukkuMxBlock' => 0 , 'ppMxBlock' => 0, 'alreadyUnsubscribed' => 0, 'yahooMxBlock' => 0, 'icloudMxBlock' => 0,'gmxMxBlock' => 0, 'duplicateOld' => 0, 'blacklistIP' => 0, 'protonmailMxBlock' => 0, 'rejectByInboxgame' => 0, 'rejectByIntegromat' => 0);
 
                     return array('countsArr' => $countsArr,'rejectDetailCountsArr' => $rejectDetailCountsArr,'filteredData' => array());
                 }
@@ -371,6 +371,8 @@ class Mdl_live_delivery extends CI_Model
             19 => 'duplicateOld',
             20 => 'blacklistIP',
             21 => 'protonmailMxBlock',
+            22 => 'rejectByInboxgame',
+            23 => 'rejectByIntegromat'
         );
 
         if ($this->isDateWithoutTime($startDate) == 'true') {
@@ -579,7 +581,11 @@ class Mdl_live_delivery extends CI_Model
             , SUM(CASE sucFailMsgIndex
                 WHEN '22' THEN 1
                 ELSE 0
-                END) AS rejectByInboxgame    
+                END) AS rejectByInboxgame  
+            , SUM(CASE sucFailMsgIndex
+                WHEN '23' THEN 1
+                ELSE 0
+                END) AS rejectByIntegromat       
         FROM $tableName
         WHERE `apikey` ='".$apikey."'";
 
@@ -602,7 +608,7 @@ class Mdl_live_delivery extends CI_Model
 
         $countsArr =  array('successCount' => $successCount,'failureCount' => $failureCount, 'checkEmailCount' => $checkEmailCount);
 
-        $reasonArr = array(1 => 'duplicateCount', 2 => 'blacklistCount', 3 => 'serverIssue', 4 => 'apiKeyIsNotActive', 5 => 'emailIsRequired', 6 => 'phoneIsRequired', 7 => 'emailIsBlank', 8 => 'phoneIsBlank', 9 => 'invalidEmailFormat', 10 => 'invalidPhone', 11 => 'invalidGender', 12 => 'teliaMxBlock', 13 => 'luukkuMxBlock', 14 => 'ppMxBlock', 15 => 'alreadyUnsubscribed', 16 => 'yahooMxBlock', 17 => 'icloudMxBlock', 18 => 'gmxMxBlock', 19 => 'duplicateOld', 20 => 'blacklistIP', 21 => 'protonmailMxBlock', 22 => 'rejectByInboxgame');
+        $reasonArr = array(1 => 'duplicateCount', 2 => 'blacklistCount', 3 => 'serverIssue', 4 => 'apiKeyIsNotActive', 5 => 'emailIsRequired', 6 => 'phoneIsRequired', 7 => 'emailIsBlank', 8 => 'phoneIsBlank', 9 => 'invalidEmailFormat', 10 => 'invalidPhone', 11 => 'invalidGender', 12 => 'teliaMxBlock', 13 => 'luukkuMxBlock', 14 => 'ppMxBlock', 15 => 'alreadyUnsubscribed', 16 => 'yahooMxBlock', 17 => 'icloudMxBlock', 18 => 'gmxMxBlock', 19 => 'duplicateOld', 20 => 'blacklistIP', 21 => 'protonmailMxBlock', 22 => 'rejectByInboxgame', 23 => 'rejectByIntegromat');
 
         //get reject count in detail
         $rejectDetailCountsArr = array();
