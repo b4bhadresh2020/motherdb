@@ -156,6 +156,7 @@ define("REPOST_SCHEDULE_HISTORY", "repost_schedule_history");
 define("INBOXGAME_FACEBOOKLEAD_DATA", "inboxgame_facebooklead_data");
 define("INTEGROMAT_HOOKS", "integromat_hooks");
 define("LIVE_DELIVERY_INTEGROMAT_DATA", "live_delivery_integromat_data");
+define("INTEGROMAT_LEAD_DATA", "integromat_lead_data");
 
 //from other db
 define("SMS_UNSUBSCRIBER_LIST","sms_unsubscriber_list");

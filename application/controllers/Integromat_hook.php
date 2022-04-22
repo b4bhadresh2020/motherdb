@@ -13,15 +13,15 @@ class Integromat_hook extends CI_Controller
         
     function index(){
 
-        $logPath    = FCPATH."log/integromat/";
-        if(!file_exists($logPath)){
-                mkdir($logPath);
-        }
-        $fileName   = date("Ymd")."_log.txt"; 
-        $logFile    = fopen($logPath.$fileName,"a");
-        $logData    = json_encode($this->input->post())."\n";
-        fwrite($logFile,$logData);
-        fclose($logFile);
+        $data = $this->input->post();
+
+        $integromatLead = array(
+            "name" => $data['name'],
+            "emailId" => $data['email'],
+            "scenario" => $data['scenario'],
+            "country" => $data['country']
+        );
+        ManageData(INTEGROMAT_LEAD_DATA,[],$integromatLead,TRUE);
     }      
     
 }
