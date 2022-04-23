@@ -198,6 +198,23 @@
                                     </td>
                                 <?php } ?>
                             </tr>
+                            <tr>
+                                <td><b>Total Facebook lead ads integromat</b></td>
+                                <?php foreach($statFileds as $filed => $day){ ?>
+                                    <td>
+                                        <?php 
+                                            if($filed == 'current_week') {
+                                                $filed = "lastSevenDay";
+                                            } else if ($filed == 'current_month') {
+                                                $filed = $currentMonth;
+                                            } else {
+                                                $filed = $filed;
+                                            }
+                                            echo $stat['total_fb_hosted_ads_integromat'][$filed];
+                                        ?>
+                                    </td>
+                                <?php } ?>
+                            </tr>
                         </tbody>
                     </table>
                 <?php } ?>

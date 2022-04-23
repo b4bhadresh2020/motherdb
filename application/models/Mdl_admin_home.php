@@ -60,6 +60,16 @@ class Mdl_admin_home extends CI_Model {
                 $getCounterSql .= " AND dataSourceType = 2";
             }
             $getCounter = $this->db->query($getCounterSql)->row_array();           
+        } else if($filed == "total_fb_hosted_ads_integromat") {            
+            $getCounterSql = "SELECT COUNT(*) AS fbIntegromatTotal
+                FROM integromat_lead_data
+                WHERE `country` = '".$country."'";
+            
+            if($startDate != null && $endDate != null) {
+                $getCounterSql .= " AND `createdDate` >= '".$startDate."' AND `createdDate` <= '".$endDate."'";
+            }
+            
+            $getCounter = $this->db->query($getCounterSql)->row_array();           
         }
 
         if($filed == "total") {
@@ -72,6 +82,8 @@ class Mdl_admin_home extends CI_Model {
             $result = $totalAccepted['total'];
         } else if($filed == "fb_lead_ads" || $filed == "fb_hosted_ads" || $filed == "total_fb") {
             $result = $getCounter['fbTotal'];
+        } else if($filed == "total_fb_hosted_ads_integromat") {
+            $result = $getCounter['fbIntegromatTotal'];
         } else {
             $result = 0;
         }

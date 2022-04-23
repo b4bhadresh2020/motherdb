@@ -33,10 +33,14 @@ class Cron_dashboard_stat extends CI_Controller
         }
         // get All Response Field Name 
         $getAllResponseFieldName = getAllResponseFieldName();
+
+        // field array
+        $fields = ['total', 'success', 'fail', 'duplicate', 'fb_lead_ads', 'fb_hosted_ads','total_fb','total_fb_hosted_ads_integromat'];
         
         // get country data
         $is_single = false;
-        $countryList = GetAllRecord(COUNTRY_MASTER, array(), $is_single, array(), array(), array(), 'countryId, country');
+        $countryList = GetAllRecord(COUNTRY_MASTER, array(), $is_single, array(), array(), array(), 'countryId, country');       
+
         foreach($countryList as $ct) {
             $country = $ct['country'];
 
@@ -47,12 +51,28 @@ class Cron_dashboard_stat extends CI_Controller
             );
             $is_single = false;
             $dashboardStats = GetAllRecord(DASHBOARD_STATS, $condition, $is_single);
+            
+            $dashboardStatsFileds = GetAllRecord(DASHBOARD_STATS, $condition, $is_single,[],[],[],'field');
 
-            if(empty($dashboardStats)) {
-                // field array
-                $fields = ['total', 'success', 'fail', 'duplicate', 'fb_lead_ads', 'fb_hosted_ads','total_fb'];
+            if(count($dashboardStatsFileds) < count($fields)){
+                foreach($dashboardStatsFileds as $dashboardField){
+                    $existFileds[] = $dashboardField['field'];
+                }
+                $remainDashboardFields = array_diff($fields,$existFileds);
+                foreach($remainDashboardFields as $remainField){
+                    foreach($countryList as $ct) {
+                        $remainFieldData = array(
+                            'year' => $currentYear,
+                            'countryId' => $ct['countryId'],
+                            'field' => $remainField
+                        );
+                        ManageData(DASHBOARD_STATS,[],$remainFieldData,true);
+                    } 
+                }
+            }
+            
+            if(empty($dashboardStats)) {                
                 foreach($fields as $field) {
-                    
                     $response = [];
                     $response[$country][$field] = $this->getCounterByCustomFilter($country,$field,$getAllResponseFieldName);
                     $statCounts = $response[$country][$field];
