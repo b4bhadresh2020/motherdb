@@ -210,7 +210,7 @@
                                             } else {
                                                 $filed = $filed;
                                             }
-                                            echo $stat['total_fb_hosted_ads_integromat'][$filed];
+                                            echo isset($stat['total_fb_hosted_ads_integromat'][$filed])?$stat['total_fb_hosted_ads_integromat'][$filed]:0;
                                         ?>
                                     </td>
                                 <?php } ?>
