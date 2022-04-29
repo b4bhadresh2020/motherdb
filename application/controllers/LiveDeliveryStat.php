@@ -32,12 +32,14 @@ class LiveDeliveryStat extends CI_Controller {
 
         $data['countsArr'] = $returnArr['countsArr'];
         $data['rejectDetailCountsArr'] = $returnArr['rejectDetailCountsArr'];
+        $data['countGenderArr'] = $returnArr['countGenderArr'];
+        $data['countAgeArr'] = $returnArr['countAgeArr'];
+        $data['countCityArr'] = $returnArr['countCityArr'];
 
         $data['headerTitle'] = "Live Delivery Stat";
         $data['load_page'] = 'liveDeliveryStat';
         $data["curTemplateName"] = "liveDeliveryStat/list";
         $data['start'] = $start;
-        //pre($data);die;
         $this->load->view('commonTemplates/templateLayout', $data);
     }
 

@@ -7,8 +7,8 @@
     <!-- sidebar -->
     <script src="<?php echo base_url();?>assets/js/lib/bootstrap.min.js"></script>
     <!-- bootstrap -->
-    <script src="<?php echo base_url();?>assets/js/lib/weather/jquery.simpleWeather.min.js"></script>
-    <script src="<?php echo base_url();?>assets/js/lib/weather/weather-init.js"></script>
+    <!-- <script src="<?php echo base_url();?>assets/js/lib/weather/jquery.simpleWeather.min.js"></script> -->
+    <!-- <script src="<?php echo base_url();?>assets/js/lib/weather/weather-init.js"></script> -->
     <script src="<?php echo base_url();?>assets/js/lib/circle-progress/circle-progress.min.js"></script>
     <script src="<?php echo base_url();?>assets/js/lib/circle-progress/circle-progress-init.js"></script>
     
