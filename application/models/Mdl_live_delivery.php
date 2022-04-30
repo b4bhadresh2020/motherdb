@@ -741,7 +741,7 @@ class Mdl_live_delivery extends CI_Model
 
         if($getCityCounter){
             foreach($getCityCounter as $cityCounter){
-              $countCity[] = array(empty($cityCounter["city"])?"Blank":$cityCounter["city"],$cityCounter["total"]);
+              $countCity[] = array(empty($cityCounter["city"])?"Blank":$cityCounter["city"],(int)$cityCounter["total"]);
             }
         }
         
