@@ -38,6 +38,8 @@ class Mdl_live_delivery extends CI_Model
                 $countGenderArr = $getCounterArr['countGenderArr'];   
                 $countAgeArr = $getCounterArr['countAgeArr'];   
                 $countCityArr = $getCounterArr['countCityArr']; 
+                $countTotalArr = $getCounterArr['countTotalArr']; 
+                $countRejectionArr = $getCounterArr['countRejectionArr']; 
             }
                 
         }elseif ($chooseFilter == 'yd') {
@@ -53,7 +55,9 @@ class Mdl_live_delivery extends CI_Model
                 $rejectDetailCountsArr = $getCounterArr['rejectDetailCountsArr']; 
                 $countGenderArr = $getCounterArr['countGenderArr'];   
                 $countAgeArr = $getCounterArr['countAgeArr'];   
-                $countCityArr = $getCounterArr['countCityArr'];    
+                $countCityArr = $getCounterArr['countCityArr']; 
+                $countTotalArr = $getCounterArr['countTotalArr'];    
+                $countRejectionArr = $getCounterArr['countRejectionArr']; 
             }
                 
             
@@ -73,6 +77,8 @@ class Mdl_live_delivery extends CI_Model
                 $countGenderArr = $getCounterArr['countGenderArr'];   
                 $countAgeArr = $getCounterArr['countAgeArr'];   
                 $countCityArr = $getCounterArr['countCityArr']; 
+                $countTotalArr = $getCounterArr['countTotalArr']; 
+                $countRejectionArr = $getCounterArr['countRejectionArr']; 
             }
 
 
@@ -91,6 +97,8 @@ class Mdl_live_delivery extends CI_Model
                 $countGenderArr = $getCounterArr['countGenderArr'];   
                 $countAgeArr = $getCounterArr['countAgeArr'];   
                 $countCityArr = $getCounterArr['countCityArr'];    
+                $countTotalArr = $getCounterArr['countTotalArr']; 
+                $countRejectionArr = $getCounterArr['countRejectionArr']; 
             }
 
         }elseif ($chooseFilter == 'wTd') {
@@ -110,6 +118,8 @@ class Mdl_live_delivery extends CI_Model
                 $countGenderArr = $getCounterArr['countGenderArr'];   
                 $countAgeArr = $getCounterArr['countAgeArr'];   
                 $countCityArr = $getCounterArr['countCityArr']; 
+                $countTotalArr = $getCounterArr['countTotalArr']; 
+                $countRejectionArr = $getCounterArr['countRejectionArr']; 
             }
             
         }elseif ($chooseFilter == 'mTd') {
@@ -128,6 +138,8 @@ class Mdl_live_delivery extends CI_Model
                 $countGenderArr = $getCounterArr['countGenderArr'];   
                 $countAgeArr = $getCounterArr['countAgeArr'];   
                 $countCityArr = $getCounterArr['countCityArr'];  
+                $countTotalArr = $getCounterArr['countTotalArr']; 
+                $countRejectionArr = $getCounterArr['countRejectionArr']; 
             }
 
         }elseif ($chooseFilter == 'qTd') {
@@ -147,6 +159,8 @@ class Mdl_live_delivery extends CI_Model
                 $countGenderArr = $getCounterArr['countGenderArr'];   
                 $countAgeArr = $getCounterArr['countAgeArr'];   
                 $countCityArr = $getCounterArr['countCityArr']; 
+                $countTotalArr = $getCounterArr['countTotalArr']; 
+                $countRejectionArr = $getCounterArr['countRejectionArr']; 
             }
 
         }elseif ($chooseFilter == 'yTd') {
@@ -165,6 +179,8 @@ class Mdl_live_delivery extends CI_Model
                 $countGenderArr = $getCounterArr['countGenderArr'];   
                 $countAgeArr = $getCounterArr['countAgeArr'];   
                 $countCityArr = $getCounterArr['countCityArr']; 
+                $countTotalArr = $getCounterArr['countTotalArr']; 
+                $countRejectionArr = $getCounterArr['countRejectionArr']; 
             }
 
         }elseif ($chooseFilter == 'pw') {
@@ -182,6 +198,8 @@ class Mdl_live_delivery extends CI_Model
                 $countGenderArr = $getCounterArr['countGenderArr'];   
                 $countAgeArr = $getCounterArr['countAgeArr'];   
                 $countCityArr = $getCounterArr['countCityArr'];  
+                $countTotalArr = $getCounterArr['countTotalArr'];
+                $countRejectionArr = $getCounterArr['countRejectionArr'];  
             }
 
         }elseif ($chooseFilter == 'pm') {
@@ -199,6 +217,8 @@ class Mdl_live_delivery extends CI_Model
                 $countGenderArr = $getCounterArr['countGenderArr'];   
                 $countAgeArr = $getCounterArr['countAgeArr'];   
                 $countCityArr = $getCounterArr['countCityArr']; 
+                $countTotalArr = $getCounterArr['countTotalArr']; 
+                $countRejectionArr = $getCounterArr['countRejectionArr']; 
             }
 
         }elseif ($chooseFilter == 'pq') {
@@ -227,6 +247,8 @@ class Mdl_live_delivery extends CI_Model
                 $countGenderArr = $getCounterArr['countGenderArr'];   
                 $countAgeArr = $getCounterArr['countAgeArr'];   
                 $countCityArr = $getCounterArr['countCityArr']; 
+                $countTotalArr = $getCounterArr['countTotalArr']; 
+                $countRejectionArr = $getCounterArr['countRejectionArr']; 
             }
 
         }elseif ($chooseFilter == 'py') {
@@ -244,6 +266,8 @@ class Mdl_live_delivery extends CI_Model
                 $countGenderArr = $getCounterArr['countGenderArr'];   
                 $countAgeArr = $getCounterArr['countAgeArr'];   
                 $countCityArr = $getCounterArr['countCityArr'];
+                $countTotalArr = $getCounterArr['countTotalArr']; 
+                $countRejectionArr = $getCounterArr['countRejectionArr']; 
             }
 
         }elseif ($chooseFilter == 'cd') {
@@ -260,7 +284,9 @@ class Mdl_live_delivery extends CI_Model
                 $rejectDetailCountsArr = $getCounterArr['rejectDetailCountsArr'];   
                 $countGenderArr = $getCounterArr['countGenderArr'];   
                 $countAgeArr = $getCounterArr['countAgeArr'];   
-                $countCityArr = $getCounterArr['countCityArr'];   
+                $countCityArr = $getCounterArr['countCityArr']; 
+                $countTotalArr = $getCounterArr['countTotalArr'];  
+                $countRejectionArr = $getCounterArr['countRejectionArr'];  
             }
 
         }else{
@@ -331,6 +357,8 @@ class Mdl_live_delivery extends CI_Model
                 $countGenderArr = $getCounterArr['countGenderArr'];
                 $countAgeArr = $getCounterArr['countAgeArr'];
                 $countCityArr = $getCounterArr['countCityArr'];
+                $countTotalArr = $getCounterArr['countTotalArr']; 
+                $countRejectionArr = $getCounterArr['countRejectionArr']; 
                 //---------------------------------------------------------------------------------------------------
             }
             
@@ -342,6 +370,8 @@ class Mdl_live_delivery extends CI_Model
              $countGenderArr = array();
              $countAgeArr = array();
              $countCityArr = array();
+             $countTotalArr = array();
+             $countRejectionArr = array();
         }else{
             $filteredData = array();   
         }
@@ -351,6 +381,8 @@ class Mdl_live_delivery extends CI_Model
             'countGenderArr' => $countGenderArr,
             'countAgeArr' => $countAgeArr,
             'countCityArr' => $countCityArr,
+            'countTotalArr' => $countTotalArr,
+            'countRejectionArr' => $countRejectionArr,
             'filteredData' => $filteredData
         );       
 
@@ -715,19 +747,30 @@ class Mdl_live_delivery extends CI_Model
 
         //get reject count in detail
         $rejectDetailCountsArr = array();
+        $countRejection = array(
+            array('Rejection','Total')
+        );
+
         for ($i=1; $i <= count($reasonArr); $i++) { 
             $rejectDetailCountsArr[$reasonArr[$i]] = $getCounter[$reasonArr[$i]];
+            $countRejection[] = array($reasonArr[$i],(int)$getCounter[$reasonArr[$i]]);
         }
 
+        $countTotal = array(
+            array('Ratio', 'Total'),
+            array('Success', (int) $getCounter['successCount']),
+            array('Failure', (int) $getCounter['failureCount']),
+        );
+
         $countGender = array(
-            array('Type', 'Total'),
+            array('Gender', 'Total'),
             array('Male', (int) $getCounter['male']),
             array('Female', (int) $getCounter['female']),
             array('Unknown', (int) $getCounter['unknown_gender'])
         );
 
         $countAge = array(
-            array('Type', 'Total'),
+            array('Age', 'Total'),
             array('0-17', (int)$getCounter['age_0_17']),
             array('18-25', (int)$getCounter['age_18_25']),
             array('26-34', (int)$getCounter['age_26_34']),
@@ -750,7 +793,9 @@ class Mdl_live_delivery extends CI_Model
             'rejectDetailCountsArr' => $rejectDetailCountsArr,
             'countGenderArr' => json_encode($countGender),
             'countAgeArr' => json_encode($countAge),
-            'countCityArr' => json_encode($countCity)
+            'countCityArr' => json_encode($countCity),
+            'countTotalArr' => json_encode($countTotal),
+            'countRejectionArr' => json_encode($countRejection)
         );
     }
 

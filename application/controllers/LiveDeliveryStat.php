@@ -35,6 +35,8 @@ class LiveDeliveryStat extends CI_Controller {
         $data['countGenderArr'] = $returnArr['countGenderArr'];
         $data['countAgeArr'] = $returnArr['countAgeArr'];
         $data['countCityArr'] = $returnArr['countCityArr'];
+        $data['countTotalArr'] = $returnArr['countTotalArr'];
+        $data['countRejectionArr'] = $returnArr['countRejectionArr'];
 
         $data['headerTitle'] = "Live Delivery Stat";
         $data['load_page'] = 'liveDeliveryStat';

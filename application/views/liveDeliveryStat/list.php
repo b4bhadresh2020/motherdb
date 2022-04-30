@@ -296,16 +296,24 @@
             <section id="main-content">
                 <div class="row">
                     <div class="col-md-4">
+                        <div id="total_chart" style="width: 100%; height: 350px;"></div>                        
+                    </div>                    
+                    <div class="col-md-4">
                         <div id="gender_chart" style="width: 100%; height: 350px;"></div>                        
                     </div>
                     <div class="col-md-4">
                         <div id="age_chart" style="width: 100%; height: 350px;"></div>                        
                     </div>
+                </div>
+                <div class="row" style="margin-top: 5px;">
                     <div class="col-md-4">
-                    <div id="city_chart" style="width: 100%; height: 350px;"></div>
+                        <div id="rejection_chart" style="width: 100%; height: 350px;"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="city_chart" style="width: 100%; height: 350px;"></div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" style="display: none;">
                     <!-- /# column -->
                     <div class="col-lg-6">
                         <div class="card">
