@@ -290,11 +290,30 @@
     </div>
 </div>
 
-<div class="content-wrap">
+<div class="content-wrap" style="margin-top: 0px !important;">
     <div class="main">
         <div class="container-fluid">
             <section id="main-content">
                 <div class="row">
+                    <div class="col-md-4">
+                        <div id="total_chart" style="width: 100%; height: 350px;"></div>                        
+                    </div>                    
+                    <div class="col-md-4">
+                        <div id="gender_chart" style="width: 100%; height: 350px;"></div>                        
+                    </div>
+                    <div class="col-md-4">
+                        <div id="age_chart" style="width: 100%; height: 350px;"></div>                        
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 5px;">
+                    <div class="col-md-4">
+                        <div id="rejection_chart" style="width: 100%; height: 350px;"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div id="city_chart" style="width: 100%; height: 350px;"></div>
+                    </div>
+                </div>
+                <div class="row" style="display: none;">
                     <!-- /# column -->
                     <div class="col-lg-6">
                         <div class="card">
@@ -702,5 +721,8 @@
         </div>
     </div>
 </div>
-<?php $this->load->view('liveDeliveryStat/live_delivery_stat_data_script'); ?>
 <script src="<?php echo base_url();?>/assets/js/bootstrap-select.js"></script>
+<script src="<?php echo base_url();?>/assets/js/chart/loader.js"></script>
+<?php $this->load->view('liveDeliveryStat/live_delivery_stat_data_script'); ?>
+<?php $this->load->view('liveDeliveryStat/live_delivery_stat_chart_script'); ?>
+

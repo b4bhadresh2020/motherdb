@@ -490,3 +490,7 @@
 .text-red {
   color: red;;
 }
+
+.bg-white{
+  background: white !important;
+}
