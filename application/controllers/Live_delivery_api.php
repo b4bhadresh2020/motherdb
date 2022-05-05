@@ -19,7 +19,7 @@ class Live_delivery_api extends CI_Controller
     public function rest()
     {   
         
-        $response = array();
+        $response = array();        
 
         if (isset($_GET['apikey'])) {
 
@@ -155,9 +155,23 @@ class Live_delivery_api extends CI_Controller
                                         // check email id host in blocklist array.
                                         $emailAddressChunk = explode("@",$_GET['emailId']);
                                         $country = $getLiveDeliveryData['country'];
-
+                                        
                                         // dublicate old (birth year older than 1957)
                                         $birthdateYear = $_GET['birthdateYear'];
+                                        $age = 0;
+                                        // check birthdayYear or Age parameter have value or not.
+                                        if((is_numeric($_GET['birthdateYear']) && strtotime($_GET['birthdateYear'])) || (is_numeric($_GET['age']))){
+                                            if(!empty($_GET['age']) && is_numeric($_GET['age'])){
+                                                $age = (int)$_GET['age'];
+                                            }else{
+                                                $age = (int)date('Y') - (int)$_GET['birthdateYear'];
+                                            }
+                                            if($age < 18){
+                                                $notToCheckFuther = 13; // Missing age parameter.
+                                            }
+                                        }else{
+                                            $notToCheckFuther = 13; // Missing age parameter.
+                                        }
                                         
                                         if($emailAddressChunk[1] == TELIA_DOMAIN){
                                             $notToCheckFuther = 4; // Telia MX Block	
@@ -171,7 +185,7 @@ class Live_delivery_api extends CI_Controller
                                             $notToCheckFuther = 8; // Icloud MX Block
                                         } else if (strpos($emailAddressChunk[1], GMX_DOMAIN) !== false) {
                                             $notToCheckFuther = 9; // GMX MX Block
-                                        } else if($birthdateYear < 1957) {
+                                        } else if($age > 65) {
                                             $notToCheckFuther = 10; // dublicate old                                           
                                         } else if($emailAddressChunk[1] == PROTONMAIL_DOMAIN) {
                                             $notToCheckFuther = 12; // Protonmail MX Block	
@@ -195,8 +209,7 @@ class Live_delivery_api extends CI_Controller
                                         if (@$_GET['phone'] != '' && !is_numeric($_GET['phone'])) {
                                             $notToCheckFuther = 2;
                                         }
-                                    }                              
-
+                                    }    
 
                                     if ($notToCheckFuther == 0) {
 
@@ -573,6 +586,11 @@ class Live_delivery_api extends CI_Controller
                                         $isFail            = 1;
                                         $sucFailMsgIndex   = 21; // Protonmail MX Block
                                         $response['error'] = 'Protonmail MX Block.';
+                                    } else if ($notToCheckFuther == 13) {
+                                        //data save to live_delivery_data table
+                                        $isFail            = 1;
+                                        $sucFailMsgIndex   = 24; // Missing age parameter. please pass value in birthdayYear or Age
+                                        $response['error'] = 'Invalid age parameter. please pass valid value in birthdayYear or Age';
                                     }
                                     
                                 } else {
