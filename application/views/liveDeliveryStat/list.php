@@ -313,7 +313,7 @@
                         <div id="city_chart" style="width: 100%; height: 350px;"></div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" style="display: none;">
                     <!-- /# column -->
                     <div class="col-lg-6">
                         <div class="card">
