@@ -671,7 +671,7 @@ class Mdl_live_delivery extends CI_Model
                 ELSE 0
                 END) AS rejectByIntegromat
             , SUM(CASE sucFailMsgIndex
-                WHEN '24' THEN 20
+                WHEN '24' THEN 1
                 ELSE 0
                 END) AS ageIsRequired    
             , SUM(CASE gender
