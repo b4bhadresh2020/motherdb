@@ -608,7 +608,7 @@
                                             </tr>
                                             <tr>
                                                 <td>24</td>
-                                                <td>Required Phone</td>
+                                                <td>Required Age</td>
                                                 <td><?php echo $ageIsRequiredCount; ?></td>
                                                 <td><?php echo $ageIsRequiredPer.' %'; ?></td>
                                             </tr>
