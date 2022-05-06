@@ -776,7 +776,7 @@ class Mdl_live_delivery extends CI_Model
 
         $countAge = array(
             array('Age', 'Total'),
-            array('0-17', (int)$getCounter['age_0_17']),
+            array('No Age', (int)$getCounter['age_0_17']),
             array('18-25', (int)$getCounter['age_18_25']),
             array('26-34', (int)$getCounter['age_26_34']),
             array('35-44', (int)$getCounter['age_35_44']),
