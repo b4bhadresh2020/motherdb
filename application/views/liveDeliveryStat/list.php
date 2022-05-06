@@ -119,7 +119,7 @@
                                                     </div>    
                                                 </div>
                                             </div>
-                                            <?php $sucFailTypeArr =  array('0' => 'Success', '1' => 'Duplicate', '2' => 'Blacklisted', '3' => 'Server Issue','4' => 'Api Key Is Not Active', '5' => 'Email Is Required', '6' => 'Phone Is Required', '7' => 'Email Is Blank', '8' => 'Phone Is Blank', '9' => 'Invalid Email Format', '10' => 'Invalid Phone', '11' => 'Invalid Gender', '12' => 'Telia MX Block','13' => 'Luukku Mx Block', '14' => 'PP MX Block', '15' => 'User Already Unsubscribed', '16' => 'Yahoo MX Block', '17' => 'Icloud MX Block','18' => 'GMX MX Block', '19' => 'Duplicate Old', '20' => 'Blacklisted IP', '21' => 'Protonmail MX Block', '22' => 'Reject By Inboxgame and Facebook Lead', '23' => 'Reject By Integromat Lead'); ?>
+                                            <?php $sucFailTypeArr =  array('0' => 'Success', '1' => 'Duplicate', '2' => 'Blacklisted', '3' => 'Server Issue','4' => 'Api Key Is Not Active', '5' => 'Email Is Required', '6' => 'Phone Is Required', '7' => 'Email Is Blank', '8' => 'Phone Is Blank', '9' => 'Invalid Email Format', '10' => 'Invalid Phone', '11' => 'Invalid Gender', '12' => 'Telia MX Block','13' => 'Luukku Mx Block', '14' => 'PP MX Block', '15' => 'User Already Unsubscribed', '16' => 'Yahoo MX Block', '17' => 'Icloud MX Block','18' => 'GMX MX Block', '19' => 'Duplicate Old', '20' => 'Blacklisted IP', '21' => 'Protonmail MX Block', '22' => 'Reject By Inboxgame and Facebook Lead', '23' => 'Reject By Integromat Lead', '24' => 'Age Is Required'); ?>
                                             
                                             <div class="row" >
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -362,6 +362,7 @@
                                             $protonmailMxBlockCount = $rejectDetailCountsArr['protonmailMxBlock'];
                                             $rejectByInboxgameCount = $rejectDetailCountsArr['rejectByInboxgame'];
                                             $rejectByIntegromatCount = $rejectDetailCountsArr['rejectByIntegromat'];
+                                            $ageIsRequiredCount = $rejectDetailCountsArr['ageIsRequired'];
 
                                             if ($totalRejectCount > 0) {
                                                 
@@ -433,6 +434,9 @@
 
                                                 $rejectByIntegromatPer = ($rejectByIntegromatCount / $totalRejectCount) * 100;
                                                 $rejectByIntegromatPer = reformat_number_format($rejectByIntegromatPer);
+                                                
+                                                $ageIsRequiredPer = ($ageIsRequiredCount / $totalRejectCount) * 100;
+                                                $ageIsRequiredPer = reformat_number_format($ageIsRequiredPer);
 
                                             }else{
 
@@ -459,6 +463,7 @@
                                                 $protonmailMxBlockPer = 0;
                                                 $rejectByInboxgamePer = 0;
                                                 $rejectByIntegromatPer = 0;
+                                                $ageIsRequiredPer = 0;
                                             }
                                             
 
@@ -600,6 +605,12 @@
                                                 <td>Reject By Integromat Lead</td>
                                                 <td><?php echo $rejectByIntegromatCount; ?></td>
                                                 <td><?php echo $rejectByIntegromatPer.' %'; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td>24</td>
+                                                <td>Required Phone</td>
+                                                <td><?php echo $ageIsRequiredCount; ?></td>
+                                                <td><?php echo $ageIsRequiredPer.' %'; ?></td>
                                             </tr>
                                         </tbody>
                                     </table>
