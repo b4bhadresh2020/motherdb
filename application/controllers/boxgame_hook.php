@@ -33,7 +33,7 @@ class Boxgame_hook extends CI_Controller
         $response =  $body->getBody();
         if("Accepted" == $response){
             ManageData(BOXGAME_LEAD_DATA,['id' => $leadResponseId],['response' => $response],FALSE);
-            echo json_encode(['status' => $response]);
+            echo json_encode(['status' => "Accepted"]);
         }else{
             ManageData(BOXGAME_LEAD_DATA,['id' => $leadResponseId],['response' => 'Failed'],FALSE);
             echo json_encode(['status' => "success"]);
