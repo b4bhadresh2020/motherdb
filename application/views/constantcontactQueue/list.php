@@ -6,7 +6,7 @@
                     <div class="col-lg-12">
                         <div class="card alert">
                             <div class="card-header">
-                                <h4>Filters</h4>
+                                <h4>Filters </h4>
                             </div>
                             <div class="card-body">
                                 <div class="horizontal-form-elements">
