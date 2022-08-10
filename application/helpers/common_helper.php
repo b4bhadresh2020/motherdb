@@ -1,10 +1,11 @@
 <?php
-require_once(FCPATH.'vendor/autoload.php');
+require_once(FCPATH . 'vendor/autoload.php');
 /*
     @counts
     Need this function only in PHP >= 7.2.
 */
-function counts($stuff){
+function counts($stuff)
+{
 
     if ($stuff == '' || !is_array($stuff)) {
         $stuff = array();
@@ -15,28 +16,30 @@ function counts($stuff){
 
 #fetch all records to display with filters
 
-function GetAllRecordsTest($table_name, $condition, $is_single, $selected_rows=''){
-    $ci = & get_instance();
-    
+function GetAllRecordsTest($table_name, $condition, $is_single, $selected_rows = '')
+{
+    $ci = &get_instance();
 
-    if ($condition){
+
+    if ($condition) {
         $ci->db->where($condition);
     }
-    if($selected_rows) {
+    if ($selected_rows) {
         $ci->db->select($selected_rows);
     }
 
     $res = $ci->db->get($table_name);
-    
-    if ($is_single){
+
+    if ($is_single) {
         return $res->row_array();
-    } else{
+    } else {
         return $res->result_array();
     }
 }
 
-function GetAllRecord($table_name = '', $condition = array(), $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $selected_rows = '',$startNo = '') {
-    $ci = & get_instance();
+function GetAllRecord($table_name = '', $condition = array(), $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $selected_rows = '', $startNo = '')
+{
+    $ci = &get_instance();
     if ($condition && count($condition))
         $ci->db->where($condition);
     if ($is_like && count($is_like)) {
@@ -67,14 +70,14 @@ function GetAllRecord($table_name = '', $condition = array(), $is_single = false
             }
         }
     }
-    if($selected_rows != "") {
+    if ($selected_rows != "") {
         $ci->db->select($selected_rows);
     }
 
-    if($startNo != ""){
+    if ($startNo != "") {
         $limit = getConfigVal('servicePaginationLimit');
-        $start = ($startNo - 1)*$limit;
-        $ci->db->limit($limit,$start);
+        $start = ($startNo - 1) * $limit;
+        $ci->db->limit($limit, $start);
     }
     $res = $ci->db->get($table_name);
     if ($is_single)
@@ -83,13 +86,14 @@ function GetAllRecord($table_name = '', $condition = array(), $is_single = false
         return $res->result_array();
 }
 
-function GetRecordWithLimit($table_name = '', $condition = array(), $join_table = '', $table_id = '', $join_id = '', $type = '',$is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $selected_rows = '',$startNo = '',$limit = '') {
-    $ci = & get_instance();
+function GetRecordWithLimit($table_name = '', $condition = array(), $join_table = '', $table_id = '', $join_id = '', $type = '', $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $selected_rows = '', $startNo = '', $limit = '')
+{
+    $ci = &get_instance();
     if ($condition && count($condition))
         $ci->db->where($condition);
 
     if ($join_table != '')
-        $ci->db->join($join_table, "$table_name.$table_id = $join_table.$join_id",$type);
+        $ci->db->join($join_table, "$table_name.$table_id = $join_table.$join_id", $type);
 
     if ($is_like && count($is_like)) {
         foreach ($is_like as $key => $val) {
@@ -119,17 +123,17 @@ function GetRecordWithLimit($table_name = '', $condition = array(), $join_table 
             }
         }
     }
-    if($selected_rows != "") {
+    if ($selected_rows != "") {
         $ci->db->select($selected_rows);
     }
 
-    if($startNo != "" && $limit != ""){       
-        $start = ($startNo - 1)*$limit;
-        $ci->db->limit($limit,$start);
+    if ($startNo != "" && $limit != "") {
+        $start = ($startNo - 1) * $limit;
+        $ci->db->limit($limit, $start);
     }
 
-    if($limit != "") {
-        $ci->db->limit($limit,0);
+    if ($limit != "") {
+        $ci->db->limit($limit, 0);
     }
 
     $res = $ci->db->get($table_name);
@@ -139,8 +143,9 @@ function GetRecordWithLimit($table_name = '', $condition = array(), $join_table 
         return $res->result_array();
 }
 
-function GetAllRecordCount($table_name = '', $condition = array(), $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $selected_rows = '') {
-    $ci = & get_instance();
+function GetAllRecordCount($table_name = '', $condition = array(), $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $selected_rows = '')
+{
+    $ci = &get_instance();
     if ($condition && count($condition))
         $ci->db->where($condition);
     if ($is_like && count($is_like)) {
@@ -171,24 +176,25 @@ function GetAllRecordCount($table_name = '', $condition = array(), $is_single = 
             }
         }
     }
-    if($selected_rows != "") {
+    if ($selected_rows != "") {
         $ci->db->select($selected_rows);
     }
     $res = $ci->db->count_all_results($table_name);
     return $res;
 }
 
-function GetAllRecordCountIn($table_name = '', $condition = array(), $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $is_in = array(), $selected_rows = '') {
-    $ci = & get_instance();
+function GetAllRecordCountIn($table_name = '', $condition = array(), $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $is_in = array(), $selected_rows = '')
+{
+    $ci = &get_instance();
     if ($condition && count($condition))
         $ci->db->where($condition);
-    
+
     if ($is_in && count($is_in)) {
         foreach ($is_in as $key => $val) {
             $ci->db->where_in($key, $val);
         }
     }
-    
+
     if ($is_like && count($is_like)) {
         foreach ($is_like as $key => $val) {
             $cur_filter = array();
@@ -217,15 +223,16 @@ function GetAllRecordCountIn($table_name = '', $condition = array(), $is_single 
             }
         }
     }
-    if($selected_rows != "") {
+    if ($selected_rows != "") {
         $ci->db->select($selected_rows);
     }
     $res = $ci->db->count_all_results($table_name);
     return $res;
 }
 
-function GetAllRecordIn($table_name = '', $condition = array(), $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $is_in = array(), $selected_rows = '') {
-    $ci = & get_instance();
+function GetAllRecordIn($table_name = '', $condition = array(), $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $is_in = array(), $selected_rows = '')
+{
+    $ci = &get_instance();
     if ($condition && count($condition))
         $ci->db->where($condition);
     if ($is_in && count($is_in)) {
@@ -261,7 +268,7 @@ function GetAllRecordIn($table_name = '', $condition = array(), $is_single = fal
             }
         }
     }
-    if($selected_rows != "") {
+    if ($selected_rows != "") {
         $ci->db->select($selected_rows);
     }
     $res = $ci->db->get($table_name);
@@ -271,17 +278,19 @@ function GetAllRecordIn($table_name = '', $condition = array(), $is_single = fal
         return $res->result_array();
 }
 
-function GetDatabyqry($sql) {
-    $ci = & get_instance();
+function GetDatabyqry($sql)
+{
+    $ci = &get_instance();
     $res = $ci->db->query($sql);
     return $res->result_array();
 }
 
 #insert update query with filter and flag
 
-function ManageData($table_name = '', $condition = array(), $udata = array(), $is_insert = false) {
+function ManageData($table_name = '', $condition = array(), $udata = array(), $is_insert = false)
+{
     $resultArr = array();
-    $ci = & get_instance();
+    $ci = &get_instance();
     if ($condition && count($condition))
         $ci->db->where($condition);
     if ($is_insert) {
@@ -290,55 +299,57 @@ function ManageData($table_name = '', $condition = array(), $udata = array(), $i
         return $insertid;
         #return 0;
     } else {
-        if($ci->db->update($table_name, $udata)){
+        if ($ci->db->update($table_name, $udata)) {
             return 1;
-        }else{
+        } else {
             return 0;
         }
-        
     }
 }
 
 #insert update query with filter and flag
 
-function incrementReportData($table_name = '', $condition = array(), $value = 0, $status = 'inc') {
+function incrementReportData($table_name = '', $condition = array(), $value = 0, $status = 'inc')
+{
     $resultArr = array();
-    $ci = & get_instance();
+    $ci = &get_instance();
     if ($condition && count($condition))
         $ci->db->where($condition);
-    if(@$status && $status == "inc")
-        $ci->db->set('reportVal', 'reportVal+'.$value, FALSE);
-    if(@$status && $status == "dec")
-        $ci->db->set('reportVal', 'reportVal-'.$value, FALSE);
+    if (@$status && $status == "inc")
+        $ci->db->set('reportVal', 'reportVal+' . $value, FALSE);
+    if (@$status && $status == "dec")
+        $ci->db->set('reportVal', 'reportVal-' . $value, FALSE);
     $ci->db->update($table_name);
     return 0;
 }
 
-function incrementData($table_name = '', $condition = array(), $fields = "", $value = 0, $status = 'inc') {
+function incrementData($table_name = '', $condition = array(), $fields = "", $value = 0, $status = 'inc')
+{
     $resultArr = array();
-    $ci = & get_instance();
+    $ci = &get_instance();
     if ($condition && count($condition))
         $ci->db->where($condition);
-    if(@$status && $status == "inc")
-        $ci->db->set($fields, ''.$fields.'+'.$value.'', FALSE);
-    if(@$status && $status == "dec")
-        $ci->db->set($fields, ''.$fields.'-'.$value.'', FALSE);
+    if (@$status && $status == "inc")
+        $ci->db->set($fields, '' . $fields . '+' . $value . '', FALSE);
+    if (@$status && $status == "dec")
+        $ci->db->set($fields, '' . $fields . '-' . $value . '', FALSE);
     $ci->db->update($table_name);
     return 0;
 }
 
 #joinTable
 
-function JoinData($table_name = '', $condition = array(), $join_table = '', $table_id = '', $join_id = '', $type = '',$is_single = false,$order_by = array(),$selected_rows = '',$limit = '') {
-    $ci = & get_instance();
+function JoinData($table_name = '', $condition = array(), $join_table = '', $table_id = '', $join_id = '', $type = '', $is_single = false, $order_by = array(), $selected_rows = '', $limit = '')
+{
+    $ci = &get_instance();
     #$ci->db->select('first_name,last_name');
-    
+
     if ($condition && count($condition))
         $ci->db->where($condition);
     $ci->db->from($table_name);
-    
+
     if ($join_table)
-        $ci->db->join($join_table, "$table_name.$table_id = $join_table.$join_id",$type);
+        $ci->db->join($join_table, "$table_name.$table_id = $join_table.$join_id", $type);
 
     if ($order_by && count($order_by)) {
         foreach ($order_by as $key => $val) {
@@ -350,13 +361,13 @@ function JoinData($table_name = '', $condition = array(), $join_table = '', $tab
             }
         }
     }
-    if($selected_rows)
+    if ($selected_rows)
         $ci->db->select($selected_rows);
 
-    if($limit != ""){
+    if ($limit != "") {
         $ci->db->limit($limit);
     }
-    
+
     $res = $ci->db->get();
     if ($is_single)
         return $res->row_array();
@@ -364,26 +375,28 @@ function JoinData($table_name = '', $condition = array(), $join_table = '', $tab
         return $res->result_array();
 }
 
-function JoinDataCount($table_name = '', $condition = array(), $join_table = '', $table_id = '', $join_id = '', $type = '') {
-    $ci = & get_instance();
+function JoinDataCount($table_name = '', $condition = array(), $join_table = '', $table_id = '', $join_id = '', $type = '')
+{
+    $ci = &get_instance();
     #$ci->db->select('first_name,last_name');
-    
+
     if ($condition && count($condition))
         $ci->db->where($condition);
     $ci->db->from($table_name);
-    
+
     if ($join_table)
-        $ci->db->join($join_table, "$table_name.$table_id = $join_table.$join_id",$type);
-    
+        $ci->db->join($join_table, "$table_name.$table_id = $join_table.$join_id", $type);
+
     $res = $ci->db->count_all_results();
     return $res;
 }
 
 #Creating Pagination Link
 
-function pagiationData($str, $num, $start, $segment, $perpage = 20, $isExpload = FALSE) {
+function pagiationData($str, $num, $start, $segment, $perpage = 20, $isExpload = FALSE)
+{
 
-    $CI = & get_instance();
+    $CI = &get_instance();
     $config['base_url'] = site_url('/') . $str;
     $config['total_rows'] = $num;
     if ($perpage) {
@@ -414,10 +427,10 @@ function pagiationData($str, $num, $start, $segment, $perpage = 20, $isExpload =
 
     if ($isExpload == 'true') {
         $query = $CI->db->last_query();
-    }else{
-        $query = $CI->db->last_query() . " LIMIT " . $start . " , " . $config['per_page'];    
+    } else {
+        $query = $CI->db->last_query() . " LIMIT " . $start . " , " . $config['per_page'];
     }
-    
+
     //print_r($query);die;
     $res = $CI->db->query($query);
     $data['listArr'] = $res->result_array();
@@ -431,8 +444,7 @@ function pagiationData($str, $num, $start, $segment, $perpage = 20, $isExpload =
 
         $start = $start + 1;
         $data['pageinfo'] = 'Showing ' . $start . ' to ' . $ofpage . ' of ' . $data['Total'] . ' entries';
-
-    }else{
+    } else {
 
         $data['pageinfo'] = "No Records";
     }
@@ -442,9 +454,10 @@ function pagiationData($str, $num, $start, $segment, $perpage = 20, $isExpload =
 
 
 
-function pagination_data($str, $total_rows, $start, $segment, $perpage = 20,$result_data = array()) {
+function pagination_data($str, $total_rows, $start, $segment, $perpage = 20, $result_data = array())
+{
 
-    $CI = & get_instance();
+    $CI = &get_instance();
     $config['base_url'] = site_url('/') . $str;
     $config['total_rows'] = $total_rows;
     if ($perpage) {
@@ -483,8 +496,7 @@ function pagination_data($str, $total_rows, $start, $segment, $perpage = 20,$res
 
         $start = $start + 1;
         $data['pageinfo'] = 'Showing ' . $start . ' to ' . $ofpage . ' of ' . $data['Total'] . ' entries';
-
-    }else{
+    } else {
 
         $data['pageinfo'] = "No Records";
     }
@@ -494,8 +506,9 @@ function pagination_data($str, $total_rows, $start, $segment, $perpage = 20,$res
 
 
 
-function GetFormError() { //return single error message after form validation
-    $CI = & get_instance();
+function GetFormError()
+{ //return single error message after form validation
+    $CI = &get_instance();
     $errorarr = $CI->form_validation->error_array();
     if (count($errorarr) === 0) {
         return FALSE;
@@ -506,19 +519,23 @@ function GetFormError() { //return single error message after form validation
     }
 }
 
-function pre($str) { //Print prev screen for array
+function pre($str)
+{ //Print prev screen for array
     echo '<pre>';
     print_r($str);
     echo '</pre>';
 }
 
-function last_query() { //print last executed query
-    $CI = & get_instance();
+function last_query()
+{ //print last executed query
+    $CI = &get_instance();
     pre($CI->db->last_query());
 }
 
-function ValidImageExt() {
-    $dropdown = array('gif' => 'gif',
+function ValidImageExt()
+{
+    $dropdown = array(
+        'gif' => 'gif',
         'jpg' => 'jpg',
         'jpeg' => 'jpeg',
         'png' => 'png',
@@ -527,8 +544,9 @@ function ValidImageExt() {
     return $dropdown;
 }
 
-function uploadFile($uploadFile, $filetype, $folder, $fileName = '') {
-    $CI = & get_instance();
+function uploadFile($uploadFile, $filetype, $folder, $fileName = '')
+{
+    $CI = &get_instance();
     $resultArr = array();
     $config['max_size'] = '1024000';
     if ($filetype == 'img')
@@ -545,7 +563,7 @@ function uploadFile($uploadFile, $filetype, $folder, $fileName = '') {
         $config['allowed_types'] = 'kml|kmz';
     if ($filetype == '*')
         $config['allowed_types'] = '*';
-    
+
 
     if (strpos($folder, 'application/views') !== FALSE)
         $config['upload_path'] = './' . $folder . '/';
@@ -555,8 +573,8 @@ function uploadFile($uploadFile, $filetype, $folder, $fileName = '') {
         $config['file_name'] = $fileName;
 
     //echo $config['upload_path'];
-    if(!is_dir($config['upload_path']))
-            mkdir($config['upload_path'],'0777');
+    if (!is_dir($config['upload_path']))
+        mkdir($config['upload_path'], '0777');
 
     $CI->load->library('upload', $config);
     $CI->upload->initialize($config);
@@ -577,14 +595,15 @@ function uploadFile($uploadFile, $filetype, $folder, $fileName = '') {
     return $resultArr;
 }
 
-function uploadMultiFiles($fieldName, $folder, $options = array()) {
-    $CI = & get_instance();
+function uploadMultiFiles($fieldName, $folder, $options = array())
+{
+    $CI = &get_instance();
     $CI->load->library('upload');
     $response = array();
     $files = $_FILES;
     $cpt = count($_FILES[$fieldName]['name']);
     $options['upload_path'] = "./upload/";
-	if (strpos($folder, 'application/views') !== FALSE)
+    if (strpos($folder, 'application/views') !== FALSE)
         $options['upload_path'] = './' . $folder . '/';
     else
         $options['upload_path'] = './upload/' . $folder . '/';
@@ -597,51 +616,56 @@ function uploadMultiFiles($fieldName, $folder, $options = array()) {
         $_FILES[$fieldName]['size'] = $files[$fieldName]['size'][$i];
         $CI->upload->initialize($options);
         $fileName = $files[$fieldName]['name'][$i];
-//upload the image
+        //upload the image
         if (!$CI->upload->do_upload($fieldName)) {
             $response['error'][] = $CI->upload->display_errors();
         } else {
             $resArr = $CI->upload->data();
             //$response[] = "upload/" . $resArr['file_name'];
-			if (strpos($folder, 'application/views') !== FALSE) {
-				$response[] = $folder . "/" . $resArr['file_name'];
-			} else {
-				$response[] = "upload/" . $folder . "/" . $resArr['file_name'];
-			}
+            if (strpos($folder, 'application/views') !== FALSE) {
+                $response[] = $folder . "/" . $resArr['file_name'];
+            } else {
+                $response[] = "upload/" . $folder . "/" . $resArr['file_name'];
+            }
         }
     }
 
     return $response;
 }
 
-function SetMsg($var, $msg) {
-    $ci = & get_instance();
+function SetMsg($var, $msg)
+{
+    $ci = &get_instance();
     $ci->session->set_flashdata($var, $msg);
 }
 
-function GetMsg($var) {
-    $ci = & get_instance();
+function GetMsg($var)
+{
+    $ci = &get_instance();
     return $ci->session->flashdata($var);
 }
 
-function getConfigVal($keyParam) {
-    $ci = & get_instance();
-    $sql = "select configVal from ".SITECONFIG." where configKey='$keyParam'";
+function getConfigVal($keyParam)
+{
+    $ci = &get_instance();
+    $sql = "select configVal from " . SITECONFIG . " where configKey='$keyParam'";
     $configVal = $ci->db->query($sql)->row_array($sql);
     return isset($configVal['configVal']) ? $configVal['configVal'] : "";
 }
 
-function getReportVal($keyParam) {
-    $ci = & get_instance();
-    $sql = "select reportVal from ".PAYMENT_REPORT." where reportKey='$keyParam'";
+function getReportVal($keyParam)
+{
+    $ci = &get_instance();
+    $sql = "select reportVal from " . PAYMENT_REPORT . " where reportKey='$keyParam'";
     $reportVal = $ci->db->query($sql)->row_array($sql);
     return isset($reportVal['reportVal']) ? $reportVal['reportVal'] : "";
 }
 
-function loginRegSectionMsg($msgId = "") {
+function loginRegSectionMsg($msgId = "")
+{
     $msgArr = array(
-        "insertData" => "Data Inserted Successfully.",        
-        "updateData" => "Data Updated Successfully.",                
+        "insertData" => "Data Inserted Successfully.",
+        "updateData" => "Data Updated Successfully.",
     );
     if ($msgId !== "")
         return $msgArr[$msgId];
@@ -649,7 +673,8 @@ function loginRegSectionMsg($msgId = "") {
         return $msgArr;
 }
 
-function getAccountTableName($provider) {
+function getAccountTableName($provider)
+{
     $tableNames = array(
         '1' => 'aweber_accounts',
         '4' => 'ongage_accounts',
@@ -670,8 +695,9 @@ function getAccountTableName($provider) {
     }
 }
 
-function getProviderList($provider) {
-    $CI = & get_instance();
+function getProviderList($provider)
+{
+    $CI = &get_instance();
     // $condition = array(
     //     'provider' => $provider
     // );
@@ -680,21 +706,22 @@ function getProviderList($provider) {
     $espAccountTable = getAccountTableName($provider);
     $CI->db->select('providers.*');
     $CI->db->from(PROVIDERS);
-    if(!empty($espAccountTable)) {
-        $CI->db->join($espAccountTable,'providers.aweber_account='.$espAccountTable.'.id','left');
-        $CI->db->where($espAccountTable.'.status', 1);
+    if (!empty($espAccountTable)) {
+        $CI->db->join($espAccountTable, 'providers.aweber_account=' . $espAccountTable . '.id', 'left');
+        $CI->db->where($espAccountTable . '.status', 1);
     }
     $CI->db->where('providers.provider', $provider);
     $providerList = $CI->db->get()->result_array();
-   
+
     if (count($providerList) > 0) {
         return $providerList;
-    }else{
+    } else {
         return array();
     }
 }
 
-function getProviderName($providerId){
+function getProviderName($providerId)
+{
     $providerNames = array(
         '1' => 'Aweber',
         '2' => 'Transmitvia',
@@ -715,7 +742,8 @@ function getProviderName($providerId){
     return $providerNames[$providerId];
 }
 
-function getAweverProviderListName($providerListId){
+function getAweverProviderListName($providerListId)
+{
     $aweberList = array(
         '1' => 'Velkomstgaven.com (Norway)',
         '2' => 'Gratispresent.se (Sweden)',
@@ -741,7 +769,7 @@ function getAweverProviderListName($providerListId){
         '22' => 'New_velkomstgaven_dk',
         '23' => 'New_velkomstgaven_com',
         '24' => 'New_velkomstgaven1_com',
-        '25' => 'New_unelmalaina',        
+        '25' => 'New_unelmalaina',
         '26' => 'Freecasinodeal/NZ (olivia)',
         '27' => 'Freecasinodeal/CA (sofia)',
         '28' => 'Freecasinodeal/NO (emma)',
@@ -776,7 +804,8 @@ function getAweverProviderListName($providerListId){
     return $aweberList[$providerListId];
 }
 
-function getTransmitviaProviderListName($providerListId){
+function getTransmitviaProviderListName($providerListId)
+{
     $transmitviaList = array(
         '1' => 'NO - deveroper',
         '2' => 'SE - deveroper - Loan',
@@ -805,7 +834,8 @@ function getTransmitviaProviderListName($providerListId){
     return $transmitviaList[$providerListId];
 }
 
-function getOngageProviderListName($providerListId){
+function getOngageProviderListName($providerListId)
+{
     $ongageList = array(
         "1" => "SE - Test", // Australia-camilla => SE - Test
         "2" => "DK - Test", // Australia - Kare => DK - Test
@@ -826,7 +856,8 @@ function getOngageProviderListName($providerListId){
     return $ongageList[$providerListId];
 }
 
-function getSendgridProviderListName($providerListId){
+function getSendgridProviderListName($providerListId)
+{
     $sendgridList = array(
         "1" => "CA-Abbiesmail",
         "2" => "NZ-Ashleysmail",
@@ -841,7 +872,8 @@ function getSendgridProviderListName($providerListId){
     return $sendgridList[$providerListId];
 }
 
-function getSendInBlueProviderListName($providerListId){
+function getSendInBlueProviderListName($providerListId)
+{
     $sendInBlueList = array(
         "1" => "NO",
         "2" => "CA",
@@ -851,7 +883,8 @@ function getSendInBlueProviderListName($providerListId){
     return $sendInBlueList[$providerListId];
 }
 
-function getSendPulseProviderListName($providerListId){
+function getSendPulseProviderListName($providerListId)
+{
     $sendPulseList = array(
         "1" => "NO", // NO-Sendpulse
         "2" => "CA", // CA-Sendpulse
@@ -860,7 +893,8 @@ function getSendPulseProviderListName($providerListId){
     return $sendPulseList[$providerListId];
 }
 
-function getMailerliteProviderListName($providerListId){
+function getMailerliteProviderListName($providerListId)
+{
     $mailerliteList = array(
         "1" => "DK-Velkomstgaven",
         "2" => "NO-Velkomstgaven.com",
@@ -870,7 +904,8 @@ function getMailerliteProviderListName($providerListId){
     return $mailerliteList[$providerListId];
 }
 
-function getMailjetProviderListName($providerListId){
+function getMailjetProviderListName($providerListId)
+{
     $mailjetList = array(
         "1" => "Velkomstgaven/DK",
         "2" => "Gratispresent/SE",
@@ -886,7 +921,8 @@ function getMailjetProviderListName($providerListId){
     return $mailjetList[$providerListId];
 }
 
-function getConvertkitProviderListName($providerListId){
+function getConvertkitProviderListName($providerListId)
+{
     $convertkitList = array(
         "1" => "camilla/DK",
         "2" => "camilla/SE",
@@ -903,7 +939,8 @@ function getConvertkitProviderListName($providerListId){
     return $convertkitList[$providerListId];
 }
 
-function getMarketingPlatformProviderListName($providerListId){
+function getMarketingPlatformProviderListName($providerListId)
+{
     $marketingPlatformList = array(
         "1" => "SE-Gratispresent",
         "2" => "NO-Velkomstgaven",
@@ -918,7 +955,8 @@ function getMarketingPlatformProviderListName($providerListId){
     return $marketingPlatformList[$providerListId];
 }
 
-function getOntraportProviderListName($providerListId){
+function getOntraportProviderListName($providerListId)
+{
     $ontraportList = array(
         "1" => "Gratispresentmail.se",
         "2" => "Freecasinodeal1/no",
@@ -927,7 +965,7 @@ function getOntraportProviderListName($providerListId){
         "5" => "Freecasinodeal1/ca",
         "6" => "Freecasinodeal1/nz",
         "7" => "Velkomstgaven/DK",
-        "8" => "Velkomstgaven/com", 
+        "8" => "Velkomstgaven/com",
         "9" => "Gratispresent/SE",
         "10" => "Unelmalaina/FI",
         "11" => "Velkomst/DK",
@@ -944,7 +982,8 @@ function getOntraportProviderListName($providerListId){
     return $ontraportList[$providerListId];
 }
 
-function getActiveCampaignProviderListName($providerListId){
+function getActiveCampaignProviderListName($providerListId)
+{
     $activeCampaignList = array(
         "1" => "Velkomstgaven/NOR",
         "2" => "GratisPresent/SE",
@@ -957,52 +996,55 @@ function getActiveCampaignProviderListName($providerListId){
         "9" => "Velkomstgaven1/NO",
         "10" => "gratisprodukttester.com/NO",
         "11" => "dagenspresent.se/SE",
-        "12" => "gratispresent1.com"       
+        "12" => "gratispresent1.com"
     );
     return $activeCampaignList[$providerListId];
 }
 
-function getExpertSenderProviderListName($providerListId){
+function getExpertSenderProviderListName($providerListId)
+{
     $expertSenderList = array(
-        "1" => "camilla/abbiesmail2.com/CA",        
-        "2" => "camilla/ashleysmail1.com/NZ",        
-        "3" => "camilla/felinafinans.se/SE",        
-        "4" => "camilla/frejasmail2.se/SE",        
-        "5" => "camilla/katariinasmail1.com/FI",        
-        "6" => "camilla/signesmail1.dk/DK",        
+        "1" => "camilla/abbiesmail2.com/CA",
+        "2" => "camilla/ashleysmail1.com/NZ",
+        "3" => "camilla/felinafinans.se/SE",
+        "4" => "camilla/frejasmail2.se/SE",
+        "5" => "camilla/katariinasmail1.com/FI",
+        "6" => "camilla/signesmail1.dk/DK",
         "7" => "camilla/signesmail2.com/NO",
-        "8" => "Kaare/NO-FreeCasinodeal",        
-        "9" => "Kaare/FI-FreeCasinodeal",        
-        "10" => "Kaare/CA-FreeCasinodeal",        
-        "11" => "Kaare/NZ-FreeCasinodeal",        
-        "12" => "Kaare/CA-GetSpinn",        
-        "13" => "Kaare/NZ-GetSpinn",        
-        "14" => "Kaare/NO-GetSpinn",        
-        "15" => "Kaare/gratispresentmail.se/SE",        
-        "16" => "Kaare/unelmalainamail.fi/Unelmalaina",        
-        "17" => "Kaare/Velkomstgaven-NO",        
-        "18" => "Kaare/DK-Velkomstgaven",        
+        "8" => "Kaare/NO-FreeCasinodeal",
+        "9" => "Kaare/FI-FreeCasinodeal",
+        "10" => "Kaare/CA-FreeCasinodeal",
+        "11" => "Kaare/NZ-FreeCasinodeal",
+        "12" => "Kaare/CA-GetSpinn",
+        "13" => "Kaare/NZ-GetSpinn",
+        "14" => "Kaare/NO-GetSpinn",
+        "15" => "Kaare/gratispresentmail.se/SE",
+        "16" => "Kaare/unelmalainamail.fi/Unelmalaina",
+        "17" => "Kaare/Velkomstgaven-NO",
+        "18" => "Kaare/DK-Velkomstgaven",
     );
     return $expertSenderList[$providerListId];
 }
 
-function getCleverReachListName($providerListId){
+function getCleverReachListName($providerListId)
+{
     $cleverReachList = array(
         "1" => "Velkomstgaven/DK",
         "2" => "Cathrinesmail/CA",
         "3" => "Cathrinesmail/DK",
-        "4" => "Cathrinesmail/FI",        
+        "4" => "Cathrinesmail/FI",
         "5" => "Cathrinesmail/NO",
         "6" => "Cathrinesmail/NZ",
         "7" => "Cathrinesmail/SE",
         "8" => "Velkomstgaven/NO",
         "9" => "Gratispresent/SE",
-        "10" => "Unelmalaina/FI"     
+        "10" => "Unelmalaina/FI"
     );
     return $cleverReachList[$providerListId];
 }
 
-function getOmnisendListName($providerListId){
+function getOmnisendListName($providerListId)
+{
     $omnisendList = array(
         "1" => "SE-Gratispresent",
         "2" => "NO-Velkomstgaven",
@@ -1012,7 +1054,8 @@ function getOmnisendListName($providerListId){
     return $omnisendList[$providerListId];
 }
 
-function getLiveRepostAweverProviderID($providerListId){
+function getLiveRepostAweverProviderID($providerListId)
+{
     $provider = array(
         "1" => "14",  // Velkomstgaven.com (Norway) 
         "2" => "16", // Gratispresent.se (Sweden)
@@ -1073,35 +1116,37 @@ function getLiveRepostAweverProviderID($providerListId){
     return $provider[$providerListId];
 }
 
-function getLiveRepostTransmitviaProviderListID($providerListId){
+function getLiveRepostTransmitviaProviderListID($providerListId)
+{
     $provider = array(
         "1" => "28",
         "2" => "29",
-        "3" => "30",  
-        "4" => "31",  
-        "5" => "32",  
-        "6" => "33",  
-        "7" => "34",  
-        "8" => "35",  
-        "9" => "36",  
-        "10" => "37",  
-        "11" => "38",  
-        "12" => "39",  
-        "13" => "40",  
-        "14" => "41",  
-        "15" => "42",  
-        "16" => "43",  
-        "17" => "44",  
-        "18" => "45",  
-        "19" => "21",  
-        "20" => "24",  
-        "21" => "25",  
+        "3" => "30",
+        "4" => "31",
+        "5" => "32",
+        "6" => "33",
+        "7" => "34",
+        "8" => "35",
+        "9" => "36",
+        "10" => "37",
+        "11" => "38",
+        "12" => "39",
+        "13" => "40",
+        "14" => "41",
+        "15" => "42",
+        "16" => "43",
+        "17" => "44",
+        "18" => "45",
+        "19" => "21",
+        "20" => "24",
+        "21" => "25",
         "22" => "26"
     );
     return $provider[$providerListId];
 }
 
-function getLiveRepostOngageProviderID($providerId){
+function getLiveRepostOngageProviderID($providerId)
+{
     $provider = array(
         "1" => "47",  // Australia-camilla 
         "2" => "48",  // Australia - Kare 
@@ -1122,7 +1167,8 @@ function getLiveRepostOngageProviderID($providerId){
     return $provider[$providerId];
 }
 
-function getLiveRepostSendgridProviderID($providerId){
+function getLiveRepostSendgridProviderID($providerId)
+{
     $provider = array(
         "1" => "60",  // CA-Abbiesmail
         "2" => "214",  // NZ-Ashleysmail
@@ -1137,7 +1183,8 @@ function getLiveRepostSendgridProviderID($providerId){
     return $provider[$providerId];
 }
 
-function getLiveRepostSendInBlueProviderID($providerId){
+function getLiveRepostSendInBlueProviderID($providerId)
+{
     $provider = array(
         "1" => "64",  // NO
         "2" => "65",  // CA
@@ -1147,7 +1194,8 @@ function getLiveRepostSendInBlueProviderID($providerId){
     return $provider[$providerId];
 }
 
-function getLiveRepostSendPulseProviderID($providerId){
+function getLiveRepostSendPulseProviderID($providerId)
+{
     $provider = array(
         "1" => "83",  // NO-Sendpulse
         "2" => "84",  // CA-Sendpulse
@@ -1156,7 +1204,8 @@ function getLiveRepostSendPulseProviderID($providerId){
     return $provider[$providerId];
 }
 
-function getLiveRepostMailerliteProviderID($providerId){
+function getLiveRepostMailerliteProviderID($providerId)
+{
     $provider = array(
         "1" => "115",  // DK-Velkomstgaven
         "2" => "116",  // NO-Velkomstgaven.com
@@ -1166,7 +1215,8 @@ function getLiveRepostMailerliteProviderID($providerId){
     return $provider[$providerId];
 }
 
-function getLiveRepostMailjetProviderID($providerId){
+function getLiveRepostMailjetProviderID($providerId)
+{
     $provider = array(
         "1" => "119",  // Velkomstgaven/DK
         "2" => "120",  // Gratispresent/SE
@@ -1182,7 +1232,8 @@ function getLiveRepostMailjetProviderID($providerId){
     return $provider[$providerId];
 }
 
-function getLiveRepostConvertkitProviderID($providerId){
+function getLiveRepostConvertkitProviderID($providerId)
+{
     $provider = array(
         "1" => "121",  // DK
         "2" => "122",  // SE
@@ -1199,7 +1250,8 @@ function getLiveRepostConvertkitProviderID($providerId){
     return $provider[$providerId];
 }
 
-function getLiveRepostMarketingPlatformProviderID($providerId){
+function getLiveRepostMarketingPlatformProviderID($providerId)
+{
     $provider = array(
         "1" => "133",  // SE-Gratispresent
         "2" => "134",  // NO-Velkomstgaven
@@ -1214,7 +1266,8 @@ function getLiveRepostMarketingPlatformProviderID($providerId){
     return $provider[$providerId];
 }
 
-function getLiveRepostOntraportProviderID($providerId){
+function getLiveRepostOntraportProviderID($providerId)
+{
     $provider = array(
         "1" => "141",  // Gratispresentmail.se
         "2" => "142",  // Freecasinodeal1/no
@@ -1241,7 +1294,8 @@ function getLiveRepostOntraportProviderID($providerId){
     return $provider[$providerId];
 }
 
-function getLiveRepostActiveCampaignProviderID($providerId){
+function getLiveRepostActiveCampaignProviderID($providerId)
+{
     $provider = array(
         "1" => "147",  // Velkomstgaven/NOR
         "2" => "163",  // GratisPresent/SE
@@ -1259,7 +1313,8 @@ function getLiveRepostActiveCampaignProviderID($providerId){
     return $provider[$providerId];
 }
 
-function getLiveRepostExpertSenderProviderID($providerId){
+function getLiveRepostExpertSenderProviderID($providerId)
+{
     $provider = array(
         "1" => "149",  // camilla/abbiesmail2.com/CA
         "2" => "150",  // camilla/ashleysmail1.com/NZ
@@ -1283,7 +1338,8 @@ function getLiveRepostExpertSenderProviderID($providerId){
     return $provider[$providerId];
 }
 
-function getLiveRepostCleverReachProviderID($providerId){
+function getLiveRepostCleverReachProviderID($providerId)
+{
     $provider = array(
         "1" => "156",  // Velkomstgaven/DK
         "2" => "157",  // Cathrinesmail/CA
@@ -1299,7 +1355,8 @@ function getLiveRepostCleverReachProviderID($providerId){
     return $provider[$providerId];
 }
 
-function getLiveRepostOmnisendProviderID($providerId){
+function getLiveRepostOmnisendProviderID($providerId)
+{
     $provider = array(
         "1" => "181",  // SE-Gratispresent 
         "2" => "182",  // NO-Velkomstgaven
@@ -1316,9 +1373,10 @@ function getLiveRepostOmnisendProviderID($providerId){
   ++++++++++++++++++++++++++++++++++++++++++++++
  */
 
-function sendMail($toEmail, $subject='', $mail_body, $from_email = '', $from_name = '', $file_path = '') {
-    $C = & get_instance();
-    
+function sendMail($toEmail, $subject = '', $mail_body, $from_email = '', $from_name = '', $file_path = '')
+{
+    $C = &get_instance();
+
     $from_email  = getConfigVal('fromEmailId');
     $from_name   = getConfigVal('fromEmailName');
 
@@ -1335,9 +1393,9 @@ function sendMail($toEmail, $subject='', $mail_body, $from_email = '', $from_nam
     $C->email->subject($subject);
     $C->email->message($mail_body);
     //$C->email->send();
-    if($C->email->send()){
+    if ($C->email->send()) {
         return 1;
-    }else{
+    } else {
         return 0;
     }
     //echo $C->email->print_debugger();
@@ -1352,13 +1410,14 @@ function sendMail($toEmail, $subject='', $mail_body, $from_email = '', $from_nam
   ++++++++++++++++++++++++++++++++++++++++++++++
  */
 
-function sendLocalMail($emailId, $subject, $mail_body, $senderId = "", $rpl_to_email = '') {
+function sendLocalMail($emailId, $subject, $mail_body, $senderId = "", $rpl_to_email = '')
+{
     if ($rpl_to_email == '')
         $rpl_to_email = getConfigVal("emailSender");
     if ($senderId == '')
         $senderId = getConfigVal("emailSender");
 
-    $C = & get_instance();
+    $C = &get_instance();
     $emailData['smtpHost'] = getConfigVal("smtpHost");
     $emailData['smtpPort'] = getConfigVal("smtpPort");
     $emailData['smtpUname'] = getConfigVal("smtpUname");
@@ -1370,7 +1429,7 @@ function sendLocalMail($emailId, $subject, $mail_body, $senderId = "", $rpl_to_e
     $mail->IsHTML(true); // send as HTML	
     $mail->SMTPAuth = true;                  // enable SMTP authentication
     $mail->SMTPSecure = "ssl";
-//    $mail->SMTPSecure = "tls";
+    //    $mail->SMTPSecure = "tls";
     if (!empty($emailData)) {
         $mail->Host = $emailData['smtpHost'];
         $mail->Port = $emailData['smtpPort'];
@@ -1397,16 +1456,18 @@ function sendLocalMail($emailId, $subject, $mail_body, $senderId = "", $rpl_to_e
         return false;
     } else
         return true;
-#		echo 'message send successfuuly';
+    #		echo 'message send successfuuly';
 }
 
-function cleanString($string) {
+function cleanString($string)
+{
     $string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
     $string = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
     return preg_replace('/-+/', '-', $string); // Replaces multiple hyphens with single one.
 }
 
-function reformatPrice($num, $precision = 1) {
+function reformatPrice($num, $precision = 1)
+{
     if ($num >= 1000 && $num < 1000000) {
         $n_format = number_format($num / 1000, $precision) . 'K';
     } else if ($num >= 1000000 && $num < 1000000000) {
@@ -1419,30 +1480,34 @@ function reformatPrice($num, $precision = 1) {
     return $n_format;
 }
 
-function is_logged() {
-    $ci = & get_instance();
+function is_logged()
+{
+    $ci = &get_instance();
     if ($ci->session->userdata('adminId') > 0)
         return true;
     else
         return false;
 }
 
-function is_admin() {
-    $ci = & get_instance();
+function is_admin()
+{
+    $ci = &get_instance();
     if ($ci->session->userdata('role') == 0)
         return true;
     else
         return false;
 }
 
-function GetCurUserInfo() {
-    $ci = & get_instance();
+function GetCurUserInfo()
+{
+    $ci = &get_instance();
     $curUserId = $ci->session->userdata('adminId');
     $ci->db->where('adminId', $curUserId);
     return $ci->db->get(ADMINMASTER)->row_array();
 }
 
-function getResizeImagePath($imagePath, $height = 125, $width = 125) {
+function getResizeImagePath($imagePath, $height = 125, $width = 125)
+{
     if (strtolower($_SERVER['HTTP_HOST']) == 'localhost') {
         return $imagePath;
     } else {
@@ -1450,36 +1515,42 @@ function getResizeImagePath($imagePath, $height = 125, $width = 125) {
     }
 }
 
-function getReceivedProjectAmount($projectId) {
+function getReceivedProjectAmount($projectId)
+{
     $record = GetAllRecord(PROJECT_PAYMENT, array("projectId" => $projectId), "", "", "", array());
     $amount = 0;
-    for($i = 0; $i < count($record); $i++) {
+    for ($i = 0; $i < count($record); $i++) {
         $amount += $record[$i]["payment"];
     }
     return $amount;
 }
 
-function displayErrorMsg($errorMsg=""){
-    return '<div class="alert alert-danger alert-dismissible fade in" role="alert"><strong>Error</strong> '.$errorMsg.'</div>';
+function displayErrorMsg($errorMsg = "")
+{
+    return '<div class="alert alert-danger alert-dismissible fade in" role="alert"><strong>Error</strong> ' . $errorMsg . '</div>';
 }
 
-function displaySucMsg($sucMsg=""){
-    return '<div class="alert alert-success alert-dismissible fade in" role="alert"><strong>Success</strong> '.$sucMsg.'</div>';
+function displaySucMsg($sucMsg = "")
+{
+    return '<div class="alert alert-success alert-dismissible fade in" role="alert"><strong>Success</strong> ' . $sucMsg . '</div>';
 }
 
-function checkLoginAccess() {
-    $ci = & get_instance();
+function checkLoginAccess()
+{
+    $ci = &get_instance();
     if ($ci->session->userdata('adminId') > 0)
         return true;
     else
         redirect("login");
 }
 
-function usMoneyFormat($value) {
+function usMoneyFormat($value)
+{
     return number_format($value, 2);
 }
 
-function generateRandomString($length = 10) {
+function generateRandomString($length = 10)
+{
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomString = '';
@@ -1489,14 +1560,16 @@ function generateRandomString($length = 10) {
     return $randomString;
 }
 
-function getRandomIp(){
-    return mt_rand(0,255).".".mt_rand(0,255).".".mt_rand(0,255).".".mt_rand(0,255);
+function getRandomIp()
+{
+    return mt_rand(0, 255) . "." . mt_rand(0, 255) . "." . mt_rand(0, 255) . "." . mt_rand(0, 255);
 }
 
-function sendMessage($params) {
+function sendMessage($params)
+{
     $mobile = $params["mobile"];
     $message = urlencode($params["message"]);
-    $output = file_get_contents("http://login.arihantsms.com/vendorsms/pushsms.aspx?user=cipherhex&password=UBtNiZlY45z3Md00qe&msisdn=".$mobile."&sid=CIPHHX&msg=".$message."&fl=0&gwid=2");
+    $output = file_get_contents("http://login.arihantsms.com/vendorsms/pushsms.aspx?user=cipherhex&password=UBtNiZlY45z3Md00qe&msisdn=" . $mobile . "&sid=CIPHHX&msg=" . $message . "&fl=0&gwid=2");
 }
 
 //function InsertRecord($collectionName="",$insertData=array()){
@@ -1523,8 +1596,9 @@ function sendMessage($params) {
 
 */
 
-function deleteData($table_name = '', $condition = array()){
-    $ci = & get_instance();
+function deleteData($table_name = '', $condition = array())
+{
+    $ci = &get_instance();
     $ci->db->where($condition);
     $ci->db->delete($table_name);
     return 1;
@@ -1536,14 +1610,14 @@ function deleteData($table_name = '', $condition = array()){
     -> unlink means delete image on edit and delete
 */
 
-function imageUnlink($imagePath = ''){
+function imageUnlink($imagePath = '')
+{
 
     if (is_readable($imagePath) && unlink($imagePath)) {
         echo 1;
     } else {
         echo 0;
     }
-
 }
 
 /*
@@ -1551,11 +1625,12 @@ function imageUnlink($imagePath = ''){
     -> emailid format valid or not
     
 */
-function isValidEmail($emailId = ''){
+function isValidEmail($emailId = '')
+{
     if (filter_var($emailId, FILTER_VALIDATE_EMAIL)) {
 
         return 1; //Yes
-    }else{
+    } else {
         return 0; //No
     }
 }
@@ -1565,10 +1640,11 @@ function isValidEmail($emailId = ''){
     -> emailid valid for delivery or not
     
 */
-function isValidDeliverableEmail($emailId){
-     try {        
+function isValidDeliverableEmail($emailId)
+{
+    try {
         $apikey = "8fafe17031cd31997be8835f2e3264741112461af4dc494d6f3da0980636b13c";
-        $data = array(                
+        $data = array(
             'email' => $emailId,
             'api_key' => $apikey
         );
@@ -1577,19 +1653,18 @@ function isValidDeliverableEmail($emailId){
         $client = new GuzzleHttp\Client();
 
         $body = $client->get("https://api.thechecker.co/v2/verify", [
-            'query' => $data        
+            'query' => $data
         ]);
 
-        $responseBody = json_decode($body->getBody(true),true);
-        if($responseBody['result'] == "deliverable"){
+        $responseBody = json_decode($body->getBody(true), true);
+        if ($responseBody['result'] == "deliverable") {
             return 1;
-        }else{
+        } else {
             return 0;
         }
     } catch (\Throwable $th) {
         return -1;
     }
-
 }
 
 /*
@@ -1599,12 +1674,13 @@ function isValidDeliverableEmail($emailId){
     -> create random number length = 6
 */
 
-function createOtp(){
+function createOtp()
+{
     $numbers = "0123456789";
     $charactersLength = strlen($numbers);
     $otpNumber = '';
     for ($i = 0; $i < 6; $i++) {
-        $otpNumber.= $numbers[rand(0, $charactersLength - 1) ];
+        $otpNumber .= $numbers[rand(0, $charactersLength - 1)];
     }
     return $otpNumber;
 }
@@ -1615,25 +1691,26 @@ function createOtp(){
     @sendOtpMail
     -> start code send otp mail
 */
-function sendMailOtp($emailId,$fullName,$otpNumber){
-    
+function sendMailOtp($emailId, $fullName, $otpNumber)
+{
+
     $condition = array();
-    
+
     $toEmail    = $emailId;
     $subject    = "OTP Verify";
     $mail_body  = "";
-    $mail_body  .= "Dear ".$fullName.",<br /><br />";
-    $mail_body  .= "Our OTP for the registration for Go Badger Management is : ". $otpNumber.". It will be expired in 10 minutes.";  
+    $mail_body  .= "Dear " . $fullName . ",<br /><br />";
+    $mail_body  .= "Our OTP for the registration for Go Badger Management is : " . $otpNumber . ". It will be expired in 10 minutes.";
     $mail_body  .= "<br/>Thank you,";
     $mail_body  .= "<br/>Go Badger Team";
     $mailResponse = sendMail($toEmail, $subject, $mail_body);   // send mail here
 
-    if($mailResponse == 0){
+    if ($mailResponse == 0) {
 
         $response['err'] = 0;
         $response['otp'] = $otpNumber;
         $response['msg'] = "OTP has been sent successfully to your email id";
-    }else{
+    } else {
 
         $response['err'] = 2;
         $response['msg'] = "Failed to send OTP to your email id";
@@ -1648,8 +1725,9 @@ function sendMailOtp($emailId,$fullName,$otpNumber){
     @sendMailForgetPassword
     -> start code send otp mail
 */
-function sendMailForgetPassword($emailId,$fullName) {
-    
+function sendMailForgetPassword($emailId, $fullName)
+{
+
     $generatePassword = generateRandomString(12);
 
     $dataArr = array(
@@ -1659,14 +1737,14 @@ function sendMailForgetPassword($emailId,$fullName) {
     $toEmail    = $emailId;
     $subject    = "Forget Password";
     $mail_body  = "";
-    $mail_body  .= "Dear ".$fullName.",<br /><br />";
-    $mail_body  .= "Your new auto-generated password is ".$generatePassword.". Please login with it and change the password again of your choice for security reason.<br/><br/>";  
-    $mail_body  .= "Thank you,<br/><br/>";  
-    $mail_body  .= "Go Badger.<br/><br/>";  
+    $mail_body  .= "Dear " . $fullName . ",<br /><br />";
+    $mail_body  .= "Your new auto-generated password is " . $generatePassword . ". Please login with it and change the password again of your choice for security reason.<br/><br/>";
+    $mail_body  .= "Thank you,<br/><br/>";
+    $mail_body  .= "Go Badger.<br/><br/>";
 
     $mailResponse = sendMail($toEmail, $subject, $mail_body);   // send mail here
 
-    if($mailResponse == 0) {
+    if ($mailResponse == 0) {
 
         $response['err'] = 0;
         $response['password'] = $generatePassword;
@@ -1683,91 +1761,96 @@ function sendMailForgetPassword($emailId,$fullName) {
     @sendNotification
     -> send notification user trash bin collect request (start code here)
 */
-function sendNotification($fcmToken = "",$title = '',$body ='',$status = ''){
+function sendNotification($fcmToken = "", $title = '', $body = '', $status = '')
+{
 
-        // store variable fcmToken id
-        $registrationIds = $fcmToken;
-        
-        // notification code start here
-        //$icon  = base_url()."images/splash_screen_logo.png";
-        $fields = array(
-            'to'   => $registrationIds,
-            'notification' =>  array(
-                'title'    => $title,
-                'body'     => $body, 
-                'status'   => $status,
-                //'icon'   => 'myicon', 
-                //'image'  => $icon,
-                'sound'    => "default"
-            ), 
-            'data' => array(
-                'title'    => $title,
-                'body'     => $body, 
-                'status'   => $status,
-                //'icon'   => 'myicon', 
-                //'image'  => $icon,
-                'sound'  => "default"
-            )
-        );
-        
-        
-        //echo json_encode($fields);die;
-        $headers = array('Authorization: key=' . API_ACCESS_KEY, 'Content-Type: application/json');
-        #Send Reponse To FireBase Server
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-        $result = curl_exec($ch);
-         if($result === false){
-            /*die('Curl failed:' .curl_errno($ch));
+    // store variable fcmToken id
+    $registrationIds = $fcmToken;
+
+    // notification code start here
+    //$icon  = base_url()."images/splash_screen_logo.png";
+    $fields = array(
+        'to'   => $registrationIds,
+        'notification' =>  array(
+            'title'    => $title,
+            'body'     => $body,
+            'status'   => $status,
+            //'icon'   => 'myicon', 
+            //'image'  => $icon,
+            'sound'    => "default"
+        ),
+        'data' => array(
+            'title'    => $title,
+            'body'     => $body,
+            'status'   => $status,
+            //'icon'   => 'myicon', 
+            //'image'  => $icon,
+            'sound'  => "default"
+        )
+    );
+
+
+    //echo json_encode($fields);die;
+    $headers = array('Authorization: key=' . API_ACCESS_KEY, 'Content-Type: application/json');
+    #Send Reponse To FireBase Server
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+    $result = curl_exec($ch);
+    if ($result === false) {
+        /*die('Curl failed:' .curl_errno($ch));
             echo $result;*/
-            return 0;
-        }else{
-            //return $result;
-            return 1;
-            //$resultData = json_decode($result, TRUE);
-        }
-        //echo  $result ."<br>";
-        curl_close($ch);
-}   
+        return 0;
+    } else {
+        //return $result;
+        return 1;
+        //$resultData = json_decode($result, TRUE);
+    }
+    //echo  $result ."<br>";
+    curl_close($ch);
+}
 
 
-function getCountry(){
+function getCountry()
+{
     $condition = array();
     $is_single = FALSE;
-    $countries = GetAllRecord(COUNTRY_MASTER,$condition,$is_single);
+    $countries = GetAllRecord(COUNTRY_MASTER, $condition, $is_single);
 
     if (count($countries) > 0) {
         return $countries;
-    }else{
+    } else {
         return array();
     }
 }
 
-function getCountryCode($country){
-    $countriesWithCode = array('DK'=>'+45','SE'=>'+46','NOR'=>'+47','FI'=>'+358','UK'=>'+44','AU'=>'+43','DE' => '+49','CA' => '+1','NL' => '+31','NZ' => '+64');
+function getCountryCode($country)
+{
+    $countriesWithCode = array('DK' => '+45', 'SE' => '+46', 'NOR' => '+47', 'FI' => '+358', 'UK' => '+44', 'AU' => '+43', 'DE' => '+49', 'CA' => '+1', 'NL' => '+31', 'NZ' => '+64');
     return $countriesWithCode[$country];
 }
 
-function getAllCountryCode(){
-    $countryCode = array('DK'=>'45','SE'=>'46','NOR'=>'47','FI'=>'358','UK'=>'44','AU'=>'43','DE' => '49','CA' => '1','NL' => '31','NZ' => '64');
-    return $countryCode;   
+function getAllCountryCode()
+{
+    $countryCode = array('DK' => '45', 'SE' => '46', 'NOR' => '47', 'FI' => '358', 'UK' => '44', 'AU' => '43', 'DE' => '49', 'CA' => '1', 'NL' => '31', 'NZ' => '64');
+    return $countryCode;
 }
 
-function getAllSmsApiProvider(){
+function getAllSmsApiProvider()
+{
     $sms_providers = array('forty_two' => 'Fourty Two', 'cp_sms' => 'CP SMS', 'warriors_sms' => 'Warriors SMS'/*, 'sms_edge' => 'SMS Edge', 'mmd_smart' => 'MMD Smart', 'in_mobile' => 'In Mobile', 'sinch'=>'Sinch'*/);
     return $sms_providers;
 }
 
 
-function encrypt($pure_string) {
-    
-    return bin2hex(openssl_encrypt($pure_string, 'AES-128-CBC', ENCRYPT_KEY));
+function encrypt($pure_string)
+{
 
+    return bin2hex(openssl_encrypt($pure_string, 'AES-128-CBC', ENCRYPT_KEY));
 }
 
 /**
@@ -1776,89 +1859,96 @@ function encrypt($pure_string) {
 
  */
 
-function decrypt($encrypted_string) {
-    
+function decrypt($encrypted_string)
+{
+
     return openssl_decrypt(hex2bin($encrypted_string), 'AES-128-CBC', ENCRYPT_KEY);
 }
 
 
 //get datetime diff in hours
-function getDateTimeDiffInHours($startDate,$endDate){
-    return round((strtotime($endDate) - strtotime($startDate))/3600, 1);
+function getDateTimeDiffInHours($startDate, $endDate)
+{
+    return round((strtotime($endDate) - strtotime($startDate)) / 3600, 1);
 }
 
 
-function countryThasListedInEgoi(){
-    return array('DK','NO','SE');
+function countryThasListedInEgoi()
+{
+    return array('DK', 'NO', 'SE');
 }
 
-function countryThasListedInAweber(){
-    return array('DK','NOR','SE','FI','UK','NL','CA','NZ');
+function countryThasListedInAweber()
+{
+    return array('DK', 'NOR', 'SE', 'FI', 'UK', 'NL', 'CA', 'NZ');
 }
 
-function getListIdForAllAweber($aweberListId,$country){
+function getListIdForAllAweber($aweberListId, $country)
+{
     if ($country != '') {
-        
+
         $aweberAllListArr = array(
             '1' => array('DK' => 5237847, 'SE' => 5217417, 'FI' => 5237852, 'NOR' => 5217426, 'UK' => '', 'DE' => '', 'CA' => 5221106, 'NL' => 5514395),
             '2' => array('DK' => 5297593, 'SE' => 5297594, 'FI' => 5297596, 'NOR' => 5297595, 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => ''),
-            '3' => array('DK' => '', 'SE' => '', 'FI' => '', 'NOR' => 5327219, 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => ''), 
+            '3' => array('DK' => '', 'SE' => '', 'FI' => '', 'NOR' => 5327219, 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => ''),
             '4' => array('DK' => '', 'SE' => '', 'FI' => 5327235, 'NOR' => '', 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => ''),
-            '5' => array('DK' => 5353599,'SE' => '', 'FI' => '', 'NOR' => '', 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => ''),
-            '6' => array('DK' => '','SE' => '', 'FI' => '', 'NOR' => 5384430, 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => ''),
-            '7' => array('DK' => '','SE' => '', 'FI' => 5384432, 'NOR' => '', 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => ''),
-            '8' => array('DK' => 5518965,'SE' => '', 'FI' => '', 'NOR' => 5518966, 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => ''),
-            '9' => array('DK' => '','SE' => '', 'FI' => '', 'NOR' => 5562033, 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => ''),
-            '10' => array('DK' => '','SE' => 5518967, 'FI' => '', 'NOR' => '', 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => ''),
-            '11' => array('DK' => '','SE' => '', 'FI' => 5327235, 'NOR' => '', 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => ''),
-            '12' => array('DK' => '','SE' => '', 'FI' => '', 'NOR' => '', 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => '')
+            '5' => array('DK' => 5353599, 'SE' => '', 'FI' => '', 'NOR' => '', 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => ''),
+            '6' => array('DK' => '', 'SE' => '', 'FI' => '', 'NOR' => 5384430, 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => ''),
+            '7' => array('DK' => '', 'SE' => '', 'FI' => 5384432, 'NOR' => '', 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => ''),
+            '8' => array('DK' => 5518965, 'SE' => '', 'FI' => '', 'NOR' => 5518966, 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => ''),
+            '9' => array('DK' => '', 'SE' => '', 'FI' => '', 'NOR' => 5562033, 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => ''),
+            '10' => array('DK' => '', 'SE' => 5518967, 'FI' => '', 'NOR' => '', 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => ''),
+            '11' => array('DK' => '', 'SE' => '', 'FI' => 5327235, 'NOR' => '', 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => ''),
+            '12' => array('DK' => '', 'SE' => '', 'FI' => '', 'NOR' => '', 'UK' => '', 'DE' => '', 'CA' => '', 'NL' => '')
         );
 
         return $aweberAllListArr[$aweberListId][strtoupper($country)];
-    }else{
+    } else {
         return '';
     }
 }
 
-function reformat_number_format($percentage = 0){
+function reformat_number_format($percentage = 0)
+{
 
     $percentage = number_format((float)$percentage, 8, '.', '');
     return floatval($percentage);
 }
 
 
-function get_timezone_wise_difference($country = 'DK', $set_date = ''){
+function get_timezone_wise_difference($country = 'DK', $set_date = '')
+{
 
-    $country_wise_time_zone = array('DK' => 'Europe/Copenhagen', 'SE' => 'Europe/Stockholm', 'NOR' => 'Europe/Oslo', 'FI' => 'Europe/Helsinki', 'UK' => 'Europe/London', 'DE' => 'Europe/Berlin', 'AU' => 'Australia/Canberra', 'NL' => 'Europe/Amsterdam', 'CA' => 'America/Regina'); 
+    $country_wise_time_zone = array('DK' => 'Europe/Copenhagen', 'SE' => 'Europe/Stockholm', 'NOR' => 'Europe/Oslo', 'FI' => 'Europe/Helsinki', 'UK' => 'Europe/London', 'DE' => 'Europe/Berlin', 'AU' => 'Australia/Canberra', 'NL' => 'Europe/Amsterdam', 'CA' => 'America/Regina');
 
     $set_time_zone_region = $country_wise_time_zone[$country];
     date_default_timezone_set($set_time_zone_region);
 
-    $diff = strtotime($set_date) - time();    
+    $diff = strtotime($set_date) - time();
     return $diff;
-
 }
 
-function get_current_time_of_country($country){
+function get_current_time_of_country($country)
+{
 
-    $country_wise_time_zone = array('DK' => 'Europe/Copenhagen', 'SE' => 'Europe/Stockholm', 'NOR' => 'Europe/Oslo', 'FI' => 'Europe/Helsinki', 'UK' => 'Europe/London', 'DE' => 'Europe/Berlin', 'AU' => 'Australia/Canberra', 'NL' => 'Europe/Amsterdam', 'CA' => 'America/Regina'); 
+    $country_wise_time_zone = array('DK' => 'Europe/Copenhagen', 'SE' => 'Europe/Stockholm', 'NOR' => 'Europe/Oslo', 'FI' => 'Europe/Helsinki', 'UK' => 'Europe/London', 'DE' => 'Europe/Berlin', 'AU' => 'Australia/Canberra', 'NL' => 'Europe/Amsterdam', 'CA' => 'America/Regina');
 
     $set_time_zone_region = $country_wise_time_zone[$country];
     date_default_timezone_set($set_time_zone_region);
 
-    $currentTime = time();    
+    $currentTime = time();
     return $currentTime;
-
 }
 
-function addToAweberSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+function addToAweberSubscriberQueue($liveDeliveryDataId, $mailProvider, $delayDay)
+{
     $liveDeliveryDelayData = array(
         "liveDeliveryDataId" => $liveDeliveryDataId,
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+' . $delayDay . ' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d", strtotime('+' . $delayDay . ' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1866,14 +1956,15 @@ function addToAweberSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay)
     ManageData(AWEBER_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
-function addToTransmitviaSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+function addToTransmitviaSubscriberQueue($liveDeliveryDataId, $mailProvider, $delayDay)
+{
     $liveDeliveryDelayData = array(
         "liveDeliveryDataId" => $liveDeliveryDataId,
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+' . $delayDay . ' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d", strtotime('+' . $delayDay . ' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1881,14 +1972,15 @@ function addToTransmitviaSubscriberQueue($liveDeliveryDataId,$mailProvider,$dela
     ManageData(TRANSMITVIA_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
-function addToContactSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+function addToContactSubscriberQueue($liveDeliveryDataId, $mailProvider, $delayDay)
+{
     $liveDeliveryDelayData = array(
         "liveDeliveryDataId" => $liveDeliveryDataId,
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+' . $delayDay . ' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d", strtotime('+' . $delayDay . ' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1896,14 +1988,15 @@ function addToContactSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay
     ManageData(CONTACT_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
-function addToOngageSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+function addToOngageSubscriberQueue($liveDeliveryDataId, $mailProvider, $delayDay)
+{
     $liveDeliveryDelayData = array(
         "liveDeliveryDataId" => $liveDeliveryDataId,
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+' . $delayDay . ' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d", strtotime('+' . $delayDay . ' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1911,14 +2004,15 @@ function addToOngageSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay)
     ManageData(ONGAGE_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
-function addToSendgridSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+function addToSendgridSubscriberQueue($liveDeliveryDataId, $mailProvider, $delayDay)
+{
     $liveDeliveryDelayData = array(
         "liveDeliveryDataId" => $liveDeliveryDataId,
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+' . $delayDay . ' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d", strtotime('+' . $delayDay . ' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1926,14 +2020,15 @@ function addToSendgridSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDa
     ManageData(SENDGRID_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
-function addToSendinblueSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+function addToSendinblueSubscriberQueue($liveDeliveryDataId, $mailProvider, $delayDay)
+{
     $liveDeliveryDelayData = array(
         "liveDeliveryDataId" => $liveDeliveryDataId,
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+' . $delayDay . ' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d", strtotime('+' . $delayDay . ' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1941,14 +2036,15 @@ function addToSendinblueSubscriberQueue($liveDeliveryDataId,$mailProvider,$delay
     ManageData(SENDINBLUE_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
-function addToSendpulseSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+function addToSendpulseSubscriberQueue($liveDeliveryDataId, $mailProvider, $delayDay)
+{
     $liveDeliveryDelayData = array(
         "liveDeliveryDataId" => $liveDeliveryDataId,
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+' . $delayDay . ' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d", strtotime('+' . $delayDay . ' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1956,14 +2052,15 @@ function addToSendpulseSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayD
     ManageData(SENDPULSE_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
-function addToMailerliteSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+function addToMailerliteSubscriberQueue($liveDeliveryDataId, $mailProvider, $delayDay)
+{
     $liveDeliveryDelayData = array(
         "liveDeliveryDataId" => $liveDeliveryDataId,
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+' . $delayDay . ' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d", strtotime('+' . $delayDay . ' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1971,14 +2068,15 @@ function addToMailerliteSubscriberQueue($liveDeliveryDataId,$mailProvider,$delay
     ManageData(MAILERLITE_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
-function addToMailjetSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+function addToMailjetSubscriberQueue($liveDeliveryDataId, $mailProvider, $delayDay)
+{
     $liveDeliveryDelayData = array(
         "liveDeliveryDataId" => $liveDeliveryDataId,
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+' . $delayDay . ' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d", strtotime('+' . $delayDay . ' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -1986,14 +2084,15 @@ function addToMailjetSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay
     ManageData(MAILJET_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
-function addToConvertkitSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+function addToConvertkitSubscriberQueue($liveDeliveryDataId, $mailProvider, $delayDay)
+{
     $liveDeliveryDelayData = array(
         "liveDeliveryDataId" => $liveDeliveryDataId,
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+' . $delayDay . ' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d", strtotime('+' . $delayDay . ' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -2001,14 +2100,15 @@ function addToConvertkitSubscriberQueue($liveDeliveryDataId,$mailProvider,$delay
     ManageData(CONVERTKIT_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
-function addToMarketingPlatformSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+function addToMarketingPlatformSubscriberQueue($liveDeliveryDataId, $mailProvider, $delayDay)
+{
     $liveDeliveryDelayData = array(
         "liveDeliveryDataId" => $liveDeliveryDataId,
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+' . $delayDay . ' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d", strtotime('+' . $delayDay . ' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -2016,14 +2116,15 @@ function addToMarketingPlatformSubscriberQueue($liveDeliveryDataId,$mailProvider
     ManageData(MARKETING_PLATFORM_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
-function addToOntraportSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+function addToOntraportSubscriberQueue($liveDeliveryDataId, $mailProvider, $delayDay)
+{
     $liveDeliveryDelayData = array(
         "liveDeliveryDataId" => $liveDeliveryDataId,
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+' . $delayDay . ' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d", strtotime('+' . $delayDay . ' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -2031,14 +2132,15 @@ function addToOntraportSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayD
     ManageData(ONTRAPORT_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
-function addToActiveCampaignSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+function addToActiveCampaignSubscriberQueue($liveDeliveryDataId, $mailProvider, $delayDay)
+{
     $liveDeliveryDelayData = array(
         "liveDeliveryDataId" => $liveDeliveryDataId,
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+' . $delayDay . ' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d", strtotime('+' . $delayDay . ' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -2046,14 +2148,15 @@ function addToActiveCampaignSubscriberQueue($liveDeliveryDataId,$mailProvider,$d
     ManageData(ACTIVE_CAMPAIGN_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
-function addToExpertSenderSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+function addToExpertSenderSubscriberQueue($liveDeliveryDataId, $mailProvider, $delayDay)
+{
     $liveDeliveryDelayData = array(
         "liveDeliveryDataId" => $liveDeliveryDataId,
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+' . $delayDay . ' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d", strtotime('+' . $delayDay . ' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -2061,14 +2164,15 @@ function addToExpertSenderSubscriberQueue($liveDeliveryDataId,$mailProvider,$del
     ManageData(EXPERT_SENDER_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
-function addToCleverReachSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+function addToCleverReachSubscriberQueue($liveDeliveryDataId, $mailProvider, $delayDay)
+{
     $liveDeliveryDelayData = array(
         "liveDeliveryDataId" => $liveDeliveryDataId,
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+' . $delayDay . ' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d", strtotime('+' . $delayDay . ' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -2076,14 +2180,15 @@ function addToCleverReachSubscriberQueue($liveDeliveryDataId,$mailProvider,$dela
     ManageData(CLEVER_REACH_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
-function addToOmnisendSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDay){
+function addToOmnisendSubscriberQueue($liveDeliveryDataId, $mailProvider, $delayDay)
+{
     $liveDeliveryDelayData = array(
         "liveDeliveryDataId" => $liveDeliveryDataId,
         "providerId" => $mailProvider,
         "delayDay" => $delayDay,
         "currentTimestamp" => time(),
-        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+'.$delayDay.' day', strtotime('9am')),
-        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d",strtotime('+'.$delayDay.' day', time())),
+        "deliveryTimestamp" => ($delayDay == 0) ? time() : strtotime('+' . $delayDay . ' day', strtotime('9am')),
+        "deliveryDate" => ($delayDay == 0) ? date('Y-m-d') : date("Y-m-d", strtotime('+' . $delayDay . ' day', time())),
         "status" => 0
     );
     $condition = array();
@@ -2091,25 +2196,26 @@ function addToOmnisendSubscriberQueue($liveDeliveryDataId,$mailProvider,$delayDa
     ManageData(OMNISEND_DELAY_USER_DATA, $condition, $liveDeliveryDelayData, $is_insert);
 }
 
-function addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,$groupName,$keyword,$emailId = NULL){
+function addRecordInHistory($lastDeliveryData, $mailProvider, $provider, $response, $groupName, $keyword, $emailId = NULL)
+{
     $historyData = array(
         'liveDeliveryDataId' => $lastDeliveryData['liveDeliveryDataId'],
         'providerId' => $mailProvider,
         'provider' => $provider,
-        'emailId' => (isset($lastDeliveryData['emailId']) && $lastDeliveryData['emailId'] !="")?$lastDeliveryData['emailId']:$emailId,
+        'emailId' => (isset($lastDeliveryData['emailId']) && $lastDeliveryData['emailId'] != "") ? $lastDeliveryData['emailId'] : $emailId,
         'groupName' => $groupName,
         'keyword' => $keyword,
         'updateDate' => date("Y-m-d"),
         'updateDateTime' => date("Y-m-d H:i:s"),
         'response' => json_encode($response)
     );
-    if($response != null){
-        if($response['result'] == "success"){
+    if ($response != null) {
+        if ($response['result'] == "success") {
             $historyData['status'] = 1; // success
-        }else{
+        } else {
             $historyData['status'] = 2; // error - already subscribe + other error
         }
-    }else{
+    } else {
         $historyData['status'] = 0; // pending
     }
 
@@ -2118,25 +2224,26 @@ function addRecordInHistory($lastDeliveryData,$mailProvider,$provider,$response,
     ManageData(EMAIL_HISTORY_DATA, $condition, $historyData, $is_insert);
 }
 
-function addRecordInHistoryFromCSV($lastDeliveryData,$mailProvider,$provider,$response,$groupName,$keyword,$emailId = NULL){
+function addRecordInHistoryFromCSV($lastDeliveryData, $mailProvider, $provider, $response, $groupName, $keyword, $emailId = NULL)
+{
     $historyData = array(
-        'userId' => isset($lastDeliveryData['userId'])?$lastDeliveryData['userId']:"-",
+        'userId' => isset($lastDeliveryData['userId']) ? $lastDeliveryData['userId'] : "-",
         'providerId' => $mailProvider,
         'provider' => $provider,
-        'emailId' => (isset($lastDeliveryData['emailId']) && $lastDeliveryData['emailId'] !="")?$lastDeliveryData['emailId']:$emailId,
+        'emailId' => (isset($lastDeliveryData['emailId']) && $lastDeliveryData['emailId'] != "") ? $lastDeliveryData['emailId'] : $emailId,
         'groupName' => $groupName,
         'keyword' => $keyword,
         'updateDate' => date("Y-m-d"),
         'updateDateTime' => date("Y-m-d H:i:s"),
         'response' => json_encode($response)
     );
-    if($response != null){
-        if($response['result'] == "success"){
+    if ($response != null) {
+        if ($response['result'] == "success") {
             $historyData['status'] = 1; // success
-        }else{
+        } else {
             $historyData['status'] = 2; // error - already subscribe + other error
         }
-    }else{
+    } else {
         $historyData['status'] = 0; // pending
     }
 
@@ -2145,21 +2252,24 @@ function addRecordInHistoryFromCSV($lastDeliveryData,$mailProvider,$provider,$re
     ManageData(EMAIL_HISTORY_DATA, $condition, $historyData, $is_insert);
 }
 
-function getProviderIdUsingTransmitviaList($code){
+function getProviderIdUsingTransmitviaList($code)
+{
     $condition = array(
         "code" => $code
     );
     $is_single = TRUE;
-    $provider = GetAllRecord(PROVIDERS,$condition,$is_single);
-    return $provider['id'];   
+    $provider = GetAllRecord(PROVIDERS, $condition, $is_single);
+    return $provider['id'];
 }
 
-function startsWith($string, $startString){
+function startsWith($string, $startString)
+{
     $len = strlen($startString);
     return (substr($string, 0, $len) === $startString);
-} 
+}
 
-function endsWith($string, $endString) {
+function endsWith($string, $endString)
+{
     $len = strlen($endString);
     if ($len == 0) {
         return true;
@@ -2167,31 +2277,34 @@ function endsWith($string, $endString) {
     return (substr($string, -$len) === $endString);
 }
 
-function getSubscribeDetails($listId,$email) {
+function getSubscribeDetails($listId, $email)
+{
     $condition = array(
-        'providerId' => $listId ,
+        'providerId' => $listId,
         'emailId' => $email,
-        'status'=> '1'
+        'status' => '1'
     );
     $is_single = TRUE;
-    $getEmailDetail = GetAllRecord(EMAIL_HISTORY_DATA,$condition,$is_single,array(),array(),array(),'emailId,response');
-    $emailResponse = json_decode($getEmailDetail['response'],true);
-    
-    return $emailResponse; 
+    $getEmailDetail = GetAllRecord(EMAIL_HISTORY_DATA, $condition, $is_single, array(), array(), array(), 'emailId,response');
+    $emailResponse = json_decode($getEmailDetail['response'], true);
+
+    return $emailResponse;
 }
 
-function getProviderListCode($providerId) {
-    $CI = & get_instance();   
+function getProviderListCode($providerId)
+{
+    $CI = &get_instance();
     $condition = array(
         'id' => $providerId
     );
     $is_single = TRUE;
-    $getProviderListCode = GetAllRecord(PROVIDERS, $condition, $is_single, array(), array(), array(),'code');
+    $getProviderListCode = GetAllRecord(PROVIDERS, $condition, $is_single, array(), array(), array(), 'code');
     return $getProviderListCode['code'];
 }
 
-function getProviderID($account, $listId, $provider) {
-    $CI = & get_instance();
+function getProviderID($account, $listId, $provider)
+{
+    $CI = &get_instance();
     $condition = array(
         'aweber_account' => $account,
         'code' => $listId,
@@ -2202,39 +2315,43 @@ function getProviderID($account, $listId, $provider) {
     return $getProviderID['id'];
 }
 
-function getLivedeliveryDetail($email,$responseField) {
-    $CI = & get_instance();
-    $getDetail = $CI->db->select('emailId,country,'.$responseField)
-            ->from(LIVE_DELIVERY_DATA)
-            ->where('emailId', $email)
-            ->like($responseField, 'success')
-            ->get()->row_array();
-    
-        return $getDetail;
+function getLivedeliveryDetail($email, $responseField)
+{
+    $CI = &get_instance();
+    $getDetail = $CI->db->select('emailId,country,' . $responseField)
+        ->from(LIVE_DELIVERY_DATA)
+        ->where('emailId', $email)
+        ->like($responseField, 'success')
+        ->get()->row_array();
+
+    return $getDetail;
 }
 
-function getAlreadySubscribeLivedeliveryDetail($email,$responseField) {
-    $CI = & get_instance();
-    $getDetail = $CI->db->select('emailId,country,'.$responseField)
-            ->from(LIVE_DELIVERY_DATA)
-            ->where('emailId', $email)
-            ->like($responseField, 'Subscriber already subscribed')
-            ->get()->row_array();
-    
-        return $getDetail;
+function getAlreadySubscribeLivedeliveryDetail($email, $responseField)
+{
+    $CI = &get_instance();
+    $getDetail = $CI->db->select('emailId,country,' . $responseField)
+        ->from(LIVE_DELIVERY_DATA)
+        ->where('emailId', $email)
+        ->like($responseField, 'Subscriber already subscribed')
+        ->get()->row_array();
+
+    return $getDetail;
 }
 
-function getProviderDetail($mainProviderId) {
-    $CI = & get_instance();
+function getProviderDetail($mainProviderId)
+{
+    $CI = &get_instance();
     $condition = array(
-        'id' => $mainProviderId       
+        'id' => $mainProviderId
     );
     $is_single = TRUE;
     $getProvider = GetAllRecord(PROVIDERS, $condition, $is_single, array(), array(), array());
     return $getProvider;
 }
 
-function getCsvUserResponseField($emailServiceProvider){
+function getCsvUserResponseField($emailServiceProvider)
+{
     $responseField = array(
         '1' => 'aweberResponse',
         '2' => 'transmitviaResponse',
@@ -2255,15 +2372,16 @@ function getCsvUserResponseField($emailServiceProvider){
     return $responseField[$emailServiceProvider];
 }
 
-function getCsvUserDetail($userIds, $listId, $responseField) {
-    $CI = & get_instance();
+function getCsvUserDetail($userIds, $listId, $responseField)
+{
+    $CI = &get_instance();
     $getDetail = [];
-    if(!empty($userIds)) {
+    if (!empty($userIds)) {
         $getDetail =  $CI->db->select('csv_cron_user_data.*,csv_file_provider_data.providerName,csv_file_provider_data.providerList,csv_providers_detail.originalProvider')
             ->from(CSV_CRON_USER_DATA)
-            ->join(CSV_FILE_PROVIDER_DATA,'csv_cron_user_data.providerId = csv_file_provider_data.id', 'left')
-            ->join(CSV_PROVIDERS_DETAIL,'csv_file_provider_data.providerName = csv_providers_detail.providerName AND csv_file_provider_data.providerList = csv_providers_detail.providerList', 'left')
-            ->where('csv_cron_user_data.userId IN ('.$userIds.')')
+            ->join(CSV_FILE_PROVIDER_DATA, 'csv_cron_user_data.providerId = csv_file_provider_data.id', 'left')
+            ->join(CSV_PROVIDERS_DETAIL, 'csv_file_provider_data.providerName = csv_providers_detail.providerName AND csv_file_provider_data.providerList = csv_providers_detail.providerList', 'left')
+            ->where('csv_cron_user_data.userId IN (' . $userIds . ')')
             ->where('csv_cron_user_data.status', 1)
             ->where('csv_providers_detail.originalProvider', $listId)
             ->like($responseField, 'success')
@@ -2272,15 +2390,16 @@ function getCsvUserDetail($userIds, $listId, $responseField) {
     return $getDetail;
 }
 
-function getAlreadySubscribeCsvUserDetail($userIds, $listId, $responseField) {
-    $CI = & get_instance();
+function getAlreadySubscribeCsvUserDetail($userIds, $listId, $responseField)
+{
+    $CI = &get_instance();
     $getDetail = [];
-    if(!empty($userIds)) {
+    if (!empty($userIds)) {
         $getDetail =  $CI->db->select('csv_cron_user_data.*,csv_file_provider_data.providerName,csv_file_provider_data.providerList,csv_providers_detail.originalProvider')
             ->from(CSV_CRON_USER_DATA)
-            ->join(CSV_FILE_PROVIDER_DATA,'csv_cron_user_data.providerId = csv_file_provider_data.id', 'left')
-            ->join(CSV_PROVIDERS_DETAIL,'csv_file_provider_data.providerName = csv_providers_detail.providerName AND csv_file_provider_data.providerList = csv_providers_detail.providerList', 'left')
-            ->where('csv_cron_user_data.userId IN ('.$userIds.')')
+            ->join(CSV_FILE_PROVIDER_DATA, 'csv_cron_user_data.providerId = csv_file_provider_data.id', 'left')
+            ->join(CSV_PROVIDERS_DETAIL, 'csv_file_provider_data.providerName = csv_providers_detail.providerName AND csv_file_provider_data.providerList = csv_providers_detail.providerList', 'left')
+            ->where('csv_cron_user_data.userId IN (' . $userIds . ')')
             ->where('csv_cron_user_data.status', 1)
             ->where('csv_providers_detail.originalProvider', $listId)
             ->like($responseField, 'Subscriber already subscribed')
@@ -2289,12 +2408,13 @@ function getAlreadySubscribeCsvUserDetail($userIds, $listId, $responseField) {
     return $getDetail;
 }
 
-function checkAccountStatus($mailProvider) {
+function checkAccountStatus($mailProvider)
+{
     $providerCondition   = array('id' => $mailProvider);
     $is_single           = true;
-    $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);   
-    $provider     = $providerData['provider']; 
-    $accountId    = $providerData['aweber_account']; 
+    $providerData        = GetAllRecord(PROVIDERS, $providerCondition, $is_single);
+    $provider     = $providerData['provider'];
+    $accountId    = $providerData['aweber_account'];
     $accountTable = getAccountTableName($provider);
 
     $condition   = array('id' => $accountId);
@@ -2304,7 +2424,8 @@ function checkAccountStatus($mailProvider) {
 }
 
 //delay account table name
-function getDelayAccountTableName($provider) {
+function getDelayAccountTableName($provider)
+{
     $tableNames = array(
         '1' => 'aweber_delay_user_data',
         '4' => 'ongage_delay_user_data',
@@ -2326,131 +2447,132 @@ function getDelayAccountTableName($provider) {
 }
 
 // get condition: dashboard stats by jalpa
-function getCondition($chooseFilter = "td",$month=null,$year=null){
+function getCondition($chooseFilter = "td", $month = null, $year = null)
+{
 
     if ($chooseFilter == 'td') {
 
-         //get td = today's clicks and registrations
-         $today = date('Y-m-d');
-         $startDate = $today;
-         $endDate = $today;
-             
-     }elseif ($chooseFilter == 'yd') {
+        //get td = today's clicks and registrations
+        $today = date('Y-m-d');
+        $startDate = $today;
+        $endDate = $today;
+    } elseif ($chooseFilter == 'yd') {
 
-         //get yd = yester's records
-         $yesterday = date('Y-m-d',strtotime("-1 day"));
-         $startDate = $yesterday;
-         $endDate = $yesterday;
+        //get yd = yester's records
+        $yesterday = date('Y-m-d', strtotime("-1 day"));
+        $startDate = $yesterday;
+        $endDate = $yesterday;
+    } elseif ($chooseFilter == 'lSvnD') {
 
-     }elseif ($chooseFilter == 'lSvnD') {
-         
-         //get lSvnD = last seven day's records
-         $lastSevenDay   = date('Y-m-d',strtotime("-7 days"));
-         $today          = date('Y-m-d');
+        //get lSvnD = last seven day's records
+        $lastSevenDay   = date('Y-m-d', strtotime("-7 days"));
+        $today          = date('Y-m-d');
 
-         $startDate = $lastSevenDay;
-         $endDate = $today;            
+        $startDate = $lastSevenDay;
+        $endDate = $today;
+    } elseif ($chooseFilter == 'lThrtyD') {
 
-     }elseif ($chooseFilter == 'lThrtyD') {
-         
-         //get lThrtyD = current month records
-         $lastThirtyDay  = date('Y-m-01');
-         $today          = date('Y-m-d');
+        //get lThrtyD = current month records
+        $lastThirtyDay  = date('Y-m-01');
+        $today          = date('Y-m-d');
 
-         $startDate = $lastThirtyDay;
-         $endDate = $today;   
-
-     }elseif($chooseFilter == 'dM'){
+        $startDate = $lastThirtyDay;
+        $endDate = $today;
+    } elseif ($chooseFilter == 'dM') {
         //get dM = daynamic month records end of january
-        if($month!=null && $year != null){
-            $timestamp    = strtotime($month." ".$year);
+        if ($month != null && $year != null) {
+            $timestamp    = strtotime($month . " " . $year);
             $startDate = date('Y-m-01', $timestamp);
-            $endDate  =date('Y-m-t',strtotime($startDate));
+            $endDate  = date('Y-m-t', strtotime($startDate));
         }
-
-     }
+    }
 
     $condition = array(
-        'startDate' => $startDate.' '.'00:00:00',
-        'endDate'   => $endDate.' '.'23:59:59'
-    );  
-   
-    return $condition;        
+        'startDate' => $startDate . ' ' . '00:00:00',
+        'endDate'   => $endDate . ' ' . '23:59:59'
+    );
+
+    return $condition;
 }
 
 // get all esp response field from provider - DAB
-function getAllResponseFieldName() {
-    $CI = & get_instance();
+function getAllResponseFieldName()
+{
+    $CI = &get_instance();
     $getProvideDetail = $CI->db->select('response_field')
-                                ->from('providers')
-                                ->where_in('provider', [9,12,13,14,15,16])
-                                ->get()->result_array();
+        ->from('providers')
+        ->where_in('provider', [9, 12, 13, 14, 15, 16])
+        ->get()->result_array();
     $responseFields = array_column($getProvideDetail, 'response_field');
     return $responseFields;
 }
 
 // get table name according to esp - DAB
-function getAccountTable($esp) {
+function getAccountTable($esp)
+{
     $table = "";
-    if($esp == 9) {
+    if ($esp == 9) {
         $table = 'mailjet_accounts';
-    } else if($esp == 12) {
+    } else if ($esp == 12) {
         $table = 'ontraport_accounts';
-    }  else if($esp == 13) {
+    } else if ($esp == 13) {
         $table = 'active_campaign_accounts';
-    }  else if($esp == 14) {
+    } else if ($esp == 14) {
         $table = 'expert_sender_accounts';
-    }  else if($esp == 15) {
+    } else if ($esp == 15) {
         $table = 'clever_reach_accounts';
-    }  else if($esp == 16) {
+    } else if ($esp == 16) {
         $table = 'omnisend_accounts';
-    }  else if($esp == 5) {
+    } else if ($esp == 5) {
         $table = 'sendgrid_accounts';
-    }  
+    }
     return $table;
 }
 
 // get IP - DAB
-function getIPAddress() {
+function getIPAddress()
+{
     $ipaddress = '';
     if (getenv('HTTP_CLIENT_IP'))
         $ipaddress = getenv('HTTP_CLIENT_IP');
-    else if(getenv('HTTP_X_FORWARDED_FOR'))
+    else if (getenv('HTTP_X_FORWARDED_FOR'))
         $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
-    else if(getenv('HTTP_X_FORWARDED'))
+    else if (getenv('HTTP_X_FORWARDED'))
         $ipaddress = getenv('HTTP_X_FORWARDED');
-    else if(getenv('HTTP_FORWARDED_FOR'))
+    else if (getenv('HTTP_FORWARDED_FOR'))
         $ipaddress = getenv('HTTP_FORWARDED_FOR');
-    else if(getenv('HTTP_FORWARDED'))
-       $ipaddress = getenv('HTTP_FORWARDED');
-    else if(getenv('REMOTE_ADDR'))
+    else if (getenv('HTTP_FORWARDED'))
+        $ipaddress = getenv('HTTP_FORWARDED');
+    else if (getenv('REMOTE_ADDR'))
         $ipaddress = getenv('REMOTE_ADDR');
     else
         $ipaddress = 'UNKNOWN';
-    return $ipaddress; 
+    return $ipaddress;
 }
 
-function getHeadingName($esp) {
+function getHeadingName($esp)
+{
     $heading = '';
-    if($esp == 9) {
+    if ($esp == 9) {
         $heading = 'Mailjet';
-    }else if($esp == 12) {
+    } else if ($esp == 12) {
         $heading = 'Ontraport';
-    }else if($esp == 13) {
+    } else if ($esp == 13) {
         $heading = 'Active Campaign';
-    }else if($esp == 14) {
+    } else if ($esp == 14) {
         $heading = 'Expert Sender';
-    }else if($esp == 15) {
+    } else if ($esp == 15) {
         $heading = 'Clever Reach';
-    }else if($esp == 16) {
+    } else if ($esp == 16) {
         $heading = 'Omnisend';
-    }else if($esp == 9) {
+    } else if ($esp == 9) {
         $heading = 'Sendgrid';
     }
     return $heading;
 }
 
-function getAccountStatusLog($esp, $accountId) {
+function getAccountStatusLog($esp, $accountId)
+{
     $condition = array(
         'account_status_log.esp' => $esp,
         'account_status_log.account_id' => $accountId
@@ -2460,45 +2582,48 @@ function getAccountStatusLog($esp, $accountId) {
     return $dataCount;
 }
 
-function sendLeadInIntegromat($lastDeliveryData,$getLiveDeliveryData){
-    try{
-        if($getLiveDeliveryData['integromatHookId'] != 0){
-            $hookData = GetAllRecord(INTEGROMAT_HOOKS,array('id' => $getLiveDeliveryData['integromatHookId']),true);
-        
+function sendLeadInIntegromat($lastDeliveryData, $getLiveDeliveryData)
+{
+    try {
+        if ($getLiveDeliveryData['integromatHookId'] != 0) {
+            $hookData = GetAllRecord(INTEGROMAT_HOOKS, array('id' => $getLiveDeliveryData['integromatHookId']), true);
+
             $lastDeliveryData['birthDate'] = "";
             if (@$lastDeliveryData['birthdateDay'] != '0' && @$lastDeliveryData['birthdateMonth'] != '0' && @$lastDeliveryData['birthdateYear'] != '0') {
                 $birthDate            = $lastDeliveryData['birthdateYear'] . '-' . $lastDeliveryData['birthdateMonth'] . '-' . $lastDeliveryData['birthdateDay'];
                 $lastDeliveryData['birthDate'] = date('Y-m-d', strtotime($birthDate));
             }
-            
+
+
             $integromatUserData = [
                 'firstname' => $lastDeliveryData['firstName'],
                 'email' => $lastDeliveryData['emailId'],
                 'gender' => $lastDeliveryData['gender'],
                 'birthdate' => $lastDeliveryData['birthDate'],
                 'country' => $lastDeliveryData['country'],
+                'phone' => $lastDeliveryData['phone'],
+                'countryCode' => getCountryCode($lastDeliveryData['country']),
                 'timestamp'  => strtotime(date('Y-m-d H:i:s'))
             ];
             // Create a Guzzle client
             $client = new GuzzleHttp\Client();
             $subscriberUrl = $hookData['hook_url'];
             $body = $client->post($subscriberUrl, [
-                'form_params' => $integromatUserData, 
-            ]); 
+                'form_params' => $integromatUserData,
+            ]);
             $response =  $body->getBody();
 
-            $is_insert = true;        
+            $is_insert = true;
             $live_delivery_integromat_data = array(
-                'liveDeliveryId' => $getLiveDeliveryData['liveDeliveryId'], 
-                'liveDeliveryDataId' => $lastDeliveryData['liveDeliveryDataId'], 
-                'integromatHookId' => $getLiveDeliveryData['integromatHookId'], 
+                'liveDeliveryId' => $getLiveDeliveryData['liveDeliveryId'],
+                'liveDeliveryDataId' => $lastDeliveryData['liveDeliveryDataId'],
+                'integromatHookId' => $getLiveDeliveryData['integromatHookId'],
                 'response' => $response,
                 'created_at' => date('Y-m-d H:i')
             );
-            ManageData(LIVE_DELIVERY_INTEGROMAT_DATA,[],$live_delivery_integromat_data,$is_insert);
-        }        
-
-    } catch(\GuzzleHttp\Exception\ClientException $e) {
-        return json_encode(array("result" => "error","error" => array("msg" => "Bad Request")));
+            ManageData(LIVE_DELIVERY_INTEGROMAT_DATA, [], $live_delivery_integromat_data, $is_insert);
+        }
+    } catch (\GuzzleHttp\Exception\ClientException $e) {
+        return json_encode(array("result" => "error", "error" => array("msg" => "Bad Request")));
     }
 }
