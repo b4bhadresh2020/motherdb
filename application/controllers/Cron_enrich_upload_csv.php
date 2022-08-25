@@ -22,7 +22,7 @@ class Cron_enrich_upload_csv extends CI_Controller
         $is_single   = true;
         $csvFileData = GetAllRecord(ENRICHMENT_CSV_FILE, $condition, $is_single, array(), array(), array(array('enrichmentCsvFileId' => 'ASC')));
 
-        if (count($csvFileData) > 0) {
+        if (isset($csvFileData) && count($csvFileData) > 0) {
 
             $this->updateEnrichCronStatus(1); //update cron is running
 
@@ -106,7 +106,6 @@ class Cron_enrich_upload_csv extends CI_Controller
                             $notUpdatedRecords++;
                             ftruncate($file, $this->lineStart($file)); // truncate from beginning of line
                         }
-
                     } else {
                         $emptyRecords++;
                         ftruncate($file, $this->lineStart($file)); // truncate from beginning of line
@@ -133,7 +132,6 @@ class Cron_enrich_upload_csv extends CI_Controller
 
             echo 'No pending files';
         }
-
     }
 
     public function updateEnrichCronStatus($configVal)
@@ -143,11 +141,11 @@ class Cron_enrich_upload_csv extends CI_Controller
         $condition = array("configKey" => "isEnrichCronRunning");
         $dataArr   = array("configVal" => $configVal);
         ManageData(SITECONFIG, $condition, $dataArr, false);
-
     }
 
     public function doEnrichment($csvDataArr, $csvFileData)
     {
+        pre($csvDataArr);
 
         $colNumber                = json_decode($csvFileData['colNumber'], true);
         $fieldsName               = json_decode($csvFileData['fieldsName'], true);
@@ -192,164 +190,158 @@ class Cron_enrich_upload_csv extends CI_Controller
 
         //get user count with above condition
         $userDataCount = GetAllRecordCount(USER, $condition);
+
         if ($userDataCount > 0) {
 
+            $isUpdatedTotal = 0;
+
             //get data from user table with above condition
-            $is_single = true;
+            $is_single = false;
             $order_by  = array('userId' => 'DESC');
-            $this->db->limit(1);
-            $getUserData = GetAllRecord(USER, $condition, $is_single, array(), array(), array($order_by), 'userId,groupName,keyword,allDataInString,gender,country');
+            $getUsersData = GetAllRecord(USER, $condition, $is_single, array(), array(), array($order_by), 'userId,groupName,keyword,allDataInString,gender,country');
 
-            if (count($getUserData) > 0) {
+            if (count($getUsersData) > 0) {
 
-                // first add in allDataInString field if groupName or keyword
-                $allDataInString = $getUserData['allDataInString'];
+                foreach ($getUsersData as $getUserData) {
 
-                //now, add comma separated groupname
-                $userGroupName = $getUserData['groupName'];
-                $groupExArr    = explode(',', $userGroupName);
+                    // first add in allDataInString field if groupName or keyword
+                    $allDataInString = $getUserData['allDataInString'];
 
-                if (!in_array($groupName, $groupExArr)) {
-                    $groupExArr[] = $groupName;
-                    $allDataInString .= '+' . $groupName;
-                }
-                $groupImpldStr = implode(',', $groupExArr);
+                    //now, add comma separated groupname
+                    $userGroupName = $getUserData['groupName'];
+                    $groupExArr    = explode(',', $userGroupName);
 
-                //And now, add comma separated keyword
-                $userKeyword  = $getUserData['keyword'];
-                $keywordExArr = explode(',', $userKeyword);
+                    if (!in_array($groupName, $groupExArr)) {
+                        $groupExArr[] = $groupName;
+                        $allDataInString .= '+' . $groupName;
+                    }
+                    $groupImpldStr = implode(',', $groupExArr);
 
-                if (!in_array($keyword, $keywordExArr)) {
-                    $keywordExArr[] = $keyword;
-                    $allDataInString .= '+' . $keyword;
-                }
-                $keywordImpldStr = implode(',', $keywordExArr);
+                    //And now, add comma separated keyword
+                    $userKeyword  = $getUserData['keyword'];
+                    $keywordExArr = explode(',', $userKeyword);
 
-                // new edited start
+                    if (!in_array($keyword, $keywordExArr)) {
+                        $keywordExArr[] = $keyword;
+                        $allDataInString .= '+' . $keyword;
+                    }
+                    $keywordImpldStr = implode(',', $keywordExArr);
 
-                $userGender  = $getUserData['gender'];
-                $userCountry = $getUserData['country'];
-                $userGroup   = $getUserData['groupName'];
+                    // new edited start
 
-                $keywordExArr_old = explode(',', $userKeyword);
-                $keyword_status   = 'not_update';
+                    $userGender  = $getUserData['gender'];
+                    $userCountry = $getUserData['country'];
+                    $userGroup   = $getUserData['groupName'];
 
-                if (!in_array($csvFileData['keyword'], $keywordExArr_old)) {
-                    $keyword_status = 'is_update';
-                }
+                    $keywordExArr_old = explode(',', $userKeyword);
+                    $keyword_status   = 'not_update';
 
-                // die;
+                    if (!in_array($csvFileData['keyword'], $keywordExArr_old)) {
+                        $keyword_status = 'is_update';
+                    }
 
-                $groupExArr_old = explode(',', $userGroupName);
-                $group_status   = 'not_update';
+                    $groupExArr_old = explode(',', $userGroupName);
+                    $group_status   = 'not_update';
 
-                if (!in_array($csvFileData['groupName'], $groupExArr_old)) {
-                    $group_status = 'is_update';
-                }
+                    if (!in_array($csvFileData['groupName'], $groupExArr_old)) {
+                        $group_status = 'is_update';
+                    }
 
-                $new_keyword   = $csvFileData['keyword'];
-                $new_groupName = $csvFileData['groupName'];
+                    $new_keyword   = $csvFileData['keyword'];
+                    $new_groupName = $csvFileData['groupName'];
 
-                if ($this->insertCount == 0) {
+                    if ($this->insertCount == 0) {
 
-                    if ($keyword_status == 'is_update') {
+                        if ($keyword_status == 'is_update') {
 
-                        $keywordCountryCount = GetAllRecordCount(KEYWORD_COUNTRY_COUNT, $condition = array('keyword' => $new_keyword, 'country' => $userCountry), $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $selected_rows = 'keywordCountryId');
+                            $keywordCountryCount = GetAllRecordCount(KEYWORD_COUNTRY_COUNT, $condition = array('keyword' => $new_keyword, 'country' => $userCountry), $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $selected_rows = 'keywordCountryId');
 
-                        if ($keywordCountryCount == 0) {
+                            if ($keywordCountryCount == 0) {
 
-                            $sql_keywordCountryCount = "INSERT INTO " . KEYWORD_COUNTRY_COUNT . " (keyword, country, total)  VALUES ('$new_keyword', '$userCountry', 0)";
+                                $sql_keywordCountryCount = "INSERT INTO " . KEYWORD_COUNTRY_COUNT . " (keyword, country, total)  VALUES ('$new_keyword', '$userCountry', 0)";
 
-                            $this->db->query($sql_keywordCountryCount);
+                                $this->db->query($sql_keywordCountryCount);
+                            }
+                        }
+
+                        if ($group_status == 'is_update') {
+
+                            $groupCountryCount = GetAllRecordCount(GROUP_COUNTRY_COUNT, $condition = array('groupName' => $new_groupName, 'country' => $userCountry), $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $selected_rows = 'groupCountryId');
+
+                            if ($groupCountryCount == 0) {
+
+                                $sql_groupCountryCount = "INSERT INTO " . GROUP_COUNTRY_COUNT . " (groupName, country)  VALUES ('$new_groupName', '$userCountry')";
+
+                                $this->db->query($sql_groupCountryCount);
+                            }
                         }
                     }
 
-                    if ($group_status == 'is_update') {
+                    if ($keyword_status == 'is_update') {
 
-                        $groupCountryCount = GetAllRecordCount(GROUP_COUNTRY_COUNT, $condition = array('groupName' => $new_groupName, 'country' => $userCountry), $is_single = false, $is_like = array(), $or_like = array(), $order_by = array(), $selected_rows = 'groupCountryId');
+                        $sql_keywordCountryCount = "UPDATE " . KEYWORD_COUNTRY_COUNT . " SET total = total + 1  WHERE keyword = '$new_keyword' and country = '$userCountry'";
+                        $this->db->query($sql_keywordCountryCount);
+                    }
 
-                        if ($groupCountryCount == 0) {
+                    if (@$userGender == 'male') {
 
-                            $sql_groupCountryCount = "INSERT INTO " . GROUP_COUNTRY_COUNT . " (groupName, country)  VALUES ('$new_groupName', '$userCountry')";
+                        if ($keyword_status == 'is_update') {
+                            $sql_keyword = "UPDATE " . KEYWORD_MASTER . " SET male = male + 1  WHERE keyword = '$new_keyword'";
+                            $this->db->query($sql_keyword);
+                        }
 
-                            $this->db->query($sql_groupCountryCount);
+                        if ($group_status == 'is_update') {
+                            $sql_groupName = "UPDATE " . GROUP_MASTER . " SET male = male + 1  WHERE groupName = '$new_groupName'";
+                            $this->db->query($sql_groupName);
                         }
                     }
 
-                }
+                    if (@$userGender == 'female') {
 
+                        if ($keyword_status == 'is_update') {
+                            $sql_keyword = "UPDATE " . KEYWORD_MASTER . " SET female = female + 1  WHERE keyword = '$new_keyword'";
+                            $this->db->query($sql_keyword);
+                        }
 
-
-                if ($keyword_status == 'is_update') {
-
-                    $sql_keywordCountryCount = "UPDATE " . KEYWORD_COUNTRY_COUNT . " SET total = total + 1  WHERE keyword = '$new_keyword' and country = '$userCountry'";
-                    $this->db->query($sql_keywordCountryCount);
-
-                }
-
-                if (@$userGender == 'male') {
-
-                    if ($keyword_status == 'is_update') {
-                        $sql_keyword = "UPDATE " . KEYWORD_MASTER . " SET male = male + 1  WHERE keyword = '$new_keyword'";
-                        $this->db->query($sql_keyword);
+                        if ($group_status == 'is_update') {
+                            $sql_groupName = "UPDATE " . GROUP_MASTER . " SET female = female + 1  WHERE groupName = '$new_groupName'";
+                            $this->db->query($sql_groupName);
+                        }
                     }
 
-                    if ($group_status == 'is_update') {
-                        $sql_groupName = "UPDATE " . GROUP_MASTER . " SET male = male + 1  WHERE groupName = '$new_groupName'";
-                        $this->db->query($sql_groupName);
+                    if (@$userGender != 'male' && @$userGender != 'female') {
+
+                        if ($keyword_status == 'is_update') {
+                            $sql_keyword = "UPDATE " . KEYWORD_MASTER . " SET other = other + 1  WHERE keyword = '$new_keyword'";
+                            $this->db->query($sql_keyword);
+                        }
+
+                        if ($group_status == 'is_update') {
+                            $sql_groupName = "UPDATE " . GROUP_MASTER . " SET other = other + 1  WHERE groupName = '$new_groupName'";
+                            $this->db->query($sql_groupName);
+                        }
                     }
 
-                }
+                    // new edited end
 
-                if (@$userGender == 'female') {
+                    //update record
+                    $condition = array('userId' => $getUserData['userId']);
+                    $dataArr   = array('groupName' => $groupImpldStr, 'keyword' => $keywordImpldStr, 'allDataInString' => $allDataInString);
+                    $is_insert = false;
 
-                    if ($keyword_status == 'is_update') {
-                        $sql_keyword = "UPDATE " . KEYWORD_MASTER . " SET female = female + 1  WHERE keyword = '$new_keyword'";
-                        $this->db->query($sql_keyword);
-                    }
+                    $isUpdated = ManageData(USER, $condition, $dataArr, $is_insert);
 
-                    if ($group_status == 'is_update') {
-                        $sql_groupName = "UPDATE " . GROUP_MASTER . " SET female = female + 1  WHERE groupName = '$new_groupName'";
-                        $this->db->query($sql_groupName);
-                    }
-                }
-
-                if (@$userGender != 'male' && @$userGender != 'female') {
-
-                    if ($keyword_status == 'is_update') {
-                        $sql_keyword = "UPDATE " . KEYWORD_MASTER . " SET other = other + 1  WHERE keyword = '$new_keyword'";
-                        $this->db->query($sql_keyword);
-                    }
-
-                    if ($group_status == 'is_update') {
-                        $sql_groupName = "UPDATE " . GROUP_MASTER . " SET other = other + 1  WHERE groupName = '$new_groupName'";
-                        $this->db->query($sql_groupName);
+                    if ($isUpdated == 1) {
+                        $isUpdatedTotal++;
                     }
                 }
-
-                // new edited end
-
-                //update record
-                $condition = array('userId' => $getUserData['userId']);
-                $dataArr   = array('groupName' => $groupImpldStr, 'keyword' => $keywordImpldStr, 'allDataInString' => $allDataInString);
-                $is_insert = false;
-
-                $isUpdated = ManageData(USER, $condition, $dataArr, $is_insert);
-
-                if ($isUpdated == 1) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-
+                return $isUpdatedTotal;
             } else {
                 return 0;
             }
-
         } else {
             return 0;
         }
-
     }
 
     /* @param string $csvFile Path to the CSV file
@@ -382,9 +374,7 @@ class Cron_enrich_upload_csv extends CI_Controller
             if ($position == 0) {
                 break;
             }
-
         }
         return $position;
     }
-
 }

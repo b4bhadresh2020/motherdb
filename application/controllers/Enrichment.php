@@ -5,13 +5,14 @@
  */
 class Enrichment extends CI_Controller
 {
-	
-	public function __construct() {
+
+    public function __construct()
+    {
         parent::__construct();
-        
-        if(!is_logged()){
+
+        if (!is_logged()) {
             redirect(base_url());
-        }else if(is_logged() && !is_admin()){
+        } else if (is_logged() && !is_admin()) {
             redirect("mailUnsubscribe");
         }
 
@@ -19,7 +20,8 @@ class Enrichment extends CI_Controller
         $this->load->model('mdl_history');
     }
 
-    public function manage($start = 0) {
+    public function manage($start = 0)
+    {
         $data = array();
         $data['load_page'] = 'enrichment';
         $data["curTemplateName"] = "enrichment/addEdit";
@@ -33,9 +35,10 @@ class Enrichment extends CI_Controller
 
     /**
         AJAX Call
-    */
-    public function addEdit(){
-        
+     */
+    public function addEdit()
+    {
+
         $fieldsName = $this->input->post('fieldsName');
         $colNumber = $this->input->post('colNumber');
         $lookingFor = $this->input->post('lookingFor');
@@ -46,23 +49,22 @@ class Enrichment extends CI_Controller
         $search_against_country = $this->input->post('search_against_country');
 
         $response = array();
-        
+
         if (@$_FILES['uploadCsv']['tmp_name'] != '') {
 
-            $content = file(@$_FILES['uploadCsv']['tmp_name']);    
+            $content = file(@$_FILES['uploadCsv']['tmp_name']);
 
             //check if file is empty or not
-            if(empty($content) || (count($content) === 1 && empty(trim($content[0])))){
-                
+            if (empty($content) || (count($content) === 1 && empty(trim($content[0])))) {
+
                 $response['err'] = 1;
                 $response['msg'] = 'CSV file is empty';
-
-            }else{
+            } else {
 
                 //now upload the file
-                $res = uploadFile('uploadCsv', '*','enrichment_csv');
-                
-                if($res['success']) {
+                $res = uploadFile('uploadCsv', '*', 'enrichment_csv');
+
+                if ($res['success']) {
                     $path = $res['path'];
                     //insert in db
                     $condition = array();
@@ -79,7 +81,7 @@ class Enrichment extends CI_Controller
                         'filePath' => $path
                     );
 
-                    $lastInsertedId = ManageData(ENRICHMENT_CSV_FILE,$condition,$insertArr,$is_insert);
+                    $lastInsertedId = ManageData(ENRICHMENT_CSV_FILE, $condition, $insertArr, $is_insert);
 
                     if ($lastInsertedId > 0) {
 
@@ -87,15 +89,15 @@ class Enrichment extends CI_Controller
                         $uploadedCsv = $_FILES['uploadCsv']['tmp_name'];
                         $fp = new SplFileObject($uploadedCsv, 'r');
                         $fp->seek(PHP_INT_MAX);         // got last line of file
-                        $totalRecords = $fp->key();     // get last line's number
+                        $totalRecords = $fp->key() - 1;     // get last line's number
                         $fp->rewind();                  // go to first line 
                         $fp = null;                     // close file by null (Because there is only method to close the file in splFileObject)
 
                         //insert record in cron_status table
                         $condition = array();
                         $is_insert = TRUE;
-                        $insertArr = array('filePath' => $path,'totalRecords' => $totalRecords,'groupName' => $groupName, 'keyword' => $keyword);
-                        ManageData(ENRICHMENT_CRON_STATUS,$condition,$insertArr,$is_insert);
+                        $insertArr = array('filePath' => $path, 'totalRecords' => $totalRecords, 'groupName' => $groupName, 'keyword' => $keyword);
+                        ManageData(ENRICHMENT_CRON_STATUS, $condition, $insertArr, $is_insert);
 
                         $this->mdl_csv->insertGroupName($groupName);
                         $this->mdl_csv->insertKeyword($keyword);
@@ -103,30 +105,26 @@ class Enrichment extends CI_Controller
                         //add data in history table
                         $explodeFileArr = explode('/', $path);
                         $fileName = array_pop($explodeFileArr);
-                        $jsonValue = array('groupName' => $groupName,'keyword' => $keyword);
+                        $jsonValue = array('groupName' => $groupName, 'keyword' => $keyword);
                         $jsonValue = json_encode($jsonValue);
-                        $this->mdl_history->addInHistoryTable($fileName,'enrichment',1,$jsonValue,$totalRecords);
-                        
+                        $this->mdl_history->addInHistoryTable($fileName, 'enrichment', 1, $jsonValue, $totalRecords);
+
                         $response['err'] = 0;
                         $response['msg'] = "File uploaded successfully";
-
-                    }else{
+                    } else {
                         $response['err'] = 1;
                         $response['msg'] = 'Something went wrong. File uploading process failed';
                     }
-                }else{
+                } else {
                     $response['err'] = 1;
                     $response['msg'] = 'Something went wrong. File uploading process failed';
                 }
             }
-        }else{
+        } else {
             $response['err'] = 1;
             $response['msg'] = 'Something went wrong. Please try again later';
         }
-        
-        echo json_encode($response);
-        
-    }
 
-    
+        echo json_encode($response);
+    }
 }
