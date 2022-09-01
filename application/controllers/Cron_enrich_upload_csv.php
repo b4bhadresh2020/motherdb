@@ -145,8 +145,6 @@ class Cron_enrich_upload_csv extends CI_Controller
 
     public function doEnrichment($csvDataArr, $csvFileData)
     {
-        pre($csvDataArr);
-
         $colNumber                = json_decode($csvFileData['colNumber'], true);
         $fieldsName               = json_decode($csvFileData['fieldsName'], true);
         $lookingFor               = json_decode($csvFileData['lookingFor'], true);
