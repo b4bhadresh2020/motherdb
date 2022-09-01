@@ -84,7 +84,7 @@ class LiveDeliveryStat extends CI_Controller {
             for ($i = 0; $i < $userdataCount; $i++) {
 
                 foreach ($keyArr as $value) {
-                    $reArrangeArray[$i][$value] = $userdata[$i][$value];
+                    $reArrangeArray[$i][$value] = (string)$userdata[$i][$value];
                 }
 
             }

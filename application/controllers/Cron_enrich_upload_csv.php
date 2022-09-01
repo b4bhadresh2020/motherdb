@@ -156,17 +156,12 @@ class Cron_enrich_upload_csv extends CI_Controller
 
         // prepare to get conditions data
         $condition = array();
-        $likeCondition = array();
 
         $countColNumber = count($colNumber);
 
         // prepare array for insert the data
         for ($j = 0; $j < $countColNumber; $j++) {
-            if($fieldsName[$j] == "phone"){
-                $likeCondition = array(array($fieldsName[$j] => $csvDataArr[$colNumber[$j] - 1]));
-            }else{
-                $condition[$fieldsName[$j]] = $csvDataArr[$colNumber[$j] - 1];
-            }
+            $condition[$fieldsName[$j]] = $csvDataArr[$colNumber[$j] - 1];
         }
 
         //looking for condition
@@ -191,7 +186,7 @@ class Cron_enrich_upload_csv extends CI_Controller
         }
 
         //get user count with above condition
-        $userDataCount = GetAllRecordCount(USER, $condition,false,$likeCondition);
+        $userDataCount = GetAllRecordCount(USER, $condition,false);
 
         if ($userDataCount > 0) {
 
