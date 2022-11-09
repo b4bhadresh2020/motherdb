@@ -113,6 +113,7 @@ define("KEYWORD_MASTER"					,		"keyword_master");
 define("COUNTRY_MASTER"					,		"country_master");
 define("ENRICHMENT_CSV_FILE"			,		"enrichment_csv_file");
 define("ENRICHMENT_CRON_STATUS"			,		"enrichment_cron_status");
+define("ENRICHMENT_HISTORY_DATA"		,		"enrichment_history_data");
 define("BLACKLIST_CSV_FILE"				,		"blacklist_csv_file");
 define("BLACKLIST_CRON_STATUS"			,		"blacklist_cron_status");
 define("HISTORY"						,		"history");

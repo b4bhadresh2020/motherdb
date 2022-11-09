@@ -65,7 +65,7 @@ class mdl_re_tracking_broadcast extends CI_Model {
         }
 
         if (@$groupName) {
-            $condition['user.groupName REGEXP'] = "[[:<:]]".trim($groupName)."[[:>:]]";  
+            $condition['user.groupName REGEXP'] = "\\b".trim($groupName)."\\b";  
         }
 
         if (@$minAge && @$maxAge) {
@@ -120,7 +120,7 @@ class mdl_re_tracking_broadcast extends CI_Model {
         }
         
         if (@$keyword) {
-            $condition['user.keyword REGEXP'] = "[[:<:]]".trim($keyword)."[[:>:]]";   
+            $condition['user.keyword REGEXP'] = "\\b".trim($keyword)."\\b";   
         }
 
         $this->db->select('*');

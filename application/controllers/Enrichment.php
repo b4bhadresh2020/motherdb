@@ -88,15 +88,17 @@ class Enrichment extends CI_Controller
                         //get total number of records from file
                         $uploadedCsv = $_FILES['uploadCsv']['tmp_name'];
                         $fp = new SplFileObject($uploadedCsv, 'r');
+                        $header = preg_replace( "/\r|\n/", "", $fp->current());
+
                         $fp->seek(PHP_INT_MAX);         // got last line of file
-                        $totalRecords = $fp->key() - 1;     // get last line's number
+                        $totalRecords = $fp->key();     // get last line's number
                         $fp->rewind();                  // go to first line 
                         $fp = null;                     // close file by null (Because there is only method to close the file in splFileObject)
 
                         //insert record in cron_status table
                         $condition = array();
                         $is_insert = TRUE;
-                        $insertArr = array('filePath' => $path, 'totalRecords' => $totalRecords, 'groupName' => $groupName, 'keyword' => $keyword);
+                        $insertArr = array('filePath' => $path, 'totalRecords' => $totalRecords, 'groupName' => $groupName, 'keyword' => $keyword, 'header' => json_encode(explode(",",$header)));
                         ManageData(ENRICHMENT_CRON_STATUS, $condition, $insertArr, $is_insert);
 
                         $this->mdl_csv->insertGroupName($groupName);

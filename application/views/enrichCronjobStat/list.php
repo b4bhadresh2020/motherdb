@@ -27,6 +27,7 @@
                                                 <th>Updated Records</th>
                                                 <th>Percentage</th>
                                                 <th>File Status</th>
+                                                <th>Download</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -60,7 +61,9 @@
                                                         <td><?php echo $curEntry['totalUpdatedRecords']; ?></td>
                                                         <td><?php echo $percentage.'%'; ?></td>
                                                         <td><?php echo $fileStatus; ?></td>
-
+                                                        <td class="text-center">
+                                                            <a href="<?php echo base_url('enrichmentCronjobStat/exportCsv?enrichCronStatusId='.$curEntry['enrichCronStatusId']); ?>"    class="btn btn-primary" ><i class="fa fa-download"></i></a>
+                                                        </td>
                                                     </tr>
                                             <?php } ?>
                                         </tbody>

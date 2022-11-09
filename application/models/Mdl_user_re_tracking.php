@@ -87,7 +87,7 @@ class Mdl_user_re_tracking extends CI_Model {
         }
 
         if (@$groupName) {
-            $condition['user.groupName REGEXP'] = "[[:<:]]".trim($groupName)."[[:>:]]";  
+            $condition['user.groupName REGEXP'] = "\\b".trim($groupName)."\\b";  
         }
 
         if (@$minAge && @$maxAge) {
@@ -142,7 +142,7 @@ class Mdl_user_re_tracking extends CI_Model {
         }
         
         if (@$keyword) {
-            $condition['user.keyword REGEXP'] = "[[:<:]]".trim($keyword)."[[:>:]]";   
+            $condition['user.keyword REGEXP'] = "\\b".trim($keyword)."\\b";   
         }
 
         $this->db->select('*');
@@ -242,7 +242,7 @@ class Mdl_user_re_tracking extends CI_Model {
         }
 
         if (@$groupName) {
-            $condition['user.groupName REGEXP'] = "[[:<:]]".trim($groupName)."[[:>:]]";  
+            $condition['user.groupName REGEXP'] = "\\b".trim($groupName)."\\b";  
         }
 
         if (@$minAge && @$maxAge) {
@@ -297,7 +297,7 @@ class Mdl_user_re_tracking extends CI_Model {
         }
         
         if (@$keyword) {
-            $condition['user.keyword REGEXP'] = "[[:<:]]".trim($keyword)."[[:>:]]";   
+            $condition['user.keyword REGEXP'] = "\\b".trim($keyword)."\\b";   
         }
 
 

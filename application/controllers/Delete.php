@@ -51,11 +51,11 @@ class Delete extends CI_Controller
             }
 
             if (@$groupName) {
-                $condition['groupName REGEXP'] = "[[:<:]]".trim($groupName)."[[:>:]]";   
+                $condition['groupName REGEXP'] = "\\b".trim($groupName)."\\b";   
             }
 
             if (@$keyword) {
-                $condition['keyword REGEXP'] = "[[:<:]]".trim($keyword)."[[:>:]]";   
+                $condition['keyword REGEXP'] = "\\b".trim($keyword)."\\b";   
             }
 
             //get userIds
@@ -101,11 +101,11 @@ class Delete extends CI_Controller
             }
 
             if (@$groupName) {
-                $condition['groupName REGEXP'] = "[[:<:]]".trim($groupName)."[[:>:]]";   
+                $condition['groupName REGEXP'] = "\\b".trim($groupName)."\\b";   
             }
 
             if (@$keyword) {
-                $condition['keyword REGEXP'] = "[[:<:]]".trim($keyword)."[[:>:]]";   
+                $condition['keyword REGEXP'] = "\\b".trim($keyword)."\\b";   
             }
 
             //get userIds

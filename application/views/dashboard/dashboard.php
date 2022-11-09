@@ -1031,7 +1031,7 @@
                                                                     $fileName = array_pop($explodeFileArr);
 
                                                                     //get file percentage
-                                                                    // $condition = array("groupName REGEXP" => '[[:<:]]'.$curEntry['groupName'].'[[:>:]]');
+                                                                    // $condition = array("groupName REGEXP" => '\\b'.$curEntry['groupName'].'\\b');
                                                                     // $totalGroupCount = GetAllRecordCount(USER,$condition);
 
                                                                     $groupName_con = $curEntry['groupName'];
