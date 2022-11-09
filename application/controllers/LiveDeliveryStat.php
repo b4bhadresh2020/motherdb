@@ -65,6 +65,8 @@ class LiveDeliveryStat extends CI_Controller {
         
         $userDataResponse = $this->mdl_live_delivery->getLiveDeliveryStatData($getData,$start,$perpage,TRUE);
         $userdata         = $userDataResponse['filteredData'];
+
+        
        
         $userdataCount    = count($userdata);
         if ($userdataCount > 0) {
@@ -84,7 +86,7 @@ class LiveDeliveryStat extends CI_Controller {
             for ($i = 0; $i < $userdataCount; $i++) {
 
                 foreach ($keyArr as $value) {
-                    $reArrangeArray[$i][$value] = (string)$userdata[$i][$value];
+                    $reArrangeArray[$i][$value] = "=\"" .$userdata[$i][$value]. "\"";
                 }
 
             }

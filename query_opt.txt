@@ -5,8 +5,8 @@ function checkQueryTime(){
         $condition['ip !=']   = '';
         $condition['phone !=']   = '';
         $condition['participated !=']   = '';
-        $condition['groupName REGEXP'] = '[[:<:]]Weloveleads[[:>:]]';
-        $condition['keyword REGEXP'] = '[[:<:]]Master[[:>:]]';
+        $condition['groupName REGEXP'] = '\\bWeloveleads\\b';
+        $condition['keyword REGEXP'] = '\\bMaster\\b';
 
         $is_single = TRUE;
         $order_by = array('userId' => 'DESC');

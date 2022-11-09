@@ -70,6 +70,13 @@ class Cron_enrich_upload_csv extends CI_Controller
             $notUpdatedRecords = 0;
             $isFileRunning     = 1; // 1 = running, 2 = completed
 
+            // Get cronjob status id
+
+            $condition   = array("filePath" => $csvFileData['filePath']);
+            $is_single   = true;
+            $enrichCronStatusData = GetAllRecord(ENRICHMENT_CRON_STATUS, $condition, $is_single, array(), array(), array());
+            $enrichCronStatusId = $enrichCronStatusData['enrichCronStatusId'];
+
             while (fstat($file)['size']) {
 
                 $this->lineStart($file); // move to beginning of line
@@ -96,7 +103,7 @@ class Cron_enrich_upload_csv extends CI_Controller
 
                     if ($csvDataArr != '') {
 
-                        $isUpdated = $this->doEnrichment($csvDataArr, $csvFileData);
+                        $isUpdated = $this->doEnrichment($csvDataArr, $csvFileData, $enrichCronStatusId);
 
                         if ($isUpdated > 0) {
                             $recordCount++;
@@ -106,6 +113,10 @@ class Cron_enrich_upload_csv extends CI_Controller
                             $notUpdatedRecords++;
                             ftruncate($file, $this->lineStart($file)); // truncate from beginning of line
                         }
+
+                        // Update Status for the records.
+
+
                     } else {
                         $emptyRecords++;
                         ftruncate($file, $this->lineStart($file)); // truncate from beginning of line
@@ -143,7 +154,7 @@ class Cron_enrich_upload_csv extends CI_Controller
         ManageData(SITECONFIG, $condition, $dataArr, false);
     }
 
-    public function doEnrichment($csvDataArr, $csvFileData)
+    public function doEnrichment($csvDataArr, $csvFileData, $enrichCronStatusId)
     {
         $colNumber                = json_decode($csvFileData['colNumber'], true);
         $fieldsName               = json_decode($csvFileData['fieldsName'], true);
@@ -165,7 +176,7 @@ class Cron_enrich_upload_csv extends CI_Controller
         }
 
         //looking for condition
-        if (count($lookingFor) > 0) {
+        if (count($lookingFor) > 0) { 
             foreach ($lookingFor as $value) {
                 $condition[$value . ' !='] = '';
             }
@@ -174,11 +185,11 @@ class Cron_enrich_upload_csv extends CI_Controller
         //search against groupName,keyword,country condition
 
         if (@$search_against_groupName) {
-            $condition['groupName REGEXP'] = "[[:<:]]" . trim($search_against_groupName) . "[[:>:]]";
+            $condition['groupName REGEXP'] = "\\b" . trim($search_against_groupName) . "\\b";
         }
 
         if (@$search_against_keyword) {
-            $condition['keyword REGEXP'] = "[[:<:]]" . trim($search_against_keyword) . "[[:>:]]";
+            $condition['keyword REGEXP'] = "\\b" . trim($search_against_keyword) . "\\b";
         }
 
         if (@$search_against_country) {
@@ -327,6 +338,14 @@ class Cron_enrich_upload_csv extends CI_Controller
                     $is_insert = false;
 
                     $isUpdated = ManageData(USER, $condition, $dataArr, $is_insert);
+
+                    // Code for add history of enrichment 
+
+
+                    $condition  = array();
+                    $dataArr    = array('enrichCronStatusId' => $enrichCronStatusId, 'enrichData' => json_encode($csvDataArr), 'userId' => $getUserData['userId']);
+                    $is_insert  = true;
+                    ManageData(ENRICHMENT_HISTORY_DATA, $condition, $dataArr, $is_insert);
 
                     if ($isUpdated == 1) {
                         $isUpdatedTotal++;

@@ -47,11 +47,11 @@ class User_list_model extends CI_Model
         }        
 
         if (@$groupName) {
-            $condition['groupName REGEXP'] = "[[:<:]]".trim($groupName)."[[:>:]]";   
+            $condition['groupName REGEXP'] = "\\b".trim($groupName)."\\b";   
         }
 
         if (@$keyword) {
-            $condition['keyword REGEXP'] = "[[:<:]]".trim($keyword)."[[:>:]]";   
+            $condition['keyword REGEXP'] = "\\b".trim($keyword)."\\b";   
         }
 
         if (@$minAge && @$maxAge) {
