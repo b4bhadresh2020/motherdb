@@ -61,8 +61,10 @@ class Enrichment extends CI_Controller
                 $response['msg'] = 'CSV file is empty';
             } else {
 
+                $csvFileName  = $this->getUniqueFilename($_FILES['uploadCsv']['name']);               
+
                 //now upload the file
-                $res = uploadFile('uploadCsv', '*', 'enrichment_csv');
+                $res = uploadFile('uploadCsv', '*', 'enrichment_csv',$csvFileName);
 
                 if ($res['success']) {
                     $path = $res['path'];
@@ -128,5 +130,20 @@ class Enrichment extends CI_Controller
         }
 
         echo json_encode($response);
+    }
+
+    function getUniqueFilename($fileName){
+        $filepath = "upload/enrichment_csv/".$fileName;
+
+        $condition  = array("filePath" => $filepath);
+        $fileCounts = GetAllRecordCount(ENRICHMENT_CRON_STATUS,$condition);
+
+        if(!$fileCounts){
+            return $fileName;
+        }else{
+            $fileInfo = explode(".",$fileName);
+            $fileName = $fileInfo[0]."_".time().".".$fileInfo[1];
+            return $this->getUniqueFilename($fileName);
+        }
     }
 }
