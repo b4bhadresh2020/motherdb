@@ -72,6 +72,12 @@ class EnrichmentCronjobStat extends CI_Controller {
         if (count($enrichHistoryData) > 0) {
          
             $csvHeader = json_decode($enrichCronData['header']);
+            
+            // Remove double quatation mark from the field name
+            foreach ($csvHeader as $key => $value) {
+                $csvHeader[$key] = trim($value,'"');
+            }
+            
             $csvExtraFieldHeader = [];
             if(!in_array("Full Name",$csvHeader)){
                 $csvExtraFieldHeader[] = "firstName";
