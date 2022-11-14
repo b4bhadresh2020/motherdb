@@ -172,7 +172,7 @@ class Cron_enrich_upload_csv extends CI_Controller
 
         // prepare array for insert the data
         for ($j = 0; $j < $countColNumber; $j++) {
-            $condition[$fieldsName[$j]] = $csvDataArr[$colNumber[$j] - 1];
+            $condition[$fieldsName[$j]] = trim(str_replace("=","",$csvDataArr[$colNumber[$j] - 1]), '"');
         }
 
         //looking for condition
@@ -339,18 +339,18 @@ class Cron_enrich_upload_csv extends CI_Controller
 
                     $isUpdated = ManageData(USER, $condition, $dataArr, $is_insert);
 
-                    // Code for add history of enrichment 
-
-
-                    $condition  = array();
-                    $dataArr    = array('enrichCronStatusId' => $enrichCronStatusId, 'enrichData' => json_encode($csvDataArr), 'userId' => $getUserData['userId']);
-                    $is_insert  = true;
-                    ManageData(ENRICHMENT_HISTORY_DATA, $condition, $dataArr, $is_insert);
-
+                   
                     if ($isUpdated == 1) {
                         $isUpdatedTotal++;
                     }
                 }
+                // Code for add history of enrichment 
+
+                $condition  = array();
+                $dataArr    = array('enrichCronStatusId' => $enrichCronStatusId, 'enrichData' => json_encode($csvDataArr), 'userId' => $getUserData['userId']);
+                $is_insert  = true;
+                ManageData(ENRICHMENT_HISTORY_DATA, $condition, $dataArr, $is_insert);
+                    
                 return $isUpdatedTotal;
             } else {
                 return 0;

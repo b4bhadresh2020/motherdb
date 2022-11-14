@@ -93,7 +93,7 @@ class Enrichment extends CI_Controller
                         $header = preg_replace( "/\r|\n/", "", $fp->current());
 
                         $fp->seek(PHP_INT_MAX);         // got last line of file
-                        $totalRecords = $fp->key();     // get last line's number
+                        $totalRecords = $fp->key() - 1;     // get last line's number
                         $fp->rewind();                  // go to first line 
                         $fp = null;                     // close file by null (Because there is only method to close the file in splFileObject)
 
@@ -133,6 +133,7 @@ class Enrichment extends CI_Controller
     }
 
     function getUniqueFilename($fileName){
+        $fileName = str_replace(" ","_",$fileName);
         $filepath = "upload/enrichment_csv/".$fileName;
 
         $condition  = array("filePath" => $filepath);
