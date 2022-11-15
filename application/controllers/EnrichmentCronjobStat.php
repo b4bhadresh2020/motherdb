@@ -106,6 +106,15 @@ class EnrichmentCronjobStat extends CI_Controller {
             if(!in_array("createdDate",$csvHeader)){
                 $csvExtraFieldHeader[] = "createdDate";
             }
+            if(!in_array("birthdateDay",$csvHeader)){
+                $csvExtraFieldHeader[] = "birthdateDay";
+            }
+            if(!in_array("birthdateMonth",$csvHeader)){
+                $csvExtraFieldHeader[] = "birthdateMonth";
+            }
+            if(!in_array("birthdateYear",$csvHeader)){
+                $csvExtraFieldHeader[] = "birthdateYear";
+            }
 
             foreach($enrichHistoryData as $enrichment){
 
