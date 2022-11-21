@@ -94,6 +94,9 @@ class EnrichmentCronjobStat extends CI_Controller {
             if(!in_array("Address",$csvHeader)){
                 $csvExtraFieldHeader[] = "address";
             } 
+            if(!in_array("city",$csvHeader)){
+                $csvExtraFieldHeader[] = "city";
+            }            
             if(!in_array("Postcode",$csvHeader)){
                 $csvExtraFieldHeader[] = "postCode";
             } 
