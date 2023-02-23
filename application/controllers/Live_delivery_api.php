@@ -142,13 +142,13 @@ class Live_delivery_api extends CI_Controller
                                     // get current ip
                                     $ipValue = getIPAddress();
 
+                                    // get all blacklist ip
+                                    $condition           = array();
+                                    $is_single           = false;
+                                    $getIPBlacklistData = GetAllRecord(IP_BLACKLIST, $condition, $is_single, array(), array(), array(), 'ip');
+
                                     // check isCheckIp flage is enable or not from live delivery setting
                                     if ($getLiveDeliveryData['isCheckIp']) {
-
-                                        // get all blacklist ip
-                                        $condition           = array();
-                                        $is_single           = false;
-                                        $getIPBlacklistData = GetAllRecord(IP_BLACKLIST, $condition, $is_single, array(), array(), array(), 'ip');
 
                                         // check ip address exist in restiction schema
                                         $condition           = array('ip_address' => $ipValue);
