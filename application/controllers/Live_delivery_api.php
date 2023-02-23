@@ -142,10 +142,43 @@ class Live_delivery_api extends CI_Controller
                                     // get current ip
                                     $ipValue = getIPAddress();
 
-                                    // get all blacklist ip
-                                    $condition           = array();
-                                    $is_single           = false;
-                                    $getIPBlacklistData = GetAllRecord(IP_BLACKLIST, $condition, $is_single, array(), array(), array(), 'ip');
+                                    // check isCheckIp flage is enable or not from live delivery setting
+                                    if ($getLiveDeliveryData['isCheckIp']) {
+
+                                        // get all blacklist ip
+                                        $condition           = array();
+                                        $is_single           = false;
+                                        $getIPBlacklistData = GetAllRecord(IP_BLACKLIST, $condition, $is_single, array(), array(), array(), 'ip');
+
+                                        // check ip address exist in restiction schema
+                                        $condition           = array('ip_address' => $ipValue);
+                                        $is_single           = true;
+                                        $getIPRestrictData = GetAllRecord(IP_RESTRICTIONS, $condition, $is_single, array(), array(), array(), 'last_timestamp');
+
+                                        $current_timestamp = time();
+
+                                        if (isset($getIPRestrictData) && counts($getIPRestrictData)) {
+                                            $time_different = round(abs($current_timestamp - $getIPRestrictData['last_timestamp']) / 60, 2);
+                                            if ($time_different < $getLiveDeliveryData['ipInterval']) {
+                                                $notToCheckFuther = 18; // Request serve from same IP within time period
+                                            } else {
+                                                $is_insert = false;
+                                                $dataArr = array(
+                                                    'last_timestamp' =>  $current_timestamp,
+                                                    'updated_at' => date("Y-m-d H:i:s")
+                                                );
+                                                ManageData(IP_RESTRICTIONS, array('ip_address' => $ipValue), $dataArr, $is_insert);
+                                            }
+                                        } else {
+                                            $is_insert = true;
+                                            $dataArr = array(
+                                                'ip_address' => $ipValue,
+                                                'last_timestamp' =>  $current_timestamp,
+                                                'updated_at' => date("Y-m-d H:i:s")
+                                            );
+                                            ManageData(IP_RESTRICTIONS, array(), $dataArr, $is_insert);
+                                        }
+                                    }
 
                                     $allBlackListIP = array_column($getIPBlacklistData, 'ip');
                                     // check whether IP is in blacklist
@@ -613,6 +646,11 @@ class Live_delivery_api extends CI_Controller
                                         $isFail            = 1;
                                         $sucFailMsgIndex   = 28; // MSN MX Block
                                         $response['error'] = 'MSN MX Block';
+                                    } else if ($notToCheckFuther == 18) {
+                                        //data save to live_delivery_data table
+                                        $isFail            = 1;
+                                        $sucFailMsgIndex   = 29; // Request from same within timeframe.
+                                        $response['error'] = 'Duplicate record found';
                                     }
                                 } else {
 

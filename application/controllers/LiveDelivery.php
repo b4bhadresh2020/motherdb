@@ -1,14 +1,16 @@
 <?php
 
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class LiveDelivery extends CI_Controller {
+class LiveDelivery extends CI_Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
-        if(!is_logged()){
+        if (!is_logged()) {
             redirect(base_url());
-        }else if(is_logged() && !is_admin()){
+        } else if (is_logged() && !is_admin()) {
             redirect("mailUnsubscribe");
         }
     }
@@ -17,19 +19,20 @@ class LiveDelivery extends CI_Controller {
      *  list code starts here
      */
 
-    function manage($start = 0) {
-        
+    function manage($start = 0)
+    {
+
         $condition = array();
 
         $dataCount = GetAllRecordCount(LIVE_DELIVERY, $condition);
 
         $liveDeliveryData = array();
         if ($dataCount > 0) {
-            $liveDeliveryData = GetAllRecord(LIVE_DELIVERY, $condition, "",array(),array(),array(array('liveDeliveryId' => 'DESC')));    
+            $liveDeliveryData = GetAllRecord(LIVE_DELIVERY, $condition, "", array(), array(), array(array('liveDeliveryId' => 'DESC')));
         }
-        
+
         $perPage = 15;
-        $data = pagination_data('liveDelivery/manage/', $dataCount, $start, 3, $perPage,$liveDeliveryData);
+        $data = pagination_data('liveDelivery/manage/', $dataCount, $start, 3, $perPage, $liveDeliveryData);
         $data['headerTitle'] = "Live Delivery";
         $data['load_page'] = 'liveDelivery';
         $data["curTemplateName"] = "liveDelivery/list";
@@ -46,53 +49,54 @@ class LiveDelivery extends CI_Controller {
      *  add/edit code starts here
      */
 
-    function addEdit($liveDeliveryId = 0) {
+    function addEdit($liveDeliveryId = 0)
+    {
 
-        $this->form_validation->set_rules('country','Country', 'required'); 
-        $this->form_validation->set_rules('mailProvider','Mail Provider', 'callback_check_mail_provider'); 
-        $this->form_validation->set_rules('identifier','Identifier', 'required'); 
-        $this->form_validation->set_rules('groupName','Group Name', 'required'); 
-        $this->form_validation->set_rules('keyword','Keyword', 'required'); 
-        $this->form_validation->set_rules('ifUserInThisGroups','', 'callback_ifUserInThisGroups_validation'); 
+        $this->form_validation->set_rules('country', 'Country', 'required');
+        $this->form_validation->set_rules('mailProvider', 'Mail Provider', 'callback_check_mail_provider');
+        $this->form_validation->set_rules('identifier', 'Identifier', 'required');
+        $this->form_validation->set_rules('groupName', 'Group Name', 'required');
+        $this->form_validation->set_rules('keyword', 'Keyword', 'required');
+        $this->form_validation->set_rules('ifUserInThisGroups', '', 'callback_ifUserInThisGroups_validation');
 
         if ($this->form_validation->run() != FALSE) {
 
             $postVal = $_POST;
-            $fieldArr = array('country','mailProvider','identifier','groupName','keyword','dataSource','delay','isDuplicate','checkEmail','checkPhone', 'dataSourceType','integromatHookId');
+            $fieldArr = array('country', 'mailProvider', 'identifier', 'groupName', 'keyword', 'dataSource', 'delay', 'isDuplicate', 'checkEmail', 'checkPhone', 'dataSourceType', 'integromatHookId', 'isCheckIp', 'ipInterval');
             $dataArr = array();
-            foreach ($fieldArr as $value) {           
-                if(isset($postVal[$value])){
-                    if($value == "mailProvider" || $value == "delay" || $value == "isDuplicate"){
-                       $dataArr[$value] = json_encode($postVal[$value]);
-                    }else{
-                       $dataArr[$value] = $postVal[$value];
+            foreach ($fieldArr as $value) {
+                if (isset($postVal[$value])) {
+                    if ($value == "mailProvider" || $value == "delay" || $value == "isDuplicate") {
+                        $dataArr[$value] = json_encode($postVal[$value]);
+                    } else {
+                        $dataArr[$value] = $postVal[$value];
                     }
+                } else {
+                    $dataArr[$value] = 0;
                 }
             }
 
-            if(@$this->input->post('ifUserInThisGroups') != '' && @$this->input->post('addTheUserInThisGroup') != ''){
-                
-                $ifUserInThisGroups = trim($this->input->post('ifUserInThisGroups'),',');
-                $addTheUserInThisGroup = trim($this->input->post('addTheUserInThisGroup'),',');
+            if (@$this->input->post('ifUserInThisGroups') != '' && @$this->input->post('addTheUserInThisGroup') != '') {
+
+                $ifUserInThisGroups = trim($this->input->post('ifUserInThisGroups'), ',');
+                $addTheUserInThisGroup = trim($this->input->post('addTheUserInThisGroup'), ',');
 
                 $dataArr['ifUserInThisGroups'] = $ifUserInThisGroups;
                 $dataArr['addTheUserInThisGroup'] = $addTheUserInThisGroup;
+            } else {
 
-            }else{
-                
                 $dataArr['ifUserInThisGroups'] = '';
                 $dataArr['addTheUserInThisGroup'] = '';
-            }            
-            
+            }
+
             if ($liveDeliveryId > 0) {
 
                 $condition = array("liveDeliveryId" => $liveDeliveryId);
                 $is_add = false;
                 ManageData(LIVE_DELIVERY, $condition, $dataArr, $is_add);
                 SetMsg('loginSucMsg', loginRegSectionMsg("updateData"));
-
             } else {
-                
+
                 $is_add = true;
                 $liveDeliveryId = ManageData(LIVE_DELIVERY, array(), $dataArr, $is_add);
                 SetMsg('loginSucMsg', loginRegSectionMsg("insertData"));
@@ -100,16 +104,16 @@ class LiveDelivery extends CI_Controller {
 
             //create apikey by encrypted createdId and update it to table
             $apikey = @encrypt($liveDeliveryId);
-            
+
             $condition = array("liveDeliveryId" => $liveDeliveryId);
             $is_single           = true;
-            $getLiveDeliveryData = GetAllRecord(LIVE_DELIVERY, $condition, $is_single); 
+            $getLiveDeliveryData = GetAllRecord(LIVE_DELIVERY, $condition, $is_single);
             $dataSourceType = $getLiveDeliveryData['dataSourceType'];
-            
-            if($dataSourceType == 1 || $dataSourceType == 2) {
-                $liveDeliveryUrl = LIVE_DELIVERY_URL_DOMAIN."live_delivery_api/rest?apikey=".$apikey."&emailId=email&name=name&signupDate=signupDate&ip=ip&source=source&country=country";
+
+            if ($dataSourceType == 1 || $dataSourceType == 2) {
+                $liveDeliveryUrl = LIVE_DELIVERY_URL_DOMAIN . "live_delivery_api/rest?apikey=" . $apikey . "&emailId=email&name=name&signupDate=signupDate&ip=ip&source=source&country=country";
             } else {
-                $liveDeliveryUrl = LIVE_DELIVERY_URL_DOMAIN."live_delivery_api/rest?apikey=".$apikey."&emailId=email&firstName=firstname&lastName=lastname&phone=phone&gender=gender&address=address&postCode=postcode&city=city&birthdateDay=birthdateDay&birthdateMonth=birthdateMonth&birthdateYear=birthdateYear&age=age&ip=ip&optinurl=optinurl&optindate=optindate&tag=tag";
+                $liveDeliveryUrl = LIVE_DELIVERY_URL_DOMAIN . "live_delivery_api/rest?apikey=" . $apikey . "&emailId=email&firstName=firstname&lastName=lastname&phone=phone&gender=gender&address=address&postCode=postcode&city=city&birthdateDay=birthdateDay&birthdateMonth=birthdateMonth&birthdateYear=birthdateYear&age=age&ip=ip&optinurl=optinurl&optindate=optindate&tag=tag";
             }
 
             //update  apikey,liveDeliveryUrl
@@ -119,7 +123,7 @@ class LiveDelivery extends CI_Controller {
                 'apikey' => $apikey,
                 'liveDeliveryUrl' => $liveDeliveryUrl
             );
-            ManageData(LIVE_DELIVERY,$condition,$updateArr,$is_insert);
+            ManageData(LIVE_DELIVERY, $condition, $updateArr, $is_insert);
 
             redirect("liveDelivery/manage");
         }
@@ -131,13 +135,12 @@ class LiveDelivery extends CI_Controller {
         if ($liveDeliveryId > 0) {
             $data['addEditTitle'] = "Edit Live Delivery";
             $data['headerTitle']  = "Edit Live Delivery";
-        }else{
+        } else {
             $data['addEditTitle'] = "Add Live Delivery";
             $data['headerTitle'] = "Add Live Delivery";
+        }
 
-        }     
-        
-        $data['integromatHooks'] = GetAllRecord(INTEGROMAT_HOOKS,[],FALSE,[],[],[],"id,hook_name");
+        $data['integromatHooks'] = GetAllRecord(INTEGROMAT_HOOKS, [], FALSE, [], [], [], "id,hook_name");
 
         $data['load_page'] = 'liveDelivery';
         $data["liveDeliveryId"]  = $liveDeliveryId;
@@ -151,7 +154,8 @@ class LiveDelivery extends CI_Controller {
      */
 
 
-    function check_mail_provider(){
+    function check_mail_provider()
+    {
 
         $identifier = $this->input->post('identifier');
         $mailProviders = $this->input->post('mailProvider');
@@ -160,14 +164,14 @@ class LiveDelivery extends CI_Controller {
 
             $this->form_validation->set_message('check_mail_provider', 'The Mail Provider field is required.');
             return FALSE;
-
-        }else{
+        } else {
             return TRUE;
         }
     }
 
 
-    function ifUserInThisGroups_validation($ifUserInThisGroups){
+    function ifUserInThisGroups_validation($ifUserInThisGroups)
+    {
 
         $addTheUserInThisGroup = $this->input->post('addTheUserInThisGroup');
 
@@ -175,13 +179,11 @@ class LiveDelivery extends CI_Controller {
 
             $this->form_validation->set_message('ifUserInThisGroups_validation', 'The "If user in these groups" field is required.');
             return FALSE;
+        } else if ($ifUserInThisGroups != '' && $addTheUserInThisGroup == '') {
 
-        }else if($ifUserInThisGroups != '' && $addTheUserInThisGroup == ''){
-            
             $this->form_validation->set_message('ifUserInThisGroups_validation', 'The "Add the user in this group" field is required.');
             return FALSE;
-
-        }else{
+        } else {
             return TRUE;
         }
     }
@@ -189,16 +191,17 @@ class LiveDelivery extends CI_Controller {
     /* Change active,inactive status
      ------------------------------------*/
 
-    function changeActiveInActiveStatus(){
-        
+    function changeActiveInActiveStatus()
+    {
+
         $liveDeliveryId = $this->input->post('id');
         $status     = $this->input->post('status');
 
         $condition = array("liveDeliveryId" => $liveDeliveryId);
         $dataArr['isInActive'] = $status;
-        
-        
-        echo $updatedStatus = ManageData(LIVE_DELIVERY,$condition,$dataArr,false);
+
+
+        echo $updatedStatus = ManageData(LIVE_DELIVERY, $condition, $dataArr, false);
     }
 
 

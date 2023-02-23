@@ -223,6 +223,7 @@ define('OMNISEND_ACCOUNTS', 'omnisend_accounts');
 define('SENDGRID_ACCOUNTS', 'sendgrid_accounts');
 define('DASHBOARD_STATS', 'dashboard_stats');
 define('ACCOUNT_STATUS_LOG', 'account_status_log');
+define('IP_RESTRICTIONS', 'ip_restrictions');
 
 // MX Block account
 define('TELIA_DOMAIN', 'telia.com');
