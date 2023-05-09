@@ -996,7 +996,10 @@ function getActiveCampaignProviderListName($providerListId)
         "9" => "Velkomstgaven1/NO",
         "10" => "gratisprodukttester.com/NO",
         "11" => "dagenspresent.se/SE",
-        "12" => "gratispresent1.com"
+        "12" => "gratispresent1.com",
+        "13" => "Velkomstgaven1/DK",
+        "14" => "signesmaildk1/DK"
+
     );
     return $activeCampaignList[$providerListId];
 }
@@ -1309,6 +1312,8 @@ function getLiveRepostActiveCampaignProviderID($providerId)
         "10" => "198",   // gratisprodukttester.com/NO
         "11" => "199",   // dagenspresent.se/SE
         "12" => "213",   // gratispresent1.com
+        "13" => "222",   // Velkomstgaven1/DK
+        "14" => "223",   // signesmaildk1/DK
     );
     return $provider[$providerId];
 }
