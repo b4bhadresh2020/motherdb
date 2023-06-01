@@ -167,17 +167,16 @@ class Cron_enrich_upload_csv extends CI_Controller
 
         // prepare to get conditions data
         $condition = array();
-        $like_condition = array();
 
         $countColNumber = count($colNumber);
 
         // prepare array for insert the data
         for ($j = 0; $j < $countColNumber; $j++) {
-            $condition[$fieldsName[$j]] = trim(str_replace("=", "", $csvDataArr[$colNumber[$j] - 1]), '"');
+            $condition[$fieldsName[$j]] = trim(str_replace("=","",$csvDataArr[$colNumber[$j] - 1]), '"');
         }
 
         //looking for condition
-        if (count($lookingFor) > 0) {
+        if (count($lookingFor) > 0) { 
             foreach ($lookingFor as $value) {
                 $condition[$value . ' !='] = '';
             }
@@ -197,36 +196,17 @@ class Cron_enrich_upload_csv extends CI_Controller
             $condition['country'] = $search_against_country;
         }
 
-        if (key_exists("phone", $condition)) {
-            $like_condition["phone"] = $condition["phone"];
-            unset($condition["phone"]);
-        }
-        if (key_exists("emailId", $condition)) {
-            $like_condition["emailId"] = $condition["emailId"];
-            unset($condition["emailId"]);
-        }
-
         //get user count with above condition
+        $userDataCount = GetAllRecordCount(USER, $condition,false);
 
-        $this->db->from(USER);
-        $this->db->where($condition);
-        if (key_exists("phone", $like_condition) && key_exists("emailId", $like_condition)) {
-            $this->db->group_start();
-            $this->db->like('phone', $like_condition["phone"]);
-            $this->db->or_like('emailId', $like_condition["emailId"]);
-            $this->db->group_end();
-        } else if (key_exists("phone", $like_condition)) {
-            $this->db->like('phone', $like_condition["phone"]);
-        } else if (key_exists("emailId", $like_condition)) {
-            $this->db->like('emailId', $like_condition["emailId"]);
-        }
-        $this->db->order_by('userId', "desc");
-        $this->db->select('userId,groupName,keyword,allDataInString,gender,country');
-        $getUsersData = $this->db->get()->result_array();
-
-        if (count($getUsersData) > 0) {
+        if ($userDataCount > 0) {
 
             $isUpdatedTotal = 0;
+
+            //get data from user table with above condition
+            $is_single = false;
+            $order_by  = array('userId' => 'DESC');
+            $getUsersData = GetAllRecord(USER, $condition, $is_single, array(), array(), array($order_by), 'userId,groupName,keyword,allDataInString,gender,country');
 
             if (count($getUsersData) > 0) {
 
@@ -359,7 +339,7 @@ class Cron_enrich_upload_csv extends CI_Controller
 
                     $isUpdated = ManageData(USER, $condition, $dataArr, $is_insert);
 
-
+                   
                     if ($isUpdated == 1) {
                         $isUpdatedTotal++;
                     }
@@ -370,7 +350,7 @@ class Cron_enrich_upload_csv extends CI_Controller
                 $dataArr    = array('enrichCronStatusId' => $enrichCronStatusId, 'enrichData' => json_encode($csvDataArr), 'userId' => $getUserData['userId']);
                 $is_insert  = true;
                 ManageData(ENRICHMENT_HISTORY_DATA, $condition, $dataArr, $is_insert);
-
+                    
                 return $isUpdatedTotal;
             } else {
                 return 0;
