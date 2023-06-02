@@ -61,10 +61,10 @@ class Enrichment extends CI_Controller
                 $response['msg'] = 'CSV file is empty';
             } else {
 
-                $csvFileName  = $this->getUniqueFilename($_FILES['uploadCsv']['name']);               
+                $csvFileName  = $this->getUniqueFilename($_FILES['uploadCsv']['name']);
 
                 //now upload the file
-                $res = uploadFile('uploadCsv', '*', 'enrichment_csv',$csvFileName);
+                $res = uploadFile('uploadCsv', '*', 'enrichment_csv', $csvFileName);
 
                 if ($res['success']) {
                     $path = $res['path'];
@@ -90,17 +90,17 @@ class Enrichment extends CI_Controller
                         //get total number of records from file
                         $uploadedCsv = $_FILES['uploadCsv']['tmp_name'];
                         $fp = new SplFileObject($uploadedCsv, 'r');
-                        $header = preg_replace( "/\r|\n/", "", $fp->current());
+                        $header = preg_replace("/\r|\n/", "", $fp->current());
 
                         $fp->seek(PHP_INT_MAX);         // got last line of file
-                        $totalRecords = $fp->key() - 1;     // get last line's number
+                        $totalRecords = $fp->key();     // get last line's number
                         $fp->rewind();                  // go to first line 
                         $fp = null;                     // close file by null (Because there is only method to close the file in splFileObject)
 
                         //insert record in cron_status table
                         $condition = array();
                         $is_insert = TRUE;
-                        $insertArr = array('filePath' => $path, 'totalRecords' => $totalRecords, 'groupName' => $groupName, 'keyword' => $keyword, 'header' => json_encode(explode(",",$header)));
+                        $insertArr = array('filePath' => $path, 'totalRecords' => $totalRecords, 'groupName' => $groupName, 'keyword' => $keyword, 'header' => json_encode(explode(",", $header)));
                         ManageData(ENRICHMENT_CRON_STATUS, $condition, $insertArr, $is_insert);
 
                         $this->mdl_csv->insertGroupName($groupName);
@@ -132,18 +132,19 @@ class Enrichment extends CI_Controller
         echo json_encode($response);
     }
 
-    function getUniqueFilename($fileName){
-        $fileName = str_replace(" ","_",$fileName);
-        $filepath = "upload/enrichment_csv/".$fileName;
+    function getUniqueFilename($fileName)
+    {
+        $fileName = str_replace(" ", "_", $fileName);
+        $filepath = "upload/enrichment_csv/" . $fileName;
 
         $condition  = array("filePath" => $filepath);
-        $fileCounts = GetAllRecordCount(ENRICHMENT_CRON_STATUS,$condition);
+        $fileCounts = GetAllRecordCount(ENRICHMENT_CRON_STATUS, $condition);
 
-        if(!$fileCounts){
+        if (!$fileCounts) {
             return $fileName;
-        }else{
-            $fileInfo = explode(".",$fileName);
-            $fileName = $fileInfo[0]."_".time().".".$fileInfo[1];
+        } else {
+            $fileInfo = explode(".", $fileName);
+            $fileName = $fileInfo[0] . "_" . time() . "." . $fileInfo[1];
             return $this->getUniqueFilename($fileName);
         }
     }
