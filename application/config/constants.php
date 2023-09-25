@@ -160,6 +160,7 @@ define("LIVE_DELIVERY_INTEGROMAT_DATA", "live_delivery_integromat_data");
 define("INTEGROMAT_LEAD_DATA", "integromat_lead_data");
 define("BOXGAME_LEAD_DATA", "boxgame_lead_data");
 define("WHEELGAME_LEAD_DATA", "wheelgame_lead_data");
+define("LIVE_DELIVERY_LEADBYTE_DATA", "live_delivery_leadbyte_data");
 
 //from other db
 define("SMS_UNSUBSCRIBER_LIST", "sms_unsubscriber_list");

@@ -304,7 +304,16 @@ $dataSourceTypes = array(
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-3"></div>
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label>Enable Leadbyte</label>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input id="isLeadbyte" type="checkbox" name="isLeadbyte" value="1" <?php echo (@$isLeadbyte) ? "checked" : "" ?> />
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="col-lg-3">
                                                 <div class="form-group">
                                                     <label>Enable IP Restrictions</label>

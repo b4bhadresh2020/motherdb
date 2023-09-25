@@ -1262,6 +1262,10 @@ class Live_delivery_api extends CI_Controller
             if ($sucFailMsgIndex == 0 || $sucFailMsgIndex == 1) {
                 sendLeadInIntegromat($lastDeliveryData, $getLiveDeliveryData);
             }
+
+            if ($getLiveDeliveryData['isLeadbyte'] == 1) {
+                sendLeadInLeadbyte($lastDeliveryData, $getLiveDeliveryData);
+            }
         }
     }
 
