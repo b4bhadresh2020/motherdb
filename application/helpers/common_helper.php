@@ -2632,3 +2632,61 @@ function sendLeadInIntegromat($lastDeliveryData, $getLiveDeliveryData)
         return json_encode(array("result" => "error", "error" => array("msg" => "Bad Request")));
     }
 }
+
+function sendLeadInLeadbyte($lastDeliveryData, $getLiveDeliveryData)
+{
+    try {
+
+        $lastDeliveryData['birthDate'] = "";
+        if (@$lastDeliveryData['birthdateDay'] != '0' && @$lastDeliveryData['birthdateMonth'] != '0' && @$lastDeliveryData['birthdateYear'] != '0') {
+            $birthDate            = $lastDeliveryData['birthdateYear'] . '-' . $lastDeliveryData['birthdateMonth'] . '-' . $lastDeliveryData['birthdateDay'];
+            $lastDeliveryData['birthDate'] = date('Y-m-d', strtotime($birthDate));
+        }
+
+
+        $leadbyteUserData = [
+            "returnjson" => "yes",
+            "campid" => "MOTHERDB",
+            "sid" => "1",
+            'firstname' => $lastDeliveryData['firstName'],
+            'lastname' => $lastDeliveryData['lastName'],
+            'email' => $lastDeliveryData['emailId'],
+            'gender' => $lastDeliveryData['gender'],
+            'dob' => $lastDeliveryData['birthDate'],
+            'phone1' => $lastDeliveryData['phone'],
+            'street1' => $lastDeliveryData['address'],
+            'towncity' => $lastDeliveryData['city'],
+            'country' => $lastDeliveryData['country'],
+            'postcode' => $lastDeliveryData['postCode'],
+            'ipaddress' => $lastDeliveryData['ip'],
+            'optinurl' => $lastDeliveryData['optinurl'],
+            'optindate' => $lastDeliveryData['optindate'],
+            'data1' => $lastDeliveryData['age'],
+            'data2' => $lastDeliveryData['tag'],
+            'data3' => getCountryCode($lastDeliveryData['country']),
+            'data4'  => strtotime(date('Y-m-d H:i:s'))
+        ];
+
+        // Create a Guzzle client
+        $client = new GuzzleHttp\Client();
+        $subscriberUrl = "https://inboxgame.leadbyte.co.uk/api/submit.php";
+        $queryString = http_build_query($leadbyteUserData);
+
+        $response = $client->get($subscriberUrl . '?' . $queryString);
+        $responseBody = $response->getBody()->getContents();
+        $responseData = json_decode($responseBody, true);
+
+        if (isset($responseData['response']) && $responseData['response'] == "OK") {
+            $is_insert = true;
+            $live_delivery_leadbyte_data = array(
+                'liveDeliveryId' => $getLiveDeliveryData['liveDeliveryId'],
+                'liveDeliveryDataId' => $lastDeliveryData['liveDeliveryDataId'],
+                'leadId' => $responseData['leadId'],
+                'created_at' => date('Y-m-d H:i')
+            );
+            ManageData(LIVE_DELIVERY_LEADBYTE_DATA, [], $live_delivery_leadbyte_data, $is_insert);
+        }
+    } catch (\GuzzleHttp\Exception\ClientException $e) {
+        return json_encode(array("result" => "error", "error" => array("msg" => "Bad Request")));
+    }
+}
